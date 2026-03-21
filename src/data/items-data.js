@@ -8,12 +8,12 @@ window.AO_ITEMS = [
   // ══════════════════════════════════════════════════════════
   // KILIÇLAR / SWORDS
   // ══════════════════════════════════════════════════════════
-  { id:'MAIN_SWORD',           en:"Sword",              tr:"Kılıç",                  cat:'sword',    tiers:[4,5,6,7,8] },
+  { id:'MAIN_SWORD',           en:"Broadsword",         tr:"Geniş Kılıç",            cat:'sword',    tiers:[4,5,6,7,8] },
   { id:'2H_CLAYMORE',          en:"Claymore",           tr:"Claymore",               cat:'sword',    tiers:[4,5,6,7,8] },
   { id:'2H_DUALSWORD',         en:"Dual Swords",        tr:"Çift Kılıç",             cat:'sword',    tiers:[4,5,6,7,8] },
   { id:'MAIN_SCIMITAR_MORGANA',en:"Carving Sword",      tr:"Orak Kılıcı",            cat:'sword',    tiers:[4,5,6,7,8] },
   { id:'2H_CLEAVER_HELL',      en:"Clarent Blade",      tr:"Clarent Kılıcı",         cat:'sword',    tiers:[4,5,6,7,8] },
-  { id:'2H_BROADSWORD',        en:"Broad Sword",        tr:"Geniş Kılıç",            cat:'sword',    tiers:[4,5,6,7,8] },
+  { id:'2H_DUALSWORD_UNDEAD',  en:"Galatine Pair",      tr:"Galatine Çifti",         cat:'sword',    tiers:[4,5,6,7,8] },
 
   // ══════════════════════════════════════════════════════════
   // BALTALAR / AXES
@@ -29,12 +29,13 @@ window.AO_ITEMS = [
   // ══════════════════════════════════════════════════════════
   { id:'2H_BOW',               en:"Bow",                tr:"Yay",                    cat:'bow',      tiers:[4,5,6,7,8] },
   { id:'2H_LONGBOW',           en:"Warbow",             tr:"Savaş Yayı",             cat:'bow',      tiers:[4,5,6,7,8] },
+  { id:'2H_LONGBOW_UNDEAD',    en:"Whispering Bow",     tr:"Fısıldayan Yay",         cat:'bow',      tiers:[4,5,6,7,8] },
   { id:'2H_BOW_HELL',          en:"Bow of Badon",       tr:"Badon Yayı",             cat:'bow',      tiers:[4,5,6,7,8] },
   { id:'2H_BOW_MORGANA',       en:"Wailing Bow",        tr:"Feryat Yayı",            cat:'bow',      tiers:[4,5,6,7,8] },
   { id:'2H_CROSSBOW',          en:"Crossbow",           tr:"Arbalet",                cat:'bow',      tiers:[4,5,6,7,8] },
   { id:'2H_CROSSBOW_CANNON',   en:"Heavy Crossbow",     tr:"Ağır Arbalet",           cat:'bow',      tiers:[4,5,6,7,8] },
   { id:'MAIN_CROSSBOW',        en:"Weeping Repeater",   tr:"Ağlayan Tekrarlı",       cat:'bow',      tiers:[4,5,6,7,8] },
-  { id:'2H_CROSSBOW_HELL',     en:"Siegebow",           tr:"Kuşatma Yayı",           cat:'bow',      tiers:[4,5,6,7,8] },
+  { id:'2H_CROSSBOW_LARGE_MORGANA',en:"Siegebow",       tr:"Kuşatma Yayı",           cat:'bow',      tiers:[4,5,6,7,8] },
   { id:'2H_BOW_KEEPER',        en:"Mistpiercer",        tr:"Sis Delici",             cat:'bow',      tiers:[4,5,6,7,8] },
 
   // ══════════════════════════════════════════════════════════
@@ -60,24 +61,27 @@ window.AO_ITEMS = [
   { id:'MAIN_DAGGER',          en:"Dagger",             tr:"Hançer",                 cat:'dagger',   tiers:[4,5,6,7,8] },
   { id:'2H_DAGGERPAIR',        en:"Dagger Pair",        tr:"Çift Hançer",            cat:'dagger',   tiers:[4,5,6,7,8] },
   { id:'2H_CLAWPAIR_HELL',     en:"Bloodletter",        tr:"Kan Dökücü",             cat:'dagger',   tiers:[4,5,6,7,8] },
-  { id:'MAIN_RAPIER_MORGANA',  en:"Carving Blade",      tr:"Oyma Kılıç",             cat:'dagger',   tiers:[4,5,6,7,8] },
-  { id:'2H_DUALSWORD_CRYSTAL', en:"Deathgivers",        tr:"Ölüm Vericiler",         cat:'dagger',   tiers:[4,5,6,7,8] },
+  { id:'MAIN_RAPIER_MORGANA',  en:"Carving Blade",      tr:"Oyma Kılıcı",            cat:'dagger',   tiers:[4,5,6,7,8] },
+  { id:'2H_DUALSCIMITAR_UNDEAD',en:"Deathgivers",       tr:"Ölüm Vericiler",         cat:'dagger',   tiers:[4,5,6,7,8] },
 
   // ══════════════════════════════════════════════════════════
   // QUARTERSTAFFLAR
   // ══════════════════════════════════════════════════════════
-  { id:'2H_QUARTERSTAFF',      en:"Quarterstaff",       tr:"Quarterstaff",           cat:'qstaff',   tiers:[4,5,6,7,8] },
-  { id:'2H_IRONCLADEDSTAFF',   en:"Iron-clad Staff",    tr:"Demirli Asa",            cat:'qstaff',   tiers:[4,5,6,7,8] },
-  { id:'2H_DOUBLEBLADEDSTAFF_HELL',en:"Black Monk Stave",tr:"Siyah Keşiş Sopası",   cat:'qstaff',   tiers:[4,5,6,7,8] },
-  { id:'2H_ROCKSTAFF_UNDEAD',  en:"Grailseeker",        tr:"Kâse Arayan",            cat:'qstaff',   tiers:[4,5,6,7,8] },
+  { id:'2H_QUARTERSTAFF',           en:"Quarterstaff",        tr:"Quarterstaff",           cat:'qstaff',   tiers:[4,5,6,7,8] },
+  { id:'2H_IRONCLADEDSTAFF',        en:"Iron-clad Staff",      tr:"Demirli Asa",            cat:'qstaff',   tiers:[4,5,6,7,8] },
+  { id:'2H_DOUBLEBLADEDSTAFF_HELL', en:"Black Monk Stave",     tr:"Siyah Keşiş Sopası",     cat:'qstaff',   tiers:[4,5,6,7,8] },
+  { id:'2H_COMBATSTAFF_MORGANA',    en:"Staff of Balance",     tr:"Denge Asası",            cat:'qstaff',   tiers:[4,5,6,7,8] },
+  { id:'2H_ROCKSTAFF_UNDEAD',       en:"Grailseeker",          tr:"Kâse Arayan",            cat:'qstaff',   tiers:[4,5,6,7,8] },
 
   // ══════════════════════════════════════════════════════════
   // GÜRZ / MACES
   // ══════════════════════════════════════════════════════════
   { id:'MAIN_MACE',            en:"Mace",               tr:"Gürz",                   cat:'mace',     tiers:[4,5,6,7,8] },
-  { id:'2H_MACE',              en:"Bedrock Mace",       tr:"Ana Kaya Gürzü",         cat:'mace',     tiers:[4,5,6,7,8] },
-  { id:'2H_FLAIL_HELL',        en:"Incubus Mace",       tr:"Şeytan Gürzü",           cat:'mace',     tiers:[4,5,6,7,8] },
-  { id:'MAIN_MACE_MORGANA',    en:"Camlann Mace",       tr:"Camlann Gürzü",          cat:'mace',     tiers:[4,5,6,7,8] },
+  { id:'2H_MACE',              en:"Heavy Mace",         tr:"Ağır Gürz",              cat:'mace',     tiers:[4,5,6,7,8] },
+  { id:'MAIN_MACE_MORGANA',    en:"Morning Star",       tr:"Sabah Yıldızı",          cat:'mace',     tiers:[4,5,6,7,8] },
+  { id:'MAIN_ROCKMACE_KEEPER', en:"Bedrock Mace",       tr:"Ana Kaya Gürzü",         cat:'mace',     tiers:[4,5,6,7,8] },
+  { id:'MAIN_MACE_HELL',       en:"Incubus Mace",       tr:"İnkubus Gürzü",          cat:'mace',     tiers:[4,5,6,7,8] },
+  { id:'2H_MACE_MORGANA',      en:"Camlann Mace",       tr:"Camlann Gürzü",          cat:'mace',     tiers:[4,5,6,7,8] },
 
   // ══════════════════════════════════════════════════════════
   // ATEş ASALARI / FIRE STAVES
