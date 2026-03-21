@@ -178,6 +178,7 @@ function renderTable(data){
     const qn=QUALITY[lang][d.quality||1]||'Normal';
     const age=formatAge(d.sell_price_min_date?new Date(d.sell_price_min_date):null);
     const ageCls=getAgeCls(d.sell_price_min_date);
+    const noMarket=isNoMarket(d.sell_price_min_date,d.sell_price_min,d.buy_price_max);
     const icon=`https://render.albiononline.com/v1/item/${d.item_id}.png`;
     const isBM=d.city==='Black Market';
 
@@ -190,7 +191,7 @@ function renderTable(data){
       <td class="${d.sell_price_min>0&&!isBM?'price-sell':'price-zero'}">${isBM?'<span title="Black Market sadece alış emri alır">—</span>':d.sell_price_min>0?d.sell_price_min.toLocaleString('tr-TR'):'—'}</td>
       <td class="${d.buy_price_max>0?'price-buy':'price-zero'}">${d.buy_price_max>0?d.buy_price_max.toLocaleString('tr-TR'):'—'}</td>
       <td><span class="quality-badge q${d.quality||1}">${qn}</span></td>
-      <td class="date-cell ${ageCls}">${age}</td>
+      <td class="date-cell ${ageCls}">${noMarket?'<span class="no-market">⚠️ Pazar yok</span>':age}</td>
     </tr>`;
   }).join('');
 
@@ -276,6 +277,16 @@ function formatAge(date){
   if(d<10080) return `${Math.floor(d/1440)} gün`;
   if(d<43200) return `${Math.floor(d/10080)} hafta`;
   return `${Math.floor(d/43200)} ay`;
+}
+
+function isNoMarket(ds, sellPrice, buyPrice){
+  // Hiç veri yoksa
+  if(!ds && !sellPrice && !buyPrice) return true;
+  // Tarih yoksa
+  if(!ds) return false;
+  // 7 günden eskiyse (10080 dakika)
+  const mins=(new Date()-new Date(ds))/60000;
+  return mins>10080;
 }
 
 function getAgeCls(ds){
