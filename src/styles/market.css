@@ -134,3 +134,11 @@
   .transport-arrow { transform: rotate(90deg); margin: 0; }
 }
 @media (max-width: 480px) { .stat-cards { grid-template-columns: 1fr; } }
+
+/* ITEM ICON */
+.item-icon { width: 40px; height: 40px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-base); object-fit: contain; flex-shrink: 0; }
+.item-name { display: flex; align-items: center; gap: 10px; }
+.item-name-text { display: flex; flex-direction: column; gap: 2px; }
+.item-label { font-family: var(--font-display); font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.city-blackmarket { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+.city-other { background: var(--border); color: var(--text-secondary); }
