@@ -76,58 +76,57 @@
 
       <div class="craft-layout">
         <!-- SOL: EŞYA SEÇİMİ -->
-        <div class="craft-left">
+                <div class="craft-left">
+          <!-- Kategori butonları -->
           <div class="panel">
-            <h3 data-tr="Eşya Seç" data-en="Select Item">Eşya Seç</h3>
-            <input type="text" id="craftSearch" class="form-input" placeholder="Ara... (T4 Çanta, Kılıç, Yay...)" oninput="filterCraftItems(this.value)"/>
-            <div class="craft-category-filter">
-              <select id="craftCatFilter" onchange="filterCraftItems(document.getElementById('craftSearch').value)" class="form-select">
-                <option value="">Tüm Kategoriler</option>
-                <option value="bags">Çantalar</option>
-                <option value="swords">Kılıçlar</option>
-                <option value="bows">Yaylar</option>
-                <option value="axes">Baltalar</option>
-                <option value="staves">Asalar</option>
-                <option value="hammers">Çekiçler</option>
-                <option value="spears">Mızraklar</option>
-                <option value="armor">Zırhlar</option>
-                <option value="food">Yiyecek</option>
-                <option value="potions">İksirler</option>
-              </select>
-            </div>
-            <div class="craft-item-list" id="craftItemList"></div>
+            <h3 data-tr="Eşya Kategorisi" data-en="Item Category">Eşya Kategorisi</h3>
+            <div class="group-buttons" id="groupButtons"></div>
           </div>
 
-          <!-- AYARLAR -->
+          <!-- Tier & Enchant seçimi -->
+          <div class="panel">
+            <h3 data-tr="Tier & Enchant" data-en="Tier & Enchant">Tier & Enchant</h3>
+            <div style="margin-bottom:8px;font-size:11px;color:var(--text-muted)">Tier:</div>
+            <div class="tier-buttons">
+              <button class="tier-btn" data-tier="2" onclick="selectTier(2)">T2</button>
+              <button class="tier-btn" data-tier="3" onclick="selectTier(3)">T3</button>
+              <button class="tier-btn" data-tier="4" onclick="selectTier(4)">T4</button>
+              <button class="tier-btn active" data-tier="5" onclick="selectTier(5)">T5</button>
+              <button class="tier-btn" data-tier="6" onclick="selectTier(6)">T6</button>
+              <button class="tier-btn" data-tier="7" onclick="selectTier(7)">T7</button>
+              <button class="tier-btn" data-tier="8" onclick="selectTier(8)">T8</button>
+            </div>
+            <div style="margin-bottom:8px;font-size:11px;color:var(--text-muted)">Enchant:</div>
+            <div class="enchant-buttons">
+              <button class="enchant-btn active" data-enc="0" onclick="selectEnchant(0)">+0 Normal</button>
+              <button class="enchant-btn" data-enc="1" onclick="selectEnchant(1)">+1 Uncommon</button>
+              <button class="enchant-btn" data-enc="2" onclick="selectEnchant(2)">+2 Rare</button>
+              <button class="enchant-btn" data-enc="3" onclick="selectEnchant(3)">+3 Exceptional</button>
+            </div>
+          </div>
+
+          <!-- Eşya ızgarası -->
+          <div class="panel">
+            <h3 data-tr="Eşya Seç" data-en="Select Item">Eşya Seç</h3>
+            <div class="craft-search-bar">
+              <input type="text" id="craftSearch" placeholder="Ara..." oninput="filterItems(this.value)"/>
+            </div>
+            <div class="item-grid" id="itemGrid"></div>
+          </div>
+
+          <!-- Ayarlar -->
           <div class="panel">
             <h3 data-tr="Hesap Ayarları" data-en="Calculation Settings">Hesap Ayarları</h3>
             <div class="settings-grid">
-              <div class="setting-row">
-                <label data-tr="Miktar" data-en="Quantity">Miktar</label>
-                <input type="number" id="craftQty" value="1" min="1" max="9999" class="form-input-sm" oninput="calcCrafting()"/>
-              </div>
-              <div class="setting-row">
-                <label data-tr="Return Rate %" data-en="Return Rate %">Return Rate %</label>
-                <input type="number" id="returnRate" value="15" min="0" max="70" class="form-input-sm" oninput="calcCrafting()"/>
-                <span class="setting-hint" data-tr="(Focus: ~47%)" data-en="(Focus: ~47%)">(Focus: ~47%)</span>
-              </div>
-              <div class="setting-row">
-                <label data-tr="Kullanım Ücreti %" data-en="Usage Fee %">Kullanım Ücreti %</label>
-                <input type="number" id="usageFee" value="3" min="0" max="25" class="form-input-sm" oninput="calcCrafting()"/>
-              </div>
-              <div class="setting-row">
-                <label data-tr="Vergi %" data-en="Tax %">Vergi %</label>
-                <input type="number" id="taxRate" value="8" min="0" max="15" class="form-input-sm" oninput="calcCrafting()"/>
-              </div>
-              <div class="setting-row">
-                <label><input type="checkbox" id="focusMode" onchange="calcCrafting()"/> <span data-tr="Focus Kullan" data-en="Use Focus">Focus Kullan</span></label>
-              </div>
-              <div class="setting-row">
-                <label><input type="checkbox" id="premiumMode" checked onchange="calcCrafting()"/> <span data-tr="Premium Hesap" data-en="Premium Account">Premium Hesap</span></label>
-              </div>
+              <div class="setting-row"><label>Miktar</label><input type="number" id="craftQty" value="1" min="1" max="9999" class="form-input-sm" oninput="calcCrafting()"/></div>
+              <div class="setting-row"><label>Return Rate %</label><input type="number" id="returnRate" value="15" min="0" max="70" class="form-input-sm" oninput="calcCrafting()"/><span class="setting-hint">(Focus: ~47%)</span></div>
+              <div class="setting-row"><label>Kullanım Ücreti %</label><input type="number" id="usageFee" value="3" min="0" max="25" class="form-input-sm" oninput="calcCrafting()"/></div>
+              <div class="setting-row"><label>Vergi %</label><input type="number" id="taxRate" value="8" min="0" max="15" class="form-input-sm" oninput="calcCrafting()"/></div>
+              <div class="setting-row"><label><input type="checkbox" id="focusMode" onchange="calcCrafting()"/> Focus Kullan</label></div>
             </div>
           </div>
         </div>
+
 
         <!-- SAĞ: SONUÇLAR -->
         <div class="craft-right">
