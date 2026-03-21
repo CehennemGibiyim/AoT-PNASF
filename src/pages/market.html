@@ -60,9 +60,10 @@
       <div class="search-box">
         <span class="search-icon">🔍</span>
         <input type="text" id="itemSearch" class="search-input"
-          placeholder="Eşya ara... (örn: T4 Bag, Kılıç, Leather)"
+          placeholder="Eşya ara... (örn: T4 Bag, Kılıç, Leather, Hunter Hood)"
           oninput="onSearchInput(this.value)"/>
         <button class="search-clear" onclick="clearSearch()" id="clearBtn" style="display:none">✕</button>
+        <div class="market-search-dropdown" id="marketSearchDropdown"></div>
       </div>
       <div class="search-filters">
         <select class="filter-select" id="tierFilter" onchange="applyFilters()">
@@ -87,6 +88,7 @@
           <option value="Black Market">Black Market</option>
         </select>
         <select class="filter-select" id="categoryFilter" onchange="loadCategory(this.value)">
+          <option value="all">🔍 Tüm Eşyalar</option>
           <option value="bags">🎒 Çantalar</option>
           <option value="swords">⚔️ Kılıçlar</option>
           <option value="bows">🏹 Yaylar</option>

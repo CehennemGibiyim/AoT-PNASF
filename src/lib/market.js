@@ -22,6 +22,11 @@ const CITY_CLASS = {
 };
 
 const CATEGORIES = {
+  all: (()=>{ // Tüm eşyalar — items-data.js'den dinamik oluşturulur
+    const tiers=[4,5,6,7,8];
+    const items=window.AO_ITEMS||[];
+    return items.flatMap(i=>tiers.filter(t=>i.tiers.includes(t)).map(t=>`T${t}_${i.id}`));
+  }),
   bags:         ['T2_BAG','T3_BAG','T4_BAG','T5_BAG','T6_BAG','T7_BAG','T8_BAG'],
   swords:       ['T4_MAIN_SWORD','T5_MAIN_SWORD','T6_MAIN_SWORD','T7_MAIN_SWORD','T8_MAIN_SWORD','T4_2H_CLAYMORE','T5_2H_CLAYMORE','T6_2H_CLAYMORE','T7_2H_CLAYMORE','T8_2H_CLAYMORE','T4_2H_DUALSWORD','T5_2H_DUALSWORD','T6_2H_DUALSWORD','T7_2H_DUALSWORD','T8_2H_DUALSWORD','T4_2H_CLEAVER_HELL','T5_2H_CLEAVER_HELL','T6_2H_CLEAVER_HELL'],
   bows:         ['T4_2H_BOW','T5_2H_BOW','T6_2H_BOW','T7_2H_BOW','T8_2H_BOW','T4_2H_LONGBOW','T5_2H_LONGBOW','T6_2H_LONGBOW','T7_2H_LONGBOW','T8_2H_LONGBOW','T4_2H_CROSSBOW','T5_2H_CROSSBOW','T6_2H_CROSSBOW','T7_2H_CROSSBOW','T8_2H_CROSSBOW','T4_2H_BOW_HELL','T5_2H_BOW_HELL','T6_2H_BOW_HELL','T4_2H_BOW_MORGANA','T5_2H_BOW_MORGANA','T6_2H_BOW_MORGANA','T4_2H_CROSSBOW_CANNON','T5_2H_CROSSBOW_CANNON','T6_2H_CROSSBOW_CANNON'],
@@ -113,7 +118,15 @@ const QUALITY = {tr:{1:'Normal',2:'İyi',3:'Üstün',4:'Mükemmel',5:'Şaheser'}
 
 let currentServer='europe', currentCategory='bags', currentData=[], searchTimeout=null;
 
-document.addEventListener('DOMContentLoaded',()=>{ loadGoldPrice(); loadCategory('bags'); });
+document.addEventListener('DOMContentLoaded',()=>{
+  loadGoldPrice();
+  loadCategory('bags');
+  // Dropdown'ı dışarı tıklamayla kapat
+  document.addEventListener('click', e=>{
+    if(!e.target.closest('.search-box'))
+      document.getElementById('marketSearchDropdown')?.classList.remove('open');
+  });
+});
 
 function setServer(s){
   currentServer=s;
@@ -137,8 +150,42 @@ async function loadGoldPrice(){
 
 async function loadCategory(cat){
   currentCategory=cat;
-  document.getElementById('tableTitle').textContent=CAT_TITLES[cat]||'Fiyatlar';
-  const items=CATEGORIES[cat]||CATEGORIES.bags;
+  const lang=localStorage.getItem('aot-lang')||'tr';
+  const titles={
+    all:     {tr:'Tüm Eşyalar',     en:'All Items'},
+    bags:    {tr:'Çanta Fiyatları',  en:'Bag Prices'},
+    swords:  {tr:'Kılıç Fiyatları',  en:'Sword Prices'},
+    bows:    {tr:'Yay Fiyatları',    en:'Bow Prices'},
+    axes:    {tr:'Balta Fiyatları',  en:'Axe Prices'},
+    staves:  {tr:'Asa Fiyatları',    en:'Staff Prices'},
+    hammers: {tr:'Çekiç Fiyatları',  en:'Hammer Prices'},
+    spears:  {tr:'Mızrak Fiyatları', en:'Spear Prices'},
+    armor_leather:{tr:'Deri Zırh',   en:'Leather Armor'},
+    armor_plate:  {tr:'Plaka Zırh',  en:'Plate Armor'},
+    armor_cloth:  {tr:'Kumaş Zırh',  en:'Cloth Armor'},
+    resources:    {tr:'Ham Kaynaklar',en:'Raw Resources'},
+    refined:      {tr:'İşlenmiş Kaynaklar',en:'Refined Resources'},
+    food:    {tr:'Yiyecek Fiyatları',en:'Food Prices'},
+    potions: {tr:'İksir Fiyatları',  en:'Potion Prices'},
+    mounts:  {tr:'Binek Fiyatları',  en:'Mount Prices'},
+  };
+  const titleObj = titles[cat]||{tr:'Fiyatlar',en:'Prices'};
+  document.getElementById('tableTitle').textContent = lang==='tr'?titleObj.tr:titleObj.en;
+
+  // all kategorisi için items-data.js'den dinamik liste
+  let items;
+  if(cat==='all'){
+    const tierFilter=document.getElementById('tierFilter').value;
+    const tier=tierFilter?parseInt(tierFilter.replace('T','')):null;
+    const aoItems=window.AO_ITEMS||[];
+    const tiers=tier?[tier]:[4,5,6,7,8];
+    items=[...new Set(aoItems.flatMap(i=>tiers.filter(t=>i.tiers.includes(t)).map(t=>`T${t}_${i.id}`)))];
+    // URL limiti için parçalara böl (max 50 ID)
+    if(items.length>50) items=items.slice(0,50);
+  } else {
+    items=CATEGORIES[cat]||CATEGORIES.bags;
+  }
+
   const city=document.getElementById('cityFilter').value||ALL_CITIES;
   showLoading();
   try{
@@ -218,17 +265,76 @@ function updateStats(data){
 function onSearchInput(val){
   document.getElementById('clearBtn').style.display=val?'block':'none';
   clearTimeout(searchTimeout);
+
+  // Dropdown arama — tüm eşyalarda
+  const dd=document.getElementById('marketSearchDropdown');
+  if(!val||val.length<1){
+    if(dd) dd.classList.remove('open');
+    renderTable(currentData);
+    return;
+  }
+
+  // items-data.js global listesinden ara
+  const results = window.AO_SEARCH ? window.AO_SEARCH(val) : [];
+  if(dd && results.length>0){
+    const lang=localStorage.getItem('aot-lang')||'tr';
+    dd.innerHTML=results.slice(0,12).map(r=>{
+      const name=lang==='tr'?r.tr:r.en;
+      const tier=document.getElementById('tierFilter').value.replace('T','')||5;
+      const icon=`https://render.albiononline.com/v1/item/T${tier}_${r.id}.png`;
+      return `<div class="msd-item" onclick="marketSearchSelect('${r.id}','${name}')">
+        <img src="${icon}" onerror="this.style.display='none'" style="width:28px;height:28px;border-radius:4px;flex-shrink:0"/>
+        <span style="font-size:12px;font-weight:500;color:var(--text-primary)">${name}</span>
+        <span style="font-size:10px;color:var(--text-muted);margin-left:auto">${r.en}</span>
+      </div>`;
+    }).join('');
+    dd.classList.add('open');
+  } else if(dd){
+    dd.classList.remove('open');
+  }
+
+  // Mevcut veriyi de filtrele
   searchTimeout=setTimeout(()=>{
-    if(val.length<2){renderTable(currentData);return;}
     const q=val.toLowerCase();
-    renderTable(currentData.filter(d=>(ITEM_NAMES[d.item_id]||'').toLowerCase().includes(q)||d.item_id.toLowerCase().includes(q)));
+    const filtered=currentData.filter(d=>{
+      const item=window.AO_ITEMS?.find(i=>d.item_id.includes(i.id));
+      return (item&&(item.tr.toLowerCase().includes(q)||item.en.toLowerCase().includes(q)))
+        ||(ITEM_NAMES[d.item_id]||'').toLowerCase().includes(q)
+        ||d.item_id.toLowerCase().includes(q);
+    });
+    renderTable(filtered);
   },300);
+}
+
+async function marketSearchSelect(baseId, name){
+  const dd=document.getElementById('marketSearchDropdown');
+  if(dd) dd.classList.remove('open');
+  document.getElementById('itemSearch').value=name;
+  document.getElementById('clearBtn').style.display='block';
+
+  // Tüm tier'lar için fiyat çek
+  const tierFilter=document.getElementById('tierFilter').value;
+  const tiers=tierFilter?[parseInt(tierFilter.replace('T',''))]:[4,5,6,7,8];
+  const ids=tiers.map(t=>`T${t}_${baseId}`);
+  const cityFilter=document.getElementById('cityFilter').value||ALL_CITIES;
+
+  showLoading();
+  try{
+    const url=`${SERVERS[currentServer]}/api/v2/stats/prices/${ids.join(',')}.json?locations=${encodeURIComponent(cityFilter)}`;
+    const res=await fetch(url);
+    const data=await res.json();
+    currentData=data;
+    renderTable(data);
+    updateStats(data);
+  }catch(e){ showError(); }
 }
 
 function clearSearch(){
   document.getElementById('itemSearch').value='';
   document.getElementById('clearBtn').style.display='none';
-  renderTable(currentData);
+  const dd=document.getElementById('marketSearchDropdown');
+  if(dd) dd.classList.remove('open');
+  loadCategory(currentCategory);
 }
 
 function applyFilters(){ renderTable(currentData); }

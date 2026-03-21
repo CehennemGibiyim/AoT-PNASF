@@ -157,3 +157,11 @@
   border-radius: 4px;
   letter-spacing: 0.03em;
 }
+
+/* MARKET SEARCH DROPDOWN */
+.search-box { position: relative; }
+.market-search-dropdown { position:absolute; top:calc(100% + 4px); left:0; right:0; background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius); z-index:300; max-height:300px; overflow-y:auto; display:none; box-shadow:0 8px 24px rgba(0,0,0,0.3); }
+.market-search-dropdown.open { display:block; }
+.msd-item { display:flex; align-items:center; gap:8px; padding:8px 12px; cursor:pointer; border-bottom:1px solid var(--border); transition:background var(--transition); }
+.msd-item:last-child { border-bottom:none; }
+.msd-item:hover { background:var(--bg-card-hover); }
