@@ -1,163 +1,93 @@
-// AoT-PNASF — AI Smart Feed Scanner
-// Bu script GitHub Actions tarafından her 6 saatte çalıştırılır.
-// Albion Online Forum, Wiki ve GameInfo API'yi tarar.
-// Değişiklik bulursa Claude API ile analiz eder ve feed.json'u günceller.
+// AoT-PNASF — AI Smart Feed Scanner (Gemini Edition)
+// Google Gemini API kullanır — Ücretsiz tier mevcut!
+// GitHub Actions tarafından her 6 saatte çalıştırılır.
 
 import fetch from 'node-fetch';
-import * as cheerio from 'cheerio';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const FEED_PATH = path.join(__dirname, '../src/data/feed.json');
-const API_KEY = process.env.ANTHROPIC_API_KEY;
+const GEMINI_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`;
 
-// ─── Kaynaklar ───────────────────────────────────────────────
-const SOURCES = [
-  {
-    name: 'Albion Forum - Patch Notes',
-    url: 'https://forum.albiononline.com/index.php/BoardList/',
-    type: 'forum'
-  },
-  {
-    name: 'Albion GameInfo API - Item Categories',
-    url: 'https://gameinfo.albiononline.com/api/gameinfo/items/_itemCategoryTree',
-    type: 'api'
-  }
-];
-
-// ─── Mevcut feed'i oku ───────────────────────────────────────
 function loadFeed() {
-  try {
-    return JSON.parse(fs.readFileSync(FEED_PATH, 'utf8'));
-  } catch {
-    return { last_updated: '', bot_version: '1.0.0', updates: [] };
-  }
+  try { return JSON.parse(fs.readFileSync(FEED_PATH, 'utf8')); }
+  catch { return { last_updated: '', bot_version: '1.0.0', updates: [] }; }
 }
 
-// ─── Forum tarama ────────────────────────────────────────────
-async function scanForum() {
+async function scanAlbionForum() {
   try {
     const res = await fetch('https://forum.albiononline.com/index.php/BoardList/', {
-      headers: { 'User-Agent': 'AoT-PNASF Bot/1.0 (Albion fan site)' },
-      timeout: 15000
+      headers: { 'User-Agent': 'AoT-PNASF Bot/1.0 (Albion fan site scanner)' },
+      signal: AbortSignal.timeout(15000)
     });
     const html = await res.text();
-    const $ = cheerio.load(html);
-    const posts = [];
-    $('a[href*="Thread"]').each((i, el) => {
-      const title = $(el).text().trim();
-      const href = $(el).attr('href');
-      if (title && title.length > 5 && i < 20) {
-        posts.push({ title, href });
-      }
+    const matches = [...html.matchAll(/href="[^"]*Thread[^"]*"[^>]*>([^<]{10,80})</g)];
+    return matches.slice(0, 25).map(m => m[1].trim()).filter(Boolean);
+  } catch (e) { console.log('Forum hatası:', e.message); return []; }
+}
+
+async function scanAlbionWiki() {
+  try {
+    const res = await fetch('https://wiki.albiononline.com/wiki/Special:RecentChanges', {
+      headers: { 'User-Agent': 'AoT-PNASF Bot/1.0' },
+      signal: AbortSignal.timeout(15000)
     });
-    return posts;
-  } catch (e) {
-    console.log('Forum tarama hatası:', e.message);
-    return [];
-  }
+    const html = await res.text();
+    const matches = [...html.matchAll(/title="([^"]{5,60})"/g)];
+    return [...new Set(matches.map(m => m[1].trim()))].slice(0, 15);
+  } catch (e) { console.log('Wiki hatası:', e.message); return []; }
 }
 
-// ─── Claude API ile analiz ───────────────────────────────────
-async function analyzeWithClaude(content, existingTitles) {
-  if (!API_KEY) {
-    console.log('ANTHROPIC_API_KEY bulunamadı, analiz atlanıyor.');
-    return null;
-  }
+async function analyzeWithGemini(forumPosts, wikiChanges, existingTitles) {
+  if (!GEMINI_KEY) { console.log('GEMINI_API_KEY yok.'); return null; }
+  const today = new Date().toISOString().split('T')[0];
+  const prompt = `Sen Albion Online uzmanı bir AI asistanısın.
 
-  const prompt = `Sen Albion Online uzmanı bir AI asistanısın. Aşağıdaki forum başlıklarını analiz et.
+Zaten sitede olanlar (tekrar ekleme):
+${existingTitles.slice(0, 10).join('\n')}
 
-Mevcut feed'de zaten olan başlıklar:
-${existingTitles.join('\n')}
+Forum başlıkları: ${forumPosts.join(' | ')}
+Wiki değişiklikleri: ${wikiChanges.join(' | ')}
 
-Yeni tarama sonuçları:
-${JSON.stringify(content, null, 2)}
-
-Gerçekten YENİ ve önemli olan güncellemeleri bul (patch, yeni item, balance değişikliği, yeni zone/event).
-Her güncelleme için JSON formatında yanıt ver:
-{
-  "updates": [
-    {
-      "type": "patch|item|balance|zone|event|guide",
-      "title_tr": "Türkçe başlık",
-      "title_en": "English title",
-      "desc_tr": "Kısa Türkçe açıklama (max 120 karakter)",
-      "desc_en": "Short English description (max 120 chars)",
-      "date": "YYYY-MM-DD"
-    }
-  ]
-}
-
-Eğer gerçekten yeni bir şey yoksa updates dizisini boş bırak: {"updates": []}
-SADECE JSON yanıt ver, başka hiçbir şey yazma.`;
+Yeni Albion güncellemelerini bul. SADECE JSON döndür:
+{"updates":[{"type":"patch|item|balance|zone|event|guide","title_tr":"...","title_en":"...","desc_tr":"...","desc_en":"...","date":"${today}"}]}
+Yeni bir şey yoksa: {"updates":[]}`;
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch(GEMINI_URL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': API_KEY,
-        'anthropic-version': '2023-06-01'
-      },
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 1000,
-        messages: [{ role: 'user', content: prompt }]
-      })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.3, maxOutputTokens: 1000 } }),
+      signal: AbortSignal.timeout(30000)
     });
     const data = await res.json();
-    const text = data.content[0].text.trim();
+    let text = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
+    text = text.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
     return JSON.parse(text);
-  } catch (e) {
-    console.log('Claude API hatası:', e.message);
-    return null;
-  }
+  } catch (e) { console.log('Gemini hatası:', e.message); return null; }
 }
 
-// ─── Ana akış ────────────────────────────────────────────────
 async function main() {
-  console.log('🤖 AoT-PNASF AI Bot başlıyor...');
-  console.log(`📅 Tarih: ${new Date().toISOString()}`);
-
+  console.log('🤖 AoT-PNASF AI Bot (Gemini) -', new Date().toISOString());
   const feed = loadFeed();
-  const existingTitles = feed.updates.map(u => u.title_tr || u.title || '');
-
-  // Forum tara
-  console.log('📋 Albion Forum taranıyor...');
-  const forumPosts = await scanForum();
-  console.log(`  ${forumPosts.length} başlık bulundu.`);
-
-  if (forumPosts.length === 0) {
-    console.log('✅ Taranacak içerik yok, bot tamamlandı.');
-    return;
-  }
-
-  // Claude ile analiz et
-  console.log('🧠 Claude API ile analiz ediliyor...');
-  const analysis = await analyzeWithClaude(forumPosts, existingTitles);
-
-  if (!analysis || !analysis.updates || analysis.updates.length === 0) {
-    console.log('✅ Yeni güncelleme bulunamadı.');
-    // Sadece last_updated güncelle
+  const existingTitles = feed.updates.map(u => u.title_tr || '');
+  const [forumPosts, wikiChanges] = await Promise.all([scanAlbionForum(), scanAlbionWiki()]);
+  console.log(`Forum: ${forumPosts.length} | Wiki: ${wikiChanges.length}`);
+  const analysis = await analyzeWithGemini(forumPosts, wikiChanges, existingTitles);
+  if (!analysis?.updates?.length) {
+    console.log('✅ Yeni güncelleme yok.');
     feed.last_updated = new Date().toISOString().split('T')[0];
     fs.writeFileSync(FEED_PATH, JSON.stringify(feed, null, 2));
     return;
   }
-
-  // Yeni güncellemeleri başa ekle
-  const newUpdates = analysis.updates.map((u, i) => ({
-    id: String(Date.now() + i),
-    ...u
-  }));
-
-  feed.updates = [...newUpdates, ...feed.updates].slice(0, 50); // max 50 kayıt
+  const newUpdates = analysis.updates.map((u, i) => ({ id: String(Date.now() + i), ...u }));
+  feed.updates = [...newUpdates, ...feed.updates].slice(0, 50);
   feed.last_updated = new Date().toISOString().split('T')[0];
-
   fs.writeFileSync(FEED_PATH, JSON.stringify(feed, null, 2));
   console.log(`✅ ${newUpdates.length} yeni güncelleme eklendi!`);
-  newUpdates.forEach(u => console.log(`  → [${u.type}] ${u.title_tr}`));
 }
 
 main().catch(console.error);
