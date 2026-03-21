@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crafting & Üretim — AoT-PNASF</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../styles/main.css"/>
+  <link rel="stylesheet" href="../styles/crafting.css"/>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a class="nav-logo" href="../../index.html">
+      <span class="logo-aot">AoT</span><span class="logo-dash">—</span><span class="logo-pnasf">PNASF</span>
+      <span class="logo-ai-badge">AI</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="market.html" data-tr="Market" data-en="Market">Market</a></li>
+      <li><a href="crafting.html" class="active" data-tr="Üretim" data-en="Crafting">Üretim</a></li>
+      <li><a href="pvp.html" data-tr="PvP & İstatistik" data-en="PvP & Stats">PvP & İstatistik</a></li>
+      <li><a href="maps.html" data-tr="Haritalar" data-en="Maps">Haritalar</a></li>
+      <li><a href="guides.html" data-tr="Rehberler" data-en="Guides">Rehberler</a></li>
+      <li><a href="tools.html" data-tr="Araçlar" data-en="Tools">Araçlar</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="lang-toggle" id="langToggle" onclick="toggleLang()"><span id="langLabel">TR</span></button>
+      <div class="ai-status"><span class="ai-dot"></span><span class="ai-text">AI Aktif</span></div>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<main class="crafting-main">
+
+  <!-- BAŞLIK -->
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="page-badge"><span class="ai-dot"></span><span data-tr="Canlı Crafting Hesabı" data-en="Live Crafting Calculator">Canlı Crafting Hesabı</span></div>
+      <h1 data-tr="Crafting & Üretim" data-en="Crafting & Production">Crafting & Üretim</h1>
+      <p data-tr="Gerçek zamanlı fiyatlarla crafting, refining, farming ve yiyecek kârını hesapla" data-en="Calculate crafting, refining, farming and food profit with real-time prices">Gerçek zamanlı fiyatlarla crafting, refining, farming ve yiyecek kârını hesapla</p>
+    </div>
+  </div>
+
+  <!-- MODÜL SEKMELERİ -->
+  <div class="module-tabs">
+    <div class="module-tabs-inner">
+      <button class="mod-tab active" onclick="switchModule('crafting')" data-tr="🔨 Crafting Kâr" data-en="🔨 Crafting Profit">🔨 Crafting Kâr</button>
+      <button class="mod-tab" onclick="switchModule('refining')" data-tr="⚙️ Refining" data-en="⚙️ Refining">⚙️ Refining</button>
+      <button class="mod-tab" onclick="switchModule('farming')" data-tr="🌾 Farming" data-en="🌾 Farming">🌾 Farming</button>
+      <button class="mod-tab" onclick="switchModule('food')" data-tr="🍲 Yiyecek & İksir" data-en="🍲 Food & Potion">🍲 Yiyecek & İksir</button>
+    </div>
+  </div>
+
+  <!-- ===== CRAFTING MODÜLÜ ===== -->
+  <div class="module-content" id="mod-crafting">
+    <div class="module-inner">
+
+      <!-- Şehir seçimi & bonuslar -->
+      <div class="city-bonus-strip">
+        <span class="cbs-label" data-tr="Craft Şehri:" data-en="Craft City:">Craft Şehri:</span>
+        <div class="cbs-cities">
+          <button class="cbs-btn active" data-city="Caerleon" onclick="setCraftCity('Caerleon')">⚔️ Caerleon</button>
+          <button class="cbs-btn" data-city="Lymhurst" onclick="setCraftCity('Lymhurst')">🌲 Lymhurst</button>
+          <button class="cbs-btn" data-city="Bridgewatch" onclick="setCraftCity('Bridgewatch')">🏜️ Bridgewatch</button>
+          <button class="cbs-btn" data-city="Martlock" onclick="setCraftCity('Martlock')">🏔️ Martlock</button>
+          <button class="cbs-btn" data-city="Fort Sterling" onclick="setCraftCity('Fort Sterling')">⛰️ Fort Sterling</button>
+          <button class="cbs-btn" data-city="Thetford" onclick="setCraftCity('Thetford')">🌿 Thetford</button>
+          <button class="cbs-btn" data-city="Brecilien" onclick="setCraftCity('Brecilien')">🌫️ Brecilien</button>
+        </div>
+        <div class="city-bonus-tag" id="cityBonusTag">Bonus yok</div>
+      </div>
+
+      <div class="craft-layout">
+        <!-- SOL: EŞYA SEÇİMİ -->
+        <div class="craft-left">
+          <div class="panel">
+            <h3 data-tr="Eşya Seç" data-en="Select Item">Eşya Seç</h3>
+            <input type="text" id="craftSearch" class="form-input" placeholder="Ara... (T4 Çanta, Kılıç, Yay...)" oninput="filterCraftItems(this.value)"/>
+            <div class="craft-category-filter">
+              <select id="craftCatFilter" onchange="filterCraftItems(document.getElementById('craftSearch').value)" class="form-select">
+                <option value="">Tüm Kategoriler</option>
+                <option value="bags">Çantalar</option>
+                <option value="swords">Kılıçlar</option>
+                <option value="bows">Yaylar</option>
+                <option value="axes">Baltalar</option>
+                <option value="staves">Asalar</option>
+                <option value="hammers">Çekiçler</option>
+                <option value="spears">Mızraklar</option>
+                <option value="armor">Zırhlar</option>
+                <option value="food">Yiyecek</option>
+                <option value="potions">İksirler</option>
+              </select>
+            </div>
+            <div class="craft-item-list" id="craftItemList"></div>
+          </div>
+
+          <!-- AYARLAR -->
+          <div class="panel">
+            <h3 data-tr="Hesap Ayarları" data-en="Calculation Settings">Hesap Ayarları</h3>
+            <div class="settings-grid">
+              <div class="setting-row">
+                <label data-tr="Miktar" data-en="Quantity">Miktar</label>
+                <input type="number" id="craftQty" value="1" min="1" max="9999" class="form-input-sm" oninput="calcCrafting()"/>
+              </div>
+              <div class="setting-row">
+                <label data-tr="Return Rate %" data-en="Return Rate %">Return Rate %</label>
+                <input type="number" id="returnRate" value="15" min="0" max="70" class="form-input-sm" oninput="calcCrafting()"/>
+                <span class="setting-hint" data-tr="(Focus: ~47%)" data-en="(Focus: ~47%)">(Focus: ~47%)</span>
+              </div>
+              <div class="setting-row">
+                <label data-tr="Kullanım Ücreti %" data-en="Usage Fee %">Kullanım Ücreti %</label>
+                <input type="number" id="usageFee" value="3" min="0" max="25" class="form-input-sm" oninput="calcCrafting()"/>
+              </div>
+              <div class="setting-row">
+                <label data-tr="Vergi %" data-en="Tax %">Vergi %</label>
+                <input type="number" id="taxRate" value="8" min="0" max="15" class="form-input-sm" oninput="calcCrafting()"/>
+              </div>
+              <div class="setting-row">
+                <label><input type="checkbox" id="focusMode" onchange="calcCrafting()"/> <span data-tr="Focus Kullan" data-en="Use Focus">Focus Kullan</span></label>
+              </div>
+              <div class="setting-row">
+                <label><input type="checkbox" id="premiumMode" checked onchange="calcCrafting()"/> <span data-tr="Premium Hesap" data-en="Premium Account">Premium Hesap</span></label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SAĞ: SONUÇLAR -->
+        <div class="craft-right">
+          <div class="craft-result-placeholder" id="craftPlaceholder">
+            <div class="placeholder-icon">🔨</div>
+            <p data-tr="Sol taraftan bir eşya seç" data-en="Select an item from the left">Sol taraftan bir eşya seç</p>
+          </div>
+
+          <div id="craftResult" style="display:none">
+            <!-- Seçili eşya başlığı -->
+            <div class="result-item-header" id="resultItemHeader"></div>
+
+            <!-- Maliyetler -->
+            <div class="panel">
+              <h3 data-tr="Malzeme Maliyeti" data-en="Material Cost">Malzeme Maliyeti</h3>
+              <div class="materials-list" id="materialsList"></div>
+              <div class="materials-total" id="materialsTotal"></div>
+            </div>
+
+            <!-- Satış fiyatı -->
+            <div class="panel">
+              <h3 data-tr="Satış Fiyatları (Şehirler)" data-en="Sell Prices (Cities)">Satış Fiyatları (Şehirler)</h3>
+              <div class="sell-prices-grid" id="sellPricesGrid"></div>
+            </div>
+
+            <!-- KÂR HESABI -->
+            <div class="panel profit-panel" id="profitPanel">
+              <h3 data-tr="Kâr Hesabı" data-en="Profit Calculation">Kâr Hesabı</h3>
+              <div class="profit-breakdown" id="profitBreakdown"></div>
+              <div class="profit-result" id="profitResult"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== REFİNİNG MODÜLÜ ===== -->
+  <div class="module-content" id="mod-refining" style="display:none">
+    <div class="module-inner">
+      <div class="refining-intro">
+        <div class="info-box">
+          💡 <strong data-tr="Refining nedir?" data-en="What is Refining?">Refining nedir?</strong>
+          <span data-tr="Ham kaynakları (Wood, Ore, Fiber, Hide, Rock) işlenmiş kaynaklara (Planks, Metalbar, Cloth, Leather, Stoneblock) dönüştürme işlemidir. Her şehirde farklı bonus uygulanır." data-en="Converting raw resources (Wood, Ore, Fiber, Hide, Rock) into refined resources (Planks, Metalbar, Cloth, Leather, Stoneblock). Each city has different bonuses.">Ham kaynakları işlenmiş kaynaklara dönüştürme işlemidir. Her şehirde farklı bonus uygulanır.</span>
+        </div>
+      </div>
+
+      <div class="refining-grid">
+        <!-- Her kaynak türü için kart -->
+        <div class="refining-card" data-resource="wood">
+          <div class="rc-header">
+            <img src="https://render.albiononline.com/v1/item/T4_WOOD.png" class="rc-icon" alt="Wood"/>
+            <div>
+              <h3 data-tr="Odun → Tahta" data-en="Wood → Planks">Odun → Tahta</h3>
+              <span class="rc-bonus-city" data-tr="Bonus şehir: Fort Sterling" data-en="Bonus city: Fort Sterling">Bonus şehir: Fort Sterling</span>
+            </div>
+          </div>
+          <div class="rc-tiers" id="refine-wood"></div>
+        </div>
+
+        <div class="refining-card" data-resource="ore">
+          <div class="rc-header">
+            <img src="https://render.albiononline.com/v1/item/T4_ORE.png" class="rc-icon" alt="Ore"/>
+            <div>
+              <h3 data-tr="Maden → Metal Külçe" data-en="Ore → Metalbar">Maden → Metal Külçe</h3>
+              <span class="rc-bonus-city" data-tr="Bonus şehir: Thetford" data-en="Bonus city: Thetford">Bonus şehir: Thetford</span>
+            </div>
+          </div>
+          <div class="rc-tiers" id="refine-ore"></div>
+        </div>
+
+        <div class="refining-card" data-resource="fiber">
+          <div class="rc-header">
+            <img src="https://render.albiononline.com/v1/item/T4_FIBER.png" class="rc-icon" alt="Fiber"/>
+            <div>
+              <h3 data-tr="Fiber → Kumaş" data-en="Fiber → Cloth">Fiber → Kumaş</h3>
+              <span class="rc-bonus-city" data-tr="Bonus şehir: Lymhurst" data-en="Bonus city: Lymhurst">Bonus şehir: Lymhurst</span>
+            </div>
+          </div>
+          <div class="rc-tiers" id="refine-fiber"></div>
+        </div>
+
+        <div class="refining-card" data-resource="hide">
+          <div class="rc-header">
+            <img src="https://render.albiononline.com/v1/item/T4_HIDE.png" class="rc-icon" alt="Hide"/>
+            <div>
+              <h3 data-tr="Ham Deri → İşlenmiş Deri" data-en="Hide → Leather">Ham Deri → İşlenmiş Deri</h3>
+              <span class="rc-bonus-city" data-tr="Bonus şehir: Martlock" data-en="Bonus city: Martlock">Bonus şehir: Martlock</span>
+            </div>
+          </div>
+          <div class="rc-tiers" id="refine-hide"></div>
+        </div>
+
+        <div class="refining-card" data-resource="rock">
+          <div class="rc-header">
+            <img src="https://render.albiononline.com/v1/item/T4_ROCK.png" class="rc-icon" alt="Rock"/>
+            <div>
+              <h3 data-tr="Taş → Taş Blok" data-en="Rock → Stoneblock">Taş → Taş Blok</h3>
+              <span class="rc-bonus-city" data-tr="Bonus şehir: Bridgewatch" data-en="Bonus city: Bridgewatch">Bonus şehir: Bridgewatch</span>
+            </div>
+          </div>
+          <div class="rc-tiers" id="refine-rock"></div>
+        </div>
+      </div>
+
+      <div class="refine-settings">
+        <div class="panel">
+          <h3 data-tr="Refining Ayarları" data-en="Refining Settings">Refining Ayarları</h3>
+          <div class="settings-grid">
+            <div class="setting-row">
+              <label data-tr="Return Rate %" data-en="Return Rate %">Return Rate %</label>
+              <input type="number" id="refineReturnRate" value="36.7" min="0" max="53" step="0.1" class="form-input-sm" oninput="calcRefining()"/>
+              <span class="setting-hint">(Focus: ~53%)</span>
+            </div>
+            <div class="setting-row">
+              <label data-tr="Miktar (ham kaynak)" data-en="Quantity (raw resource)">Miktar (ham kaynak)</label>
+              <input type="number" id="refineQty" value="100" min="1" max="99999" class="form-input-sm" oninput="calcRefining()"/>
+            </div>
+            <div class="setting-row">
+              <label><input type="checkbox" id="refineFocus" onchange="calcRefining()"/> <span data-tr="Focus Kullan (53%)" data-en="Use Focus (53%)">Focus Kullan (53%)</span></label>
+            </div>
+            <div class="setting-row">
+              <label><input type="checkbox" id="refineBonusCity" checked onchange="calcRefining()"/> <span data-tr="Bonus şehirde craft et" data-en="Craft in bonus city">Bonus şehirde craft et</span></label>
+            </div>
+          </div>
+          <button class="btn-calc" onclick="calcRefining()" data-tr="Refining Kârını Hesapla" data-en="Calculate Refining Profit">Refining Kârını Hesapla</button>
+        </div>
+      </div>
+
+      <div class="refining-results" id="refiningResults" style="display:none">
+        <div class="panel">
+          <h3 data-tr="Refining Kâr Tablosu" data-en="Refining Profit Table">Refining Kâr Tablosu</h3>
+          <table class="refine-table" id="refineTable">
+            <thead>
+              <tr>
+                <th data-tr="Kaynak" data-en="Resource">Kaynak</th>
+                <th data-tr="Tier" data-en="Tier">Tier</th>
+                <th data-tr="Ham Fiyat" data-en="Raw Price">Ham Fiyat</th>
+                <th data-tr="İşlenmiş Fiyat" data-en="Refined Price">İşlenmiş Fiyat</th>
+                <th data-tr="Çıktı" data-en="Output">Çıktı</th>
+                <th data-tr="Maliyet" data-en="Cost">Maliyet</th>
+                <th data-tr="Gelir" data-en="Revenue">Gelir</th>
+                <th data-tr="Kâr" data-en="Profit">Kâr</th>
+              </tr>
+            </thead>
+            <tbody id="refineTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FARMING MODÜLÜ ===== -->
+  <div class="module-content" id="mod-farming" style="display:none">
+    <div class="module-inner">
+      <div class="info-box" style="margin-bottom:24px">
+        🌾 <strong data-tr="Farming Hesabı" data-en="Farming Calculator">Farming Hesabı</strong>
+        <span data-tr="Ada çiftliğindeki verimini ve günlük kazancını hesapla. Premium ile %50 daha fazla ürün alırsın." data-en="Calculate your island farm yield and daily income. Premium gives 50% more yield.">Ada çiftliğindeki verimini ve günlük kazancını hesapla. Premium ile %50 daha fazla ürün alırsın.</span>
+      </div>
+
+      <div class="farming-layout">
+        <div class="panel">
+          <h3 data-tr="Çiftlik Ayarları" data-en="Farm Settings">Çiftlik Ayarları</h3>
+          <div class="settings-grid">
+            <div class="setting-row">
+              <label data-tr="Tarla Sayısı" data-en="Number of Plots">Tarla Sayısı</label>
+              <input type="number" id="farmPlots" value="9" min="1" max="120" class="form-input-sm" oninput="calcFarming()"/>
+            </div>
+            <div class="setting-row">
+              <label data-tr="Ürün Seç" data-en="Select Crop">Ürün Seç</label>
+              <select id="farmCrop" class="form-select" onchange="calcFarming()">
+                <option value="carrot">🥕 Havuç (8 saat)</option>
+                <option value="turnip">🌱 Şalgam (22 saat)</option>
+                <option value="pumpkin">🎃 Kabak (22 saat)</option>
+                <option value="cabbage">🥬 Lahana (22 saat)</option>
+                <option value="corn">🌽 Mısır (52 saat)</option>
+                <option value="bean">🫘 Fasulye (52 saat)</option>
+                <option value="wheat">🌾 Buğday (52 saat)</option>
+                <option value="potato">🥔 Patates (52 saat)</option>
+                <option value="sheep">🐑 Koyun (22 saat)</option>
+                <option value="pig">🐷 Domuz (22 saat)</option>
+                <option value="cow">🐄 İnek (52 saat)</option>
+                <option value="goose">🦆 Kaz (22 saat)</option>
+                <option value="goat">🐐 Keçi (52 saat)</option>
+              </select>
+            </div>
+            <div class="setting-row">
+              <label><input type="checkbox" id="farmPremium" checked onchange="calcFarming()"/> <span data-tr="Premium (+%50)" data-en="Premium (+50%)">Premium (+%50)</span></label>
+            </div>
+            <div class="setting-row">
+              <label><input type="checkbox" id="farmFocus" onchange="calcFarming()"/> <span data-tr="Focus Kullan" data-en="Use Focus">Focus Kullan</span></label>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel" id="farmResult">
+          <h3 data-tr="Farming Sonucu" data-en="Farming Result">Farming Sonucu</h3>
+          <div id="farmResultContent">
+            <div class="placeholder-icon">🌾</div>
+            <p style="color:var(--text-muted);text-align:center" data-tr="Ayarları gir, otomatik hesaplar" data-en="Enter settings, auto-calculates">Ayarları gir, otomatik hesaplar</p>
+          </div>
+        </div>
+
+        <!-- En karlı ürün tablosu -->
+        <div class="panel">
+          <h3 data-tr="En Karlı Ürünler (Mevcut Fiyatlara Göre)" data-en="Most Profitable Crops (Current Prices)">En Karlı Ürünler (Mevcut Fiyatlara Göre)</h3>
+          <div class="farm-ranking" id="farmRanking">
+            <div class="loading-wrap"><div class="loading-spinner"></div><span>Fiyatlar yükleniyor...</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== YİYECEK & İKSİR MODÜLÜ ===== -->
+  <div class="module-content" id="mod-food" style="display:none">
+    <div class="module-inner">
+      <div class="info-box" style="margin-bottom:24px">
+        🍲 <strong data-tr="Yiyecek & İksir Hesabı" data-en="Food & Potion Calculator">Yiyecek & İksir Hesabı</strong>
+        <span data-tr="Yiyecek ve iksir üretim maliyetini ve kârını hesapla. Yiyecekler 10x, iksirler 5x çıkar." data-en="Calculate food and potion production cost and profit. Food yields 10x, potions 5x.">Yiyecek ve iksir üretim maliyetini hesapla. Yiyecekler 10x, iksirler 5x çıkar.</span>
+      </div>
+
+      <div class="food-layout">
+        <div class="panel">
+          <h3 data-tr="Ürün Seç" data-en="Select Product">Ürün Seç</h3>
+          <div class="food-grid" id="foodGrid"></div>
+        </div>
+
+        <div class="panel" id="foodResult" style="display:none">
+          <h3 data-tr="Üretim Hesabı" data-en="Production Calculation">Üretim Hesabı</h3>
+          <div id="foodResultContent"></div>
+        </div>
+
+        <!-- Kâr tablosu -->
+        <div class="panel">
+          <h3 data-tr="Tüm Yiyecek & İksir Kâr Tablosu" data-en="All Food & Potion Profit Table">Tüm Yiyecek & İksir Kâr Tablosu</h3>
+          <div class="loading-wrap" id="foodTableLoading"><div class="loading-spinner"></div><span>Yükleniyor...</span></div>
+          <table class="refine-table" id="foodTable" style="display:none">
+            <thead>
+              <tr>
+                <th>Ürün</th>
+                <th>Tier</th>
+                <th data-tr="Malzeme Maliyeti" data-en="Material Cost">Malzeme Maliyeti</th>
+                <th data-tr="Satış Fiyatı" data-en="Sell Price">Satış Fiyatı</th>
+                <th data-tr="Çıktı" data-en="Output">Çıktı</th>
+                <th data-tr="Kâr" data-en="Profit">Kâr</th>
+              </tr>
+            </thead>
+            <tbody id="foodTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo"><span class="logo-aot">AoT</span><span class="logo-dash">—</span><span class="logo-pnasf">PNASF</span></div>
+    <p class="footer-desc" data-tr="Crafting verileri Albion Online Data Project API'sinden alınmaktadır." data-en="Crafting data sourced from Albion Online Data Project API.">Crafting verileri Albion Online Data Project API'sinden alınmaktadır.</p>
+    <p class="footer-copy">© 2025 AoT-PNASF · Powered by Claude AI</p>
+  </div>
+</footer>
+
+<script src="../lib/lang.js"></script>
+<script src="../lib/nav.js"></script>
+<script src="../lib/crafting.js"></script>
+</body>
+</html>
