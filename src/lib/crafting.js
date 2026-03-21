@@ -300,35 +300,57 @@ function updateSelectedBar(name){
 // ─── ARAMA ────────────────────────────────────────────────────
 function onSearchInput(val){
   const dd=document.getElementById('searchDropdown');
-  if(!val||val.length<2){ dd.classList.remove('open'); return; }
+  if(!val||val.length<1){ dd.classList.remove('open'); return; }
+  const lang=localStorage.getItem('aot-lang')||'tr';
+
+  // AO_ITEMS global listesinden ara (items-data.js)
+  const allItems = window.AO_ITEMS || [];
   const q=val.toLowerCase();
-  const results=[];
-  CATEGORIES.forEach(cat=>{
-    cat.items.forEach(item=>{
-      if(item.name.toLowerCase().includes(q)||item.id.toLowerCase().includes(q)){
-        results.push({...item, catKey:cat.key, catLabel:cat.label, catIcon:cat.icon});
-      }
-    });
+  const results = allItems.filter(item=>{
+    return item.en.toLowerCase().includes(q) ||
+           item.tr.toLowerCase().includes(q) ||
+           item.id.toLowerCase().includes(q);
   });
+
   if(!results.length){ dd.classList.remove('open'); return; }
-  dd.innerHTML=results.slice(0,12).map(r=>`
-    <div class="sd-item" onclick="searchSelect('${r.id}','${r.name}','${r.catKey}')">
-      <img src="${RENDER}/T${currentTier}_${r.id}.png" onerror="this.src='${RENDER}/T4_BAG.png'" alt="${r.name}"/>
-      <span class="sd-tier">T${currentTier}</span>
-      <span>${r.name}</span>
-      <span class="sd-cat">${r.catIcon} ${r.catLabel}</span>
-    </div>`).join('');
+
+  // Kategori ikonlarını bul
+  const catIcons = {};
+  CATEGORIES.forEach(c=>{ catIcons[c.key]=c.icon; catIcons[c.label]=c.icon; });
+
+  dd.innerHTML=results.slice(0,15).map(r=>{
+    const name = lang==='en' ? r.en : r.tr;
+    const tier = currentTier;
+    const enc  = currentEnchant>0?`@${currentEnchant}`:'';
+    const icon = `${RENDER}/T${tier}_${r.id}${enc}.png`;
+    const catIcon = catIcons[r.cat] || '📦';
+    return `<div class="sd-item" onclick="searchSelect('${r.id}','${r.cat}')">
+      <img src="${icon}" onerror="this.src='${RENDER}/T4_BAG.png'" alt="${name}"/>
+      <span class="sd-tier">T${tier}</span>
+      <span>${name}</span>
+      <span class="sd-en" style="font-size:10px;color:var(--text-muted)">${r.en}</span>
+      <span class="sd-cat">${catIcon}</span>
+    </div>`;
+  }).join('');
   dd.classList.add('open');
 }
 
-function searchSelect(id,name,catKey){
+function searchSelect(id, catKey){
+  const lang=localStorage.getItem('aot-lang')||'tr';
   document.getElementById('searchDropdown').classList.remove('open');
-  document.getElementById('craftSearchInput').value=name;
-  currentCat=catKey;
-  buildCatList();
-  renderItemGrid(catKey);
-  selectItem(id,name);
+  const item = (window.AO_ITEMS||[]).find(i=>i.id===id);
+  const name = item ? (lang==='en'?item.en:item.tr) : id;
+  document.getElementById('craftSearchInput').value = name;
+  // Kategoriyi de seç
+  if(catKey){
+    currentCat=catKey;
+    buildCatList();
+    renderItemGrid(catKey);
+  }
+  selectItem(id, name);
 }
+
+// searchSelect artık yukarıda tanımlı
 
 document.addEventListener('click',e=>{
   if(!e.target.closest('.craft-search-wrap'))
