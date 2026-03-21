@@ -3,6 +3,24 @@
   "bot_version": "1.0.0",
   "updates": [
     {
+      "id": "1774061613889",
+      "type": "guide",
+      "title_tr": "Rogue Frontier — Smuggler güncellemesi",
+      "title_en": "Rogue Frontier — Smuggler update",
+      "desc_tr": "Yeni Smuggler sistemi ve Outlands içeriğiyle Rogue Frontier güncellemesi yayında.",
+      "desc_en": "Rogue Frontier update live with new Smuggler system and Outlands content.",
+      "date": "2025-08-01"
+    },
+    {
+      "id": "1774061613891",
+      "type": "event",
+      "title_tr": "Brecilien — Sis Şehri aktif",
+      "title_en": "Brecilien — Mist City active",
+      "desc_tr": "The Mists biome'unda yer alan Brecilien şehri tüm sunucularda aktif durumda.",
+      "desc_en": "Brecilien city located in The Mists biome is active on all servers.",
+      "date": "2025-06-01"
+    },
+    {
       "id": "1774059864692",
       "type": "patch",
       "title_tr": "Radiant Wilds güncellemesi duyuruldu",
