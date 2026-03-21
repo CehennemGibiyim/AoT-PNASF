@@ -190,3 +190,30 @@
   .refine-cards-wrap { grid-template-columns:1fr; }
   .farming-layout { flex-direction:column; }
 }
+
+/* ═══ TRANSPORT ═══ */
+.transport-layout { display:flex; gap:16px; flex-wrap:wrap; }
+.transport-search-wrap { position:relative; margin-bottom:12px; }
+.transport-cities { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.tc-group { flex:1; min-width:180px; }
+.tc-group label { font-size:12px; color:var(--text-secondary); display:flex; flex-direction:column; gap:4px; }
+.tc-arrow { font-size:20px; color:var(--gold); font-weight:700; }
+.route-row { display:flex; align-items:center; gap:8px; padding:8px 0; border-bottom:1px solid var(--border); font-size:12px; }
+.route-row:last-child { border-bottom:none; }
+.route-profit { font-family:var(--font-display); font-size:14px; font-weight:700; color:var(--green); margin-left:auto; }
+.route-cities { color:var(--text-secondary); }
+
+/* ═══ JOURNAL ═══ */
+.journal-layout { display:flex; gap:16px; flex-wrap:wrap; }
+.journal-result-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.journal-stat { background:var(--bg-base); border:1px solid var(--border); border-radius:var(--radius); padding:10px 12px; }
+.journal-stat-label { font-family:var(--font-mono); font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:.05em; margin-bottom:3px; }
+.journal-stat-val { font-family:var(--font-display); font-size:18px; font-weight:700; color:var(--gold); }
+
+/* ═══ BLACK MARKET ═══ */
+.bm-layout { display:flex; gap:16px; flex-wrap:wrap; }
+.bm-item-icon { width:28px; height:28px; border-radius:4px; vertical-align:middle; margin-right:6px; }
+.bm-profit-pos { color:var(--green); font-weight:700; }
+.bm-profit-neg { color:var(--red); font-weight:600; }
+.btn-refresh { background:var(--bg-base); border:1px solid var(--border); color:var(--text-secondary); font-size:13px; padding:8px 14px; border-radius:var(--radius); cursor:pointer; transition:all var(--transition); font-family:var(--font-body); }
+.btn-refresh:hover { border-color:var(--gold); color:var(--gold); }

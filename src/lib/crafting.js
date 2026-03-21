@@ -584,3 +584,329 @@ function renderFarmRanking() {
 // ─── YARDIMCILAR ──────────────────────────────────────────────
 function getMinPrice(id){ const p=priceCache[id]; if(!p) return 0; const v=Object.values(p).filter(x=>x>0); return v.length?Math.min(...v):0; }
 function getMinPriceCity(id){ const p=priceCache[id]; if(!p) return {price:0,city:null}; const e=Object.entries(p).filter(([,v])=>v>0).sort((a,b)=>a[1]-b[1]); return e.length?{price:e[0][1],city:e[0][0]}:{price:0,city:null}; }
+
+// ══════════════════════════════════════════════════════
+// TRANSPORT MODÜLÜ
+// ══════════════════════════════════════════════════════
+let transportItemBase = null;
+let transportData = {};
+
+function onTransportSearch(val) {
+  const dd = document.getElementById('transportDropdown');
+  if (!val || val.length < 1) { dd.classList.remove('open'); return; }
+  const results = window.AO_SEARCH ? window.AO_SEARCH(val) : [];
+  if (!results.length) { dd.classList.remove('open'); return; }
+  const lang = getLang();
+  dd.innerHTML = results.slice(0, 12).map(r => {
+    const name = lang==='tr' ? r.tr : r.en;
+    return `<div class="sd-item" onclick="selectTransportItem('${r.id}','${name}')">
+      <img src="${RENDER}/T5_${r.id}.png" onerror="this.src='${RENDER}/T4_BAG.png'" style="width:28px;height:28px;border-radius:4px"/>
+      <span>${name}</span>
+      <span style="font-size:10px;color:var(--text-muted);margin-left:auto">${r.en}</span>
+    </div>`;
+  }).join('');
+  dd.classList.add('open');
+}
+
+async function selectTransportItem(baseId, name) {
+  transportItemBase = baseId;
+  document.getElementById('transportSearch').value = name;
+  document.getElementById('transportDropdown').classList.remove('open');
+  await loadTransportPrices(baseId);
+}
+
+async function loadTransportPrices(baseId) {
+  const tiers = [4,5,6,7,8];
+  const ids = tiers.map(t => `T${t}_${baseId}`);
+  const el = document.getElementById('transportResultContent');
+  el.innerHTML = '<div class="loading-wrap"><div class="loading-spinner"></div><span>Fiyatlar çekiliyor...</span></div>';
+  try {
+    const url = `${PRICE_API}/api/v2/stats/prices/${ids.join(',')}.json?locations=${encodeURIComponent(ALL_CITIES)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    transportData = {};
+    data.forEach(d => {
+      if (!transportData[d.item_id]) transportData[d.item_id] = {};
+      if (d.sell_price_min > 0) transportData[d.item_id][d.city] = d.sell_price_min;
+      if (!transportData[d.item_id+'_buy']) transportData[d.item_id+'_buy'] = {};
+      if (d.buy_price_max > 0) transportData[d.item_id+'_buy'][d.city] = d.buy_price_max;
+    });
+    calcTransport();
+    calcTransportRoutes();
+  } catch(e) {
+    el.innerHTML = '<span style="color:var(--red)">API hatası</span>';
+  }
+}
+
+function calcTransport() {
+  if (!transportItemBase) return;
+  const qty = parseInt(document.getElementById('transportQty').value) || 1;
+  const tax = parseFloat(document.getElementById('transportTax').value) / 100 || 0.08;
+  const fee = parseFloat(document.getElementById('transportFee').value) || 0;
+  const buyCity = document.getElementById('buyCity').value;
+  const sellCity = document.getElementById('sellCity').value;
+  const lang = getLang();
+  const el = document.getElementById('transportResultContent');
+  const tiers = [4,5,6,7,8];
+  let html = '';
+
+  tiers.forEach(t => {
+    const id = `T${t}_${transportItemBase}`;
+    const prices = transportData[id] || {};
+    const cities = Object.keys(prices).filter(c => c !== 'Black Market');
+    if (!cities.length) return;
+    const sortedBuy = cities.sort((a,b) => (prices[a]||Infinity)-(prices[b]||Infinity));
+    const cheapCity = buyCity && prices[buyCity] ? buyCity : sortedBuy[0];
+    const cheapPrice = prices[cheapCity] || 0;
+    const sortedSell = cities.sort((a,b) => (prices[b]||0)-(prices[a]||0));
+    const expCity = sellCity && prices[sellCity] ? sellCity : sortedSell[0];
+    const expPrice = prices[expCity] || 0;
+    if (!cheapPrice || !expPrice || cheapCity === expCity) return;
+    const cost = cheapPrice * qty;
+    const revenue = expPrice * qty * (1 - tax);
+    const profit = revenue - cost - fee;
+    html += `<div class="route-row">
+      <img src="${RENDER}/${id}.png" onerror="this.style.display='none'" style="width:28px;height:28px;border-radius:4px"/>
+      <span style="font-family:var(--font-mono);font-size:10px;background:var(--gold-dim);color:var(--gold);padding:2px 5px;border-radius:3px">T${t}</span>
+      <span class="route-cities">${cheapCity} → ${expCity}</span>
+      <span style="font-size:11px;color:var(--text-muted)">${cheapPrice.toLocaleString('tr-TR')} → ${expPrice.toLocaleString('tr-TR')}</span>
+      <span class="route-profit ${profit>0?'':'bm-profit-neg'}">${profit>0?'+':''}${Math.round(profit).toLocaleString('tr-TR')}</span>
+    </div>`;
+  });
+  el.innerHTML = html || `<p style="color:var(--text-muted);text-align:center;padding:20px">${lang==='tr'?'Karlı rota bulunamadı':'No profitable route found'}</p>`;
+}
+
+async function calcTransportRoutes() {
+  // En iyi rotaları tüm items-data üzerinde hesapla (top 10 bag, sword, bow...)
+  const el = document.getElementById('transportRoutes');
+  const topItems = (window.AO_ITEMS||[]).filter(i=>['bag','sword','bow','axe','hammer'].includes(i.cat)).slice(0,20);
+  const ids = topItems.flatMap(i=>[4,5,6,7,8].filter(t=>i.tiers.includes(t)).map(t=>`T${t}_${i.id}`));
+  try {
+    const url = `${PRICE_API}/api/v2/stats/prices/${ids.slice(0,50).join(',')}.json?locations=Caerleon,Bridgewatch,Lymhurst,Martlock,Thetford`;
+    const res = await fetch(url);
+    const data = await res.json();
+    const byItem = {};
+    data.forEach(d => {
+      if (!byItem[d.item_id]) byItem[d.item_id] = {};
+      if (d.sell_price_min > 0) byItem[d.item_id][d.city] = d.sell_price_min;
+    });
+    const routes = [];
+    Object.entries(byItem).forEach(([id, prices]) => {
+      const cities = Object.keys(prices);
+      if (cities.length < 2) return;
+      const min = cities.reduce((a,b) => prices[a]<prices[b]?a:b);
+      const max = cities.reduce((a,b) => prices[a]>prices[b]?a:b);
+      if (min === max) return;
+      const profit = prices[max] * 0.92 - prices[min];
+      if (profit > 0) routes.push({id, minCity:min, maxCity:max, minP:prices[min], maxP:prices[max], profit});
+    });
+    routes.sort((a,b) => b.profit - a.profit);
+    el.innerHTML = routes.slice(0,10).map(r => {
+      const item = (window.AO_ITEMS||[]).find(i=>r.id.includes(i.id));
+      const lang = getLang();
+      const name = item?(lang==='tr'?item.tr:item.en):r.id.replace(/_/g,' ');
+      return `<div class="route-row">
+        <img src="${RENDER}/${r.id}.png" onerror="this.style.display='none'" style="width:24px;height:24px;border-radius:3px"/>
+        <span style="font-size:12px;flex:1">${name}</span>
+        <span class="route-cities" style="font-size:11px">${r.minCity}→${r.maxCity}</span>
+        <span class="route-profit">+${Math.round(r.profit).toLocaleString('tr-TR')}</span>
+      </div>`;
+    }).join('') || '<p style="color:var(--text-muted);font-size:12px;padding:10px">Veri bekleniyor...</p>';
+  } catch(e) { el.innerHTML = '<p style="color:var(--text-muted);font-size:12px">Yüklenemedi</p>'; }
+}
+
+// ══════════════════════════════════════════════════════
+// JOURNAL MODÜLÜ
+// ══════════════════════════════════════════════════════
+const JOURNAL_TYPES = [
+  {id:'JOURNAL_HUNTER',    tr:'Avcı Günlüğü',       en:'Hunter Journal'},
+  {id:'JOURNAL_CRAFTSMAN', tr:'Craftçı Günlüğü',    en:'Craftsman Journal'},
+  {id:'JOURNAL_LUMBERJACK',tr:'Oduncu Günlüğü',     en:'Lumberjack Journal'},
+  {id:'JOURNAL_QUARRIER',  tr:'Taş Ocakçı Günlüğü', en:'Quarrier Journal'},
+  {id:'JOURNAL_MINER',     tr:'Madenci Günlüğü',     en:'Miner Journal'},
+  {id:'JOURNAL_SKINNER',   tr:'Derici Günlüğü',      en:'Skinner Journal'},
+  {id:'JOURNAL_HARVESTER', tr:'Hasat Günlüğü',       en:'Harvester Journal'},
+  {id:'JOURNAL_FISHER',    tr:'Balıkçı Günlüğü',     en:'Fisher Journal'},
+  {id:'JOURNAL_ADVENTURER',tr:'Maceracı Günlüğü',    en:'Adventurer Journal'},
+];
+
+let journalCache = {};
+
+async function loadJournalPrices() {
+  const tiers = [4,5,6,7,8];
+  const ids = JOURNAL_TYPES.flatMap(j => tiers.flatMap(t => [`T${t}_${j.id}_EMPTY`,`T${t}_${j.id}_FULL`]));
+  try {
+    const url = `${PRICE_API}/api/v2/stats/prices/${ids.join(',')}.json?locations=Caerleon`;
+    const res = await fetch(url);
+    const data = await res.json();
+    data.forEach(d => {
+      journalCache[d.item_id] = d.sell_price_min > 0 ? d.sell_price_min : 0;
+    });
+    calcJournal();
+    renderJournalCompare();
+  } catch(e) { console.error(e); }
+}
+
+function calcJournal() {
+  const type = document.getElementById('journalType').value;
+  const tier = document.getElementById('journalTier').value;
+  const qty = parseInt(document.getElementById('journalQty').value) || 10;
+  const tax = parseFloat(document.getElementById('journalTax').value) / 100 || 0.08;
+  const includeFull = document.getElementById('journalFull').checked;
+  const lang = getLang();
+  const emptyKey = `T${tier}_${type}_EMPTY`;
+  const fullKey  = `T${tier}_${type}_FULL`;
+  const emptyP = journalCache[emptyKey] || 0;
+  const fullP  = journalCache[fullKey]  || 0;
+  const revenue = fullP * qty * (1 - tax);
+  const cost    = includeFull ? emptyP * qty : 0;
+  const profit  = revenue - cost;
+  const perJournal = qty > 0 ? profit / qty : 0;
+  const el = document.getElementById('journalResult');
+  el.innerHTML = `<div class="journal-result-grid">
+    <div class="journal-stat"><div class="journal-stat-label">Boş Günlük Fiyatı</div><div class="journal-stat-val">${emptyP>0?emptyP.toLocaleString('tr-TR'):'—'}</div></div>
+    <div class="journal-stat"><div class="journal-stat-label">Dolu Günlük Fiyatı</div><div class="journal-stat-val">${fullP>0?fullP.toLocaleString('tr-TR'):'—'}</div></div>
+    <div class="journal-stat"><div class="journal-stat-label">${lang==='tr'?'Maliyet':'Cost'} (${qty} adet)</div><div class="journal-stat-val" style="color:var(--red)">${cost>0?Math.round(cost).toLocaleString('tr-TR'):'0'}</div></div>
+    <div class="journal-stat"><div class="journal-stat-label">${lang==='tr'?'Gelir':'Revenue'} (${qty} adet)</div><div class="journal-stat-val" style="color:var(--teal)">${revenue>0?Math.round(revenue).toLocaleString('tr-TR'):'—'}</div></div>
+    <div class="journal-stat" style="grid-column:1/-1;background:${profit>0?'rgba(34,197,94,.08)':'rgba(239,68,68,.06)'};border-color:${profit>0?'rgba(34,197,94,.3)':'rgba(239,68,68,.3)'}">
+      <div class="journal-stat-label">${lang==='tr'?'Net Kâr':'Net Profit'} (${qty} adet)</div>
+      <div class="journal-stat-val" style="font-size:24px;color:${profit>0?'var(--green)':'var(--red)'}">${profit>0?'+':''}${Math.round(profit).toLocaleString('tr-TR')}</div>
+    </div>
+    <div class="journal-stat"><div class="journal-stat-label">${lang==='tr'?'Günlük Başına':'Per Journal'}</div><div class="journal-stat-val" style="font-size:16px">${perJournal>0?Math.round(perJournal).toLocaleString('tr-TR'):'—'}</div></div>
+  </div>`;
+}
+
+function renderJournalCompare() {
+  const tier = document.getElementById('journalTier').value;
+  const tax  = parseFloat(document.getElementById('journalTax').value) / 100 || 0.08;
+  const lang = getLang();
+  const tbody = document.getElementById('journalCompareBody');
+  const rows = JOURNAL_TYPES.map(j => {
+    const emptyP = journalCache[`T${tier}_${j.id}_EMPTY`] || 0;
+    const fullP  = journalCache[`T${tier}_${j.id}_FULL`]  || 0;
+    const profit = fullP * (1-tax) - emptyP;
+    return {j, emptyP, fullP, profit};
+  }).sort((a,b) => b.profit - a.profit);
+  tbody.innerHTML = rows.map(({j,emptyP,fullP,profit}) => `<tr>
+    <td>${lang==='tr'?j.tr:j.en}</td>
+    <td><span style="font-family:var(--font-mono);font-size:10px;background:var(--gold-dim);color:var(--gold);padding:2px 5px;border-radius:3px">T${tier}</span></td>
+    <td>${emptyP>0?emptyP.toLocaleString('tr-TR'):'—'}</td>
+    <td>${fullP>0?fullP.toLocaleString('tr-TR'):'—'}</td>
+    <td class="${profit>0?'profit-pos':'profit-neg'}">${profit!==0?(profit>0?'+':'')+Math.round(profit).toLocaleString('tr-TR'):'—'}</td>
+  </tr>`).join('');
+}
+
+// ══════════════════════════════════════════════════════
+// BLACK MARKET MODÜLÜ
+// ══════════════════════════════════════════════════════
+const BM_ITEMS = (window.AO_ITEMS||[]).filter(i=>
+  ['sword','axe','bow','hammer','spear','dagger','qstaff','mace','fire','frost','arcane','holy','nature','curse',
+   'lhelmet','larmor','lshoes','phelmet','parmor','pshoes','chelmet','carmor','cshoes','bag'].includes(i.cat)
+);
+
+async function loadBMData() {
+  document.getElementById('bmLoading').style.display = 'flex';
+  document.getElementById('bmTableWrap').style.display = 'none';
+  document.getElementById('bmEmpty').style.display = 'none';
+
+  const tierSel = document.getElementById('bmTier').value;
+  const withEnchant = document.getElementById('bmEnchant').checked;
+  const tiers = tierSel === 'all' ? [4,5,6,7,8] : [parseInt(tierSel)];
+  const items = (window.AO_ITEMS||[]).filter(i=>BM_ITEMS.some(b=>b.id===i.id));
+  const ids = items.flatMap(i =>
+    tiers.filter(t=>i.tiers.includes(t)).flatMap(t => {
+      const base = `T${t}_${i.id}`;
+      return withEnchant ? [base, base+'@1', base+'@2', base+'@3'] : [base];
+    })
+  );
+
+  try {
+    // Şehir fiyatları
+    const cityUrl = `${PRICE_API}/api/v2/stats/prices/${ids.slice(0,60).join(',')}.json?locations=Caerleon,Bridgewatch,Lymhurst,Martlock,Thetford,Fort Sterling`;
+    // BM alış emirleri
+    const bmUrl   = `${PRICE_API}/api/v2/stats/prices/${ids.slice(0,60).join(',')}.json?locations=Black Market`;
+
+    const [cityRes, bmRes] = await Promise.all([fetch(cityUrl), fetch(bmUrl)]);
+    const [cityData, bmData] = await Promise.all([cityRes.json(), bmRes.json()]);
+
+    const cityPrices = {};
+    cityData.forEach(d => {
+      if (d.sell_price_min > 0) {
+        if (!cityPrices[d.item_id] || d.sell_price_min < cityPrices[d.item_id].price)
+          cityPrices[d.item_id] = {price: d.sell_price_min, city: d.city};
+      }
+    });
+    const bmPrices = {};
+    bmData.forEach(d => { if (d.buy_price_max > 0) bmPrices[d.item_id] = d.buy_price_max; });
+
+    renderBMTable(cityPrices, bmPrices);
+  } catch(e) {
+    document.getElementById('bmLoading').style.display = 'none';
+    document.getElementById('bmEmpty').style.display = 'block';
+  }
+}
+
+function renderBMTable(cityPrices, bmPrices) {
+  if (!cityPrices) return;
+  const minProfit = parseInt(document.getElementById('bmMinProfit').value) || 0;
+  const tax = parseFloat(document.getElementById('bmTax').value) / 100 || 0.08;
+  const lang = getLang();
+  const flips = [];
+
+  Object.keys(cityPrices).forEach(id => {
+    const buyP  = cityPrices[id]?.price || 0;
+    const bmP   = bmPrices[id] || 0;
+    if (!buyP || !bmP) return;
+    const revenue = bmP * (1 - tax);
+    const profit  = revenue - buyP;
+    const pct     = buyP > 0 ? ((profit/buyP)*100).toFixed(1) : 0;
+    if (profit >= minProfit) {
+      const item = (window.AO_ITEMS||[]).find(i => id.replace(/@\d/,'').includes(i.id));
+      const name = item ? (lang==='tr'?item.tr:item.en) : id.replace(/_/g,' ');
+      const tier = id.match(/^T(\d)/)?.[1] || '?';
+      const enc  = id.match(/@(\d)$/)?.[1] || '';
+      flips.push({id, name, tier, enc, buyP, bmP, buyCity: cityPrices[id].city, profit, pct});
+    }
+  });
+
+  flips.sort((a,b) => b.profit - a.profit);
+  document.getElementById('bmLoading').style.display = 'none';
+
+  if (!flips.length) {
+    document.getElementById('bmEmpty').style.display = 'block';
+    document.getElementById('bmTableWrap').style.display = 'none';
+    return;
+  }
+  document.getElementById('bmTableWrap').style.display = 'block';
+  document.getElementById('bmEmpty').style.display = 'none';
+  document.getElementById('bmTableBody').innerHTML = flips.slice(0,50).map(f => `<tr>
+    <td><img src="${RENDER}/${f.id.replace(/@\d/,'')}.png" onerror="this.style.display='none'" class="bm-item-icon"/>${f.name}${f.enc?` <span style="color:var(--teal);font-family:var(--font-mono);font-size:10px">+${f.enc}</span>`:''}</td>
+    <td><span style="font-family:var(--font-mono);font-size:10px;background:var(--gold-dim);color:var(--gold);padding:2px 5px;border-radius:3px">T${f.tier}</span></td>
+    <td style="font-size:11px">${f.buyCity}</td>
+    <td>${f.buyP.toLocaleString('tr-TR')}</td>
+    <td>${f.bmP.toLocaleString('tr-TR')}</td>
+    <td class="bm-profit-pos">+${Math.round(f.profit).toLocaleString('tr-TR')}</td>
+    <td class="bm-profit-pos">%${f.pct}</td>
+  </tr>`).join('');
+}
+
+// ══════════════════════════════════════════════════════
+// MODÜL GEÇİŞ — GÜNCELLENDİ
+// ══════════════════════════════════════════════════════
+function switchModule(mod, btn) {
+  document.querySelectorAll('.module-content').forEach(el => el.style.display='none');
+  document.querySelectorAll('.mod-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('mod-'+mod).style.display = 'block';
+  if (btn) btn.classList.add('active');
+  if (mod === 'refining')    loadRefiningPrices();
+  if (mod === 'farming')     loadFarmingPrices();
+  if (mod === 'transport')   calcTransportRoutes();
+  if (mod === 'journal')     loadJournalPrices();
+  if (mod === 'blackmarket') loadBMData();
+}
+
+// Dışarı tıklayınca transport dropdown kapat
+document.addEventListener('click', e => {
+  if (!e.target.closest('.transport-search-wrap'))
+    document.getElementById('transportDropdown')?.classList.remove('open');
+});
