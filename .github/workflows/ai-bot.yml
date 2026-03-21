@@ -1,0 +1,37 @@
+name: AoT-PNASF AI Smart Feed Bot
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'   # Her 6 saatte bir çalışır
+  workflow_dispatch:          # Manuel tetikleme de yapılabilir
+
+jobs:
+  scan-and-update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install node-fetch cheerio
+
+      - name: Run AI Scanner
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/ai-scanner.js
+
+      - name: Commit updates if any
+        run: |
+          git config --local user.email "bot@aot-pnasf.github.io"
+          git config --local user.name "AoT-PNASF AI Bot"
+          git add src/data/
+          git diff --staged --quiet || git commit -m "🤖 AI Bot: Albion güncellemeleri tarandı [$(date +'%Y-%m-%d %H:%M')]"
+          git push
