@@ -1,0 +1,33 @@
+{
+  "last_updated": "2025-03-21",
+  "bot_version": "1.0.0",
+  "updates": [
+    {
+      "id": "001",
+      "type": "patch",
+      "title_tr": "AoT-PNASF Yayında!",
+      "title_en": "AoT-PNASF is Live!",
+      "desc_tr": "Türkiye'nin ilk AI destekli Albion Online platformu açıldı. AI bot aktif ve güncelleme taraması başladı.",
+      "desc_en": "Turkey's first AI-powered Albion Online platform is live. AI bot is active and scanning for updates.",
+      "date": "2025-03-21"
+    },
+    {
+      "id": "002",
+      "type": "item",
+      "title_tr": "Market Modülü Aktif",
+      "title_en": "Market Module Active",
+      "desc_tr": "EU, US ve Asia sunucuları için gerçek zamanlı market fiyatları şimdi erişilebilir.",
+      "desc_en": "Real-time market prices for EU, US and Asia servers are now accessible.",
+      "date": "2025-03-21"
+    },
+    {
+      "id": "003",
+      "type": "guide",
+      "title_tr": "Türkçe Rehberler Geliyor",
+      "title_en": "Turkish Guides Coming",
+      "desc_tr": "AI bot tarafından yazılan Türkçe başlangıç rehberleri ve build önerileri yakında yayınlanacak.",
+      "desc_en": "Turkish beginner guides and build suggestions written by AI bot coming soon.",
+      "date": "2025-03-21"
+    }
+  ]
+}

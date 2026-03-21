@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AoT-PNASF — Albion Online Tools · Powered Nexus & AI Smart Feed</title>
+  <meta name="description" content="Türkiye'nin ilk AI destekli, canlı güncellenen Albion Online platform. Market fiyatları, crafting hesabı, harita, PvP istatistikleri ve daha fazlası." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="src/styles/main.css" />
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <a class="nav-logo" href="index.html">
+        <span class="logo-aot">AoT</span><span class="logo-dash">—</span><span class="logo-pnasf">PNASF</span>
+        <span class="logo-ai-badge">AI</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="src/pages/market.html" data-tr="Market" data-en="Market">Market</a></li>
+        <li><a href="src/pages/crafting.html" data-tr="Üretim" data-en="Crafting">Üretim</a></li>
+        <li><a href="src/pages/pvp.html" data-tr="PvP & İstatistik" data-en="PvP & Stats">PvP & İstatistik</a></li>
+        <li><a href="src/pages/maps.html" data-tr="Haritalar" data-en="Maps">Haritalar</a></li>
+        <li><a href="src/pages/guides.html" data-tr="Rehberler" data-en="Guides">Rehberler</a></li>
+        <li><a href="src/pages/tools.html" data-tr="Araçlar" data-en="Tools">Araçlar</a></li>
+      </ul>
+      <div class="nav-right">
+        <button class="lang-toggle" id="langToggle" onclick="toggleLang()">
+          <span id="langLabel">TR</span>
+        </button>
+        <div class="ai-status" id="aiStatus">
+          <span class="ai-dot"></span>
+          <span class="ai-text" data-tr="AI Aktif" data-en="AI Active">AI Aktif</span>
+        </div>
+        <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="hero-grid"></div>
+      <div class="hero-glow"></div>
+    </div>
+    <div class="hero-inner">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        <span data-tr="Türkiye'nin İlk AI Destekli Albion Platformu" data-en="Turkey's First AI-Powered Albion Platform">Türkiye'nin İlk AI Destekli Albion Platformu</span>
+      </div>
+      <h1 class="hero-title">
+        <span class="title-aot">AoT</span>
+        <span class="title-separator">—</span>
+        <span class="title-pnasf">PNASF</span>
+      </h1>
+      <p class="hero-sub" data-tr="Powered Nexus · AI Smart Feed" data-en="Powered Nexus · AI Smart Feed">Powered Nexus · AI Smart Feed</p>
+      <p class="hero-desc" data-tr="Market fiyatları, crafting hesabı, harita, PvP istatistikleri — hepsi canlı, hepsi AI destekli, hepsi Türkçe." data-en="Market prices, crafting calculator, maps, PvP stats — all live, all AI-powered, bilingual.">
+        Market fiyatları, crafting hesabı, harita, PvP istatistikleri — hepsi canlı, hepsi AI destekli, hepsi Türkçe.
+      </p>
+      <div class="hero-cta">
+        <a href="src/pages/market.html" class="btn-primary" data-tr="Market Fiyatlarına Bak" data-en="View Market Prices">Market Fiyatlarına Bak</a>
+        <a href="src/pages/maps.html" class="btn-secondary" data-tr="Haritaları Keşfet" data-en="Explore Maps">Haritaları Keşfet</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-num" id="statItems">—</span>
+          <span class="stat-label" data-tr="Eşya" data-en="Items">Eşya</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num">3</span>
+          <span class="stat-label" data-tr="Sunucu (EU/US/Asia)" data-en="Servers (EU/US/Asia)">Sunucu</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num">7</span>
+          <span class="stat-label" data-tr="Ana Şehir" data-en="Main Cities">Ana Şehir</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num">AI</span>
+          <span class="stat-label" data-tr="Canlı Güncelleme" data-en="Live Updates">Canlı Güncelleme</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODULES -->
+  <section class="modules">
+    <div class="modules-inner">
+      <div class="section-header">
+        <h2 data-tr="Tüm Araçlar" data-en="All Tools">Tüm Araçlar</h2>
+        <p data-tr="Albion Online için ihtiyacın olan her şey tek yerde" data-en="Everything you need for Albion Online in one place">Albion Online için ihtiyacın olan her şey tek yerde</p>
+      </div>
+      <div class="module-grid">
+
+        <a href="src/pages/market.html" class="module-card" data-color="teal">
+          <div class="module-icon">💹</div>
+          <h3 data-tr="Market & Ekonomi" data-en="Market & Economy">Market & Ekonomi</h3>
+          <p data-tr="Gerçek zamanlı fiyatlar, 3 sunucu karşılaştırma, gold grafikleri, transport rota analizi." data-en="Real-time prices, 3-server comparison, gold charts, transport route analysis.">Gerçek zamanlı fiyatlar, 3 sunucu karşılaştırma, gold grafikleri, transport rota analizi.</p>
+          <span class="module-tag" data-tr="Canlı API" data-en="Live API">Canlı API</span>
+        </a>
+
+        <a href="src/pages/crafting.html" class="module-card" data-color="amber">
+          <div class="module-icon">🔨</div>
+          <h3 data-tr="Crafting & Üretim" data-en="Crafting & Production">Crafting & Üretim</h3>
+          <p data-tr="Crafting kâr hesabı, refining, farming, enchanting maliyet, focus optimizasyonu." data-en="Crafting profit calculator, refining, farming, enchanting cost, focus optimization.">Crafting kâr hesabı, refining, farming, enchanting maliyet, focus optimizasyonu.</p>
+          <span class="module-tag" data-tr="Hesaplayıcı" data-en="Calculator">Hesaplayıcı</span>
+        </a>
+
+        <a href="src/pages/pvp.html" class="module-card" data-color="red">
+          <div class="module-icon">⚔️</div>
+          <h3 data-tr="PvP & İstatistikler" data-en="PvP & Statistics">PvP & İstatistikler</h3>
+          <p data-tr="Oyuncu/guild arama, kill geçmişi, battle raporları, GvG sonuçları, sıralamalar." data-en="Player/guild search, kill history, battle reports, GvG results, rankings.">Oyuncu/guild arama, kill geçmişi, battle raporları, GvG sonuçları, sıralamalar.</p>
+          <span class="module-tag" data-tr="Canlı API" data-en="Live API">Canlı API</span>
+        </a>
+
+        <a href="src/pages/maps.html" class="module-card" data-color="blue">
+          <div class="module-icon">🗺️</div>
+          <h3 data-tr="Haritalar & Zonlar" data-en="Maps & Zones">Haritalar & Zonlar</h3>
+          <p data-tr="İnteraktif dünya haritası, zone tipleri, şehir bonusları, biome rehberi, Outlands." data-en="Interactive world map, zone types, city bonuses, biome guide, Outlands.">İnteraktif dünya haritası, zone tipleri, şehir bonusları, biome rehberi, Outlands.</p>
+          <span class="module-tag" data-tr="İnteraktif" data-en="Interactive">İnteraktif</span>
+        </a>
+
+        <a href="src/pages/guides.html" class="module-card" data-color="purple">
+          <div class="module-icon">📚</div>
+          <h3 data-tr="Rehberler" data-en="Guides">Rehberler</h3>
+          <p data-tr="Türkçe başlangıç rehberi, build önerileri, silver kazanma, destiny board planlayıcı." data-en="Turkish beginner guide, build suggestions, silver farming, destiny board planner.">Türkçe başlangıç rehberi, build önerileri, silver kazanma, destiny board planlayıcı.</p>
+          <span class="module-tag" data-tr="AI Yazılı" data-en="AI Written">AI Yazılı</span>
+        </a>
+
+        <a href="src/pages/tools.html" class="module-card" data-color="green">
+          <div class="module-icon">🛠️</div>
+          <h3 data-tr="Özel Araçlar" data-en="Special Tools">Özel Araçlar</h3>
+          <p data-tr="Build simülatörü, item karşılaştırıcı, timer takibi, loot değer hesabı, enchant simülatörü." data-en="Build simulator, item comparator, timer tracker, loot value calculator, enchant simulator.">Build simülatörü, item karşılaştırıcı, timer takibi, loot değer hesabı, enchant simülatörü.</p>
+          <span class="module-tag" data-tr="Yakında" data-en="Coming Soon">Yakında</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- AI FEED -->
+  <section class="ai-feed-section">
+    <div class="ai-feed-inner">
+      <div class="section-header">
+        <div class="ai-live-badge">
+          <span class="ai-dot"></span>
+          <span data-tr="AI Smart Feed — Canlı" data-en="AI Smart Feed — Live">AI Smart Feed — Canlı</span>
+        </div>
+        <h2 data-tr="Son Albion Güncellemeleri" data-en="Latest Albion Updates">Son Albion Güncellemeleri</h2>
+        <p data-tr="AI botumuz Albion forumunu ve patch notlarını sürekli izler, otomatik günceller." data-en="Our AI bot continuously monitors Albion forum and patch notes, updates automatically.">AI botumuz Albion forumunu ve patch notlarını sürekli izler, otomatik günceller.</p>
+      </div>
+      <div class="feed-grid" id="feedGrid">
+        <div class="feed-card skeleton"></div>
+        <div class="feed-card skeleton"></div>
+        <div class="feed-card skeleton"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <span class="logo-aot">AoT</span><span class="logo-dash">—</span><span class="logo-pnasf">PNASF</span>
+      </div>
+      <p class="footer-desc" data-tr="Albion Online Tools · Powered Nexus & AI Smart Feed. Bu site Sandbox Interactive GmbH ile bağlantılı değildir." data-en="Albion Online Tools · Powered Nexus & AI Smart Feed. This site is not affiliated with Sandbox Interactive GmbH.">
+        Albion Online Tools · Powered Nexus & AI Smart Feed.<br>Bu site Sandbox Interactive GmbH ile bağlantılı değildir.
+      </p>
+      <div class="footer-links">
+        <a href="https://www.albion-online-data.com/" target="_blank">AODP</a>
+        <a href="https://albiononline.com/" target="_blank">Albion Online</a>
+        <a href="src/pages/admin.html">Admin</a>
+      </div>
+      <p class="footer-copy">© 2025 AoT-PNASF · Powered by Claude AI</p>
+    </div>
+  </footer>
+
+  <script src="src/lib/lang.js"></script>
+  <script src="src/lib/feed.js"></script>
+  <script src="src/lib/nav.js"></script>
+</body>
+</html>

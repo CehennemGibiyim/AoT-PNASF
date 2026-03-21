@@ -1,0 +1,13 @@
+{
+  "name": "aot-pnasf",
+  "version": "1.0.0",
+  "description": "Albion Online Tools · Powered Nexus & AI Smart Feed",
+  "type": "module",
+  "scripts": {
+    "scan": "node scripts/ai-scanner.js"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "node-fetch": "^3.3.2"
+  }
+}
