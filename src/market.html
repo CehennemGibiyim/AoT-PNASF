@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Market — AoT-PNASF</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../styles/main.css"/>
+  <link rel="stylesheet" href="../styles/market.css"/>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a class="nav-logo" href="../../index.html">
+      <span class="logo-aot">AoT</span><span class="logo-dash">—</span><span class="logo-pnasf">PNASF</span>
+      <span class="logo-ai-badge">AI</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="market.html" class="active" data-tr="Market" data-en="Market">Market</a></li>
+      <li><a href="crafting.html" data-tr="Üretim" data-en="Crafting">Üretim</a></li>
+      <li><a href="pvp.html" data-tr="PvP & İstatistik" data-en="PvP & Stats">PvP & İstatistik</a></li>
+      <li><a href="maps.html" data-tr="Haritalar" data-en="Maps">Haritalar</a></li>
+      <li><a href="guides.html" data-tr="Rehberler" data-en="Guides">Rehberler</a></li>
+      <li><a href="tools.html" data-tr="Araçlar" data-en="Tools">Araçlar</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="lang-toggle" id="langToggle" onclick="toggleLang()"><span id="langLabel">TR</span></button>
+      <div class="ai-status"><span class="ai-dot"></span><span class="ai-text" data-tr="AI Aktif" data-en="AI Active">AI Aktif</span></div>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<main class="market-main">
+
+  <!-- BAŞLIK -->
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="page-badge">
+        <span class="ai-dot"></span>
+        <span data-tr="Canlı Market Verisi" data-en="Live Market Data">Canlı Market Verisi</span>
+      </div>
+      <h1 data-tr="Market & Ekonomi" data-en="Market & Economy">Market & Ekonomi</h1>
+      <p data-tr="EU, US ve Asia sunucuları için gerçek zamanlı Albion Online fiyatları" data-en="Real-time Albion Online prices for EU, US and Asia servers">EU, US ve Asia sunucuları için gerçek zamanlı Albion Online fiyatları</p>
+    </div>
+  </div>
+
+  <!-- SUNUCU SEÇİCİ -->
+  <div class="market-controls">
+    <div class="controls-inner">
+      <div class="server-tabs">
+        <button class="server-tab active" data-server="europe" onclick="setServer('europe')">
+          <span class="server-dot"></span> EU — Avrupa
+        </button>
+        <button class="server-tab" data-server="west" onclick="setServer('west')">
+          <span class="server-dot"></span> US — Amerika
+        </button>
+        <button class="server-tab" data-server="east" onclick="setServer('east')">
+          <span class="server-dot"></span> Asia — Asya
+        </button>
+      </div>
+      <div class="compare-toggle">
+        <button class="btn-compare" id="compareBtn" onclick="toggleCompare()">
+          <span data-tr="3 Sunucu Karşılaştır" data-en="Compare 3 Servers">3 Sunucu Karşılaştır</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARAMA -->
+  <div class="search-section">
+    <div class="search-inner">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="itemSearch" class="search-input"
+          data-tr-placeholder="Eşya ara... (örn: T4 Bag, Sword, Leather)"
+          data-en-placeholder="Search item... (e.g. T4 Bag, Sword, Leather)"
+          placeholder="Eşya ara... (örn: T4 Bag, Sword, Leather)"
+          oninput="onSearchInput(this.value)"/>
+        <button class="search-clear" onclick="clearSearch()" id="clearBtn" style="display:none">✕</button>
+      </div>
+      <div class="search-filters">
+        <select class="filter-select" id="tierFilter" onchange="applyFilters()">
+          <option value="" data-tr="Tüm Tier" data-en="All Tiers">Tüm Tier</option>
+          <option value="T2">T2</option>
+          <option value="T3">T3</option>
+          <option value="T4">T4</option>
+          <option value="T5">T5</option>
+          <option value="T6">T6</option>
+          <option value="T7">T7</option>
+          <option value="T8">T8</option>
+        </select>
+        <select class="filter-select" id="cityFilter" onchange="applyFilters()">
+          <option value="" data-tr="Tüm Şehirler" data-en="All Cities">Tüm Şehirler</option>
+          <option value="Caerleon">Caerleon</option>
+          <option value="Bridgewatch">Bridgewatch</option>
+          <option value="Lymhurst">Lymhurst</option>
+          <option value="Martlock">Martlock</option>
+          <option value="Thetford">Thetford</option>
+          <option value="FortSterling">Fort Sterling</option>
+          <option value="Brecilien">Brecilien</option>
+        </select>
+        <select class="filter-select" id="categoryFilter" onchange="loadCategory(this.value)">
+          <option value="bags" data-tr="Çantalar" data-en="Bags">Çantalar</option>
+          <option value="swords" data-tr="Kılıçlar" data-en="Swords">Kılıçlar</option>
+          <option value="bows" data-tr="Yaylar" data-en="Bows">Yaylar</option>
+          <option value="armor" data-tr="Zırhlar" data-en="Armor">Zırhlar</option>
+          <option value="resources" data-tr="Kaynaklar" data-en="Resources">Kaynaklar</option>
+          <option value="food" data-tr="Yiyecek" data-en="Food">Yiyecek</option>
+          <option value="mounts" data-tr="Binekler" data-en="Mounts">Binekler</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- GOLD FİYATI -->
+  <div class="gold-bar" id="goldBar">
+    <div class="gold-bar-inner">
+      <span class="gold-icon">🥇</span>
+      <span class="gold-label" data-tr="Gold Fiyatı:" data-en="Gold Price:">Gold Fiyatı:</span>
+      <span class="gold-value" id="goldValue">Yükleniyor...</span>
+      <span class="gold-server" id="goldServer">EU</span>
+      <span class="gold-updated" id="goldUpdated"></span>
+    </div>
+  </div>
+
+  <!-- FİYAT TABLOSU -->
+  <div class="price-section">
+    <div class="price-inner">
+
+      <!-- İstatistik kartları -->
+      <div class="stat-cards" id="statCards">
+        <div class="stat-card">
+          <span class="stat-card-label" data-tr="En Ucuz" data-en="Cheapest">En Ucuz</span>
+          <span class="stat-card-value" id="cheapestVal">—</span>
+          <span class="stat-card-city" id="cheapestCity">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-card-label" data-tr="En Pahalı" data-en="Most Expensive">En Pahalı</span>
+          <span class="stat-card-value" id="expensiveVal">—</span>
+          <span class="stat-card-city" id="expensiveCity">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-card-label" data-tr="Kar Farkı" data-en="Profit Gap">Kar Farkı</span>
+          <span class="stat-card-value" id="profitVal">—</span>
+          <span class="stat-card-sub" data-tr="transport kârı" data-en="transport profit">transport kârı</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-card-label" data-tr="Son Güncelleme" data-en="Last Updated">Son Güncelleme</span>
+          <span class="stat-card-value" id="lastUpdated">—</span>
+          <span class="stat-card-sub" data-tr="veri yaşı" data-en="data age">veri yaşı</span>
+        </div>
+      </div>
+
+      <!-- Tablo başlığı -->
+      <div class="table-header">
+        <h2 class="table-title" id="tableTitle" data-tr="Çanta Fiyatları" data-en="Bag Prices">Çanta Fiyatları</h2>
+        <div class="table-meta">
+          <span class="items-count" id="itemsCount"></span>
+          <button class="refresh-btn" onclick="refreshPrices()" id="refreshBtn">
+            <span data-tr="Yenile" data-en="Refresh">Yenile</span> ↻
+          </button>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div class="loading-wrap" id="loadingWrap">
+        <div class="loading-spinner"></div>
+        <span data-tr="Fiyatlar yükleniyor..." data-en="Loading prices...">Fiyatlar yükleniyor...</span>
+      </div>
+
+      <!-- Hata -->
+      <div class="error-wrap" id="errorWrap" style="display:none">
+        <span>⚠️</span>
+        <span data-tr="Veri alınamadı. API geçici olarak kapalı olabilir." data-en="Could not fetch data. API may be temporarily down.">Veri alınamadı. API geçici olarak kapalı olabilir.</span>
+        <button onclick="refreshPrices()" data-tr="Tekrar Dene" data-en="Retry">Tekrar Dene</button>
+      </div>
+
+      <!-- Fiyat tablosu -->
+      <div class="price-table-wrap" id="priceTableWrap" style="display:none">
+        <table class="price-table" id="priceTable">
+          <thead>
+            <tr>
+              <th data-tr="Eşya" data-en="Item">Eşya</th>
+              <th data-tr="Şehir" data-en="City">Şehir</th>
+              <th data-tr="Satış Fiyatı" data-en="Sell Price">Satış Fiyatı</th>
+              <th data-tr="Alış Fiyatı" data-en="Buy Price">Alış Fiyatı</th>
+              <th data-tr="Kalite" data-en="Quality">Kalite</th>
+              <th data-tr="Güncelleme" data-en="Updated">Güncelleme</th>
+            </tr>
+          </thead>
+          <tbody id="priceTableBody"></tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TRANSPORT ROTA HESABISI -->
+  <div class="transport-section">
+    <div class="transport-inner">
+      <h2 data-tr="Transport Karlılık Hesabı" data-en="Transport Profit Calculator">Transport Karlılık Hesabı</h2>
+      <p data-tr="Şehirler arası taşıma karını hesapla" data-en="Calculate profit from transporting between cities">Şehirler arası taşıma karını hesapla</p>
+      <div class="transport-grid">
+        <div class="transport-card">
+          <label data-tr="Alış Şehri" data-en="Buy City">Alış Şehri</label>
+          <select id="buyCity" onchange="calcTransport()">
+            <option value="Caerleon">Caerleon</option>
+            <option value="Bridgewatch">Bridgewatch</option>
+            <option value="Lymhurst">Lymhurst</option>
+            <option value="Martlock">Martlock</option>
+            <option value="Thetford">Thetford</option>
+            <option value="FortSterling">Fort Sterling</option>
+          </select>
+        </div>
+        <div class="transport-arrow">→</div>
+        <div class="transport-card">
+          <label data-tr="Satış Şehri" data-en="Sell City">Satış Şehri</label>
+          <select id="sellCity" onchange="calcTransport()">
+            <option value="Bridgewatch">Bridgewatch</option>
+            <option value="Caerleon">Caerleon</option>
+            <option value="Lymhurst">Lymhurst</option>
+            <option value="Martlock">Martlock</option>
+            <option value="Thetford">Thetford</option>
+            <option value="FortSterling">Fort Sterling</option>
+          </select>
+        </div>
+        <div class="transport-card">
+          <label data-tr="Miktar" data-en="Quantity">Miktar</label>
+          <input type="number" id="quantity" value="1" min="1" max="9999" oninput="calcTransport()"/>
+        </div>
+        <div class="transport-result" id="transportResult">
+          <span data-tr="Alış & satış şehri seçince hesaplar" data-en="Select buy & sell city to calculate">Alış & satış şehri seçince hesaplar</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <span class="logo-aot">AoT</span><span class="logo-dash">—</span><span class="logo-pnasf">PNASF</span>
+    </div>
+    <p class="footer-desc" data-tr="Market verileri Albion Online Data Project API'sinden alınmaktadır." data-en="Market data is sourced from the Albion Online Data Project API.">Market verileri Albion Online Data Project API'sinden alınmaktadır.</p>
+    <p class="footer-copy">© 2025 AoT-PNASF · Powered by Claude AI</p>
+  </div>
+</footer>
+
+<script src="../lib/lang.js"></script>
+<script src="../lib/nav.js"></script>
+<script src="../lib/market.js"></script>
+</body>
+</html>
