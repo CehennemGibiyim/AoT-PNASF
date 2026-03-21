@@ -1,0 +1,215 @@
+/* AoT-PNASF — Crafting Styles */
+
+.crafting-main { padding-top: 64px; min-height: 100vh; }
+
+/* MODULE TABS */
+.module-tabs { background: var(--bg-card); border-bottom: 1px solid var(--border); position: sticky; top: 64px; z-index: 99; }
+.module-tabs-inner { max-width: 1280px; margin: 0 auto; padding: 0 24px; display: flex; gap: 4px; overflow-x: auto; }
+.mod-tab { background: transparent; border: none; border-bottom: 2px solid transparent; color: var(--text-secondary); font-family: var(--font-display); font-size: 15px; font-weight: 600; padding: 14px 20px; cursor: pointer; transition: all var(--transition); white-space: nowrap; letter-spacing: 0.03em; }
+.mod-tab:hover { color: var(--text-primary); }
+.mod-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+/* MODULE CONTENT */
+.module-content { padding: 32px 24px; }
+.module-inner { max-width: 1280px; margin: 0 auto; }
+
+/* CITY BONUS STRIP */
+.city-bonus-strip { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 12px 16px; margin-bottom: 24px; }
+.cbs-label { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; flex-shrink: 0; }
+.cbs-cities { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; }
+.cbs-btn { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); font-size: 12px; padding: 5px 10px; border-radius: var(--radius); cursor: pointer; transition: all var(--transition); font-family: var(--font-body); }
+.cbs-btn:hover { border-color: var(--gold); color: var(--gold); }
+.cbs-btn.active { background: var(--gold-dim); border-color: var(--gold); color: var(--gold); font-weight: 500; }
+.city-bonus-tag { font-family: var(--font-mono); font-size: 11px; background: var(--teal-dim); border: 1px solid rgba(0,212,170,0.3); color: var(--teal); padding: 4px 10px; border-radius: 4px; margin-left: auto; white-space: nowrap; }
+
+/* CRAFT LAYOUT */
+.craft-layout { display: grid; grid-template-columns: 320px 1fr; gap: 20px; }
+.craft-left { display: flex; flex-direction: column; gap: 16px; }
+.craft-right { display: flex; flex-direction: column; gap: 16px; }
+
+/* PANEL */
+.panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px 24px; }
+.panel h3 { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--text-primary); margin-bottom: 14px; letter-spacing: 0.03em; }
+
+/* FORM */
+.form-input { width: 100%; background: var(--bg-base); border: 1px solid var(--border); color: var(--text-primary); font-size: 13px; padding: 9px 12px; border-radius: var(--radius); outline: none; transition: border-color var(--transition); margin-bottom: 10px; font-family: var(--font-body); }
+.form-input:focus { border-color: var(--gold); }
+.form-select { width: 100%; background: var(--bg-base); border: 1px solid var(--border); color: var(--text-primary); font-size: 13px; padding: 8px 12px; border-radius: var(--radius); outline: none; cursor: pointer; font-family: var(--font-body); margin-bottom: 10px; }
+.form-input-sm { width: 80px; background: var(--bg-base); border: 1px solid var(--border); color: var(--text-primary); font-size: 13px; padding: 6px 10px; border-radius: var(--radius); outline: none; transition: border-color var(--transition); font-family: var(--font-body); }
+.form-input-sm:focus { border-color: var(--gold); }
+.craft-category-filter { margin-bottom: 8px; }
+
+/* ITEM LIST */
+.craft-item-list { max-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; margin-top: 4px; }
+.craft-item-btn { display: flex; align-items: center; gap: 10px; background: transparent; border: 1px solid var(--border); color: var(--text-secondary); font-size: 12px; padding: 8px 10px; border-radius: var(--radius); cursor: pointer; transition: all var(--transition); text-align: left; width: 100%; }
+.craft-item-btn:hover { border-color: var(--gold); color: var(--text-primary); background: var(--gold-dim); }
+.craft-item-btn.active { border-color: var(--gold); background: var(--gold-dim); color: var(--gold); }
+.craft-item-btn img { width: 28px; height: 28px; border-radius: 4px; }
+.craft-item-tier { font-family: var(--font-mono); font-size: 9px; background: var(--border); padding: 1px 5px; border-radius: 3px; flex-shrink: 0; }
+
+/* SETTINGS */
+.settings-grid { display: flex; flex-direction: column; gap: 10px; }
+.setting-row { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-secondary); }
+.setting-row label { min-width: 130px; }
+.setting-hint { font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); }
+
+/* PLACEHOLDER */
+.craft-result-placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 60px; background: var(--bg-card); border: 1px dashed var(--border); border-radius: var(--radius-lg); color: var(--text-muted); font-size: 14px; }
+.placeholder-icon { font-size: 40px; }
+
+/* RESULT HEADER */
+.result-item-header { display: flex; align-items: center; gap: 14px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px 20px; }
+.result-item-header img { width: 56px; height: 56px; border-radius: 8px; border: 1px solid var(--border); }
+.result-item-info h2 { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text-primary); }
+.result-item-info p { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+
+/* MATERIALS */
+.materials-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+.material-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--bg-base); border-radius: var(--radius); border: 1px solid var(--border); }
+.material-row img { width: 32px; height: 32px; border-radius: 4px; }
+.material-name { flex: 1; font-size: 13px; color: var(--text-primary); }
+.material-qty { font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary); }
+.material-price { font-family: var(--font-display); font-size: 14px; font-weight: 600; color: var(--gold); }
+.material-total { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); }
+.materials-total { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: var(--gold-dim); border: 1px solid rgba(201,168,76,0.3); border-radius: var(--radius); }
+.materials-total-label { font-family: var(--font-mono); font-size: 11px; color: var(--gold); text-transform: uppercase; letter-spacing: 0.06em; }
+.materials-total-value { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--gold); }
+
+/* SELL PRICES */
+.sell-prices-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
+.sell-price-card { background: var(--bg-base); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px; text-align: center; cursor: pointer; transition: all var(--transition); }
+.sell-price-card:hover { border-color: var(--teal); }
+.sell-price-card.selected { border-color: var(--teal); background: var(--teal-dim); }
+.sell-price-card.best { border-color: var(--green); background: rgba(34,197,94,0.08); }
+.spc-city { font-size: 10px; color: var(--text-muted); margin-bottom: 4px; }
+.spc-price { font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--text-primary); }
+.spc-price.no-data { color: var(--text-muted); font-size: 12px; font-family: var(--font-body); font-weight: 400; }
+.spc-age { font-size: 9px; color: var(--text-muted); margin-top: 2px; font-family: var(--font-mono); }
+.best-badge { font-size: 9px; color: var(--green); font-family: var(--font-mono); }
+
+/* PROFIT PANEL */
+.profit-panel { border-color: rgba(201,168,76,0.2); }
+.profit-breakdown { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.pb-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 4px 0; border-bottom: 1px solid var(--border); }
+.pb-row:last-child { border-bottom: none; }
+.pb-label { color: var(--text-secondary); }
+.pb-value { font-family: var(--font-mono); font-weight: 500; }
+.pb-value.cost { color: var(--red); }
+.pb-value.income { color: var(--teal); }
+.pb-value.fee { color: var(--amber); }
+.profit-result { display: flex; align-items: center; justify-content: space-between; background: var(--bg-base); border-radius: var(--radius); padding: 16px 20px; border: 2px solid transparent; }
+.profit-result.positive { border-color: rgba(34,197,94,0.4); background: rgba(34,197,94,0.05); }
+.profit-result.negative { border-color: rgba(239,68,68,0.4); background: rgba(239,68,68,0.05); }
+.pr-label { font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.pr-value { font-family: var(--font-display); font-size: 28px; font-weight: 700; }
+.pr-value.positive { color: var(--green); }
+.pr-value.negative { color: var(--red); }
+.pr-pct { font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary); }
+
+/* REFINING */
+.refining-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 24px; }
+.refining-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px 20px; }
+.rc-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.rc-icon { width: 40px; height: 40px; border-radius: 6px; border: 1px solid var(--border); }
+.rc-header h3 { font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 2px; }
+.rc-bonus-city { font-size: 11px; color: var(--teal); font-family: var(--font-mono); }
+.rc-tiers { display: flex; flex-direction: column; gap: 4px; }
+.rc-tier-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 8px; background: var(--bg-base); border-radius: var(--radius); font-size: 12px; }
+.rc-tier-label { font-family: var(--font-mono); color: var(--text-muted); }
+.rc-tier-profit { font-family: var(--font-display); font-weight: 600; }
+.rc-tier-profit.pos { color: var(--green); }
+.rc-tier-profit.neg { color: var(--red); }
+.rc-tier-profit.load { color: var(--text-muted); }
+.refine-settings { margin-bottom: 24px; }
+.btn-calc { width: 100%; background: var(--gold); color: var(--bg-base); font-family: var(--font-display); font-size: 15px; font-weight: 700; padding: 12px; border: none; border-radius: var(--radius); cursor: pointer; transition: all var(--transition); margin-top: 12px; letter-spacing: 0.05em; }
+.btn-calc:hover { background: var(--gold-light); }
+
+/* REFINE TABLE */
+.refine-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.refine-table th { font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); text-transform: uppercase; letter-spacing: 0.06em; }
+.refine-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text-primary); }
+.refine-table tr:last-child td { border-bottom: none; }
+.refine-table tr:hover td { background: var(--bg-card-hover); }
+.profit-pos { color: var(--green); font-weight: 600; }
+.profit-neg { color: var(--red); font-weight: 600; }
+
+/* FARMING */
+.farming-layout { display: grid; grid-template-columns: 300px 1fr; gap: 20px; }
+.farm-ranking { display: flex; flex-direction: column; gap: 6px; }
+.farm-rank-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--bg-base); border-radius: var(--radius); border: 1px solid var(--border); font-size: 13px; }
+.farm-rank-num { font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); width: 20px; }
+.farm-rank-icon { font-size: 18px; }
+.farm-rank-name { flex: 1; color: var(--text-primary); }
+.farm-rank-profit { font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--green); }
+.farm-result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.farm-stat { background: var(--bg-base); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; text-align: center; }
+.farm-stat-label { font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+.farm-stat-value { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--gold); }
+
+/* FOOD */
+.food-layout { display: flex; flex-direction: column; gap: 20px; }
+.food-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 8px; }
+.food-btn { display: flex; flex-direction: column; align-items: center; gap: 6px; background: var(--bg-base); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 8px; cursor: pointer; transition: all var(--transition); font-size: 11px; color: var(--text-secondary); }
+.food-btn:hover { border-color: var(--gold); color: var(--gold); }
+.food-btn.active { border-color: var(--gold); background: var(--gold-dim); color: var(--gold); }
+.food-btn img { width: 36px; height: 36px; border-radius: 4px; }
+
+/* INFO BOX */
+.info-box { background: var(--bg-card); border: 1px solid rgba(0,212,170,0.2); border-left: 3px solid var(--teal); border-radius: var(--radius); padding: 12px 16px; font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+.info-box strong { color: var(--teal); }
+
+/* LOADING */
+.loading-wrap { display: flex; align-items: center; gap: 12px; padding: 20px; color: var(--text-muted); font-size: 13px; }
+.loading-spinner { width: 20px; height: 20px; border: 2px solid var(--border); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; flex-shrink: 0; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .craft-layout { grid-template-columns: 280px 1fr; }
+  .refining-grid { grid-template-columns: repeat(2,1fr); }
+  .sell-prices-grid { grid-template-columns: repeat(3,1fr); }
+  .farming-layout { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .craft-layout { grid-template-columns: 1fr; }
+  .refining-grid { grid-template-columns: 1fr; }
+  .sell-prices-grid { grid-template-columns: repeat(2,1fr); }
+  .food-grid { grid-template-columns: repeat(3,1fr); }
+  .farm-result-grid { grid-template-columns: 1fr; }
+}
+
+/* GRUP BUTONLARI */
+.group-buttons { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+.group-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; background: var(--bg-base); border: 1px solid var(--border); color: var(--text-secondary); font-size: 11px; padding: 8px 10px; border-radius: var(--radius); cursor: pointer; transition: all var(--transition); min-width: 72px; }
+.group-btn:hover { border-color: var(--gold); color: var(--gold); }
+.group-btn.active { background: var(--gold-dim); border-color: var(--gold); color: var(--gold); font-weight: 500; }
+
+/* TIER BUTONLARI */
+.tier-buttons { display: flex; gap: 6px; margin-bottom: 12px; }
+.tier-btn { background: var(--bg-base); border: 1px solid var(--border); color: var(--text-secondary); font-family: var(--font-mono); font-size: 12px; font-weight: 700; width: 36px; height: 36px; border-radius: var(--radius); cursor: pointer; transition: all var(--transition); }
+.tier-btn:hover { border-color: var(--gold); color: var(--gold); }
+.tier-btn.active { background: var(--gold); color: var(--bg-base); border-color: var(--gold); }
+
+/* ENCHANT BUTONLARI */
+.enchant-buttons { display: flex; gap: 6px; margin-bottom: 16px; }
+.enchant-btn { background: var(--bg-base); border: 1px solid var(--border); color: var(--text-secondary); font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: var(--radius); cursor: pointer; transition: all var(--transition); }
+.enchant-btn:hover { border-color: var(--teal); color: var(--teal); }
+.enchant-btn.active { background: var(--teal-dim); border-color: var(--teal); color: var(--teal); }
+.enchant-btn[data-enc="1"].active { background: rgba(34,197,94,0.1); border-color: var(--green); color: var(--green); }
+.enchant-btn[data-enc="2"].active { background: var(--blue-dim); border-color: var(--blue); color: var(--blue); }
+.enchant-btn[data-enc="3"].active { background: var(--purple-dim); border-color: var(--purple); color: var(--purple); }
+
+/* EŞYA IZGARA (Slishy tarzı) */
+.item-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 8px; max-height: 320px; overflow-y: auto; padding: 4px; }
+.item-grid-btn { display: flex; flex-direction: column; align-items: center; gap: 5px; background: var(--bg-base); border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 4px; cursor: pointer; transition: all var(--transition); }
+.item-grid-btn:hover { border-color: var(--gold); transform: translateY(-2px); }
+.item-grid-btn.active { border-color: var(--gold); background: var(--gold-dim); box-shadow: 0 0 0 2px rgba(201,168,76,0.3); }
+.item-grid-btn img { width: 48px; height: 48px; border-radius: 6px; }
+.item-grid-name { font-size: 10px; color: var(--text-secondary); text-align: center; line-height: 1.3; }
+.item-grid-btn.active .item-grid-name { color: var(--gold); }
+
+/* SEARCH INPUT */
+.craft-search-bar { position: relative; margin-bottom: 12px; }
+.craft-search-bar input { width: 100%; background: var(--bg-base); border: 1px solid var(--border); color: var(--text-primary); font-size: 13px; padding: 9px 12px 9px 34px; border-radius: var(--radius); outline: none; transition: border-color var(--transition); font-family: var(--font-body); }
+.craft-search-bar input:focus { border-color: var(--gold); }
+.craft-search-bar::before { content: '🔍'; position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 14px; pointer-events: none; }
