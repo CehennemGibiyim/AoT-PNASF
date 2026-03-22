@@ -159,3 +159,5 @@
   .fame-grid { grid-template-columns:repeat(2,1fr); }
   .bc-players { flex-direction:column; }
 }
+
+.feed-age-bar { font-size:11px; color:var(--text-muted); font-family:var(--font-mono); padding:8px 14px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; margin-bottom:12px; }
