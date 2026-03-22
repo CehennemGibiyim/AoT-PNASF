@@ -1,175 +1,153 @@
-// AoT-PNASF — PvP Feed Fetcher
-// GitHub Actions tarafından her 5 dakikada çalıştırılır
-// GameInfo API'den sunucu tarafında veri çeker → pvp-feed.json'a yazar
+// AoT-PNASF — PvP Feed Fetcher v2
+// Node.js native https — dış paket gerektirmez
+// GitHub Actions her 5 dakikada çalıştırır
 
-import fetch from 'node-fetch';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-// API endpoint'leri — 3 sunucu
-const GI = {
-  us:   'https://gameinfo.albiononline.com/api/gameinfo',
-  eu:   'https://gameinfo-ams.albiononline.com/api/gameinfo',
-  asia: 'https://gameinfo-sgp.albiononline.com/api/gameinfo',
-};
+const https = require('https');
+const fs    = require('fs');
+const path  = require('path');
 
 const OUTPUT = path.join(__dirname, '../src/data/pvp-feed.json');
-const TIMEOUT = 15000; // 15 saniye timeout
 
-// Timeout ile fetch
-async function safeFetch(url, ms = TIMEOUT) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), ms);
-  try {
-    const res = await fetch(url, { signal: controller.signal,
-      headers: { 'User-Agent': 'AoT-PNASF Bot/1.0 (github.io)' }
-    });
-    clearTimeout(timer);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    return await res.json();
-  } catch(e) {
-    clearTimeout(timer);
-    console.warn(`  ⚠ Fetch hatası: ${url} → ${e.message}`);
-    return null;
-  }
-}
+const GI = {
+  us:   'gameinfo.albiononline.com',
+  eu:   'gameinfo-ams.albiononline.com',
+  asia: 'gameinfo-sgp.albiononline.com',
+};
 
-// Ekipman slotlarını düzenle
-function cleanEquipment(equipment) {
-  if (!equipment) return {};
-  const slots = ['MainHand','OffHand','Head','Armor','Shoes','Cape','Bag','Mount','Potion','Food'];
-  const result = {};
-  slots.forEach(slot => {
-    const item = equipment[slot];
-    if (item && item.Type) {
-      result[slot] = { type: item.Type, quality: item.Quality || 1 };
-    }
-  });
-  return result;
-}
-
-// Kill event'ini sadeleştir
-function cleanKill(event) {
-  if (!event) return null;
-  return {
-    id:            event.EventId || event.Id || '',
-    timestamp:     event.TimeStamp || '',
-    killer:        event.Killer?.Name || '?',
-    killerId:      event.Killer?.Id  || '',
-    killerGuild:   event.Killer?.GuildName  || '',
-    killerAlliance:event.Killer?.AllianceName || '',
-    killerIP:      Math.round(event.Killer?.AverageItemPower || 0),
-    victim:        event.Victim?.Name  || '?',
-    victimId:      event.Victim?.Id   || '',
-    victimGuild:   event.Victim?.GuildName  || '',
-    victimAlliance:event.Victim?.AllianceName || '',
-    victimIP:      Math.round(event.Victim?.AverageItemPower || 0),
-    totalFame:     event.TotalVictimKillFame || 0,
-    location:      event.Victim?.DeathZone || event.Location || '',
-    equipment:     cleanEquipment(event.Victim?.Equipment),
-    partySize:     (event.GroupMembers?.length || 0) + 1,
-  };
-}
-
-// Battle'ı sadeleştir
-function cleanBattle(battle) {
-  if (!battle) return null;
-  const alliances = Object.values(battle.Alliances || {}).slice(0, 6).map(a => ({
-    name:   a.Name || 'Guildless',
-    kills:  a.Kills  || 0,
-    deaths: a.Deaths || 0,
-    fame:   a.KillFame || 0,
-  }));
-  return {
-    id:          battle.id || battle.Id || '',
-    startTime:   battle.StartTime || '',
-    totalKills:  battle.TotalKills  || 0,
-    totalFame:   battle.TotalFame   || 0,
-    playerCount: Object.keys(battle.Players || {}).length,
-    alliances,
-  };
-}
-
-// Ana fonksiyon
-async function main() {
-  console.log('⚔️  AoT-PNASF PvP Fetcher başladı...');
-  const now = new Date().toISOString();
-
-  const result = {
-    fetchedAt: now,
-    servers: {},
-  };
-
-  // Her 3 sunucu için veri çek
-  for (const [serverKey, baseUrl] of Object.entries(GI)) {
-    console.log(`\n🌐 Sunucu: ${serverKey.toUpperCase()} — ${baseUrl}`);
-    const serverData = {
-      recentKills: [],
-      topKills:    [],
-      battles:     [],
-      fetchedAt:   now,
-      ok:          false,
+// Native HTTPS GET — dış paket yok
+function httpsGet(hostname, urlPath, timeoutMs = 12000) {
+  return new Promise((resolve, reject) => {
+    const options = {
+      hostname,
+      path: urlPath,
+      method: 'GET',
+      headers: { 'User-Agent': 'AoT-PNASF-Bot/2.0', 'Accept': 'application/json' }
     };
+    const req = https.request(options, res => {
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => {
+        try { resolve(JSON.parse(data)); }
+        catch(e) { reject(new Error('JSON parse error: ' + data.slice(0,100))); }
+      });
+    });
+    req.setTimeout(timeoutMs, () => { req.destroy(); reject(new Error('timeout')); });
+    req.on('error', e => reject(e));
+    req.end();
+  });
+}
 
-    // Son kill'ler
-    console.log('  → Son kill\'ler çekiliyor...');
-    const recentRaw = await safeFetch(`${baseUrl}/events?limit=30&offset=0`);
-    if (recentRaw && Array.isArray(recentRaw)) {
-      serverData.recentKills = recentRaw
-        .map(cleanKill)
-        .filter(Boolean)
-        .slice(0, 20);
-      console.log(`  ✓ ${serverData.recentKills.length} kill alındı`);
+function cleanEquipment(eq) {
+  if (!eq) return {};
+  const slots = ['MainHand','OffHand','Head','Armor','Shoes','Cape','Bag','Mount','Potion','Food'];
+  const r = {};
+  slots.forEach(s => { if (eq[s]?.Type) r[s] = { type: eq[s].Type, quality: eq[s].Quality||1 }; });
+  return r;
+}
+
+function cleanKill(e) {
+  if (!e) return null;
+  return {
+    id:             e.EventId || '',
+    timestamp:      e.TimeStamp || '',
+    killer:         e.Killer?.Name || '?',
+    killerGuild:    e.Killer?.GuildName || '',
+    killerAlliance: e.Killer?.AllianceName || '',
+    killerIP:       Math.round(e.Killer?.AverageItemPower || 0),
+    victim:         e.Victim?.Name || '?',
+    victimGuild:    e.Victim?.GuildName || '',
+    victimAlliance: e.Victim?.AllianceName || '',
+    victimIP:       Math.round(e.Victim?.AverageItemPower || 0),
+    totalFame:      e.TotalVictimKillFame || 0,
+    location:       e.Victim?.DeathZone || '',
+    equipment:      cleanEquipment(e.Victim?.Equipment),
+    partySize:      (e.GroupMembers?.length || 0) + 1,
+  };
+}
+
+function cleanBattle(b) {
+  if (!b) return null;
+  return {
+    id:          b.id || b.Id || '',
+    startTime:   b.StartTime || '',
+    totalKills:  b.TotalKills || 0,
+    totalFame:   b.TotalFame || 0,
+    playerCount: Object.keys(b.Players || {}).length,
+    alliances:   Object.values(b.Alliances || {}).slice(0, 6).map(a => ({
+      name:   a.Name || 'Guildless',
+      kills:  a.Kills || 0,
+      deaths: a.Deaths || 0,
+      fame:   a.KillFame || 0,
+    })),
+  };
+}
+
+async function fetchServer(key, hostname) {
+  console.log(`\n[${key.toUpperCase()}] ${hostname}`);
+  const data = { recentKills:[], topKills:[], battles:[], ok:false, fetchedAt: new Date().toISOString() };
+
+  // Kill feed
+  try {
+    const events = await httpsGet(hostname, '/api/gameinfo/events?limit=51&offset=0');
+    if (Array.isArray(events) && events.length) {
+      data.recentKills = events.slice(0, 20).map(cleanKill).filter(Boolean);
+      data.topKills    = [...events]
+        .sort((a,b) => (b.TotalVictimKillFame||0) - (a.TotalVictimKillFame||0))
+        .slice(0, 20).map(cleanKill).filter(Boolean);
+      data.ok = true;
+      console.log(`  ✓ Kill: ${data.recentKills.length}`);
+    } else {
+      console.log(`  ✗ Kill: boş yanıt`);
     }
+  } catch(e) { console.warn(`  ✗ Kill hatası: ${e.message}`); }
 
-    // En yüksek fame kill'ler (son 300'den filtrele)
-    console.log('  → Top kill\'ler hesaplanıyor...');
-    const topRaw = await safeFetch(`${baseUrl}/events?limit=300&offset=0`);
-    if (topRaw && Array.isArray(topRaw)) {
-      serverData.topKills = topRaw
-        .map(cleanKill)
-        .filter(Boolean)
-        .sort((a, b) => b.totalFame - a.totalFame)
-        .slice(0, 20);
-      console.log(`  ✓ ${serverData.topKills.length} top kill hesaplandı`);
+  // Battle board
+  try {
+    const battles = await httpsGet(hostname, '/api/gameinfo/battles?sort=recent&limit=20&offset=0');
+    if (Array.isArray(battles) && battles.length) {
+      data.battles = battles.map(cleanBattle).filter(Boolean);
+      console.log(`  ✓ Battle: ${data.battles.length}`);
+    } else {
+      console.log(`  ✗ Battle: boş yanıt`);
     }
+  } catch(e) { console.warn(`  ✗ Battle hatası: ${e.message}`); }
 
-    // Battle board
-    console.log('  → Battle board çekiliyor...');
-    const battleRaw = await safeFetch(`${baseUrl}/battles?sort=recent&limit=20&offset=0`);
-    if (battleRaw && Array.isArray(battleRaw)) {
-      serverData.battles = battleRaw
-        .map(cleanBattle)
-        .filter(Boolean);
-      console.log(`  ✓ ${serverData.battles.length} muharebe alındı`);
-    }
+  return data;
+}
 
-    serverData.ok = serverData.recentKills.length > 0 || serverData.battles.length > 0;
-    result.servers[serverKey] = serverData;
+async function main() {
+  console.log('⚔️  AoT-PNASF PvP Fetcher v2');
+  console.log('   Zaman:', new Date().toISOString());
+
+  const result = { fetchedAt: new Date().toISOString(), servers: {} };
+
+  for (const [key, hostname] of Object.entries(GI)) {
+    result.servers[key] = await fetchServer(key, hostname);
   }
 
-  // JSON'a yaz
+  // Klasör yoksa oluştur
+  fs.mkdirSync(path.dirname(OUTPUT), { recursive: true });
   const json = JSON.stringify(result, null, 2);
   fs.writeFileSync(OUTPUT, json, 'utf8');
-  console.log(`\n✅ pvp-feed.json yazıldı — ${(json.length / 1024).toFixed(1)} KB`);
 
-  // Özet
-  for (const [srv, data] of Object.entries(result.servers)) {
-    console.log(`  ${srv.toUpperCase()}: ${data.recentKills.length} kill · ${data.battles.length} battle · ${data.ok ? '✓' : '✗'}`);
+  console.log(`\n✅ Yazıldı: ${OUTPUT}`);
+  console.log(`   Boyut: ${(json.length/1024).toFixed(1)} KB`);
+
+  let anyOk = false;
+  for (const [srv, d] of Object.entries(result.servers)) {
+    const icon = d.ok ? '✓' : '✗';
+    console.log(`   ${icon} ${srv.toUpperCase()}: ${d.recentKills.length} kill · ${d.battles.length} battle`);
+    if (d.ok) anyOk = true;
+  }
+
+  if (!anyOk) {
+    console.warn('\n⚠️  GameInfo API hiçbir sunucudan yanıt vermedi');
+    console.warn('   Bu normaldir — Albion sunucuları bazen meşgul olur');
+    console.warn('   Bir sonraki çalışmada tekrar denenir');
   }
 }
 
 main().catch(e => {
-  console.error('❌ Fatal hata:', e);
-  // Hata olsa bile boş JSON yaz — sayfa çökmez
-  const fallback = {
-    fetchedAt: new Date().toISOString(),
-    error: e.message,
-    servers: { us: { recentKills:[], topKills:[], battles:[], ok:false }, eu: { recentKills:[], topKills:[], battles:[], ok:false }, asia: { recentKills:[], topKills:[], battles:[], ok:false } }
-  };
-  fs.writeFileSync(OUTPUT, JSON.stringify(fallback, null, 2), 'utf8');
-  process.exit(0); // Workflow'u başarısız sayma
+  console.error('❌ Fatal:', e);
+  process.exit(0); // 0 ile çık — workflow başarısız sayılmasın
 });
