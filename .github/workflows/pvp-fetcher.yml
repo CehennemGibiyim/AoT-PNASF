@@ -1,0 +1,35 @@
+name: AoT-PNASF PvP Feed Fetcher
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'   # Her 5 dakikada bir çalışır
+  workflow_dispatch:          # Manuel tetikleme
+
+jobs:
+  fetch-pvp-data:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install node-fetch
+
+      - name: Fetch PvP Data
+        run: node scripts/pvp-fetcher.js
+
+      - name: Commit PvP feed if changed
+        run: |
+          git config --local user.email "bot@aot-pnasf.github.io"
+          git config --local user.name "AoT-PNASF PvP Bot"
+          git add src/data/pvp-feed.json
+          git diff --staged --quiet || git commit -m "⚔️ PvP Bot: Kill feed güncellendi [$(date +'%Y-%m-%d %H:%M')]"
+          git push
