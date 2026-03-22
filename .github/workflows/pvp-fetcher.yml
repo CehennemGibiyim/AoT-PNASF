@@ -15,18 +15,13 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Fetch PvP Data (Native HTTPS)
-        run: node scripts/pvp-fetcher.js
+      - name: Fetch PvP Data
+        run: node scripts/pvp-fetcher.cjs
 
       - name: Commit if changed
         run: |
           git config --local user.email "bot@aot-pnasf.github.io"
           git config --local user.name "AoT-PNASF PvP Bot"
           git add src/data/pvp-feed.json
-          git diff --staged --quiet || git commit -m "⚔️ PvP: Kill feed güncellendi [$(date +'%H:%M')]"
+          git diff --staged --quiet || git commit -m "⚔️ PvP feed [$(date +'%H:%M')]"
           git push
