@@ -1,26 +1,27 @@
-https://cehennemgibiyim.github.io/AoT-PNASF
-# AoT-PNASF
-## Albion Online Tools · Powered Nexus & AI Smart Feed
+# AoT-PNASF — Albion Online Tools
 
-Türkiye'nin ilk AI destekli, kendi kendini güncelleyen Albion Online platformu.
+**Powered Nexus & AI Smart Feed** | https://cehennemgibiyim.github.io/AoT-PNASF
 
-### Özellikler
-- 💹 Gerçek zamanlı market fiyatları (EU/US/Asia)
-- 🔨 Crafting & üretim hesaplayıcılar
-- ⚔️ PvP & oyuncu istatistikleri
-- 🗺️ İnteraktif haritalar & zone rehberi
-- 📚 Türkçe rehberler
-- 🤖 AI bot — Albion güncellemelerini otomatik takip eder
+Albion Online için kapsamlı araçlar: market fiyatları, crafting hesabı, ticaret rotaları, kara pazar flipper, interaktif harita ve gold takip.
+
+### Araçlar
+
+- 💹 **Fiyat Sorgulayıcı** — Tüm şehirlerde anlık alış/satış fiyatları (Albion Data Project)
+- ⚒ **Crafting Hesaplayıcı** — Maliyetler, şehir bonusları, focus, ROI
+- ↔ **Ticaret Rotaları** — Şehirler arası en karlı alım-satım fırsatları
+- ◈ **Kara Pazar Flipper** — Caerleon/şehir → Black Market arbitraj
+- ◎ **İnteraktif Harita** — Ağırlıklı pathfinding ile rota planlama
+- ▲ **Gold Takip** — Gerçek zamanlı gold fiyat grafiği
+
+### Teknoloji
+
+React + Vite + Tailwind CSS v4 · Albion Online Data Project API
 
 ### Kurulum
-Bu siteyi çalıştırmak için sadece GitHub Pages gerekli.
-Hiçbir sunucu veya ücret yok.
 
-### AI Bot Kurulumu
-1. GitHub repo → Settings → Secrets → `ANTHROPIC_API_KEY` ekle
-2. GitHub Actions otomatik olarak her 6 saatte çalışır
-3. Yeni Albion güncellemeleri otomatik `src/data/feed.json`'a yazılır
+```bash
+npm install
+npm run dev
+```
 
-### Katkı
-Bu proje Albion Online topluluğu için geliştirilmektedir.
-Sandbox Interactive GmbH ile resmi bir bağlantısı yoktur.
+> Bu site Sandbox Interactive GmbH ile resmi bir bağlantısı yoktur.

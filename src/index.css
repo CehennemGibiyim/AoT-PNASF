@@ -1,0 +1,138 @@
+@import "tailwindcss";
+
+@theme {
+  --color-albion-gold: #f5c842;
+  --color-albion-dark: #0d0f14;
+  --color-albion-panel: #161921;
+  --color-albion-border: #2a2f3e;
+  --color-albion-hover: #1e2330;
+  --color-albion-blue: #4a9eff;
+  --color-albion-green: #4ade80;
+  --color-albion-red: #f87171;
+  --color-albion-yellow: #facc15;
+  --color-albion-orange: #fb923c;
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+@layer base {
+  * { box-sizing: border-box; }
+  body {
+    background-color: #0d0f14;
+    color: #e2e8f0;
+    font-family: 'Inter', system-ui, sans-serif;
+    margin: 0;
+  }
+  #root { width: 100%; min-height: 100svh; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: #161921; }
+  ::-webkit-scrollbar-thumb { background: #2a2f3e; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #3a4050; }
+}
+
+@layer components {
+  .panel-card {
+    background-color: #161921;
+    border: 1px solid #2a2f3e;
+    border-radius: 0.75rem;
+    padding: 1rem;
+  }
+  .btn-primary {
+    background-color: #f5c842;
+    color: #0d0f14;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.15s;
+  }
+  .btn-primary:hover { background-color: #facc15; }
+  .btn-secondary {
+    background-color: #1e2330;
+    border: 1px solid #2a2f3e;
+    color: #cbd5e1;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background-color 0.15s;
+  }
+  .btn-secondary:hover { background-color: #2a2f3e; }
+  .input-field {
+    background-color: #0d0f14;
+    border: 1px solid #2a2f3e;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    color: #e2e8f0;
+    font-size: 0.875rem;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .input-field::placeholder { color: #64748b; }
+  .input-field:focus { border-color: #f5c842; }
+  .select-field {
+    background-color: #0d0f14;
+    border: 1px solid #2a2f3e;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    color: #e2e8f0;
+    font-size: 0.875rem;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .select-field:focus { border-color: #f5c842; }
+  .table-row {
+    border-bottom: 1px solid #2a2f3e;
+    transition: background-color 0.15s;
+  }
+  .table-row:hover { background-color: #1e2330; }
+  .badge-blue {
+    background-color: rgba(59,130,246,0.2);
+    color: #93c5fd;
+    border: 1px solid rgba(59,130,246,0.3);
+    padding: 0.125rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+  .badge-yellow {
+    background-color: rgba(234,179,8,0.2);
+    color: #fde047;
+    border: 1px solid rgba(234,179,8,0.3);
+    padding: 0.125rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+  .badge-red {
+    background-color: rgba(239,68,68,0.2);
+    color: #fca5a5;
+    border: 1px solid rgba(239,68,68,0.3);
+    padding: 0.125rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+  .badge-black {
+    background-color: rgba(107,114,128,0.2);
+    color: #9ca3af;
+    border: 1px solid rgba(107,114,128,0.3);
+    padding: 0.125rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+  .badge-road {
+    background-color: rgba(168,85,247,0.2);
+    color: #d8b4fe;
+    border: 1px solid rgba(168,85,247,0.3);
+    padding: 0.125rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+}
