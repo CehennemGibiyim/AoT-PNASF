@@ -189,11 +189,19 @@ function updateSettingsPreview(key) {
 
 // ─── DİL SEÇ ─────────────────────────────────────────────
 function selectLang(lang) {
+  // Önce kaydet
+  localStorage.setItem('aot-lang', lang);
   AO_SETTINGS.save({ lang });
-  AO_SETTINGS.applyLang(lang);
-  // Navbar dil göstergesini güncelle
+  // lang.js merkezi fonksiyonunu çağır
+  if (typeof _applyLang === 'function') _applyLang(lang);
+  // Settings panel butonları
+  document.querySelectorAll('.lang-opt').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === lang);
+  });
+  // Navbar göstergesi
+  const flags = {tr:'🇹🇷',en:'🇬🇧',ru:'🇷🇺',de:'🇩🇪',fr:'🇫🇷',pl:'🇵🇱',pt:'🇵🇹',es:'🇪🇸',kr:'🇰🇷'};
   const indicator = document.getElementById('settingsLangIndicator');
-  if (indicator) indicator.textContent = AO_SETTINGS.LANGS[lang]?.flag + ' ' + lang.toUpperCase();
+  if (indicator) indicator.textContent = (flags[lang] || '🌐') + ' ' + lang.toUpperCase();
 }
 
 // ─── SUNUCU SEÇ ───────────────────────────────────────────

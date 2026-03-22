@@ -150,23 +150,15 @@ const AO_SETTINGS = {
     if (badge) { badge.style.background = t.accent; badge.style.color = t.bg; }
   },
 
-  // ─── DİL UYGULA ─────────────────────────────────────────
+  // ─── DİL UYGULA — lang.js'e delege et ──────────────────
   applyLang(lang) {
-    localStorage.setItem('aot-lang', lang);
-    document.querySelectorAll('[data-tr]').forEach(el => {
-      el.textContent = lang === 'tr' ? el.dataset.tr : (el.dataset[lang] || el.dataset.en || el.dataset.tr);
-    });
-    // placeholder'lar
-    document.querySelectorAll('[data-ph-tr]').forEach(el => {
-      el.placeholder = lang === 'tr' ? el.dataset.phTr : (el.dataset['ph'+lang.charAt(0).toUpperCase()+lang.slice(1)] || el.dataset.phEn || el.dataset.phTr);
-    });
-    // lang label
-    const ll = document.getElementById('langLabel');
-    if (ll) ll.textContent = lang.toUpperCase();
-    // settings panel seçimini güncelle
-    document.querySelectorAll('.lang-opt').forEach(b => {
-      b.classList.toggle('active', b.dataset.lang === lang);
-    });
+    // lang.js'deki merkezi fonksiyonu çağır
+    if (typeof applyLang === 'function' && applyLang !== AO_SETTINGS.applyLang) {
+      applyLang(lang);
+    } else if (typeof _applyLang === 'function') {
+      localStorage.setItem('aot-lang', lang);
+      _applyLang(lang);
+    }
   },
 
   // ─── SUNUCU UYGULA ──────────────────────────────────────
@@ -181,7 +173,14 @@ const AO_SETTINGS = {
   init() {
     const s = this.get();
     this.applyTheme(s.theme);
-    this.applyLang(s.lang);
+    // Dil lang.js DOMContentLoaded'da zaten uygulanıyor
+    // Ama settings panel butonlarını güncelle
+    document.querySelectorAll('.lang-opt').forEach(b => {
+      b.classList.toggle('active', b.dataset.lang === s.lang);
+    });
+    document.querySelectorAll('.server-opt').forEach(b => {
+      b.classList.toggle('active', b.dataset.server === s.server);
+    });
     this.applyServer(s.server);
   }
 };
