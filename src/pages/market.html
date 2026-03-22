@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="../styles/main.css"/>
+  <link rel="stylesheet" href="../styles/settings.css"/>
   <link rel="stylesheet" href="../styles/market.css"/>
 </head>
 <body>
@@ -27,7 +28,7 @@
       <li><a href="tools.html" data-tr="Araçlar" data-en="Tools">Araçlar</a></li>
     </ul>
     <div class="nav-right">
-      <button class="lang-toggle" id="langToggle" onclick="toggleLang()"><span id="langLabel">TR</span></button>
+      <button class="settings-trigger" onclick="openSettings()" title="Dil, Tema ve Sunucu Ayarları"><span class="settings-trigger-flag" id="settingsLangIndicator">🇹🇷 TR</span><span class="settings-trigger-icon">⚙</span></button>
       <div class="ai-status"><span class="ai-dot"></span><span class="ai-text" data-tr="AI Aktif" data-en="AI Active">AI Aktif</span></div>
       <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
     </div>
@@ -234,6 +235,8 @@
 </footer>
 
 <script src="../lib/lang.js"></script>
+<script src="../lib/settings.js"></script>
+<script src="../lib/settings-panel.js"></script>
 <script src="../lib/nav.js"></script>
 <script src="../data/items-data.js"></script>
 <script src="../lib/market.js"></script>
