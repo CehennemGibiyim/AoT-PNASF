@@ -2,12 +2,33 @@
 // GameInfo API: Oyuncu, Guild, Kill Feed, Battle Board
 
 // ─── API ENDPOİNTLERİ ────────────────────────────────────
+// CORS proxy üzerinden çağır — GameInfo API harici sitelerden direkt CORS hatası veriyor
+const CORS_PROXY = 'https://corsproxy.io/?url=';
+
 const GI_SERVERS = {
   us:   'https://gameinfo.albiononline.com/api/gameinfo',
   eu:   'https://gameinfo-ams.albiononline.com/api/gameinfo',
   asia: 'https://gameinfo-sgp.albiononline.com/api/gameinfo',
 };
 const RENDER = 'https://render.albiononline.com/v1/item';
+
+// Proxy ile fetch — CORS sorununu aşar, timeout ekler
+async function giFetch(path, timeoutMs = 10000) {
+  const url = `${GI_SERVERS[pvpServer]}${path}`;
+  const proxied = `${CORS_PROXY}${encodeURIComponent(url)}`;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const res = await fetch(proxied, { signal: controller.signal });
+    clearTimeout(timer);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  } catch(e) {
+    clearTimeout(timer);
+    if (e.name === 'AbortError') throw new Error('timeout');
+    throw e;
+  }
+}
 
 // ─── STATE ────────────────────────────────────────────────
 let pvpServer    = 'us';
@@ -112,8 +133,7 @@ async function onPvpSearch(val) {
   if (!val || val.length < 2) { dd.classList.remove('open'); return; }
   searchTimer = setTimeout(async () => {
     try {
-      const res  = await fetch(`${GI()}/search?q=${encodeURIComponent(val)}`);
-      const data = await res.json();
+      const data = await giFetch(`/search?q=${encodeURIComponent(val)}`);
       const lang = getLang();
       const results = searchType === 'guild'
         ? (data.guilds || [])
@@ -147,8 +167,7 @@ async function doSearch() {
   const val = document.getElementById('pvpSearch').value.trim();
   if (!val) return;
   try {
-    const res  = await fetch(`${GI()}/search?q=${encodeURIComponent(val)}`);
-    const data = await res.json();
+    const data = await giFetch(`/search?q=${encodeURIComponent(val)}`);
     const results = searchType === 'guild'
       ? (data.guilds || [])
       : searchType === 'alliance'
@@ -193,14 +212,11 @@ async function loadPlayerProfile(playerId) {
   const lang = getLang();
 
   try {
-    const [profileRes, killsRes, deathsRes] = await Promise.all([
-      fetch(`${GI()}/players/${playerId}`),
-      fetch(`${GI()}/players/${playerId}/kills?limit=10&offset=0`),
-      fetch(`${GI()}/players/${playerId}/deaths?limit=10&offset=0`),
+    const [profile, kills, deaths] = await Promise.all([
+      giFetch(`/players/${playerId}`),
+      giFetch(`/players/${playerId}/kills?limit=10&offset=0`),
+      giFetch(`/players/${playerId}/deaths?limit=10&offset=0`),
     ]);
-    const profile = await profileRes.json();
-    const kills   = await killsRes.json();
-    const deaths  = await deathsRes.json();
 
     const name     = profile.Name || '—';
     const guild    = profile.GuildName || (lang==='tr'?'Guildless':'No Guild');
@@ -299,12 +315,10 @@ async function loadGuildProfile(guildId) {
   if (cont)  { cont.style.display = 'block'; cont.innerHTML = '<div class="pvp-loading"><div class="loading-spinner"></div><span>Guild yükleniyor...</span></div>'; }
   const lang = getLang();
   try {
-    const [guildRes, killsRes] = await Promise.all([
-      fetch(`${GI()}/guilds/${guildId}`),
-      fetch(`${GI()}/events?guildId=${guildId}&limit=10&sort=recent`),
+    const [guild, kills] = await Promise.all([
+      giFetch(`/guilds/${guildId}`),
+      giFetch(`/events?guildId=${guildId}&limit=10&sort=recent`),
     ]);
-    const guild = await guildRes.json();
-    const kills = await killsRes.json();
 
     cont.innerHTML = `
       <div class="guild-card">
@@ -343,9 +357,7 @@ async function loadKillFeed() {
   const lang = getLang();
   cont.innerHTML = `<div class="pvp-loading"><div class="loading-spinner"></div><span>${lang==='tr'?'Kill feed yükleniyor...':'Loading kill feed...'}</span></div>`;
   try {
-    const url = `${GI()}/events?limit=20&offset=0`;
-    const res  = await fetch(url);
-    const data = await res.json();
+    const data = await giFetch(`/events?limit=20&offset=0`);
     if (!data || !data.length) {
       cont.innerHTML = `<div class="pvp-error"><div class="err-icon">💀</div><p>${lang==='tr'?'Kill verisi bulunamadı.':'No kill data found.'}</p></div>`;
       return;
@@ -356,7 +368,19 @@ async function loadKillFeed() {
     }
     cont.innerHTML = `<div class="kills-section">${events.map(e => renderKillCard(e,'kill')).join('')}</div>`;
   } catch(e) {
-    cont.innerHTML = `<div class="pvp-error"><div class="err-icon">⚠️</div><p>${lang==='tr'?'API hatası. Sunucu yanıt vermiyor olabilir.':'API error. Server may be unresponsive.'}</p></div>`;
+    const isTimeout = e.message === 'timeout';
+    cont.innerHTML = `<div class="pvp-error">
+      <div class="err-icon">⚠️</div>
+      <p>${lang==='tr'
+        ? isTimeout
+          ? 'API zaman aşımı. Albion sunucuları şu an meşgul olabilir. Lütfen tekrar deneyin.'
+          : 'Kill feed yüklenemedi. GameInfo API şu an yanıt vermiyor (504/CORS). Lütfen bekleyip tekrar deneyin.'
+        : isTimeout
+          ? 'API timeout. Albion servers may be busy. Please try again.'
+          : 'Could not load kill feed. GameInfo API is not responding (504/CORS). Please wait and retry.'
+      }</p>
+      <button class="pvp-refresh-btn" onclick="loadKillFeed()" style="margin-top:12px">🔄 ${lang==='tr'?'Tekrar Dene':'Retry'}</button>
+    </div>`;
   }
 }
 
@@ -377,15 +401,22 @@ async function loadBattles() {
   const lang = getLang();
   cont.innerHTML = `<div class="pvp-loading"><div class="loading-spinner"></div><span>${lang==='tr'?'Muharebeler yükleniyor...':'Loading battles...'}</span></div>`;
   try {
-    const res  = await fetch(`${GI()}/battles?sort=recent&limit=20&offset=0`);
-    const data = await res.json();
+    const data = await giFetch(`/battles?sort=recent&limit=20&offset=0`);
     if (!data || !data.length) {
       cont.innerHTML = `<div class="bc-empty">${lang==='tr'?'Muharebe kaydı bulunamadı.':'No battles found.'}</div>`;
       return;
     }
     cont.innerHTML = data.map(b => renderBattleCard(b, lang)).join('');
   } catch(e) {
-    cont.innerHTML = `<div class="pvp-error"><div class="err-icon">⚠️</div><p>${lang==='tr'?'Battle API şu an yanıt vermiyor. Lütfen tekrar deneyin.':'Battle API is not responding. Please try again.'}</p></div>`;
+    const isTimeout = e.message === 'timeout';
+    cont.innerHTML = `<div class="pvp-error">
+      <div class="err-icon">⚠️</div>
+      <p>${lang==='tr'
+        ? 'Battle API şu an yanıt vermiyor. Bu bilinen bir Albion API sorunu (504). Lütfen bekleyip tekrar deneyin.'
+        : 'Battle API is not responding. This is a known Albion API issue (504). Please wait and retry.'
+      }</p>
+      <button class="pvp-refresh-btn" onclick="loadBattles()" style="margin-top:12px">🔄 ${lang==='tr'?'Tekrar Dene':'Retry'}</button>
+    </div>`;
   }
 }
 
