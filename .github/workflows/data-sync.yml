@@ -10,6 +10,9 @@ on:
         required: false
         default: 'false'
 
+permissions:
+  contents: write
+
 jobs:
   sync-data:
     runs-on: ubuntu-latest
@@ -18,11 +21,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Check ao-bin-dumps for updates
+      - name: Sync from ao-bin-dumps
         run: |
           python3 scripts/generate-items.py
           python3 scripts/generate-world.py
@@ -31,5 +33,5 @@ jobs:
           git config --global user.name 'AoT-PNASF Bot'
           git config --global user.email 'bot@aot-pnasf.github.io'
           git add -A
-          git diff --staged --quiet || git commit -m "Data Sync: items-data.js + world-data.js güncellendi [$(date '+%Y-%m-%d %H:%M')]"
+          git diff --staged --quiet || git commit -m "Data Sync: items + world güncellendi [$(date '+%Y-%m-%d %H:%M')]"
           git push
