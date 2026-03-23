@@ -5,6 +5,18 @@ import CraftingCalc from './pages/CraftingCalc'
 import TradeRoutes from './pages/TradeRoutes'
 import BlackMarket from './pages/BlackMarket'
 import MapPage from './pages/MapPage'
+import AlbionMap from './pages/AlbionMap'
+import KillboardPage from './pages/KillboardPage'
+import AvalonPage from './pages/AvalonPage'
+import AIAnalyticsPage from './pages/AIAnalyticsPage'
+import GuildManagementPage from './pages/GuildManagementPage'
+import BuildDatabasePage from './pages/BuildDatabasePage'
+import MarketTrackerPage from './pages/MarketTrackerPage'
+import FarmingCalculatorPage from './pages/FarmingCalculatorPage'
+import PersonalStatsPage from './pages/PersonalStatsPage'
+import EventTrackerPage from './pages/EventTrackerPage'
+import PartyBuilderPage from './pages/PartyBuilderPage'
+import ThemeSettingsPage from './pages/ThemeSettingsPage'
 import GoldTracker from './pages/GoldTracker'
 
 const NAV_ITEMS = [
@@ -14,6 +26,18 @@ const NAV_ITEMS = [
   { to: '/trade', label: 'Ticaret Rotaları', icon: '↔' },
   { to: '/blackmarket', label: 'Kara Pazar', icon: '◈' },
   { to: '/map', label: 'Harita', icon: '◎' },
+  { to: '/albion-map', label: '3D Harita', icon: '🗺️' },
+  { to: '/killboard', label: 'Killboard', icon: '⚔️' },
+  { to: '/avalon', label: 'Avalon', icon: '🏰' },
+  { to: '/ai-analytics', label: 'AI Analiz', icon: '🤖' },
+  { to: '/guild', label: 'Klan Yönetimi', icon: '👥' },
+  { to: '/builds', label: 'Build Database', icon: '⚔️' },
+  { to: '/market-tracker', label: 'Market Takip', icon: '📊' },
+  { to: '/farming', label: 'Farming', icon: '🌾' },
+  { to: '/personal-stats', label: 'Kişisel İstatistikler', icon: '📈' },
+  { to: '/events', label: 'Etkinlik Takibi', icon: '⏰' },
+  { to: '/party-builder', label: 'Party Builder', icon: '👥' },
+  { to: '/theme-settings', label: 'Tema Ayarları', icon: '🎨' },
   { to: '/gold', label: 'Gold Takip', icon: '▲' },
 ]
 
@@ -71,6 +95,18 @@ export default function App() {
             <Route path="/trade" element={<TradeRoutes />} />
             <Route path="/blackmarket" element={<BlackMarket />} />
             <Route path="/map" element={<MapPage />} />
+            <Route path="/albion-map" element={<AlbionMap />} />
+            <Route path="/killboard" element={<KillboardPage />} />
+            <Route path="/avalon" element={<AvalonPage />} />
+            <Route path="/ai-analytics" element={<AIAnalyticsPage />} />
+            <Route path="/guild" element={<GuildManagementPage />} />
+            <Route path="/builds" element={<BuildDatabasePage />} />
+            <Route path="/market-tracker" element={<MarketTrackerPage />} />
+            <Route path="/farming" element={<FarmingCalculatorPage />} />
+            <Route path="/personal-stats" element={<PersonalStatsPage />} />
+            <Route path="/events" element={<EventTrackerPage />} />
+            <Route path="/party-builder" element={<PartyBuilderPage />} />
+            <Route path="/theme-settings" element={<ThemeSettingsPage />} />
             <Route path="/gold" element={<GoldTracker />} />
           </Routes>
         </main>

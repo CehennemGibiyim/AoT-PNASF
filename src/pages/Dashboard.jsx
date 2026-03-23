@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { fetchGoldPrice, fetchPrices, formatSilver, getItemIcon } from '../utils/api'
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts'
 
@@ -12,10 +13,56 @@ const POPULAR_ITEMS = [
 ]
 
 const STAT_CARDS = [
-  { label: 'Aktif Oyuncu', value: '85K+', color: '#f5c842', desc: 'Kayıtlı kullanıcı' },
-  { label: 'Sunucular', value: '3', color: '#4a9eff', desc: 'Batı, Avrupa, Doğu' },
-  { label: 'API Verileri', value: 'Canlı', color: '#4ade80', desc: 'Albion Data Project' },
-  { label: 'Araç Sayısı', value: '6', color: '#fb923c', desc: 'Entegre araç' },
+  { label: 'Aktif Oyuncu', value: '85K+', color: '#f5c842', desc: 'Kayıtlı kullanıcı', icon: '' },
+  { label: 'Sunucular', value: '3', color: '#4a9eff', desc: 'Batı, Avrupa, Doğu', icon: '' },
+  { label: 'API Verileri', value: 'Canlı', color: '#4ade80', desc: 'Albion Data Project', icon: '' },
+  { label: 'Araç Sayısı', value: '6+', color: '#fb923c', desc: 'Entegre araç', icon: '' },
+]
+
+const WIDGET_DATA = {
+  market: {
+    title: 'Market Durumu',
+    icon: '',
+    items: [
+      { label: 'Gold Fiyatı', value: '3,842', change: '+2.3%', trend: 'up' },
+      { label: 'Toplam İşlem', value: '1.2M', change: '+12%', trend: 'up' },
+      { label: 'Aktif Oyuncu', value: '28.4K', change: '+5.1%', trend: 'up' }
+    ]
+  },
+  pvp: {
+    title: 'PvP Aktivite',
+    icon: '',
+    items: [
+      { label: 'Son 1 Saat', value: '847', change: '+15%', trend: 'up' },
+      { label: 'ZVZ Katılım', value: '12.3K', change: '-3%', trend: 'down' },
+      { label: 'Toplam Kill', value: '124K', change: '+8%', trend: 'up' }
+    ]
+  },
+  dungeons: {
+    title: 'Dungeon Aktivite',
+    icon: '',
+    items: [
+      { label: 'Avalon Runs', value: '2,341', change: '+18%', trend: 'up' },
+      { label: 'HCE Clears', value: '892', change: '+5%', trend: 'up' },
+      { label: 'Mist Dungeons', value: '5.6K', change: '+22%', trend: 'up' }
+    ]
+  },
+  gathering: {
+    title: 'Toplama Aktivite',
+    icon: '',
+    items: [
+      { label: 'Ore Gathered', value: '892K', change: '+7%', trend: 'up' },
+      { label: 'Fiber Gathered', value: '456K', change: '+4%', trend: 'up' },
+      { label: 'Fishing', value: '123K', change: '-2%', trend: 'down' }
+    ]
+  }
+}
+
+const COMING_FEATURES = [
+  { icon: '', color: '#10b981', title: 'Killboard Entegrasyonu', desc: 'Anlık PvP verileri ve Discord bot' },
+  { icon: '', color: '#3b82f6', title: '3D Harita Sistemi', desc: 'Google Earth tarzı interaktif harita' },
+  { icon: '', color: '#8b5cf6', title: 'Yapay Zeka Analiz', desc: 'Build önerileri ve fiyat tahminleme' },
+  { icon: '', color: '#ef4444', title: 'Avalon Rehberleri', desc: 'Boss stratejileri ve dungeon taktikleri' }
 ]
 
 const S = {
