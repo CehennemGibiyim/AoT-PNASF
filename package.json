@@ -1,35 +1,13 @@
 {
   "name": "aot-pnasf",
-  "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Albion Online Tools · Powered Nexus & AI Smart Feed",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "scan": "node scripts/ai-scanner.js"
   },
   "dependencies": {
-    "leaflet": "^1.9.4",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "react-leaflet": "^5.0.0",
-    "react-router-dom": "^7.5.0",
-    "recharts": "^2.15.3"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.39.4",
-    "@tailwindcss/postcss": "^4.2.2",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.1",
-    "autoprefixer": "^10.4.27",
-    "eslint": "^9.39.4",
-    "eslint-plugin-react-hooks": "^7.0.1",
-    "eslint-plugin-react-refresh": "^0.5.2",
-    "globals": "^17.4.0",
-    "postcss": "^8.5.8",
-    "tailwindcss": "^4.2.2",
-    "vite": "^8.0.1"
+    "cheerio": "^1.0.0",
+    "node-fetch": "^3.3.2"
   }
 }

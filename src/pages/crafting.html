@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Crafting & Üretim — AoT-PNASF</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../styles/main.css"/>
+  <link rel="stylesheet" href="../styles/settings.css"/>
+  <link rel="stylesheet" href="../styles/crafting.css"/>
+</head>
+<body>
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a class="nav-logo" href="../../index.html"><span class="logo-aot">AoT</span><span class="logo-dash">—</span><span class="logo-pnasf">PNASF</span><span class="logo-ai-badge">AI</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="market.html">Market</a></li>
+      <li><a href="crafting.html" class="active">Üretim</a></li>
+      <li><a href="pvp.html">PvP & İstatistik</a></li>
+      <li><a href="maps.html">Haritalar</a></li>
+      <li><a href="guides.html">Rehberler</a></li>
+      <li><a href="tools.html">Araçlar</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="settings-trigger" onclick="openSettings()" title="Dil, Tema ve Sunucu Ayarları"><span class="settings-trigger-flag" id="settingsLangIndicator">🇹🇷 TR</span><span class="settings-trigger-icon">⚙</span></button>
+      <div class="ai-status"><span class="ai-dot"></span><span class="ai-text">AI Aktif</span></div>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<main class="crafting-main">
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="page-badge"><span class="ai-dot"></span><span>Canlı Crafting Hesabı</span></div>
+      <h1>Crafting & Üretim</h1>
+      <p>Gerçek zamanlı fiyatlarla crafting, refining, farming, transport ve journal kârını hesapla</p>
+    </div>
+  </div>
+
+  <div class="module-tabs">
+    <div class="module-tabs-inner">
+      <button class="mod-tab active" id="tab-crafting" onclick="switchModule('crafting',this)">🔨 Crafting</button>
+      <button class="mod-tab" id="tab-refining" onclick="switchModule('refining',this)">⚙️ Refining</button>
+      <button class="mod-tab" id="tab-farming" onclick="switchModule('farming',this)">🌾 Farming</button>
+      <button class="mod-tab" id="tab-transport" onclick="switchModule('transport',this)">🚢 Transport</button>
+      <button class="mod-tab" id="tab-journal" onclick="switchModule('journal',this)">📖 Journal</button>
+      <button class="mod-tab" id="tab-blackmarket" onclick="switchModule('blackmarket',this)">🖤 Black Market</button>
+    </div>
+  </div>
+
+  <!-- ══ CRAFTING ══ -->
+  <div class="module-content" id="mod-crafting">
+    <div class="module-inner">
+      <div class="craft-top-bar">
+        <div class="craft-search-wrap">
+          <span class="s-icon">🔍</span>
+          <input type="text" id="craftSearchInput" class="craft-search-input"
+            placeholder="Eşya ara... (Yay, Claymore, Çanta, Hunter Hood, Güveç...)"
+            oninput="onSearchInput(this.value)" autocomplete="off"/>
+          <div class="search-dropdown" id="searchDropdown"></div>
+        </div>
+        <div class="top-controls">
+          <div class="ctrl-group">
+            <span class="ctrl-label">Tier:</span>
+            <div class="ctrl-btns" id="tierBtns">
+              <button class="ctrl-btn" data-val="2" onclick="setTier(2)">T2</button>
+              <button class="ctrl-btn" data-val="3" onclick="setTier(3)">T3</button>
+              <button class="ctrl-btn" data-val="4" onclick="setTier(4)">T4</button>
+              <button class="ctrl-btn active" data-val="5" onclick="setTier(5)">T5</button>
+              <button class="ctrl-btn" data-val="6" onclick="setTier(6)">T6</button>
+              <button class="ctrl-btn" data-val="7" onclick="setTier(7)">T7</button>
+              <button class="ctrl-btn" data-val="8" onclick="setTier(8)">T8</button>
+            </div>
+          </div>
+          <div class="ctrl-group">
+            <span class="ctrl-label">Enchant:</span>
+            <div class="ctrl-btns" id="enchantBtns">
+              <button class="ctrl-btn enc active" data-val="0" onclick="setEnchant(0)">+0</button>
+              <button class="ctrl-btn enc enc1" data-val="1" onclick="setEnchant(1)">+1</button>
+              <button class="ctrl-btn enc enc2" data-val="2" onclick="setEnchant(2)">+2</button>
+              <button class="ctrl-btn enc enc3" data-val="3" onclick="setEnchant(3)">+3</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="craft-mid">
+        <div class="cat-sidebar">
+          <div class="cat-sidebar-title">Kategoriler</div>
+          <div id="catList"></div>
+        </div>
+        <div class="item-grid-wrap">
+          <div class="item-grid-title" id="gridTitle">Bir kategori seçin veya arama yapın</div>
+          <div class="item-grid" id="itemGrid">
+            <div class="grid-empty"><div style="font-size:36px">🔨</div><p>Soldan kategori seçin veya üstten eşya arayın</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="craft-result" id="craftResult" style="display:none">
+        <div class="selected-bar" id="selectedBar"></div>
+        <div class="result-cols">
+          <div class="result-left">
+            <div class="panel">
+              <h3>Craft Şehri</h3>
+              <div class="city-btns" id="cityBtns">
+                <button class="city-btn active" data-city="Caerleon" onclick="setCraftCity('Caerleon')">⚔️ Caerleon</button>
+                <button class="city-btn" data-city="Lymhurst" onclick="setCraftCity('Lymhurst')">🌲 Lymhurst</button>
+                <button class="city-btn" data-city="Bridgewatch" onclick="setCraftCity('Bridgewatch')">🏜️ Bridgewatch</button>
+                <button class="city-btn" data-city="Martlock" onclick="setCraftCity('Martlock')">🏔️ Martlock</button>
+                <button class="city-btn" data-city="Fort Sterling" onclick="setCraftCity('Fort Sterling')">⛰️ Fort Sterling</button>
+                <button class="city-btn" data-city="Thetford" onclick="setCraftCity('Thetford')">🌿 Thetford</button>
+                <button class="city-btn" data-city="Brecilien" onclick="setCraftCity('Brecilien')">🌫️ Brecilien</button>
+              </div>
+              <div class="bonus-info" id="bonusInfo"></div>
+            </div>
+            <div class="panel">
+              <h3>Malzeme Maliyeti</h3>
+              <div id="materialsList"><p style="color:var(--text-muted);font-size:13px">Eşya seçilince malzemeler burada görünür</p></div>
+              <div id="matTotal"></div>
+            </div>
+            <div class="panel">
+              <h3>Hesap Ayarları</h3>
+              <div class="settings-list">
+                <div class="set-row"><label>Miktar</label><input type="number" id="craftQty" value="1" min="1" max="9999" class="set-input" oninput="calcCrafting()"/></div>
+                <div class="set-row"><label>Return Rate %</label><input type="number" id="returnRate" value="15" min="0" max="70" class="set-input" oninput="calcCrafting()"/><span class="set-hint">Focus: ~47%</span></div>
+                <div class="set-row"><label>Kullanım Ücreti %</label><input type="number" id="usageFee" value="3" min="0" max="25" class="set-input" oninput="calcCrafting()"/></div>
+                <div class="set-row"><label>Vergi %</label><input type="number" id="taxRate" value="8" min="0" max="15" class="set-input" oninput="calcCrafting()"/></div>
+                <div class="set-row check-row"><label><input type="checkbox" id="focusMode" onchange="calcCrafting()"/> Focus Kullan (~47% return)</label></div>
+              </div>
+            </div>
+          </div>
+          <div class="result-right">
+            <div class="panel">
+              <h3>Satış Fiyatları — Tüm Şehirler</h3>
+              <div class="sell-grid" id="sellGrid"></div>
+            </div>
+            <div class="panel profit-panel">
+              <h3>Kâr Hesabı</h3>
+              <div id="profitBreakdown"></div>
+              <div id="profitResult"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ REFİNİNG ══ -->
+  <div class="module-content" id="mod-refining" style="display:none">
+    <div class="module-inner">
+      <div class="info-box">⚙️ <strong>Refining:</strong> Ham kaynakları işlenmiş kaynaklara dönüştür. Bonus şehirde craft et — %36.7 return rate (Focus: %53).</div>
+      <div class="refining-layout">
+        <div class="panel" style="flex-shrink:0;width:230px">
+          <h3>Ayarlar</h3>
+          <div class="settings-list">
+            <div class="set-row"><label>Return Rate %</label><input type="number" id="refineReturnRate" value="36.7" min="0" max="53" step="0.1" class="set-input" oninput="calcRefining()"/></div>
+            <div class="set-row"><label>Miktar (ham)</label><input type="number" id="refineQty" value="100" min="1" class="set-input" oninput="calcRefining()"/></div>
+            <div class="set-row check-row"><label><input type="checkbox" id="refineFocus" onchange="calcRefining()"/> Focus (%53)</label></div>
+          </div>
+          <div style="margin-top:14px;font-size:11px;color:var(--text-muted);font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Bonus Şehirler</div>
+          <div class="rbc"><span>Odun → Tahta</span><span class="rbc-tag">Fort Sterling</span></div>
+          <div class="rbc"><span>Maden → Külçe</span><span class="rbc-tag">Thetford</span></div>
+          <div class="rbc"><span>Fiber → Kumaş</span><span class="rbc-tag">Lymhurst</span></div>
+          <div class="rbc"><span>Ham Deri → Deri</span><span class="rbc-tag">Martlock</span></div>
+          <div class="rbc"><span>Taş → Taş Blok</span><span class="rbc-tag">Bridgewatch</span></div>
+        </div>
+        <div class="refine-cards-wrap">
+          <div class="refine-card"><div class="rc-hd"><img src="https://render.albiononline.com/v1/item/T4_WOOD.png" class="rc-img" onerror="this.style.display='none'"/><div><b>Odun → Tahta</b><small>Fort Sterling +%35</small></div></div><div id="rt-wood"></div></div>
+          <div class="refine-card"><div class="rc-hd"><img src="https://render.albiononline.com/v1/item/T4_ORE.png"  class="rc-img" onerror="this.style.display='none'"/><div><b>Maden → Külçe</b><small>Thetford +%35</small></div></div><div id="rt-ore"></div></div>
+          <div class="refine-card"><div class="rc-hd"><img src="https://render.albiononline.com/v1/item/T4_FIBER.png" class="rc-img" onerror="this.style.display='none'"/><div><b>Fiber → Kumaş</b><small>Lymhurst +%35</small></div></div><div id="rt-fiber"></div></div>
+          <div class="refine-card"><div class="rc-hd"><img src="https://render.albiononline.com/v1/item/T4_HIDE.png"  class="rc-img" onerror="this.style.display='none'"/><div><b>Ham Deri → Deri</b><small>Martlock +%35</small></div></div><div id="rt-hide"></div></div>
+          <div class="refine-card"><div class="rc-hd"><img src="https://render.albiononline.com/v1/item/T4_ROCK.png"  class="rc-img" onerror="this.style.display='none'"/><div><b>Taş → Taş Blok</b><small>Bridgewatch +%35</small></div></div><div id="rt-rock"></div></div>
+        </div>
+      </div>
+      <div class="panel" style="margin-top:16px">
+        <h3>Detaylı Kâr Tablosu <span style="font-size:12px;color:var(--text-muted);font-weight:400">— karlıdan az karlıya</span></h3>
+        <div class="table-wrap"><table class="data-table"><thead><tr><th>Kaynak</th><th>T</th><th>Ham Fiyat</th><th>İşl. Fiyat</th><th>Çıktı</th><th>Maliyet</th><th>Gelir</th><th>Kâr/100</th></tr></thead><tbody id="refineTableBody"></tbody></table></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FARMING ══ -->
+  <div class="module-content" id="mod-farming" style="display:none">
+    <div class="module-inner">
+      <div class="info-box">🌾 <strong>Farming:</strong> Ada çiftliği gelirinizi hesaplayın. Premium ile %50 daha fazla ürün alırsınız.</div>
+      <div class="farming-layout">
+        <div class="panel" style="min-width:230px">
+          <h3>Çiftlik Ayarları</h3>
+          <div class="settings-list">
+            <div class="set-row"><label>Tarla Sayısı</label><input type="number" id="farmPlots" value="9" min="1" max="120" class="set-input" oninput="calcFarming()"/></div>
+            <div class="set-row"><label>Ürün</label>
+              <select id="farmCrop" class="set-select" onchange="calcFarming()">
+                <option value="carrot">🥕 Havuç (8sa)</option>
+                <option value="turnip">🌱 Şalgam (22sa)</option>
+                <option value="pumpkin">🎃 Kabak (22sa)</option>
+                <option value="corn">🌽 Mısır (52sa)</option>
+                <option value="bean">🫘 Fasulye (52sa)</option>
+                <option value="wheat">🌾 Buğday (52sa)</option>
+                <option value="sheep">🐑 Koyun (22sa)</option>
+                <option value="pig">🐷 Domuz (22sa)</option>
+                <option value="cow">🐄 İnek (52sa)</option>
+                <option value="goose">🦆 Kaz (22sa)</option>
+              </select>
+            </div>
+            <div class="set-row check-row"><label><input type="checkbox" id="farmPremium" checked onchange="calcFarming()"/> Premium (+%50)</label></div>
+            <div class="set-row check-row"><label><input type="checkbox" id="farmFocus" onchange="calcFarming()"/> Focus Kullan</label></div>
+          </div>
+        </div>
+        <div class="panel" style="flex:1">
+          <h3>Sonuç</h3>
+          <div id="farmResultContent"><p style="color:var(--text-muted);text-align:center;padding:20px">Ayarları gir, otomatik hesaplar</p></div>
+        </div>
+        <div class="panel" style="flex:1">
+          <h3>En Karlı Ürünler <span style="font-size:11px;color:var(--text-muted);font-weight:400">(9 tarla · Premium · günlük)</span></h3>
+          <div id="farmRanking"><div class="loading-wrap"><div class="loading-spinner"></div><span>Fiyatlar yükleniyor...</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ TRANSPORT ══ -->
+  <div class="module-content" id="mod-transport" style="display:none">
+    <div class="module-inner">
+      <div class="info-box">🚢 <strong>Transport Kâr:</strong> Bir şehirden ucuza al, başka şehirde pahalıya sat. Nakliye masrafını düş, net kârı gör.</div>
+      <div class="transport-layout">
+        <div class="panel">
+          <h3>Eşya & Şehir Seçimi</h3>
+          <div class="transport-search-wrap">
+            <span class="s-icon">🔍</span>
+            <input type="text" id="transportSearch" class="craft-search-input" placeholder="Eşya ara..." oninput="onTransportSearch(this.value)" autocomplete="off"/>
+            <div class="search-dropdown" id="transportDropdown"></div>
+          </div>
+          <div class="transport-cities">
+            <div class="tc-group">
+              <label>Al: <select id="buyCity" class="set-select" onchange="calcTransport()">
+                <option value="">Otomatik (en ucuz)</option>
+                <option>Caerleon</option><option>Bridgewatch</option><option>Lymhurst</option>
+                <option>Martlock</option><option>Thetford</option><option>Fort Sterling</option><option>Brecilien</option>
+              </select></label>
+            </div>
+            <div class="tc-arrow">→</div>
+            <div class="tc-group">
+              <label>Sat: <select id="sellCity" class="set-select" onchange="calcTransport()">
+                <option value="">Otomatik (en pahalı)</option>
+                <option>Caerleon</option><option>Bridgewatch</option><option>Lymhurst</option>
+                <option>Martlock</option><option>Thetford</option><option>Fort Sterling</option><option>Brecilien</option><option>Black Market</option>
+              </select></label>
+            </div>
+          </div>
+          <div class="settings-list" style="margin-top:12px">
+            <div class="set-row"><label>Miktar</label><input type="number" id="transportQty" value="1" min="1" class="set-input" oninput="calcTransport()"/></div>
+            <div class="set-row"><label>Vergi %</label><input type="number" id="transportTax" value="8" min="0" max="15" class="set-input" oninput="calcTransport()"/></div>
+            <div class="set-row"><label>Nakliye Masrafı</label><input type="number" id="transportFee" value="0" min="0" class="set-input" oninput="calcTransport()"/></div>
+          </div>
+        </div>
+        <div class="panel" id="transportResult">
+          <h3>Transport Kâr Analizi</h3>
+          <div id="transportResultContent"><p style="color:var(--text-muted);text-align:center;padding:20px">Eşya seç ve şehirleri belirle</p></div>
+        </div>
+        <div class="panel">
+          <h3>En İyi Transport Rotaları <span style="font-size:11px;color:var(--text-muted);font-weight:400">(tüm şehirler)</span></h3>
+          <div id="transportRoutes"><div class="loading-wrap"><div class="loading-spinner"></div><span>Yükleniyor...</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ JOURNAL ══ -->
+  <div class="module-content" id="mod-journal" style="display:none">
+    <div class="module-inner">
+      <div class="info-box">📖 <strong>Journal (Günlük) Hesabı:</strong> Avcı, Craftçı veya Balıkçı günlüğü doldur ve sat. Günlük başına kaç silver kazanırsın?</div>
+      <div class="journal-layout">
+        <div class="panel">
+          <h3>Journal Ayarları</h3>
+          <div class="settings-list">
+            <div class="set-row"><label>Journal Tipi</label>
+              <select id="journalType" class="set-select" onchange="calcJournal()">
+                <option value="JOURNAL_HUNTER">🏹 Avcı Günlüğü</option>
+                <option value="JOURNAL_CRAFTSMAN">🔨 Craftçı Günlüğü</option>
+                <option value="JOURNAL_LUMBERJACK">🪵 Oduncu Günlüğü</option>
+                <option value="JOURNAL_QUARRIER">⛏️ Taş Ocakçı</option>
+                <option value="JOURNAL_MINER">⛏️ Madenci Günlüğü</option>
+                <option value="JOURNAL_SKINNER">🦌 Deribucu Günlüğü</option>
+                <option value="JOURNAL_HARVESTER">🌾 Hasat Günlüğü</option>
+                <option value="JOURNAL_FISHER">🎣 Balıkçı Günlüğü</option>
+                <option value="JOURNAL_ADVENTURER">⚔️ Maceracı Günlüğü</option>
+              </select>
+            </div>
+            <div class="set-row"><label>Tier</label>
+              <select id="journalTier" class="set-select" onchange="calcJournal()">
+                <option value="4">T4 — Çırak</option>
+                <option value="5" selected>T5 — Uzman</option>
+                <option value="6">T6 — Usta</option>
+                <option value="7">T7 — Büyükusta</option>
+                <option value="8">T8 — Yaşlı</option>
+              </select>
+            </div>
+            <div class="set-row"><label>Adet</label><input type="number" id="journalQty" value="10" min="1" max="9999" class="set-input" oninput="calcJournal()"/></div>
+            <div class="set-row"><label>Vergi %</label><input type="number" id="journalTax" value="8" min="0" max="15" class="set-input" oninput="calcJournal()"/></div>
+            <div class="set-row check-row"><label><input type="checkbox" id="journalFull" checked onchange="calcJournal()"/> Dolu günlük (boş günlük maliyeti düş)</label></div>
+          </div>
+        </div>
+        <div class="panel" style="flex:1">
+          <h3>Journal Kâr Sonucu</h3>
+          <div id="journalResult"><p style="color:var(--text-muted);text-align:center;padding:20px">Ayarları gir, otomatik hesaplar</p></div>
+        </div>
+        <div class="panel" style="flex:1">
+          <h3>Tüm Journal Karşılaştırması</h3>
+          <div class="table-wrap">
+            <table class="data-table" id="journalCompareTable">
+              <thead><tr><th>Journal</th><th>T</th><th>Boş Fiyat</th><th>Dolu Fiyat</th><th>Kâr</th></tr></thead>
+              <tbody id="journalCompareBody"><tr><td colspan="5" style="text-align:center;color:var(--text-muted)">Yükleniyor...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ BLACK MARKET ══ -->
+  <div class="module-content" id="mod-blackmarket" style="display:none">
+    <div class="module-inner">
+      <div class="info-box">🖤 <strong>Black Market Flip:</strong> Şehirlerden ucuza al, Black Market alış emirlerine sat. Fiyat farkı = kârın.</div>
+      <div class="bm-layout">
+        <div class="panel">
+          <h3>Ayarlar</h3>
+          <div class="settings-list">
+            <div class="set-row"><label>Min. Kâr (Silver)</label><input type="number" id="bmMinProfit" value="10000" min="0" class="set-input" oninput="renderBMTable()"/></div>
+            <div class="set-row"><label>Vergi %</label><input type="number" id="bmTax" value="8" min="0" max="15" class="set-input" oninput="renderBMTable()"/></div>
+            <div class="set-row"><label>Tier</label>
+              <select id="bmTier" class="set-select" onchange="loadBMData()">
+                <option value="all">Tüm Tierlar</option>
+                <option value="4">T4</option><option value="5" selected>T5</option>
+                <option value="6">T6</option><option value="7">T7</option><option value="8">T8</option>
+              </select>
+            </div>
+            <div class="set-row check-row"><label><input type="checkbox" id="bmEnchant" onchange="loadBMData()"/> Enchant (+1/+2/+3) dahil</label></div>
+          </div>
+          <button class="btn-refresh" onclick="loadBMData()" style="margin-top:12px;width:100%">🔄 Fiyatları Yenile</button>
+        </div>
+        <div class="panel" style="flex:2">
+          <h3>Black Market Flip Fırsatları</h3>
+          <div id="bmLoading" class="loading-wrap"><div class="loading-spinner"></div><span>Fiyatlar çekiliyor...</span></div>
+          <div class="table-wrap" id="bmTableWrap" style="display:none">
+            <table class="data-table">
+              <thead><tr><th>Eşya</th><th>T</th><th>En Ucuz Şehir</th><th>Alış Fiyatı</th><th>BM Emri</th><th>Kâr</th><th>%</th></tr></thead>
+              <tbody id="bmTableBody"></tbody>
+            </table>
+          </div>
+          <div id="bmEmpty" style="display:none;text-align:center;padding:30px;color:var(--text-muted)">Belirtilen kriterlerde flip bulunamadı. Ayarları değiştirin.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo"><span class="logo-aot">AoT</span><span class="logo-dash">—</span><span class="logo-pnasf">PNASF</span></div>
+    <p class="footer-desc">Fiyat: AODP API · İkon: render.albiononline.com · Sandbox Interactive ile resmi bağlantısı yoktur.</p>
+    <p class="footer-copy">© 2025 AoT-PNASF · Powered by Claude AI</p>
+  </div>
+</footer>
+
+<script src="../lib/lang.js"></script>
+<script src="../lib/settings.js"></script>
+<script src="../lib/settings-panel.js"></script>
+<script src="../lib/nav.js"></script>
+<script src="../data/items-data.js"></script>
+<script src="../lib/crafting.js"></script>
+</body>
+</html>

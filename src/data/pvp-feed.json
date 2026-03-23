@@ -1,0 +1,9 @@
+{
+  "fetchedAt": "2025-01-01T00:00:00.000Z",
+  "note": "Bu dosya GitHub Actions tarafından her 5 dakikada güncellenir.",
+  "servers": {
+    "us":   { "recentKills": [], "topKills": [], "battles": [], "ok": false },
+    "eu":   { "recentKills": [], "topKills": [], "battles": [], "ok": false },
+    "asia": { "recentKills": [], "topKills": [], "battles": [], "ok": false }
+  }
+}

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Market & Ekonomi — AoT-PNASF</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../styles/main.css"/>
+  <link rel="stylesheet" href="../styles/settings.css"/>
+  <link rel="stylesheet" href="../styles/market.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a class="nav-logo" href="../../index.html"><span class="logo-aot">AoT</span><span class="logo-dash">—</span><span class="logo-pnasf">PNASF</span><span class="logo-ai-badge">AI</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="market.html" class="active" data-tr="Market" data-en="Market">Market</a></li>
+      <li><a href="crafting.html" data-tr="Üretim" data-en="Crafting">Üretim</a></li>
+      <li><a href="pvp.html" data-tr="PvP & İstatistik" data-en="PvP & Stats">PvP & İstatistik</a></li>
+      <li><a href="maps.html" data-tr="Haritalar" data-en="Maps">Haritalar</a></li>
+      <li><a href="guides.html" data-tr="Rehberler" data-en="Guides">Rehberler</a></li>
+      <li><a href="tools.html" data-tr="Araçlar" data-en="Tools">Araçlar</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="settings-trigger" onclick="openSettings()">
+        <span class="settings-trigger-flag" id="settingsLangIndicator">🇹🇷 TR</span>
+        <span class="settings-trigger-icon">⚙</span>
+      </button>
+      <div class="ai-status"><span class="ai-dot"></span><span class="ai-text" data-tr="AI Aktif" data-en="AI Active">AI Aktif</span></div>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<main class="market-main">
+
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="page-badge"><span class="ai-dot"></span><span data-tr="Canlı Market Verisi" data-en="Live Market Data">Canlı Market Verisi</span></div>
+      <h1 data-tr="Market & Ekonomi" data-en="Market & Economy">Market & Ekonomi</h1>
+      <p data-tr="EU, US ve Asia — 11 lokasyon, gerçek zamanlı fiyatlar" data-en="EU, US and Asia — 11 locations, real-time prices">EU, US ve Asia — 11 lokasyon, gerçek zamanlı fiyatlar</p>
+    </div>
+  </div>
+
+  <!-- SUNUCU + GOLD ŞERİDİ -->
+  <div class="server-bar">
+    <div class="server-bar-inner">
+      <div class="srv-btns">
+        <button class="srv-btn active" data-server="europe" onclick="switchServer('europe',this)">🌍 EU</button>
+        <button class="srv-btn" data-server="west" onclick="switchServer('west',this)">🌎 US</button>
+        <button class="srv-btn" data-server="east" onclick="switchServer('east',this)">🌏 Asia</button>
+        <button class="srv-btn srv-compare" onclick="switchServer('compare',this)">⚡ <span data-tr="Karşılaştır" data-en="Compare">Karşılaştır</span></button>
+      </div>
+      <div class="gold-pill-bar">
+        <span class="gold-icon">🥇</span>
+        <span class="gold-val" id="goldVal">—</span>
+        <span style="color:var(--text-muted);font-size:11px">Silver</span>
+        <span class="gold-server-tag" id="goldServerTag">EU</span>
+        <span class="gold-age" id="goldAge"></span>
+        <span class="bm-hint" data-tr="💡 Black Market: Yalnızca alış emri" data-en="💡 Black Market: Buy orders only">💡 Black Market: Yalnızca alış emri</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARAMA + FİLTRELER -->
+  <div class="market-filters">
+    <div class="market-filters-inner">
+      <div class="mf-search-wrap">
+        <span class="mf-icon">🔍</span>
+        <input type="text" id="itemSearch" class="mf-input"
+          data-ph-tr="Eşya ara... (Yay, Kılıç, Çanta, Hunter Hood...)"
+          data-ph-en="Search items... (Bow, Sword, Bag, Hunter Hood...)"
+          placeholder="Eşya ara... (Yay, Kılıç, Çanta, Hunter Hood...)"
+          oninput="onSearchInput(this.value)" autocomplete="off"/>
+        <button class="mf-clear" id="clearBtn" onclick="clearSearch()" style="display:none">✕</button>
+        <div class="mkt-search-dd" id="marketSearchDropdown"></div>
+      </div>
+      <div class="mf-controls">
+        <select id="tierFilter" class="mf-select" onchange="applyFilters()">
+          <option value="" data-tr="Tüm Tier" data-en="All Tiers">Tüm Tier</option>
+          <option value="T2">T2</option><option value="T3">T3</option>
+          <option value="T4">T4</option><option value="T5">T5</option>
+          <option value="T6">T6</option><option value="T7">T7</option><option value="T8">T8</option>
+        </select>
+        <select id="cityFilter" class="mf-select" onchange="applyFilters()">
+          <option value="" data-tr="Tüm Şehirler" data-en="All Cities">Tüm Şehirler</option>
+          <optgroup label="🏰 Royal">
+            <option value="Caerleon">Caerleon</option>
+            <option value="Lymhurst">Lymhurst</option>
+            <option value="Bridgewatch">Bridgewatch</option>
+            <option value="Martlock">Martlock</option>
+            <option value="Thetford">Thetford</option>
+            <option value="Fort Sterling">Fort Sterling</option>
+          </optgroup>
+          <optgroup label="🌫️ Mist">
+            <option value="Brecilien">Brecilien</option>
+          </optgroup>
+          <optgroup label="🗡️ Outlands Rest">
+            <option value="Arthurs Rest">Arthur's Rest</option>
+            <option value="Merlins Rest">Merlyn's Rest</option>
+            <option value="Morganas Rest">Morgana's Rest</option>
+          </optgroup>
+          <optgroup label="🖤 Özel">
+            <option value="Black Market">Black Market</option>
+          </optgroup>
+        </select>
+        <select id="categoryFilter" class="mf-select" onchange="loadCategory(this.value)">
+          <option value="bags">🎒 <span data-tr="Çantalar" data-en="Bags">Çantalar</span></option>
+          <option value="swords">⚔️ <span data-tr="Kılıçlar" data-en="Swords">Kılıçlar</span></option>
+          <option value="bows">🏹 <span data-tr="Yaylar" data-en="Bows">Yaylar</span></option>
+          <option value="axes">🪓 <span data-tr="Baltalar" data-en="Axes">Baltalar</span></option>
+          <option value="staves">🪄 <span data-tr="Asalar" data-en="Staves">Asalar</span></option>
+          <option value="hammers">🔨 <span data-tr="Çekiçler" data-en="Hammers">Çekiçler</span></option>
+          <option value="spears">🗡️ <span data-tr="Mızraklar" data-en="Spears">Mızraklar</span></option>
+          <option value="armor_leather">🥋 <span data-tr="Deri Zırh" data-en="Leather Armor">Deri Zırh</span></option>
+          <option value="armor_plate">🛡️ <span data-tr="Plaka Zırh" data-en="Plate Armor">Plaka Zırh</span></option>
+          <option value="armor_cloth">👘 <span data-tr="Kumaş Zırh" data-en="Cloth Armor">Kumaş Zırh</span></option>
+          <option value="resources">🪵 <span data-tr="Ham Kaynak" data-en="Raw Resources">Ham Kaynak</span></option>
+          <option value="refined">⚙️ <span data-tr="İşlenmiş" data-en="Refined">İşlenmiş</span></option>
+          <option value="food">🍲 <span data-tr="Yiyecek" data-en="Food">Yiyecek</span></option>
+          <option value="potions">⚗️ <span data-tr="İksirler" data-en="Potions">İksirler</span></option>
+          <option value="mounts">🐎 <span data-tr="Binekler" data-en="Mounts">Binekler</span></option>
+        </select>
+        <button class="mf-refresh" id="refreshBtn" onclick="refreshPrices()">🔄</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODÜL SEKMELERİ -->
+  <div class="mkt-tabs">
+    <div class="mkt-tabs-inner">
+      <button class="mkt-tab active" onclick="switchTab('prices',this)" data-tr="💰 Fiyatlar" data-en="💰 Prices">💰 Fiyatlar</button>
+      <button class="mkt-tab" onclick="switchTab('history',this)" data-tr="📈 Fiyat Geçmişi" data-en="📈 Price History">📈 Fiyat Geçmişi</button>
+      <button class="mkt-tab" onclick="switchTab('top',this)" data-tr="🔥 Top Traded" data-en="🔥 Top Traded">🔥 Top Traded</button>
+      <button class="mkt-tab" onclick="switchTab('flip',this)" data-tr="🔄 Flip & Arbitraj" data-en="🔄 Flip & Arbitrage">🔄 Flip & Arbitraj</button>
+      <button class="mkt-tab" onclick="switchTab('quality',this)" data-tr="💎 Kalite & Enchant" data-en="💎 Quality & Enchant">💎 Kalite & Enchant</button>
+      <button class="mkt-tab" onclick="switchTab('gold',this)" data-tr="🥇 Gold Grafiği" data-en="🥇 Gold Chart">🥇 Gold Grafiği</button>
+    </div>
+  </div>
+
+  <!-- ════ TAB: FİYATLAR ════ -->
+  <div class="mkt-panel" id="tab-prices">
+    <div class="mkt-inner">
+      <div class="stats-row">
+        <div class="stat-card"><div class="sc-label" data-tr="En Ucuz Satış" data-en="Cheapest Sell">En Ucuz Satış</div><div class="sc-val" id="statMin">—</div><div class="sc-sub" id="statMinCity"></div></div>
+        <div class="stat-card"><div class="sc-label" data-tr="En Pahalı Satış" data-en="Most Expensive">En Pahalı Satış</div><div class="sc-val" id="statMax">—</div><div class="sc-sub" id="statMaxCity"></div></div>
+        <div class="stat-card"><div class="sc-label" data-tr="Maks. Transport Kârı" data-en="Max Transport Profit">Maks. Transport Kârı</div><div class="sc-val" id="statProfit">—</div><div class="sc-sub" id="statProfitCities"></div></div>
+        <div class="stat-card"><div class="sc-label" data-tr="Son Güncelleme" data-en="Last Updated">Son Güncelleme</div><div class="sc-val" id="statAge">—</div><div class="sc-sub" data-tr="en yeni veri" data-en="latest data">en yeni veri</div></div>
+      </div>
+      <div class="table-wrap-outer">
+        <div class="table-header-row">
+          <span class="table-title" id="tableTitle" data-tr="Çanta Fiyatları" data-en="Bag Prices">Çanta Fiyatları</span>
+          <span class="table-count" id="tableCount"></span>
+          <span class="table-refresh-hint" data-tr="Yenile →" data-en="Refresh →"></span>
+        </div>
+        <div id="priceTableContainer"><div class="loading-state"><div class="loading-spinner"></div><span data-tr="Fiyatlar yükleniyor..." data-en="Loading prices...">Fiyatlar yükleniyor...</span></div></div>
+      </div>
+      <!-- Transport Hesabı -->
+      <div class="transport-box">
+        <h3 data-tr="🚢 Transport Kâr Hesabı" data-en="🚢 Transport Profit Calculator">🚢 Transport Kâr Hesabı</h3>
+        <div class="transport-row">
+          <label><span data-tr="Al:" data-en="Buy:">Al:</span>
+            <select id="buyCity" class="mf-select" onchange="calcTransport()">
+              <option value="" data-tr="Otomatik (en ucuz)" data-en="Auto (cheapest)">Otomatik (en ucuz)</option>
+              <option>Caerleon</option><option>Lymhurst</option><option>Bridgewatch</option>
+              <option>Martlock</option><option>Thetford</option><option>Fort Sterling</option>
+              <option>Brecilien</option>
+              <option value="Arthurs Rest">Arthur's Rest</option>
+              <option value="Merlins Rest">Merlyn's Rest</option>
+              <option value="Morganas Rest">Morgana's Rest</option>
+            </select>
+          </label>
+          <span class="transport-arrow">→</span>
+          <label><span data-tr="Sat:" data-en="Sell:">Sat:</span>
+            <select id="sellCity" class="mf-select" onchange="calcTransport()">
+              <option value="" data-tr="Otomatik (en pahalı)" data-en="Auto (most expensive)">Otomatik (en pahalı)</option>
+              <option>Caerleon</option><option>Lymhurst</option><option>Bridgewatch</option>
+              <option>Martlock</option><option>Thetford</option><option>Fort Sterling</option>
+              <option>Brecilien</option>
+              <option value="Arthurs Rest">Arthur's Rest</option>
+              <option value="Merlins Rest">Merlyn's Rest</option>
+              <option value="Morganas Rest">Morgana's Rest</option>
+              <option value="Black Market">Black Market</option>
+            </select>
+          </label>
+          <label><span data-tr="Miktar:" data-en="Qty:">Miktar:</span><input type="number" id="tQty" value="1" min="1" class="tc-inp" oninput="calcTransport()"/></label>
+          <label><span data-tr="Vergi%:" data-en="Tax%:">Vergi%:</span><input type="number" id="tTax" value="8" min="0" max="15" class="tc-inp" oninput="calcTransport()"/></label>
+        </div>
+        <div class="transport-result" id="transportResult"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ TAB: FİYAT GEÇMİŞİ ════ -->
+  <div class="mkt-panel" id="tab-history" style="display:none">
+    <div class="mkt-inner">
+      <div class="history-bar">
+        <div class="mf-search-wrap" style="flex:1;max-width:400px">
+          <span class="mf-icon">🔍</span>
+          <input type="text" id="historySearch" class="mf-input"
+            data-ph-tr="Fiyat geçmişi için eşya ara..."
+            data-ph-en="Search item for price history..."
+            placeholder="Fiyat geçmişi için eşya ara..."
+            oninput="onHistorySearch(this.value)" autocomplete="off"/>
+          <div class="mkt-search-dd" id="historyDropdown"></div>
+        </div>
+        <select id="historyCity" class="mf-select" onchange="loadHistory()">
+          <option value="Caerleon">Caerleon</option>
+          <option value="Lymhurst">Lymhurst</option>
+          <option value="Bridgewatch">Bridgewatch</option>
+          <option value="Martlock">Martlock</option>
+          <option value="Thetford">Thetford</option>
+          <option value="Fort Sterling">Fort Sterling</option>
+          <option value="Brecilien">Brecilien</option>
+          <option value="Arthurs Rest">Arthur's Rest</option>
+          <option value="Merlins Rest">Merlyn's Rest</option>
+          <option value="Morganas Rest">Morgana's Rest</option>
+        </select>
+        <select id="historyScale" class="mf-select" onchange="loadHistory()">
+          <option value="1" data-tr="Saatlik" data-en="Hourly">Saatlik</option>
+          <option value="6" data-tr="6 Saatlik" data-en="6-hourly">6 Saatlik</option>
+          <option value="24" selected data-tr="Günlük" data-en="Daily">Günlük</option>
+        </select>
+      </div>
+      <div class="history-chart-box" id="historyChartBox">
+        <div class="chart-empty"><div style="font-size:40px">📈</div><p data-tr="Fiyat geçmişi için eşya seçin" data-en="Select an item for price history">Fiyat geçmişi için eşya seçin</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ TAB: TOP TRADED ════ -->
+  <div class="mkt-panel" id="tab-top" style="display:none">
+    <div class="mkt-inner">
+      <div class="top-bar">
+        <div class="top-type-tabs">
+          <button class="top-tab active" onclick="switchTopType('volume',this)" data-tr="📊 En Çok İşlem" data-en="📊 Most Traded">📊 En Çok İşlem</button>
+          <button class="top-tab" onclick="switchTopType('rising',this)" data-tr="🚀 En Çok Artan" data-en="🚀 Rising">🚀 En Çok Artan</button>
+          <button class="top-tab" onclick="switchTopType('falling',this)" data-tr="📉 En Çok Düşen" data-en="📉 Falling">📉 En Çok Düşen</button>
+        </div>
+        <select id="topCity" class="mf-select" onchange="loadTopTraded()">
+          <option value="Caerleon">Caerleon</option>
+          <option value="Lymhurst">Lymhurst</option>
+          <option value="Bridgewatch">Bridgewatch</option>
+          <option value="Martlock">Martlock</option>
+          <option value="Thetford">Thetford</option>
+          <option value="Arthurs Rest">Arthur's Rest</option>
+          <option value="Merlins Rest">Merlyn's Rest</option>
+          <option value="Morganas Rest">Morgana's Rest</option>
+        </select>
+      </div>
+      <div id="topContent"><div class="loading-state"><div class="loading-spinner"></div><span data-tr="Yükleniyor..." data-en="Loading...">Yükleniyor...</span></div></div>
+    </div>
+  </div>
+
+  <!-- ════ TAB: FLIP ════ -->
+  <div class="mkt-panel" id="tab-flip" style="display:none">
+    <div class="mkt-inner">
+      <div class="flip-bar">
+        <div class="flip-type-tabs">
+          <button class="flip-tab active" onclick="switchFlipType('city',this)" data-tr="🏙️ Şehirler Arası" data-en="🏙️ City to City">🏙️ Şehirler Arası</button>
+          <button class="flip-tab" onclick="switchFlipType('bm',this)" data-tr="🖤 Black Market" data-en="🖤 Black Market">🖤 Black Market</button>
+          <button class="flip-tab" onclick="switchFlipType('rest',this)" data-tr="🗡️ Rest Arbitraj" data-en="🗡️ Rest Arbitrage">🗡️ Rest Arbitraj</button>
+        </div>
+        <div class="flip-opts">
+          <label><span data-tr="Min. Kâr:" data-en="Min. Profit:">Min. Kâr:</span><input type="number" id="flipMinProfit" value="10000" class="tc-inp" oninput="renderFlips()"/></label>
+          <label><span data-tr="Vergi%:" data-en="Tax%:">Vergi%:</span><input type="number" id="flipTax" value="8" min="0" max="15" class="tc-inp" oninput="renderFlips()"/></label>
+          <select id="flipTier" class="mf-select" onchange="loadFlips()">
+            <option value="all" data-tr="Tüm Tier" data-en="All Tiers">Tüm Tier</option>
+            <option value="4">T4</option><option value="5">T5</option>
+            <option value="6">T6</option><option value="7">T7</option><option value="8">T8</option>
+          </select>
+          <button class="mf-refresh" onclick="loadFlips()">🔄</button>
+        </div>
+      </div>
+      <div id="flipContent"><div class="loading-state"><div class="loading-spinner"></div><span data-tr="Flip fırsatları aranıyor..." data-en="Searching flip opportunities...">Flip fırsatları aranıyor...</span></div></div>
+    </div>
+  </div>
+
+  <!-- ════ TAB: KALİTE ════ -->
+  <div class="mkt-panel" id="tab-quality" style="display:none">
+    <div class="mkt-inner">
+      <div class="mf-search-wrap" style="max-width:500px;margin-bottom:20px">
+        <span class="mf-icon">🔍</span>
+        <input type="text" id="qualitySearch" class="mf-input"
+          data-ph-tr="Kalite karşılaştırması için eşya seçin..."
+          data-ph-en="Select item for quality comparison..."
+          placeholder="Kalite karşılaştırması için eşya seçin..."
+          oninput="onQualitySearch(this.value)" autocomplete="off"/>
+        <div class="mkt-search-dd" id="qualityDropdown"></div>
+      </div>
+      <div id="qualityContent">
+        <div class="chart-empty"><div style="font-size:40px">💎</div><p data-tr="Kalite ve enchant karşılaştırması için eşya seçin" data-en="Select item for quality and enchant comparison">Kalite ve enchant karşılaştırması için eşya seçin</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ TAB: GOLD ════ -->
+  <div class="mkt-panel" id="tab-gold" style="display:none">
+    <div class="mkt-inner">
+      <div class="gold-ctrl-bar">
+        <select id="goldDays" class="mf-select" onchange="loadGoldChart()">
+          <option value="7" data-tr="Son 7 Gün" data-en="Last 7 Days">Son 7 Gün</option>
+          <option value="30" selected data-tr="Son 30 Gün" data-en="Last 30 Days">Son 30 Gün</option>
+          <option value="90" data-tr="Son 90 Gün" data-en="Last 90 Days">Son 90 Gün</option>
+        </select>
+        <div class="gold-current-val">
+          <span data-tr="Anlık Gold:" data-en="Current Gold:">Anlık Gold:</span>
+          <span class="gold-val" id="goldChartVal">—</span>
+          <span style="color:var(--text-muted);font-size:12px">Silver</span>
+        </div>
+      </div>
+      <div class="gold-chart-box"><canvas id="goldChart" height="100"></canvas></div>
+      <div class="gold-stat-cards" id="goldStatCards"></div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo"><span class="logo-aot">AoT</span><span class="logo-dash">—</span><span class="logo-pnasf">PNASF</span></div>
+    <p class="footer-desc" data-tr="Fiyat verisi: AODP API · 11 lokasyon dahil: Royal, Mist, Outlands Rest ve Black Market" data-en="Price data: AODP API · 11 locations: Royal, Mist, Outlands Rest and Black Market">Fiyat verisi: AODP API · 11 lokasyon: Royal, Mist, Outlands Rest, Black Market</p>
+    <p class="footer-copy">© 2025 AoT-PNASF · Powered by Claude AI</p>
+  </div>
+</footer>
+
+<script src="../lib/lang.js"></script>
+<script src="../lib/settings.js"></script>
+<script src="../lib/settings-panel.js"></script>
+<script src="../data/items-data.js"></script>
+<script src="../lib/nav.js"></script>
+<script src="../lib/market.js"></script>
+</body>
+</html>
