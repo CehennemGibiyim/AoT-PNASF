@@ -1,7 +1,34 @@
 {
-  "last_updated": "2025-03-21",
+  "last_updated": "2026-03-23",
   "bot_version": "1.0.0",
   "updates": [
+    {
+      "id": "1774241956222",
+      "type": "patch",
+      "title_tr": "Radiant Wilds güncellemesi duyuruldu",
+      "title_en": "Radiant Wilds update announced",
+      "desc_tr": "Albion Online'ın yaklaşan büyük güncellemesi Radiant Wilds Nisan 2026'da geliyor.",
+      "desc_en": "Albion Online's upcoming major update Radiant Wilds arrives April 2026.",
+      "date": "2026-03-01"
+    },
+    {
+      "id": "1774241956223",
+      "type": "zone",
+      "title_tr": "Realm Divided — Yeni Faction sistemi",
+      "title_en": "Realm Divided — New Faction system",
+      "desc_tr": "Province sistemi ve Fortress Sieges ile faction savaşları tamamen yeniden tasarlandı.",
+      "desc_en": "Faction warfare redesigned with Province system and Fortress Sieges.",
+      "date": "2025-12-01"
+    },
+    {
+      "id": "1774241956224",
+      "type": "item",
+      "title_tr": "Crystal Weapons eklendi",
+      "title_en": "Crystal Weapons added",
+      "desc_tr": "Yeni Crystal silah kategorisi oyuna eklendi. Özel crafting gereksinimleri mevcut.",
+      "desc_en": "New Crystal weapon category added to the game with special crafting requirements.",
+      "date": "2025-10-01"
+    },
     {
       "id": "001",
       "type": "patch",
