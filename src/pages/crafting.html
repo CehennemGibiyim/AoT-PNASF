@@ -51,6 +51,8 @@
     </div>
   </div>
 
+  <div id="syncPanelContainer" style="max-width:1280px;margin:12px auto 0;padding:0 24px"></div>
+
   <!-- ══ CRAFTING ══ -->
   <div class="module-content" id="mod-crafting">
     <div class="module-inner">
@@ -368,10 +370,13 @@
 </footer>
 
 <script src="../lib/lang.js"></script>
+<script src="../lib/sync-button.js"></script>
 <script src="../lib/settings.js"></script>
 <script src="../lib/settings-panel.js"></script>
 <script src="../lib/nav.js"></script>
 <script src="../data/items-data.js"></script>
 <script src="../lib/crafting.js"></script>
+
+<script>document.addEventListener("DOMContentLoaded",()=>initSyncPanel("syncPanelContainer"));</script>
 </body>
 </html>

@@ -719,3 +719,40 @@ img { max-width: 100%; display: block; }
   .hero-cta    { flex-direction: column; align-items: center; }
   .btn-primary, .btn-secondary { width: 100%; max-width: 280px; text-align: center; }
 }
+
+/* ═══ SYNC WIDGET ═══════════════════════════════════════ */
+.sync-nav-btn {
+  display:flex; align-items:center; gap:5px;
+  background:var(--bg-card); border:1px solid var(--border);
+  color:var(--text-secondary); font-size:11px; padding:4px 10px;
+  border-radius:6px; cursor:pointer; transition:all var(--transition);
+  font-family:var(--font-body); white-space:nowrap;
+}
+.sync-nav-btn:hover { border-color:var(--teal); color:var(--teal); }
+.sync-nav-btn.has-update { border-color:var(--gold); color:var(--gold); animation:pulse-border 2s ease-in-out infinite; }
+.sync-nav-btn.syncing { opacity:.6; cursor:not-allowed; }
+@keyframes pulse-border { 0%,100%{border-color:var(--gold)} 50%{border-color:rgba(201,168,76,.3)} }
+
+/* Sayfa içi sync panel */
+.sync-panel {
+  background:var(--bg-card); border:1px solid var(--border);
+  border-radius:10px; padding:14px 18px; margin-bottom:16px;
+  display:flex; align-items:center; justify-content:space-between;
+  flex-wrap:wrap; gap:10px;
+}
+.sync-panel-info { display:flex; gap:16px; flex-wrap:wrap; font-size:12px; }
+.sync-panel-item { display:flex; flex-direction:column; gap:2px; }
+.sync-panel-label { font-family:var(--font-mono); font-size:10px; color:var(--text-muted); text-transform:uppercase; letter-spacing:.05em; }
+.sync-panel-val { color:var(--text-primary); font-weight:500; }
+.sync-panel-val.ok    { color:var(--teal); }
+.sync-panel-val.update { color:var(--gold); }
+.sync-panel-btn {
+  display:flex; align-items:center; gap:7px;
+  background:var(--gold); color:var(--bg-base);
+  border:none; border-radius:7px; padding:8px 16px;
+  font-family:var(--font-display); font-size:13px; font-weight:700;
+  cursor:pointer; transition:opacity var(--transition); letter-spacing:.04em;
+}
+.sync-panel-btn:hover { opacity:.88; }
+.sync-panel-btn:disabled { opacity:.5; cursor:not-allowed; background:var(--text-muted); }
+.sync-panel-btn.ok-btn { background:var(--teal); }
