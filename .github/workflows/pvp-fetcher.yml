@@ -1,4 +1,4 @@
-name: AoT-PNASF PvP Feed Fetcher
+name: AoT-PNASF PvP Data Fetcher
 
 on:
   schedule:
@@ -8,20 +8,17 @@ on:
 jobs:
   fetch-pvp-data:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
       - name: Fetch PvP Data
-        run: node scripts/pvp-fetcher.js
-
-      - name: Commit if changed
+        run: node scripts/pvp-fetcher.cjs
+      - name: Commit updates
         run: |
-          git config --local user.email "bot@aot-pnasf.github.io"
-          git config --local user.name "AoT-PNASF PvP Bot"
-          git add src/data/pvp-feed.json
-          git diff --staged --quiet || git commit -m "⚔️ PvP: Kill feed güncellendi [$(date +'%H:%M')]"
+          git config --global user.name 'AoT-PNASF Bot'
+          git config --global user.email 'bot@aot-pnasf.github.io'
+          git add -A
+          git diff --staged --quiet || git commit -m "PvP Bot: Kill feed güncellendi [$(date '+%Y-%m-%d %H:%M')]"
           git push

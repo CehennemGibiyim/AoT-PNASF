@@ -1,4 +1,4 @@
-name: AoT-PNASF Data Sync
+name: AoT-PNASF Data Sync (ao-bin-dumps)
 
 on:
   schedule:
@@ -6,84 +6,30 @@ on:
   workflow_dispatch:
     inputs:
       force:
-        description: 'Zorla güncelle'
+        description: 'Force update even if no changes'
         required: false
         default: 'false'
 
 jobs:
   sync-data:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Check ao-bin-dumps last commit
-        id: check
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check ao-bin-dumps for updates
         run: |
-          REMOTE=$(curl -s "https://api.github.com/repos/ao-data/ao-bin-dumps/commits/master" \
-            | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['commit']['committer']['date'])" 2>/dev/null || echo "unknown")
-          echo "remote_date=$REMOTE" >> $GITHUB_OUTPUT
-
-          LOCAL=""
-          if [ -f src/data/sync-info.json ]; then
-            LOCAL=$(python3 -c "import json; print(json.load(open('src/data/sync-info.json')).get('ao_bin_dumps_commit',''))" 2>/dev/null || echo "")
-          fi
-          echo "local_date=$LOCAL" >> $GITHUB_OUTPUT
-
-          FORCE="${{ github.event.inputs.force }}"
-          if [ "$REMOTE" != "$LOCAL" ] || [ "$FORCE" = "true" ]; then
-            echo "needs_update=true" >> $GITHUB_OUTPUT
-            echo "Guncelleme gerekli: $LOCAL -> $REMOTE"
-          else
-            echo "needs_update=false" >> $GITHUB_OUTPUT
-            echo "Zaten guncel: $REMOTE"
-          fi
-
-      - name: Download data
-        if: steps.check.outputs.needs_update == 'true'
+          python3 scripts/generate-items.py
+          python3 scripts/generate-world.py
+      - name: Commit generated data
         run: |
-          mkdir -p tmp-data src/data
-          curl -sL "https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/formatted/items.json" -o tmp-data/items.json
-          echo "items.json: $(wc -c < tmp-data/items.json) byte"
-          curl -sL "https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/formatted/world.json" -o tmp-data/world.json
-          echo "world.json: $(wc -c < tmp-data/world.json) byte"
-
-      - name: Generate items-data.js
-        if: steps.check.outputs.needs_update == 'true'
-        run: python3 scripts/generate-items.py
-
-      - name: Generate world-data.js
-        if: steps.check.outputs.needs_update == 'true'
-        run: python3 scripts/generate-world.py
-
-      - name: Update sync-info.json
-        if: steps.check.outputs.needs_update == 'true'
-        run: |
-          REMOTE="${{ steps.check.outputs.remote_date }}"
-          ITEM_COUNT=$(grep -c '"id":' src/data/items-data.js 2>/dev/null || echo 0)
-          ZONE_COUNT=$(grep -c '"id":' src/data/world-data.js 2>/dev/null || echo 0)
-          NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
-          cat > src/data/sync-info.json << JSONEOF
-          {
-            "ao_bin_dumps_commit": "$REMOTE",
-            "last_sync": "$NOW",
-            "items_count": $ITEM_COUNT,
-            "zones_count": $ZONE_COUNT
-          }
-          JSONEOF
-          echo "sync-info.json yazildi"
-
-      - name: Commit and push
-        if: steps.check.outputs.needs_update == 'true'
-        run: |
-          git config --local user.email "bot@aot-pnasf.github.io"
-          git config --local user.name "AoT-PNASF Data Bot"
-          git add src/data/items-data.js src/data/world-data.js src/data/sync-info.json
-          git diff --staged --quiet || git commit -m "🔄 Data sync [$(date +'%Y-%m-%d %H:%M')]"
+          git config --global user.name 'AoT-PNASF Bot'
+          git config --global user.email 'bot@aot-pnasf.github.io'
+          git add -A
+          git diff --staged --quiet || git commit -m "Data Sync: items-data.js + world-data.js güncellendi [$(date '+%Y-%m-%d %H:%M')]"
           git push
-
-      - name: Done
-        run: echo "Islem tamamlandi"
