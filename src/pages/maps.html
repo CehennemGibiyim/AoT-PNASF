@@ -1,1 +1,196 @@
-<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Haritalar — AoT-PNASF</title><link rel="stylesheet" href="../styles/main.css"/><link rel="stylesheet" href="../styles/settings.css"/></head><body><nav class="navbar" id="navbar"><div class="nav-inner"><a class="nav-logo" href="../../index.html"><span class="logo-aot">AoT</span><span class="logo-dash">—</span><span class="logo-pnasf">PNASF</span><span class="logo-ai-badge">AI</span></a><ul class="nav-links" id="navLinks"><li><a href="market.html">Market</a></li><li><a href="crafting.html">Üretim</a></li><li><a href="pvp.html">PvP</a></li><li><a href="maps.html" class="active">Haritalar</a></li><li><a href="guides.html">Rehberler</a></li><li><a href="tools.html">Araçlar</a></li></ul><div class="nav-right"><button class="settings-trigger" onclick="openSettings()"><span class="settings-trigger-flag" id="settingsLangIndicator">🇹🇷 TR</span><span class="settings-trigger-icon">⚙</span></button><div class="ai-status"><span class="ai-dot"></span><span class="ai-text">AI Aktif</span></div><button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button></div></div></nav><main style="padding:120px 24px;text-align:center;color:var(--text-muted)"><div style="font-size:56px;margin-bottom:16px">🗺️</div><h1 style="font-family:var(--font-display);color:var(--gold);margin-bottom:12px">Haritalar</h1><p>Aşama 6 — Yakında geliyor!</p></main><script src="../lib/lang.js"></script><script src="../lib/settings.js"></script><script src="../lib/settings-panel.js"></script><script src="../lib/nav.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Haritalar & Zonlar — AoT-PNASF</title>
+  <link rel="stylesheet" href="../styles/main.css">
+  <link rel="stylesheet" href="../styles/maps.css">
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="../../index.html" class="nav-logo">
+        <span class="logo-aot">AoT</span><span class="logo-sep">·</span><span class="logo-pnasf">PNASF</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="market.html" data-tr="Market" data-en="Market">Market</a></li>
+        <li><a href="crafting.html" data-tr="Üretim" data-en="Crafting">Üretim</a></li>
+        <li><a href="pvp.html" data-tr="PvP" data-en="PvP">PvP</a></li>
+        <li><a href="maps.html" class="active" data-tr="Haritalar" data-en="Maps">Haritalar</a></li>
+        <li><a href="guides.html" data-tr="Rehberler" data-en="Guides">Rehberler</a></li>
+      </ul>
+      <div class="nav-right">
+        <span class="ai-badge">🤖 AI Aktif</span>
+        <button class="lang-pill" id="langPill">🇹🇷 TR</button>
+        <button class="settings-btn" id="settingsBtn">⚙</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- SETTINGS PANEL -->
+  <div class="settings-overlay" id="settingsOverlay"></div>
+  <div class="settings-panel" id="settingsPanel"></div>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="page-header-content">
+      <h1 data-tr="🗺️ Dünya Haritası & Zonlar" data-en="🗺️ World Map & Zones">🗺️ Dünya Haritası & Zonlar</h1>
+      <p data-tr="İnteraktif harita, zone bilgileri, şehir bonusları ve kaynak rehberi" data-en="Interactive map, zone info, city bonuses and resource guide">İnteraktif harita, zone bilgileri, şehir bonusları ve kaynak rehberi</p>
+    </div>
+  </div>
+
+  <!-- TAB NAV -->
+  <div class="tabs-container">
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="world-map" data-tr="🗺️ Dünya Haritası" data-en="🗺️ World Map">🗺️ Dünya Haritası</button>
+      <button class="tab-btn" data-tab="cities" data-tr="🏰 Şehirler" data-en="🏰 Cities">🏰 Şehirler</button>
+      <button class="tab-btn" data-tab="zones" data-tr="⚔️ Zone Rehberi" data-en="⚔️ Zone Guide">⚔️ Zone Rehberi</button>
+      <button class="tab-btn" data-tab="biomes" data-tr="🌿 Biome & Kaynaklar" data-en="🌿 Biomes & Resources">🌿 Biome & Kaynaklar</button>
+      <button class="tab-btn" data-tab="outlands" data-tr="☠️ Outlands" data-en="☠️ Outlands">☠️ Outlands</button>
+      <button class="tab-btn" data-tab="special" data-tr="✨ Özel Bölgeler" data-en="✨ Special Zones">✨ Özel Bölgeler</button>
+    </div>
+  </div>
+
+  <div class="maps-container">
+
+    <!-- TAB: WORLD MAP -->
+    <div class="tab-content active" id="tab-world-map">
+      <div class="map-layout">
+        <div class="map-sidebar">
+          <div class="map-legend">
+            <h3 data-tr="Zone Renkleri" data-en="Zone Colors">Zone Renkleri</h3>
+            <div class="legend-item"><span class="legend-dot blue"></span><span data-tr="Mavi — Güvenli, PvP yok" data-en="Blue — Safe, no PvP">Mavi — Güvenli, PvP yok</span></div>
+            <div class="legend-item"><span class="legend-dot yellow"></span><span data-tr="Sarı — Kısıtlı PvP" data-en="Yellow — Limited PvP">Sarı — Kısıtlı PvP</span></div>
+            <div class="legend-item"><span class="legend-dot red"></span><span data-tr="Kırmızı — Full-loot PvP" data-en="Red — Full-loot PvP">Kırmızı — Full-loot PvP</span></div>
+            <div class="legend-item"><span class="legend-dot black"></span><span data-tr="Siyah — En tehlikeli" data-en="Black — Most dangerous">Siyah — En tehlikeli</span></div>
+          </div>
+
+          <div class="map-legend">
+            <h3 data-tr="Harita Filtreleri" data-en="Map Filters">Harita Filtreleri</h3>
+            <label class="filter-check"><input type="checkbox" id="filterBlue" checked> <span data-tr="Mavi Zonlar" data-en="Blue Zones">Mavi Zonlar</span></label>
+            <label class="filter-check"><input type="checkbox" id="filterYellow" checked> <span data-tr="Sarı Zonlar" data-en="Yellow Zones">Sarı Zonlar</span></label>
+            <label class="filter-check"><input type="checkbox" id="filterRed" checked> <span data-tr="Kırmızı Zonlar" data-en="Red Zones">Kırmızı Zonlar</span></label>
+            <label class="filter-check"><input type="checkbox" id="filterBlack" checked> <span data-tr="Siyah Zonlar" data-en="Black Zones">Siyah Zonlar</span></label>
+            <label class="filter-check"><input type="checkbox" id="filterCities" checked> <span data-tr="Şehirler" data-en="Cities">Şehirler</span></label>
+          </div>
+
+          <div class="map-legend">
+            <h3 data-tr="Hızlı Erişim" data-en="Quick Access">Hızlı Erişim</h3>
+            <div class="quick-links">
+              <button class="quick-link-btn" onclick="focusZone('caerleon')" data-tr="Caerleon" data-en="Caerleon">Caerleon</button>
+              <button class="quick-link-btn" onclick="focusZone('lymhurst')" data-tr="Lymhurst" data-en="Lymhurst">Lymhurst</button>
+              <button class="quick-link-btn" onclick="focusZone('bridgewatch')" data-tr="Bridgewatch" data-en="Bridgewatch">Bridgewatch</button>
+              <button class="quick-link-btn" onclick="focusZone('fortsterling')" data-tr="Fort Sterling" data-en="Fort Sterling">Fort Sterling</button>
+              <button class="quick-link-btn" onclick="focusZone('martlock')" data-tr="Martlock" data-en="Martlock">Martlock</button>
+              <button class="quick-link-btn" onclick="focusZone('thetford')" data-tr="Thetford" data-en="Thetford">Thetford</button>
+              <button class="quick-link-btn" onclick="focusZone('brecilien')" data-tr="Brecilien" data-en="Brecilien">Brecilien</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="map-main">
+          <div class="map-canvas-wrapper">
+            <canvas id="worldMapCanvas"></canvas>
+            <div class="map-tooltip" id="mapTooltip"></div>
+          </div>
+          <div class="map-info-bar">
+            <span id="mapZoneInfo" data-tr="Bir zone'a tıkla veya üzerine gel — detay göreceksin" data-en="Click or hover a zone to see details">Bir zone'a tıkla veya üzerine gel — detay göreceksin</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB: CITIES -->
+    <div class="tab-content" id="tab-cities">
+      <div class="cities-grid" id="citiesGrid"></div>
+    </div>
+
+    <!-- TAB: ZONES -->
+    <div class="tab-content" id="tab-zones">
+      <div class="zone-filter-bar">
+        <input type="text" id="zoneSearch" placeholder="Zone ara..." class="zone-search-input" data-placeholder-tr="Zone ara..." data-placeholder-en="Search zones...">
+        <select id="zoneTypeFilter" class="zone-filter-select">
+          <option value="" data-tr="Tüm Tipler" data-en="All Types">Tüm Tipler</option>
+          <option value="blue" data-tr="Mavi" data-en="Blue">Mavi</option>
+          <option value="yellow" data-tr="Sarı" data-en="Yellow">Sarı</option>
+          <option value="red" data-tr="Kırmızı" data-en="Red">Kırmızı</option>
+          <option value="black" data-tr="Siyah" data-en="Black">Siyah</option>
+        </select>
+        <select id="zoneBiomeFilter" class="zone-filter-select">
+          <option value="" data-tr="Tüm Biome'lar" data-en="All Biomes">Tüm Biome'lar</option>
+          <option value="forest" data-tr="Orman" data-en="Forest">Orman</option>
+          <option value="steppe" data-tr="Bozkır" data-en="Steppe">Bozkır</option>
+          <option value="mountain" data-tr="Dağ" data-en="Mountain">Dağ</option>
+          <option value="swamp" data-tr="Bataklık" data-en="Swamp">Bataklık</option>
+          <option value="highlands" data-tr="Yayla" data-en="Highlands">Yayla</option>
+        </select>
+      </div>
+      <div class="zones-table-wrap">
+        <table class="zones-table" id="zonesTable">
+          <thead>
+            <tr>
+              <th data-tr="Zone" data-en="Zone">Zone</th>
+              <th data-tr="Tip" data-en="Type">Tip</th>
+              <th data-tr="Biome" data-en="Biome">Biome</th>
+              <th data-tr="Kaynaklar" data-en="Resources">Kaynaklar</th>
+              <th data-tr="Tier" data-en="Tier">Tier</th>
+              <th data-tr="Bölge" data-en="Region">Bölge</th>
+            </tr>
+          </thead>
+          <tbody id="zonesTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB: BIOMES -->
+    <div class="tab-content" id="tab-biomes">
+      <div class="biomes-grid" id="biomesGrid"></div>
+    </div>
+
+    <!-- TAB: OUTLANDS -->
+    <div class="tab-content" id="tab-outlands">
+      <div class="outlands-layout">
+        <div class="outlands-intro">
+          <div class="danger-banner">
+            <span>☠️</span>
+            <div>
+              <strong data-tr="OUTLANDS — TAM YAĞMA PvP" data-en="OUTLANDS — FULL LOOT PvP">OUTLANDS — TAM YAĞMA PvP</strong>
+              <p data-tr="Outlands'te tüm bölgeler Siyah Zone'dur. Öldüğünde tüm eşyaların düşer." data-en="All zones in the Outlands are Black Zones. You drop all items on death.">Outlands'te tüm bölgeler Siyah Zone'dur. Öldüğünde tüm eşyaların düşer.</p>
+            </div>
+          </div>
+        </div>
+        <div class="outlands-grid" id="outlandsGrid"></div>
+      </div>
+    </div>
+
+    <!-- TAB: SPECIAL ZONES -->
+    <div class="tab-content" id="tab-special">
+      <div class="special-zones-grid" id="specialZonesGrid"></div>
+    </div>
+
+  </div>
+
+  <!-- ZONE DETAIL MODAL -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+  <div class="zone-modal" id="zoneModal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-content" id="modalContent"></div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <span>AoT-PNASF © 2025 — <a href="https://github.com/CehennemGibiyim/AoT-PNASF" target="_blank">GitHub</a></span>
+      <span data-tr="Veriler: Albion Wiki & ao-bin-dumps" data-en="Data: Albion Wiki & ao-bin-dumps">Veriler: Albion Wiki & ao-bin-dumps</span>
+    </div>
+  </footer>
+
+  <script src="../lib/lang.js"></script>
+  <script src="../lib/settings.js"></script>
+  <script src="../lib/settings-panel.js"></script>
+  <script src="../lib/nav.js"></script>
+  <script src="../data/items-data.js"></script>
+  <script src="../lib/maps.js"></script>
+</body>
+</html>
