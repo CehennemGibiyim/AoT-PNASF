@@ -16,12 +16,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Fetch PvP Data
-        run: node scripts/pvp-fetcher.cjs
+        run: node scripts/pvp-fetcher.js
 
       - name: Commit if changed
         run: |
           git config --local user.email "bot@aot-pnasf.github.io"
           git config --local user.name "AoT-PNASF PvP Bot"
           git add src/data/pvp-feed.json
-          git diff --staged --quiet || git commit -m "⚔️ PvP feed [$(date +'%H:%M')]"
+          git diff --staged --quiet || git commit -m "⚔️ PvP: Kill feed güncellendi [$(date +'%H:%M')]"
           git push
