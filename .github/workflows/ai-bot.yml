@@ -1,4 +1,4 @@
-name: AoT-PNASF Yapay Zeka Akıllı Besleme Botu
+name: AoT-PNASF AI Smart Feed Bot
 
 on:
   schedule:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  tarama-ve-güncelleme:
+  scan-and-update:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -33,5 +33,5 @@ jobs:
           git config --local user.email "bot@aot-pnasf.github.io"
           git config --local user.name "AoT-PNASF AI Bot"
           git add src/data/
-          git diff --staged --quiet || git commit -m "🤖 AI Bot: Albion güncellemeleri tarandı [$(date +'%Y-%m-%d %H:%M')]"
+          git diff --staged --quiet || git commit -m "🤖 AI Bot: Feed güncellendi [$(date +'%Y-%m-%d %H:%M')]"
           git push
