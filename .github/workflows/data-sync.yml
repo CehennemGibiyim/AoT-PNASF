@@ -1,0 +1,238 @@
+name: AoT-PNASF Data Sync
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'   # Her 6 saatte kontrol et
+  workflow_dispatch:          # Manuel / kullanıcı tetiklemesi
+    inputs:
+      force:
+        description: 'Zorla güncelle (değişiklik olmasa bile)'
+        required: false
+        default: 'false'
+
+jobs:
+  sync-data:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Check ao-bin-dumps last commit
+        id: check
+        run: |
+          # ao-bin-dumps son commit tarihini al
+          REMOTE=$(curl -s https://api.github.com/repos/ao-data/ao-bin-dumps/commits/master \
+            -H "Accept: application/vnd.github.v3+json" \
+            | grep -m1 '"date"' | cut -d'"' -f4)
+          echo "remote_date=$REMOTE" >> $GITHUB_OUTPUT
+
+          # Bizim son güncelleme tarihimizi al
+          LOCAL=""
+          if [ -f src/data/sync-info.json ]; then
+            LOCAL=$(cat src/data/sync-info.json | grep -o '"ao_bin_dumps_commit":"[^"]*"' | cut -d'"' -f4)
+          fi
+          echo "local_date=$LOCAL" >> $GITHUB_OUTPUT
+
+          # Güncelleme gerekli mi?
+          if [ "$REMOTE" != "$LOCAL" ] || [ "${{ github.event.inputs.force }}" = "true" ]; then
+            echo "needs_update=true" >> $GITHUB_OUTPUT
+            echo "Güncelleme gerekli: $LOCAL -> $REMOTE"
+          else
+            echo "needs_update=false" >> $GITHUB_OUTPUT
+            echo "Zaten güncel: $REMOTE"
+          fi
+
+      - name: Download ao-bin-dumps data
+        if: steps.check.outputs.needs_update == 'true'
+        run: |
+          mkdir -p tmp-data
+
+          echo "items.json indiriliyor..."
+          curl -sL "https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/formatted/items.json" \
+            -o tmp-data/items.json
+          echo "items.json boyutu: $(wc -c < tmp-data/items.json) byte"
+
+          echo "world.json indiriliyor..."
+          curl -sL "https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/formatted/world.json" \
+            -o tmp-data/world.json
+          echo "world.json boyutu: $(wc -c < tmp-data/world.json) byte"
+
+      - name: Generate items-data.js
+        if: steps.check.outputs.needs_update == 'true'
+        run: |
+          node << 'SCRIPT'
+          const fs = require('fs');
+
+          console.log('items.json işleniyor...');
+          const raw = JSON.parse(fs.readFileSync('tmp-data/items.json', 'utf8'));
+
+          // Kategori eşleştirme
+          const CAT_MAP = {
+            'sword':'sword', 'axe':'axe', 'bow':'bow', 'hammer':'hammer',
+            'spear':'spear', 'dagger':'dagger', 'quarterstaff':'qstaff',
+            'mace':'mace', 'knuckles':'knuckles', 'shapeshifter':'shape',
+            'firestaff':'fire', 'froststaff':'frost', 'arcanestaff':'arcane',
+            'holystaff':'holy', 'naturestaff':'nature', 'cursedstaff':'curse',
+            'warbow':'bow', 'crossbow':'bow',
+            'platearmor':'parmor', 'plateshoes':'pshoes', 'platehelmet':'phelmet',
+            'leatherarmor':'larmor', 'leathershoes':'lshoes', 'leatherhelmet':'lhelmet',
+            'clotharmor':'carmor', 'clothshoes':'cshoes', 'clothhelmet':'chelmet',
+            'bag':'bag', 'cape':'cape',
+            'mount':'mount',
+            'meal':'food', 'fish':'food',
+            'potion':'potion',
+            'wood':'raw', 'rock':'raw', 'hide':'raw', 'fiber':'raw', 'ore':'raw',
+            'planks':'refined', 'stoneblock':'refined', 'leather':'refined',
+            'cloth':'refined', 'metalbar':'refined',
+            'journal':'journal',
+          };
+
+          function getCategory(uniqueName) {
+            const lower = uniqueName.toLowerCase();
+            for (const [key, cat] of Object.entries(CAT_MAP)) {
+              if (lower.includes(key)) return cat;
+            }
+            return 'misc';
+          }
+
+          function getTiers(uniqueName, items) {
+            const base = uniqueName.replace(/^T\d_/, '').replace(/@\d$/, '');
+            const tiers = [];
+            for (let t = 1; t <= 8; t++) {
+              const id = `T${t}_${base}`;
+              if (items.some(i => i.UniqueName === id)) tiers.push(t);
+            }
+            return tiers.length ? tiers : [4];
+          }
+
+          // Sadece yararlı eşyaları filtrele
+          const SKIP = ['TEST', 'UNIQUE', 'QUESTITEM', 'TOKEN', 'RANDOMDUNGEON', 'SILVERBAG'];
+          const seen = new Set();
+          const result = [];
+
+          for (const item of raw) {
+            const u = item.UniqueName || '';
+            if (!u) continue;
+            if (SKIP.some(s => u.includes(s))) continue;
+            if (u.startsWith('EMOTE_') || u.startsWith('SKIN_')) continue;
+
+            // Base ID (T4_ prefix ve @1 suffix olmadan)
+            const baseId = u.replace(/^T\d_/, '').replace(/@\d$/, '');
+            if (seen.has(baseId)) continue;
+            seen.add(baseId);
+
+            const enName = item.LocalizedNames?.['EN-US'] || item.LocalizedNames?.['EN-GB'] || baseId.replace(/_/g,' ');
+            const trName = item.LocalizedNames?.['TR-TR'] || enName;
+            const ruName = item.LocalizedNames?.['RU-RU'] || enName;
+            const deName = item.LocalizedNames?.['DE-DE'] || enName;
+            const frName = item.LocalizedNames?.['FR-FR'] || enName;
+            const plName = item.LocalizedNames?.['PL-PL'] || enName;
+            const ptName = item.LocalizedNames?.['PT-BR'] || enName;
+            const esName = item.LocalizedNames?.['ES-ES'] || enName;
+            const krName = item.LocalizedNames?.['KO-KR'] || enName;
+
+            if (!enName || enName === baseId.replace(/_/g,' ')) continue;
+
+            const cat   = getCategory(baseId);
+            const tiers = getTiers(u, raw);
+
+            result.push({ id:baseId, en:enName, tr:trName, ru:ruName, de:deName, fr:frName, pl:plName, pt:ptName, es:esName, kr:krName, cat, tiers });
+          }
+
+          console.log(`İşlendi: ${result.length} benzersiz eşya`);
+
+          // AO_SEARCH fonksiyonu ile birlikte items-data.js yaz
+          const output = `// AoT-PNASF — Items Data
+// ao-bin-dumps'tan otomatik üretildi: ${new Date().toISOString()}
+// Toplam eşya: ${result.length}
+
+window.AO_ITEMS = ${JSON.stringify(result, null, 0)};
+
+window.AO_SEARCH = function(query, opts = {}) {
+  if (!query || query.length < 1) return [];
+  const q = query.toLowerCase().trim();
+  const lang = localStorage.getItem('aot-lang') || 'tr';
+  const { cat, tier, limit = 20 } = opts;
+  return window.AO_ITEMS.filter(item => {
+    const name = (item[lang] || item.en || '').toLowerCase();
+    const enName = (item.en || '').toLowerCase();
+    if (!name.includes(q) && !enName.includes(q) && !item.id.toLowerCase().includes(q)) return false;
+    if (cat && item.cat !== cat) return false;
+    if (tier && !item.tiers.includes(Number(tier))) return false;
+    return true;
+  }).slice(0, limit);
+};
+
+window.AO_ICON = function(baseId, tier = 4, enchant = 0) {
+  const enc = enchant > 0 ? '@' + enchant : '';
+  return 'https://render.albiononline.com/v1/item/T' + tier + '_' + baseId + enc + '.png';
+};
+
+window.AO_NAME = function(baseId, lang) {
+  const l = lang || localStorage.getItem('aot-lang') || 'tr';
+  const item = window.AO_ITEMS.find(i => i.id === baseId);
+  if (!item) return baseId;
+  return item[l] || item.en || baseId;
+};
+`;
+          fs.writeFileSync('src/data/items-data.js', output);
+          console.log('items-data.js yazıldı: ' + Math.round(output.length/1024) + ' KB');
+          SCRIPT
+
+      - name: Generate world-data.js
+        if: steps.check.outputs.needs_update == 'true'
+        run: |
+          node << 'SCRIPT'
+          const fs = require('fs');
+          console.log('world.json işleniyor...');
+          const raw = JSON.parse(fs.readFileSync('tmp-data/world.json', 'utf8'));
+
+          const zones = raw.map(z => ({
+            id:       z.Id || z.UniqueName || '',
+            name:     z.DisplayName || z.Id || '',
+            type:     z.Type || '',
+            color:    z.ReputationAreaType || z.ZoneColor || '',
+            exits:    (z.Exits || []).map(e => e.TargetZoneId || e.Exit || ''),
+          })).filter(z => z.id);
+
+          const output = `// AoT-PNASF — World Data
+// ao-bin-dumps'tan otomatik üretildi: ${new Date().toISOString()}
+// Toplam zone: ${zones.length}
+window.AO_ZONES = ${JSON.stringify(zones, null, 0)};
+`;
+          fs.writeFileSync('src/data/world-data.js', output);
+          console.log('world-data.js yazıldı: ' + zones.length + ' zone');
+          SCRIPT
+
+      - name: Update sync-info.json
+        if: steps.check.outputs.needs_update == 'true'
+        run: |
+          cat > src/data/sync-info.json << EOF
+          {
+            "ao_bin_dumps_commit": "${{ steps.check.outputs.remote_date }}",
+            "last_sync": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "items_count": $(node -e "const d=require('./src/data/items-data.js')" 2>/dev/null && \
+              grep -o '"id":' src/data/items-data.js | wc -l || echo 0),
+            "zones_count": $(grep -o '"id":' src/data/world-data.js | wc -l || echo 0)
+          }
+          EOF
+
+      - name: Commit and push
+        if: steps.check.outputs.needs_update == 'true'
+        run: |
+          git config --local user.email "bot@aot-pnasf.github.io"
+          git config --local user.name "AoT-PNASF Data Bot"
+          git add src/data/items-data.js src/data/world-data.js src/data/sync-info.json
+          git diff --staged --quiet || git commit -m "🔄 Data sync: ao-bin-dumps güncellendi [$(date +'%Y-%m-%d %H:%M')]"
+          git push
+
+      - name: Summary
+        run: |
+          if [ "${{ steps.check.outputs.needs_update }}" = "true" ]; then
+            echo "✅ Güncelleme tamamlandı"
+          else
+            echo "✅ Zaten güncel — işlem yapılmadı"
+          fi
