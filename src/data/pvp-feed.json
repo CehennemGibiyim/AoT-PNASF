@@ -1,134 +1,52 @@
 {
-  "fetchedAt": "2026-03-24T23:01:57.590Z",
+  "fetchedAt": "2026-03-24T23:40:30.453Z",
   "servers": {
     "us": {
       "recentKills": [
         {
-          "id": "1361119226",
-          "timestamp": "2026-03-24T22:56:47.828311400Z",
-          "killer": "Joaoacioly",
-          "killerGuild": "",
-          "killerAlliance": "",
-          "killerIP": 1031,
-          "victim": "xGrimSlayer",
-          "victimGuild": "Faction Wars",
-          "victimAlliance": "SKADI",
-          "victimIP": 1027,
-          "totalFame": 27072,
+          "id": "1361134556",
+          "timestamp": "2026-03-24T23:35:20.552242Z",
+          "killer": "Xebecmaru",
+          "killerGuild": "l AsgarD l",
+          "killerAlliance": "TDG",
+          "killerIP": 1113,
+          "victim": "jose2090yt2",
+          "victimGuild": "La Resurreccion del Mall",
+          "victimAlliance": "",
+          "victimIP": 1420,
+          "totalFame": 91206,
           "location": "",
           "equipment": {
             "MainHand": {
-              "type": "T4_MAIN_AXE@2",
-              "quality": 4
-            },
-            "OffHand": {
-              "type": "T4_OFF_TORCH@2",
-              "quality": 4
-            },
-            "Head": {
-              "type": "T4_HEAD_LEATHER_SET2@2",
-              "quality": 4
-            },
-            "Armor": {
-              "type": "T4_ARMOR_LEATHER_SET1@2",
-              "quality": 4
-            },
-            "Shoes": {
-              "type": "T4_SHOES_CLOTH_SET1@2",
-              "quality": 4
-            },
-            "Cape": {
-              "type": "T4_CAPE@2",
-              "quality": 4
-            }
-          },
-          "partySize": 2
-        },
-        {
-          "id": "1361119221",
-          "timestamp": "2026-03-24T22:56:47.549488400Z",
-          "killer": "YgKeyv",
-          "killerGuild": "Evil Kool Aid",
-          "killerAlliance": "C00K",
-          "killerIP": 1586,
-          "victim": "ehdtzzz3",
-          "victimGuild": "X EL ULTIMO REINO X",
-          "victimAlliance": "RE1NO",
-          "victimIP": 1385,
-          "totalFame": 73509,
-          "location": "",
-          "equipment": {
-            "MainHand": {
-              "type": "T4_2H_SHAPESHIFTER_MORGANA@2",
+              "type": "T4_2H_BOW_KEEPER@3",
               "quality": 3
             },
             "Head": {
-              "type": "T7_HEAD_LEATHER_MORGANA",
-              "quality": 2
+              "type": "T6_HEAD_PLATE_SET3@1",
+              "quality": 3
             },
             "Armor": {
-              "type": "T5_ARMOR_LEATHER_SET1@2",
-              "quality": 4
+              "type": "T6_ARMOR_CLOTH_SET2@1",
+              "quality": 3
             },
             "Shoes": {
-              "type": "T6_SHOES_LEATHER_SET2",
-              "quality": 4
+              "type": "T6_SHOES_LEATHER_SET3@1",
+              "quality": 2
             },
             "Cape": {
               "type": "T4_CAPEITEM_FW_CAERLEON@2",
               "quality": 3
             },
-            "Mount": {
-              "type": "T3_MOUNT_HORSE",
-              "quality": 2
-            }
-          },
-          "partySize": 10
-        },
-        {
-          "id": "1361119219",
-          "timestamp": "2026-03-24T22:56:47.380438700Z",
-          "killer": "El3stor",
-          "killerGuild": "SHINJU",
-          "killerAlliance": "JRT",
-          "killerIP": 1482,
-          "victim": "NOGALIA",
-          "victimGuild": "VirTus_AvAloN",
-          "victimAlliance": "",
-          "victimIP": 1144,
-          "totalFame": 30996,
-          "location": "",
-          "equipment": {
-            "MainHand": {
-              "type": "T5_2H_AXE@1",
-              "quality": 1
-            },
-            "Head": {
-              "type": "T5_HEAD_CLOTH_SET1@1",
-              "quality": 2
-            },
-            "Armor": {
-              "type": "T5_ARMOR_LEATHER_SET1@1",
-              "quality": 2
-            },
-            "Shoes": {
-              "type": "T5_SHOES_PLATE_SET1@1",
-              "quality": 2
-            },
-            "Cape": {
-              "type": "T5_CAPEITEM_FW_LYMHURST@1",
-              "quality": 1
-            },
             "Bag": {
-              "type": "T5_BAG_INSIGHT@1",
-              "quality": 1
+              "type": "T5_BAG",
+              "quality": 3
             },
             "Mount": {
-              "type": "T5_MOUNT_HORSE",
-              "quality": 1
+              "type": "T5_MOUNT_SWAMPDRAGON_FW_THETFORD",
+              "quality": 4
             },
             "Potion": {
-              "type": "T6_POTION_COOLDOWN",
+              "type": "T4_POTION_LAVA",
               "quality": 1
             },
             "Food": {
@@ -136,56 +54,774 @@
               "quality": 1
             }
           },
-          "partySize": 6
+          "partySize": 5
         },
         {
-          "id": "1361119216",
-          "timestamp": "2026-03-24T22:56:47.074828500Z",
-          "killer": "Malvadao7",
-          "killerGuild": "",
-          "killerAlliance": "",
-          "killerIP": 1293,
-          "victim": "merlicco",
-          "victimGuild": "F U R O R E",
+          "id": "1361134554",
+          "timestamp": "2026-03-24T23:35:20.510795Z",
+          "killer": "GhostDjl",
+          "killerGuild": "Ephemerals",
+          "killerAlliance": "SIMI0",
+          "killerIP": 1294,
+          "victim": "smokercampesino",
+          "victimGuild": "Hiyoko gakkou",
           "victimAlliance": "",
-          "victimIP": 1203,
-          "totalFame": 35046,
+          "victimIP": 1286,
+          "totalFame": 23327,
           "location": "",
           "equipment": {
             "MainHand": {
-              "type": "T6_MAIN_FIRESTAFF",
-              "quality": 2
-            },
-            "OffHand": {
-              "type": "T4_OFF_DEMONSKULL_HELL@2",
+              "type": "T8_2H_BOW_KEEPER@1",
               "quality": 2
             },
             "Head": {
-              "type": "T5_HEAD_PLATE_SET3@1",
-              "quality": 2
+              "type": "T8_HEAD_PLATE_AVALON@1",
+              "quality": 4
             },
             "Armor": {
-              "type": "T4_ARMOR_LEATHER_MORGANA@2",
-              "quality": 3
+              "type": "T8_ARMOR_LEATHER_SET1@1",
+              "quality": 5
             },
             "Shoes": {
-              "type": "T6_SHOES_PLATE_SET2@1",
-              "quality": 1
+              "type": "T8_SHOES_CLOTH_SET1@2",
+              "quality": 3
             },
             "Cape": {
-              "type": "T4_CAPEITEM_FW_LYMHURST@1",
+              "type": "T7_CAPEITEM_FW_CAERLEON@3",
               "quality": 4
             },
             "Bag": {
-              "type": "T5_BAG@1",
+              "type": "T5_BAG",
               "quality": 3
             },
             "Mount": {
-              "type": "T5_MOUNT_HORSE",
+              "type": "T5_MOUNT_DIREBOAR_FW_LYMHURST",
+              "quality": 1
+            },
+            "Food": {
+              "type": "T7_MEAL_OMELETTE",
+              "quality": 1
+            }
+          },
+          "partySize": 3
+        },
+        {
+          "id": "1361134552",
+          "timestamp": "2026-03-24T23:35:20.434720200Z",
+          "killer": "PALOMEQUE18",
+          "killerGuild": "",
+          "killerAlliance": "",
+          "killerIP": 1138,
+          "victim": "CheTTTmanhuge",
+          "victimGuild": "LegionOfOne",
+          "victimAlliance": "M0RE",
+          "victimIP": 989,
+          "totalFame": 7824,
+          "location": "",
+          "equipment": {
+            "MainHand": {
+              "type": "T4_2H_FIRESTAFF@1",
+              "quality": 1
+            },
+            "Head": {
+              "type": "T4_HEAD_LEATHER_SET1@1",
+              "quality": 1
+            },
+            "Armor": {
+              "type": "T4_ARMOR_PLATE_SET1@1",
+              "quality": 1
+            },
+            "Shoes": {
+              "type": "T4_SHOES_CLOTH_SET2@1",
+              "quality": 1
+            },
+            "Cape": {
+              "type": "T3_CAPE",
+              "quality": 1
+            },
+            "Bag": {
+              "type": "T4_BAG",
               "quality": 2
+            },
+            "Mount": {
+              "type": "T3_MOUNT_HORSE",
+              "quality": 1
+            }
+          },
+          "partySize": 2
+        },
+        {
+          "id": "1361134550",
+          "timestamp": "2026-03-24T23:35:20.018422100Z",
+          "killer": "TrustMyHands",
+          "killerGuild": "I N S O L E N T",
+          "killerAlliance": "",
+          "killerIP": 1357,
+          "victim": "Rafaxblow",
+          "victimGuild": "Asgard team",
+          "victimAlliance": "B00A",
+          "victimIP": 1312,
+          "totalFame": 42912,
+          "location": "",
+          "equipment": {
+            "MainHand": {
+              "type": "T8_2H_CLAYMORE@2",
+              "quality": 4
+            },
+            "Head": {
+              "type": "T8_HEAD_PLATE_AVALON@3",
+              "quality": 4
+            },
+            "Armor": {
+              "type": "T8_ARMOR_CLOTH_SET2@3",
+              "quality": 4
+            },
+            "Shoes": {
+              "type": "T8_SHOES_CLOTH_AVALON@3",
+              "quality": 4
+            },
+            "Cape": {
+              "type": "T8_CAPEITEM_FW_THETFORD@3",
+              "quality": 4
+            },
+            "Mount": {
+              "type": "T5_MOUNT_DIREBOAR_FW_LYMHURST",
+              "quality": 4
+            },
+            "Potion": {
+              "type": "T7_POTION_STONESKIN",
+              "quality": 1
+            },
+            "Food": {
+              "type": "T8_MEAL_STEW",
+              "quality": 1
+            }
+          },
+          "partySize": 4
+        },
+        {
+          "id": "1361134548",
+          "timestamp": "2026-03-24T23:35:19.919143400Z",
+          "killer": "FedeaMijo",
+          "killerGuild": "P R I M O R I A",
+          "killerAlliance": "OP3NN",
+          "killerIP": 1183,
+          "victim": "JHONCENAAAAA",
+          "victimGuild": "Make Fame Great Again",
+          "victimAlliance": "FUR3S",
+          "victimIP": 0,
+          "totalFame": 0,
+          "location": "",
+          "equipment": {},
+          "partySize": 2
+        },
+        {
+          "id": "1361134546",
+          "timestamp": "2026-03-24T23:35:19.755955500Z",
+          "killer": "HARUCHANEL",
+          "killerGuild": "CAZA GANKER",
+          "killerAlliance": "GOODE",
+          "killerIP": 1369,
+          "victim": "aynongod",
+          "victimGuild": "BESOS NEGROS",
+          "victimAlliance": "ULTI",
+          "victimIP": 1193,
+          "totalFame": 29484,
+          "location": "",
+          "equipment": {
+            "MainHand": {
+              "type": "T6_2H_DAGGERPAIR",
+              "quality": 1
+            },
+            "Head": {
+              "type": "T4_HEAD_LEATHER_ROYAL@2",
+              "quality": 4
+            },
+            "Armor": {
+              "type": "T5_ARMOR_LEATHER_SET3@1",
+              "quality": 4
+            },
+            "Shoes": {
+              "type": "T6_SHOES_LEATHER_HELL",
+              "quality": 1
+            },
+            "Cape": {
+              "type": "T4_CAPEITEM_FW_THETFORD@2",
+              "quality": 2
+            },
+            "Bag": {
+              "type": "T5_BAG",
+              "quality": 1
+            },
+            "Mount": {
+              "type": "T5_MOUNT_HORSE",
+              "quality": 1
+            },
+            "Food": {
+              "type": "T8_MEAL_STEW",
+              "quality": 1
+            }
+          },
+          "partySize": 7
+        },
+        {
+          "id": "1361134544",
+          "timestamp": "2026-03-24T23:35:19.357048400Z",
+          "killer": "TommyUwU980",
+          "killerGuild": "I N J U S 7 I C E",
+          "killerAlliance": "GOODE",
+          "killerIP": 1169,
+          "victim": "Ares001zz",
+          "victimGuild": "BESOS NEGROS",
+          "victimAlliance": "ULTI",
+          "victimIP": 1032,
+          "totalFame": 20322,
+          "location": "",
+          "equipment": {
+            "MainHand": {
+              "type": "T5_2H_HAMMER",
+              "quality": 4
+            },
+            "Head": {
+              "type": "T6_HEAD_LEATHER_SET1",
+              "quality": 4
+            },
+            "Armor": {
+              "type": "T6_ARMOR_PLATE_UNDEAD",
+              "quality": 4
+            },
+            "Shoes": {
+              "type": "T6_SHOES_PLATE_SET1",
+              "quality": 4
+            },
+            "Cape": {
+              "type": "T4_CAPEITEM_HERETIC@2",
+              "quality": 1
+            },
+            "Bag": {
+              "type": "T5_BAG",
+              "quality": 2
+            },
+            "Mount": {
+              "type": "T4_MOUNT_HORSE",
+              "quality": 1
+            },
+            "Potion": {
+              "type": "T5_POTION_SLOWFIELD",
+              "quality": 1
+            },
+            "Food": {
+              "type": "T8_MEAL_SANDWICH",
+              "quality": 1
+            }
+          },
+          "partySize": 3
+        },
+        {
+          "id": "1361134543",
+          "timestamp": "2026-03-24T23:35:18.946085800Z",
+          "killer": "Pausei",
+          "killerGuild": "desavence",
+          "killerAlliance": "SAB0R",
+          "killerIP": 1367,
+          "victim": "VEMTR4NQUILObb",
+          "victimGuild": "PRIMATA MOD",
+          "victimAlliance": "ST4RK",
+          "victimIP": 1424,
+          "totalFame": 198747,
+          "location": "",
+          "equipment": {
+            "MainHand": {
+              "type": "T6_MAIN_AXE@1",
+              "quality": 5
+            },
+            "OffHand": {
+              "type": "T6_OFF_TORCH@1",
+              "quality": 5
+            },
+            "Head": {
+              "type": "T6_HEAD_LEATHER_SET2@1",
+              "quality": 5
+            },
+            "Armor": {
+              "type": "T7_ARMOR_LEATHER_SET1@1",
+              "quality": 4
+            },
+            "Shoes": {
+              "type": "T5_SHOES_PLATE_SET1@3",
+              "quality": 5
+            },
+            "Cape": {
+              "type": "T5_CAPEITEM_SMUGGLER@3",
+              "quality": 4
+            },
+            "Bag": {
+              "type": "T6_BAG@1",
+              "quality": 2
+            },
+            "Mount": {
+              "type": "T5_MOUNT_HORSE",
+              "quality": 4
+            },
+            "Potion": {
+              "type": "T6_POTION_COOLDOWN",
+              "quality": 1
+            },
+            "Food": {
+              "type": "T8_MEAL_SANDWICH",
+              "quality": 1
+            }
+          },
+          "partySize": 2
+        },
+        {
+          "id": "1361134540",
+          "timestamp": "2026-03-24T23:35:18.665659800Z",
+          "killer": "oEdCigano",
+          "killerGuild": "S L I C E D",
+          "killerAlliance": "SAB0R",
+          "killerIP": 1435,
+          "victim": "VictorDuMal",
+          "victimGuild": "IRMANDADE DOS RENEGADOS",
+          "victimAlliance": "SHR",
+          "victimIP": 1292,
+          "totalFame": 150246,
+          "location": "",
+          "equipment": {
+            "MainHand": {
+              "type": "T4_2H_HAMMER_AVALON@2",
+              "quality": 4
+            },
+            "Head": {
+              "type": "T6_HEAD_PLATE_SET1@1",
+              "quality": 4
+            },
+            "Armor": {
+              "type": "T5_ARMOR_PLATE_SET3@2",
+              "quality": 4
+            },
+            "Shoes": {
+              "type": "T6_SHOES_LEATHER_MORGANA@2",
+              "quality": 2
+            },
+            "Cape": {
+              "type": "T6_CAPEITEM_FW_MARTLOCK@1",
+              "quality": 4
+            },
+            "Bag": {
+              "type": "T5_BAG@3",
+              "quality": 2
+            },
+            "Mount": {
+              "type": "T4_MOUNT_GIANTSTAG",
+              "quality": 1
+            },
+            "Food": {
+              "type": "T8_MEAL_SANDWICH_FISH",
+              "quality": 1
+            }
+          },
+          "partySize": 4
+        },
+        {
+          "id": "1361134537",
+          "timestamp": "2026-03-24T23:35:17.336450900Z",
+          "killer": "kedabra",
+          "killerGuild": "Los Narcisistas",
+          "killerAlliance": "NASTY",
+          "killerIP": 1420,
+          "victim": "iISpIDvagONIi",
+          "victimGuild": "Sektor_Grinda",
+          "victimAlliance": "",
+          "victimIP": 1418,
+          "totalFame": 137415,
+          "location": "",
+          "equipment": {
+            "MainHand": {
+              "type": "T6_MAIN_RAPIER_MORGANA@1",
+              "quality": 3
+            },
+            "OffHand": {
+              "type": "T6_OFF_TORCH@1",
+              "quality": 3
+            },
+            "Head": {
+              "type": "T6_HEAD_CLOTH_HELL@1",
+              "quality": 3
+            },
+            "Armor": {
+              "type": "T6_ARMOR_LEATHER_MORGANA@1",
+              "quality": 3
+            },
+            "Shoes": {
+              "type": "T6_SHOES_LEATHER_SET3@1",
+              "quality": 3
+            },
+            "Cape": {
+              "type": "T4_CAPEITEM_AVALON@3",
+              "quality": 3
+            },
+            "Bag": {
+              "type": "T4_BAG",
+              "quality": 1
+            },
+            "Mount": {
+              "type": "T3_MOUNT_HORSE",
+              "quality": 1
+            },
+            "Food": {
+              "type": "T8_MEAL_STEW",
+              "quality": 1
+            }
+          },
+          "partySize": 2
+        },
+        {
+          "id": "1361134504",
+          "timestamp": "2026-03-24T23:35:13.550466700Z",
+          "killer": "LOCOBY",
+          "killerGuild": "Corranlabola",
+          "killerAlliance": "B4ND",
+          "killerIP": 1384,
+          "victim": "Angelino09",
+          "victimGuild": "300m",
+          "victimAlliance": "CREME",
+          "victimIP": 1368,
+          "totalFame": 573759,
+          "location": "",
+          "equipment": {
+            "MainHand": {
+              "type": "T5_2H_DUALSWORD@3",
+              "quality": 4
+            },
+            "Head": {
+              "type": "T6_HEAD_PLATE_SET1@3",
+              "quality": 5
+            },
+            "Armor": {
+              "type": "T8_ARMOR_LEATHER_SET3@1",
+              "quality": 4
+            },
+            "Shoes": {
+              "type": "T8_SHOES_GATHERER_ORE@1",
+              "quality": 4
+            },
+            "Cape": {
+              "type": "T5_CAPEITEM_FW_FORTSTERLING@3",
+              "quality": 4
+            },
+            "Bag": {
+              "type": "T7_BAG@2",
+              "quality": 4
+            },
+            "Mount": {
+              "type": "UNIQUE_MOUNT_UNDEAD_DIREBOAR_ADC",
+              "quality": 1
+            },
+            "Potion": {
+              "type": "T8_POTION_CLEANSE",
+              "quality": 1
+            }
+          },
+          "partySize": 8
+        },
+        {
+          "id": "1361134497",
+          "timestamp": "2026-03-24T23:35:11.183537100Z",
+          "killer": "Digui1",
+          "killerGuild": "",
+          "killerAlliance": "",
+          "killerIP": 1095,
+          "victim": "Izunu95",
+          "victimGuild": "MINORIA",
+          "victimAlliance": "OP3NN",
+          "victimIP": 1214,
+          "totalFame": 26226,
+          "location": "",
+          "equipment": {
+            "MainHand": {
+              "type": "T6_2H_HALBERD",
+              "quality": 3
+            },
+            "Head": {
+              "type": "T6_HEAD_LEATHER_SET2",
+              "quality": 2
+            },
+            "Armor": {
+              "type": "T6_ARMOR_LEATHER_SET1",
+              "quality": 2
+            },
+            "Shoes": {
+              "type": "T6_SHOES_PLATE_SET1",
+              "quality": 3
+            },
+            "Cape": {
+              "type": "T4_CAPEITEM_SMUGGLER@2",
+              "quality": 2
+            },
+            "Bag": {
+              "type": "T4_BAG",
+              "quality": 2
+            },
+            "Mount": {
+              "type": "T5_MOUNT_HORSE",
+              "quality": 1
+            },
+            "Potion": {
+              "type": "T8_POTION_COOLDOWN",
+              "quality": 1
+            },
+            "Food": {
+              "type": "T8_MEAL_STEW@1",
+              "quality": 1
+            }
+          },
+          "partySize": 2
+        },
+        {
+          "id": "1361134477",
+          "timestamp": "2026-03-24T23:35:07.911799500Z",
+          "killer": "TrustMyHands",
+          "killerGuild": "I N S O L E N T",
+          "killerAlliance": "",
+          "killerIP": 1357,
+          "victim": "Xrgdxn",
+          "victimGuild": "CURSED ANVIL",
+          "victimAlliance": "",
+          "victimIP": 1300,
+          "totalFame": 4608,
+          "location": "",
+          "equipment": {
+            "MainHand": {
+              "type": "T8_MAIN_HOLYSTAFF@3",
+              "quality": 5
+            },
+            "OffHand": {
+              "type": "T8_OFF_HORN_KEEPER@3",
+              "quality": 4
+            },
+            "Head": {
+              "type": "T8_HEAD_CLOTH_SET1@3",
+              "quality": 4
+            },
+            "Armor": {
+              "type": "T8_ARMOR_CLOTH_AVALON@3",
+              "quality": 4
+            },
+            "Shoes": {
+              "type": "T8_SHOES_LEATHER_FEY@3",
+              "quality": 4
+            },
+            "Cape": {
+              "type": "T8_CAPEITEM_FW_BRECILIEN@2",
+              "quality": 4
+            },
+            "Mount": {
+              "type": "T5_MOUNT_DIREBOAR_FW_LYMHURST",
+              "quality": 4
+            },
+            "Potion": {
+              "type": "T5_POTION_STONESKIN",
+              "quality": 1
+            },
+            "Food": {
+              "type": "T7_MEAL_OMELETTE",
+              "quality": 1
+            }
+          },
+          "partySize": 4
+        },
+        {
+          "id": "1361134471",
+          "timestamp": "2026-03-24T23:35:06.132535800Z",
+          "killer": "JhuniorRohs3",
+          "killerGuild": "cadets of life",
+          "killerAlliance": "",
+          "killerIP": 1536,
+          "victim": "0verDose1",
+          "victimGuild": "K1llZ0N3",
+          "victimAlliance": "",
+          "victimIP": 1261,
+          "totalFame": 52164,
+          "location": "",
+          "equipment": {
+            "MainHand": {
+              "type": "T4_2H_CROSSBOW_CANNON_AVALON@2",
+              "quality": 4
+            },
+            "Head": {
+              "type": "T4_HEAD_LEATHER_SET3@2",
+              "quality": 4
+            },
+            "Armor": {
+              "type": "T7_ARMOR_CLOTH_SET1",
+              "quality": 3
+            },
+            "Shoes": {
+              "type": "T4_SHOES_CLOTH_ROYAL@2",
+              "quality": 4
+            },
+            "Cape": {
+              "type": "T4_CAPEITEM_MORGANA@2",
+              "quality": 4
+            },
+            "Bag": {
+              "type": "T4_BAG@2",
+              "quality": 4
+            },
+            "Mount": {
+              "type": "T5_MOUNT_COUGAR_KEEPER@1",
+              "quality": 1
+            },
+            "Potion": {
+              "type": "T8_POTION_COOLDOWN",
+              "quality": 1
+            },
+            "Food": {
+              "type": "T8_MEAL_STEW@1",
+              "quality": 1
+            }
+          },
+          "partySize": 3
+        },
+        {
+          "id": "1361134469",
+          "timestamp": "2026-03-24T23:35:06.063330900Z",
+          "killer": "oliverpdp1",
+          "killerGuild": "IN MOR TAL",
+          "killerAlliance": "",
+          "killerIP": 1336,
+          "victim": "astrovel",
+          "victimGuild": "INVADERS GG",
+          "victimAlliance": "",
+          "victimIP": 1235,
+          "totalFame": 97310,
+          "location": "",
+          "equipment": {
+            "MainHand": {
+              "type": "T4_2H_DOUBLEBLADEDSTAFF_CRYSTAL@2",
+              "quality": 4
+            },
+            "Head": {
+              "type": "T5_HEAD_PLATE_SET1@1",
+              "quality": 4
+            },
+            "Armor": {
+              "type": "T4_ARMOR_LEATHER_AVALON@2",
+              "quality": 4
+            },
+            "Shoes": {
+              "type": "T6_SHOES_PLATE_SET2@1",
+              "quality": 4
+            },
+            "Cape": {
+              "type": "T4_CAPEITEM_FW_CAERLEON@2",
+              "quality": 3
+            },
+            "Bag": {
+              "type": "T6_BAG@1",
+              "quality": 4
+            },
+            "Mount": {
+              "type": "T7_MOUNT_TERRORBIRD_ADC",
+              "quality": 1
             },
             "Potion": {
               "type": "T4_POTION_COOLDOWN",
+              "quality": 1
+            }
+          },
+          "partySize": 4
+        },
+        {
+          "id": "1361134457",
+          "timestamp": "2026-03-24T23:35:03.266874300Z",
+          "killer": "GHOSTY10",
+          "killerGuild": "MINORIA",
+          "killerAlliance": "OP3NN",
+          "killerIP": 1157,
+          "victim": "SrCagadinho",
+          "victimGuild": "",
+          "victimAlliance": "",
+          "victimIP": 1107,
+          "totalFame": 29232,
+          "location": "",
+          "equipment": {
+            "MainHand": {
+              "type": "T4_2H_AXE@2",
+              "quality": 2
+            },
+            "Head": {
+              "type": "T4_HEAD_PLATE_SET1@2",
+              "quality": 3
+            },
+            "Armor": {
+              "type": "T4_ARMOR_LEATHER_SET1@2",
+              "quality": 2
+            },
+            "Shoes": {
+              "type": "T4_SHOES_PLATE_SET1@2",
+              "quality": 2
+            },
+            "Cape": {
+              "type": "T4_CAPE@2",
+              "quality": 3
+            },
+            "Bag": {
+              "type": "T4_BAG@2",
+              "quality": 2
+            },
+            "Mount": {
+              "type": "T4_MOUNT_HORSE",
+              "quality": 1
+            }
+          },
+          "partySize": 5
+        },
+        {
+          "id": "1361134451",
+          "timestamp": "2026-03-24T23:35:02.422014500Z",
+          "killer": "Ftent",
+          "killerGuild": "Time Lords of Ava",
+          "killerAlliance": "Trix",
+          "killerIP": 1329,
+          "victim": "XllVikingll",
+          "victimGuild": "GEADA",
+          "victimAlliance": "ALVA",
+          "victimIP": 1204,
+          "totalFame": 864,
+          "location": "",
+          "equipment": {
+            "MainHand": {
+              "type": "T4_2H_FROSTSTAFF_CRYSTAL@3",
+              "quality": 4
+            },
+            "Head": {
+              "type": "T4_HEAD_PLATE_ROYAL@3",
+              "quality": 4
+            },
+            "Armor": {
+              "type": "T4_ARMOR_CLOTH_FEY@3",
+              "quality": 4
+            },
+            "Shoes": {
+              "type": "T4_SHOES_CLOTH_AVALON@3",
+              "quality": 4
+            },
+            "Cape": {
+              "type": "T4_CAPEITEM_FW_LYMHURST@3",
+              "quality": 4
+            },
+            "Bag": {
+              "type": "T7_BAG_INSIGHT@1",
+              "quality": 3
+            },
+            "Mount": {
+              "type": "T7_MOUNT_DIREBOAR",
+              "quality": 4
+            },
+            "Potion": {
+              "type": "T7_POTION_REVIVE",
               "quality": 1
             },
             "Food": {
@@ -196,1231 +832,243 @@
           "partySize": 3
         },
         {
-          "id": "1361119212",
-          "timestamp": "2026-03-24T22:56:45.905493700Z",
-          "killer": "Rodrolaamaba",
-          "killerGuild": "Sea-Sky Fraternity",
-          "killerAlliance": "UDKs",
-          "killerIP": 1422,
-          "victim": "Fastpaced",
-          "victimGuild": "memepaws",
-          "victimAlliance": "",
-          "victimIP": 1370,
-          "totalFame": 248426,
-          "location": "",
-          "equipment": {
-            "MainHand": {
-              "type": "T5_MAIN_HOLYSTAFF_AVALON@3",
-              "quality": 2
-            },
-            "OffHand": {
-              "type": "T5_OFF_HORN_KEEPER@3",
-              "quality": 3
-            },
-            "Head": {
-              "type": "T5_HEAD_CLOTH_HELL@3",
-              "quality": 2
-            },
-            "Armor": {
-              "type": "T8_ARMOR_CLOTH_SET3",
-              "quality": 3
-            },
-            "Shoes": {
-              "type": "T5_SHOES_PLATE_ROYAL@3",
-              "quality": 4
-            },
-            "Cape": {
-              "type": "T5_CAPEITEM_FW_THETFORD@3",
-              "quality": 4
-            },
-            "Bag": {
-              "type": "T4_BAG",
-              "quality": 2
-            },
-            "Mount": {
-              "type": "T4_MOUNT_HORSE",
-              "quality": 3
-            },
-            "Potion": {
-              "type": "T8_POTION_COOLDOWN",
-              "quality": 1
-            }
-          },
-          "partySize": 2
-        },
-        {
-          "id": "1361119203",
-          "timestamp": "2026-03-24T22:56:44.030070500Z",
-          "killer": "Jowerow",
-          "killerGuild": "Nirvana Calling",
-          "killerAlliance": "RDU",
-          "killerIP": 1584,
-          "victim": "Luminoxx",
-          "victimGuild": "I Nothing I",
-          "victimAlliance": "C00K",
-          "victimIP": 1295,
-          "totalFame": 34428,
-          "location": "",
-          "equipment": {
-            "MainHand": {
-              "type": "T5_2H_CLEAVER_HELL@1",
-              "quality": 1
-            },
-            "Head": {
-              "type": "T6_HEAD_LEATHER_SET2",
-              "quality": 2
-            },
-            "Armor": {
-              "type": "T4_ARMOR_LEATHER_SET1@2",
-              "quality": 4
-            },
-            "Shoes": {
-              "type": "T5_SHOES_PLATE_SET3@1",
-              "quality": 2
-            },
-            "Cape": {
-              "type": "T4_CAPEITEM_SMUGGLER@1",
-              "quality": 2
-            },
-            "Mount": {
-              "type": "T3_MOUNT_HORSE",
-              "quality": 1
-            },
-            "Potion": {
-              "type": "T6_POTION_HEAL@1",
-              "quality": 1
-            }
-          },
-          "partySize": 2
-        },
-        {
-          "id": "1361119201",
-          "timestamp": "2026-03-24T22:56:43.809300200Z",
-          "killer": "Akaynu",
+          "id": "1361134442",
+          "timestamp": "2026-03-24T23:34:59.366962500Z",
+          "killer": "yaseniacorazon",
           "killerGuild": "",
           "killerAlliance": "",
-          "killerIP": 1073,
-          "victim": "lTeteul",
-          "victimGuild": "Ordem Aracnidea",
-          "victimAlliance": "SUED",
-          "victimIP": 1179,
-          "totalFame": 35316,
+          "killerIP": 1096,
+          "victim": "FerPleyGM",
+          "victimGuild": "M A N D A T O R Y",
+          "victimAlliance": "FURIX",
+          "victimIP": 1046,
+          "totalFame": 40920,
           "location": "",
           "equipment": {
             "MainHand": {
-              "type": "T4_2H_DUALAXE_KEEPER@2",
-              "quality": 2
-            },
-            "Head": {
-              "type": "T4_HEAD_CLOTH_HELL@2",
-              "quality": 2
-            },
-            "Armor": {
-              "type": "T4_ARMOR_LEATHER_SET3@2",
-              "quality": 2
-            },
-            "Shoes": {
-              "type": "T4_SHOES_CLOTH_ROYAL@2",
-              "quality": 2
-            },
-            "Cape": {
-              "type": "T4_CAPEITEM_DEMON@1",
-              "quality": 4
-            },
-            "Bag": {
-              "type": "T6_BAG",
-              "quality": 2
-            },
-            "Mount": {
-              "type": "T5_MOUNT_COUGAR_KEEPER@1",
-              "quality": 1
-            },
-            "Potion": {
-              "type": "T4_POTION_COOLDOWN",
-              "quality": 1
-            },
-            "Food": {
-              "type": "T8_MEAL_STEW",
-              "quality": 1
-            }
-          },
-          "partySize": 2
-        },
-        {
-          "id": "1361119196",
-          "timestamp": "2026-03-24T22:56:42.165938300Z",
-          "killer": "Slnfer",
-          "killerGuild": "Mythix",
-          "killerAlliance": "CREME",
-          "killerIP": 1553,
-          "victim": "Jhosetix1",
-          "victimGuild": "Error 404 Not Found",
-          "victimAlliance": "ANTRO",
-          "victimIP": 1447,
-          "totalFame": 212220,
-          "location": "",
-          "equipment": {
-            "MainHand": {
-              "type": "T6_2H_DUALMACE_AVALON@1",
-              "quality": 2
-            },
-            "Head": {
-              "type": "T5_HEAD_LEATHER_SET3@3",
-              "quality": 4
-            },
-            "Armor": {
-              "type": "T7_ARMOR_PLATE_HELL@1",
-              "quality": 3
-            },
-            "Shoes": {
-              "type": "T5_SHOES_LEATHER_MORGANA@3",
-              "quality": 4
-            },
-            "Cape": {
-              "type": "T4_CAPEITEM_SMUGGLER@3",
-              "quality": 4
-            },
-            "Mount": {
-              "type": "T5_MOUNT_ARMORED_HORSE",
-              "quality": 1
-            },
-            "Potion": {
-              "type": "T7_POTION_REVIVE",
-              "quality": 1
-            }
-          },
-          "partySize": 5
-        },
-        {
-          "id": "1361119194",
-          "timestamp": "2026-03-24T22:56:41.662175600Z",
-          "killer": "BiggestBoobas",
-          "killerGuild": "The Lonely Men",
-          "killerAlliance": "CREME",
-          "killerIP": 1542,
-          "victim": "Lean1902",
-          "victimGuild": "Error 404 Not Found",
-          "victimAlliance": "ANTRO",
-          "victimIP": 1545,
-          "totalFame": 308690,
-          "location": "",
-          "equipment": {
-            "MainHand": {
-              "type": "T6_MAIN_HOLYSTAFF_AVALON@2",
+              "type": "T5_MAIN_HOLYSTAFF",
               "quality": 3
             },
             "OffHand": {
-              "type": "T6_OFF_HORN_KEEPER@2",
-              "quality": 3
+              "type": "T5_OFF_CENSER_AVALON",
+              "quality": 1
             },
             "Head": {
-              "type": "T6_HEAD_PLATE_SET3@2",
-              "quality": 3
+              "type": "T5_HEAD_PLATE_SET3",
+              "quality": 2
             },
             "Armor": {
-              "type": "T6_ARMOR_CLOTH_AVALON@2",
+              "type": "T5_ARMOR_LEATHER_SET1",
               "quality": 2
             },
             "Shoes": {
-              "type": "T6_SHOES_LEATHER_SET1@2",
-              "quality": 2
+              "type": "T5_SHOES_PLATE_SET3",
+              "quality": 1
             },
             "Cape": {
-              "type": "T4_CAPEITEM_FW_LYMHURST@3",
-              "quality": 2
-            },
-            "Mount": {
-              "type": "T5_MOUNT_ARMORED_HORSE",
-              "quality": 1
-            },
-            "Potion": {
-              "type": "T7_POTION_REVIVE",
-              "quality": 1
-            }
-          },
-          "partySize": 4
-        },
-        {
-          "id": "1361119192",
-          "timestamp": "2026-03-24T22:56:41.656153300Z",
-          "killer": "BiggestBoobas",
-          "killerGuild": "The Lonely Men",
-          "killerAlliance": "CREME",
-          "killerIP": 1542,
-          "victim": "AbyssAB",
-          "victimGuild": "Error 404 Not Found",
-          "victimAlliance": "ANTRO",
-          "victimIP": 1577,
-          "totalFame": 560194,
-          "location": "",
-          "equipment": {
-            "MainHand": {
-              "type": "T6_2H_FIRE_RINGPAIR_AVALON@3",
-              "quality": 3
-            },
-            "Head": {
-              "type": "T6_HEAD_LEATHER_SET3@2",
-              "quality": 4
-            },
-            "Armor": {
-              "type": "T6_ARMOR_CLOTH_AVALON@2",
-              "quality": 4
-            },
-            "Shoes": {
-              "type": "T5_SHOES_PLATE_UNDEAD@3",
-              "quality": 4
-            },
-            "Cape": {
-              "type": "T4_CAPEITEM_FW_LYMHURST@3",
-              "quality": 4
-            },
-            "Mount": {
-              "type": "T5_MOUNT_ARMORED_HORSE",
-              "quality": 1
-            },
-            "Potion": {
-              "type": "T7_POTION_REVIVE",
-              "quality": 1
-            }
-          },
-          "partySize": 4
-        },
-        {
-          "id": "1361119187",
-          "timestamp": "2026-03-24T22:56:39.756203800Z",
-          "killer": "knightNexus",
-          "killerGuild": "Legion Brocoli",
-          "killerAlliance": "",
-          "killerIP": 1261,
-          "victim": "JoedinnM",
-          "victimGuild": "",
-          "victimAlliance": "",
-          "victimIP": 989,
-          "totalFame": 30084,
-          "location": "",
-          "equipment": {
-            "MainHand": {
-              "type": "T4_MAIN_AXE@2",
-              "quality": 2
-            },
-            "OffHand": {
-              "type": "T5_OFF_TORCH@1",
-              "quality": 2
-            },
-            "Head": {
-              "type": "T5_HEAD_LEATHER_SET2@1",
-              "quality": 2
-            },
-            "Armor": {
-              "type": "T5_ARMOR_LEATHER_SET1@1",
-              "quality": 2
-            },
-            "Shoes": {
-              "type": "T5_SHOES_PLATE_SET3@1",
-              "quality": 2
-            },
-            "Cape": {
-              "type": "T4_CAPEITEM_FW_THETFORD@1",
-              "quality": 2
-            },
-            "Bag": {
-              "type": "T4_BAG",
-              "quality": 2
-            },
-            "Mount": {
-              "type": "T3_MOUNT_HORSE",
-              "quality": 2
-            },
-            "Food": {
-              "type": "T3_MEAL_ROAST",
-              "quality": 1
-            }
-          },
-          "partySize": 2
-        },
-        {
-          "id": "1361119178",
-          "timestamp": "2026-03-24T22:56:39.333570300Z",
-          "killer": "KingZed",
-          "killerGuild": "P R O M I N E N T E S",
-          "killerAlliance": "",
-          "killerIP": 1743,
-          "victim": "Assassinato29",
-          "victimGuild": "Demon Face",
-          "victimAlliance": "",
-          "victimIP": 1012,
-          "totalFame": 172850,
-          "location": "",
-          "equipment": {
-            "MainHand": {
-              "type": "T5_MAIN_SPEAR@1",
-              "quality": 3
-            },
-            "OffHand": {
-              "type": "T5_OFF_TORCH@1",
-              "quality": 4
-            },
-            "Head": {
-              "type": "T5_HEAD_LEATHER_SET2@1",
-              "quality": 3
-            },
-            "Armor": {
-              "type": "T5_ARMOR_LEATHER_SET1@1",
-              "quality": 3
-            },
-            "Shoes": {
-              "type": "T5_SHOES_LEATHER_SET3@1",
+              "type": "T5_CAPE@1",
               "quality": 3
             },
             "Bag": {
               "type": "T5_BAG",
-              "quality": 1
-            },
-            "Mount": {
-              "type": "T5_MOUNT_DIREBOAR_FW_LYMHURST",
-              "quality": 4
-            },
-            "Potion": {
-              "type": "T6_POTION_COOLDOWN",
-              "quality": 1
-            },
-            "Food": {
-              "type": "T7_FISH_FRESHWATER_ALL_COMMON",
-              "quality": 1
-            }
-          },
-          "partySize": 2
-        },
-        {
-          "id": "1361119176",
-          "timestamp": "2026-03-24T22:56:39.176186600Z",
-          "killer": "TrustMyHands",
-          "killerGuild": "I N S O L E N T",
-          "killerAlliance": "",
-          "killerIP": 1357,
-          "victim": "Kerly4121",
-          "victimGuild": "",
-          "victimAlliance": "",
-          "victimIP": 1151,
-          "totalFame": 69984,
-          "location": "",
-          "equipment": {
-            "MainHand": {
-              "type": "T5_2H_DUALSWORD@2",
               "quality": 3
-            },
-            "Head": {
-              "type": "T4_HEAD_CLOTH_HELL@2",
-              "quality": 2
-            },
-            "Armor": {
-              "type": "T5_ARMOR_LEATHER_SET3@1",
-              "quality": 2
-            },
-            "Shoes": {
-              "type": "T5_SHOES_LEATHER_SET3@2",
-              "quality": 2
-            },
-            "Cape": {
-              "type": "T4_CAPEITEM_AVALON@2",
-              "quality": 1
-            },
-            "Bag": {
-              "type": "T5_BAG",
-              "quality": 2
-            },
-            "Mount": {
-              "type": "T3_MOUNT_HORSE",
-              "quality": 1
-            },
-            "Potion": {
-              "type": "T4_POTION_COOLDOWN",
-              "quality": 1
-            },
-            "Food": {
-              "type": "T8_MEAL_STEW",
-              "quality": 1
-            }
-          },
-          "partySize": 4
-        },
-        {
-          "id": "1361119174",
-          "timestamp": "2026-03-24T22:56:38.810474200Z",
-          "killer": "luluvroumette",
-          "killerGuild": "les fr valoir",
-          "killerAlliance": "",
-          "killerIP": 1533,
-          "victim": "zZN0xZz",
-          "victimGuild": "NIFFLHEIM",
-          "victimAlliance": "C0SMO",
-          "victimIP": 1385,
-          "totalFame": 132840,
-          "location": "",
-          "equipment": {
-            "MainHand": {
-              "type": "T5_MAIN_MACE@2",
-              "quality": 2
-            },
-            "OffHand": {
-              "type": "T5_OFF_JESTERCANE_HELL@2",
-              "quality": 3
-            },
-            "Head": {
-              "type": "T4_HEAD_PLATE_KEEPER@3",
-              "quality": 3
-            },
-            "Armor": {
-              "type": "T4_ARMOR_PLATE_FEY@3",
-              "quality": 3
-            },
-            "Shoes": {
-              "type": "T7_SHOES_LEATHER_SET2@1",
-              "quality": 3
-            },
-            "Cape": {
-              "type": "T4_CAPEITEM_SMUGGLER@3",
-              "quality": 3
-            },
-            "Bag": {
-              "type": "T6_BAG@1",
-              "quality": 1
-            },
-            "Mount": {
-              "type": "T5_MOUNT_COUGAR_KEEPER@1",
-              "quality": 1
-            },
-            "Potion": {
-              "type": "T7_POTION_REVIVE",
-              "quality": 1
-            },
-            "Food": {
-              "type": "T7_MEAL_OMELETTE@1",
-              "quality": 1
-            }
-          },
-          "partySize": 11
-        },
-        {
-          "id": "1361119169",
-          "timestamp": "2026-03-24T22:56:37.575174800Z",
-          "killer": "Xzmistico23",
-          "killerGuild": "HAWKEYE _TF",
-          "killerAlliance": "THOD",
-          "killerIP": 1356,
-          "victim": "JaenrabeiAnky",
-          "victimGuild": "Sangue e Minerio",
-          "victimAlliance": "",
-          "victimIP": 1302,
-          "totalFame": 369827,
-          "location": "",
-          "equipment": {
-            "MainHand": {
-              "type": "T7_MAIN_HOLYSTAFF_AVALON@1",
-              "quality": 4
-            },
-            "OffHand": {
-              "type": "T7_OFF_CENSER_AVALON@1",
-              "quality": 4
-            },
-            "Head": {
-              "type": "T7_HEAD_PLATE_UNDEAD@1",
-              "quality": 4
-            },
-            "Armor": {
-              "type": "T4_ARMOR_CLOTH_SET2@1",
-              "quality": 5
-            },
-            "Shoes": {
-              "type": "T7_SHOES_LEATHER_UNDEAD@1",
-              "quality": 4
-            },
-            "Cape": {
-              "type": "T7_CAPEITEM_FW_LYMHURST@1",
-              "quality": 4
-            },
-            "Bag": {
-              "type": "T4_BAG",
-              "quality": 2
             },
             "Mount": {
               "type": "T4_MOUNT_HORSE",
-              "quality": 4
+              "quality": 1
+            },
+            "Potion": {
+              "type": "T5_POTION_STONESKIN",
+              "quality": 1
+            },
+            "Food": {
+              "type": "T7_MEAL_OMELETTE",
+              "quality": 1
             }
           },
-          "partySize": 4
+          "partySize": 2
         },
         {
-          "id": "1361119149",
-          "timestamp": "2026-03-24T22:56:37.215756800Z",
-          "killer": "SantixGG",
-          "killerGuild": "Forever-Gxnk",
-          "killerAlliance": "",
-          "killerIP": 1384,
-          "victim": "LeGionTeamPro",
-          "victimGuild": "ALQUIMISTASyt",
+          "id": "1361134437",
+          "timestamp": "2026-03-24T23:34:58.155860100Z",
+          "killer": "FrajolisXD",
+          "killerGuild": "Last-Pass",
+          "killerAlliance": "IVISA",
+          "killerIP": 1092,
+          "victim": "6ThomasTurbando6",
+          "victimGuild": "ZAVENGERX",
           "victimAlliance": "",
-          "victimIP": 1213,
-          "totalFame": 417483,
+          "victimIP": 1372,
+          "totalFame": 120177,
           "location": "",
           "equipment": {
             "MainHand": {
-              "type": "T4_2H_DUALSWORD@2",
-              "quality": 2
+              "type": "T6_MAIN_AXE@1",
+              "quality": 4
+            },
+            "OffHand": {
+              "type": "T6_OFF_DEMONSKULL_HELL@1",
+              "quality": 4
             },
             "Head": {
-              "type": "T4_HEAD_PLATE_SET1",
-              "quality": 1
+              "type": "T6_HEAD_LEATHER_MORGANA@1",
+              "quality": 4
             },
             "Armor": {
-              "type": "T5_ARMOR_LEATHER_SET3@2",
-              "quality": 3
+              "type": "T5_ARMOR_LEATHER_HELL@2",
+              "quality": 4
             },
             "Shoes": {
-              "type": "T8_SHOES_PLATE_SET1",
-              "quality": 3
+              "type": "T6_SHOES_CLOTH_MORGANA@1",
+              "quality": 4
             },
             "Cape": {
-              "type": "T7_CAPEITEM_FW_FORTSTERLING@2",
-              "quality": 1
+              "type": "T5_CAPEITEM_FW_LYMHURST@3",
+              "quality": 4
             },
             "Bag": {
-              "type": "T7_BAG",
-              "quality": 1
+              "type": "T4_BAG@2",
+              "quality": 4
             },
             "Mount": {
-              "type": "T8_MOUNT_DIREBOAR_FW_LYMHURST_ELITE",
+              "type": "T5_MOUNT_RAM_FW_MARTLOCK",
               "quality": 4
             },
             "Potion": {
               "type": "T7_POTION_REVIVE",
               "quality": 1
+            },
+            "Food": {
+              "type": "T8_MEAL_STEW",
+              "quality": 1
             }
           },
-          "partySize": 4
+          "partySize": 2
         },
         {
-          "id": "1361119141",
-          "timestamp": "2026-03-24T22:56:36.666069700Z",
-          "killer": "CherryB00m",
-          "killerGuild": "Life is game",
-          "killerAlliance": "SIUUU",
-          "killerIP": 1391,
-          "victim": "SODIACWOLF",
-          "victimGuild": "Crux Del Sur",
-          "victimAlliance": "ARCH",
-          "victimIP": 1263,
-          "totalFame": 186732,
+          "id": "1361134434",
+          "timestamp": "2026-03-24T23:34:57.230638200Z",
+          "killer": "SMGKenji",
+          "killerGuild": "VK Army",
+          "killerAlliance": "ARCH",
+          "killerIP": 1396,
+          "victim": "ricknightmareof",
+          "victimGuild": "Gankers LetaLes",
+          "victimAlliance": "BOLAS",
+          "victimIP": 1407,
+          "totalFame": 198692,
           "location": "",
           "equipment": {
             "MainHand": {
-              "type": "T8_MAIN_FIRESTAFF",
-              "quality": 1
+              "type": "T6_MAIN_AXE@2",
+              "quality": 4
             },
             "OffHand": {
-              "type": "T5_OFF_HORN_KEEPER@1",
-              "quality": 1
+              "type": "T6_OFF_DEMONSKULL_HELL@1",
+              "quality": 4
             },
             "Head": {
-              "type": "T5_HEAD_PLATE_KEEPER@2",
-              "quality": 1
+              "type": "T5_HEAD_PLATE_AVALON@3",
+              "quality": 4
             },
             "Armor": {
-              "type": "T5_ARMOR_LEATHER_UNDEAD@2",
-              "quality": 1
+              "type": "T6_ARMOR_LEATHER_SET1@2",
+              "quality": 3
             },
             "Shoes": {
-              "type": "T4_SHOES_PLATE_SET1@3",
-              "quality": 1
+              "type": "T6_SHOES_PLATE_SET1@2",
+              "quality": 3
             },
             "Cape": {
               "type": "T4_CAPEITEM_UNDEAD@2",
-              "quality": 1
+              "quality": 4
             },
             "Bag": {
-              "type": "T6_BAG@1",
-              "quality": 1
+              "type": "T5_BAG@1",
+              "quality": 3
             },
             "Mount": {
               "type": "T5_MOUNT_ARMORED_HORSE",
               "quality": 3
-            },
-            "Potion": {
-              "type": "T7_POTION_REVIVE",
-              "quality": 1
-            },
-            "Food": {
-              "type": "T7_MEAL_PIE",
-              "quality": 1
             }
           },
-          "partySize": 6
-        },
-        {
-          "id": "1361119139",
-          "timestamp": "2026-03-24T22:56:35.875256400Z",
-          "killer": "Mermanids",
-          "killerGuild": "Amazonia Gang",
-          "killerAlliance": "1979",
-          "killerIP": 1361,
-          "victim": "kumitrgrn",
-          "victimGuild": "",
-          "victimAlliance": "",
-          "victimIP": 1163,
-          "totalFame": 0,
-          "location": "",
-          "equipment": {
-            "MainHand": {
-              "type": "T6_2H_BOW_AVALON@2",
-              "quality": 4
-            },
-            "Head": {
-              "type": "T5_HEAD_LEATHER_SET2@2",
-              "quality": 4
-            },
-            "Armor": {
-              "type": "T6_ARMOR_CLOTH_SET2@1",
-              "quality": 2
-            },
-            "Shoes": {
-              "type": "T4_SHOES_PLATE_HELL@2",
-              "quality": 2
-            },
-            "Cape": {
-              "type": "T5_CAPEITEM_MORGANA@2",
-              "quality": 5
-            },
-            "Bag": {
-              "type": "T5_BAG@1",
-              "quality": 2
-            },
-            "Mount": {
-              "type": "T7_MOUNT_OX",
-              "quality": 4
-            },
-            "Potion": {
-              "type": "T8_POTION_COOLDOWN",
-              "quality": 1
-            },
-            "Food": {
-              "type": "T8_MEAL_STEW",
-              "quality": 1
-            }
-          },
-          "partySize": 4
-        },
-        {
-          "id": "1361119134",
-          "timestamp": "2026-03-24T22:56:34.553619700Z",
-          "killer": "PalmWill",
-          "killerGuild": "Unslave",
-          "killerAlliance": "0PEN",
-          "killerIP": 1574,
-          "victim": "PaulinCria",
-          "victimGuild": "",
-          "victimAlliance": "",
-          "victimIP": 1368,
-          "totalFame": 81477,
-          "location": "",
-          "equipment": {
-            "MainHand": {
-              "type": "T5_MAIN_RAPIER_MORGANA@2",
-              "quality": 4
-            },
-            "OffHand": {
-              "type": "T5_OFF_TOTEM_KEEPER@2",
-              "quality": 4
-            },
-            "Head": {
-              "type": "T5_HEAD_LEATHER_MORGANA@2",
-              "quality": 4
-            },
-            "Armor": {
-              "type": "T6_ARMOR_LEATHER_SET3@1",
-              "quality": 4
-            },
-            "Shoes": {
-              "type": "T6_SHOES_LEATHER_SET2@1",
-              "quality": 4
-            },
-            "Cape": {
-              "type": "T4_CAPEITEM_SMUGGLER@3",
-              "quality": 4
-            },
-            "Bag": {
-              "type": "T6_BAG",
-              "quality": 3
-            },
-            "Mount": {
-              "type": "T4_MOUNT_GIANTSTAG",
-              "quality": 3
-            },
-            "Potion": {
-              "type": "T7_POTION_REVIVE",
-              "quality": 1
-            },
-            "Food": {
-              "type": "T5_MEAL_SOUP",
-              "quality": 1
-            }
-          },
-          "partySize": 16
-        },
-        {
-          "id": "1361119132",
-          "timestamp": "2026-03-24T22:56:34.430131800Z",
-          "killer": "0LIKO",
-          "killerGuild": "Life is game",
-          "killerAlliance": "SIUUU",
-          "killerIP": 1420,
-          "victim": "AtenasYT",
-          "victimGuild": "Crux Del Sur",
-          "victimAlliance": "ARCH",
-          "victimIP": 1273,
-          "totalFame": 160047,
-          "location": "",
-          "equipment": {
-            "MainHand": {
-              "type": "T4_2H_DOUBLEBLADEDSTAFF_CRYSTAL@3",
-              "quality": 4
-            },
-            "Head": {
-              "type": "T7_HEAD_CLOTH_SET3@1",
-              "quality": 4
-            },
-            "Armor": {
-              "type": "T6_ARMOR_LEATHER_MORGANA@1",
-              "quality": 4
-            },
-            "Shoes": {
-              "type": "T6_SHOES_PLATE_SET1",
-              "quality": 4
-            },
-            "Cape": {
-              "type": "T4_CAPEITEM_FW_CAERLEON@3",
-              "quality": 4
-            },
-            "Bag": {
-              "type": "T5_BAG_INSIGHT@1",
-              "quality": 2
-            },
-            "Mount": {
-              "type": "T4_MOUNT_GIANTSTAG",
-              "quality": 4
-            },
-            "Potion": {
-              "type": "T4_POTION_COOLDOWN@2",
-              "quality": 1
-            },
-            "Food": {
-              "type": "T8_MEAL_STEW",
-              "quality": 1
-            }
-          },
-          "partySize": 5
+          "partySize": 2
         }
       ],
       "topKills": [
         {
-          "id": "1361119192",
-          "timestamp": "2026-03-24T22:56:41.656153300Z",
-          "killer": "BiggestBoobas",
-          "killerGuild": "The Lonely Men",
-          "killerAlliance": "CREME",
-          "killerIP": 1542,
-          "victim": "AbyssAB",
-          "victimGuild": "Error 404 Not Found",
-          "victimAlliance": "ANTRO",
-          "victimIP": 1577,
-          "totalFame": 560194,
-          "location": "",
-          "equipment": {
-            "MainHand": {
-              "type": "T6_2H_FIRE_RINGPAIR_AVALON@3",
-              "quality": 3
-            },
-            "Head": {
-              "type": "T6_HEAD_LEATHER_SET3@2",
-              "quality": 4
-            },
-            "Armor": {
-              "type": "T6_ARMOR_CLOTH_AVALON@2",
-              "quality": 4
-            },
-            "Shoes": {
-              "type": "T5_SHOES_PLATE_UNDEAD@3",
-              "quality": 4
-            },
-            "Cape": {
-              "type": "T4_CAPEITEM_FW_LYMHURST@3",
-              "quality": 4
-            },
-            "Mount": {
-              "type": "T5_MOUNT_ARMORED_HORSE",
-              "quality": 1
-            },
-            "Potion": {
-              "type": "T7_POTION_REVIVE",
-              "quality": 1
-            }
-          },
-          "partySize": 4
-        },
-        {
-          "id": "1361119007",
-          "timestamp": "2026-03-24T22:56:17.195530900Z",
-          "killer": "juupo12",
-          "killerGuild": "Rogue Natives",
-          "killerAlliance": "CREME",
-          "killerIP": 1519,
-          "victim": "Espektro02",
-          "victimGuild": "Error 404 Not Found",
-          "victimAlliance": "ANTRO",
-          "victimIP": 1574,
-          "totalFame": 524919,
-          "location": "",
-          "equipment": {
-            "MainHand": {
-              "type": "T6_2H_AXE_AVALON@3",
-              "quality": 3
-            },
-            "Head": {
-              "type": "T6_HEAD_PLATE_SET2@2",
-              "quality": 4
-            },
-            "Armor": {
-              "type": "T5_ARMOR_LEATHER_ROYAL@3",
-              "quality": 4
-            },
-            "Shoes": {
-              "type": "T4_SHOES_LEATHER_FEY@4",
-              "quality": 3
-            },
-            "Cape": {
-              "type": "T4_CAPEITEM_SMUGGLER@3",
-              "quality": 3
-            },
-            "Mount": {
-              "type": "T5_MOUNT_COUGAR_KEEPER@1",
-              "quality": 1
-            },
-            "Potion": {
-              "type": "T7_POTION_REVIVE",
-              "quality": 1
-            }
-          },
-          "partySize": 21
-        },
-        {
-          "id": "1361118994",
-          "timestamp": "2026-03-24T22:56:14.617504300Z",
-          "killer": "Inuronak",
-          "killerGuild": "Rogue Natives",
-          "killerAlliance": "CREME",
-          "killerIP": 1531,
-          "victim": "CrazyArgonian20",
-          "victimGuild": "Error 404 Not Found",
-          "victimAlliance": "ANTRO",
-          "victimIP": 1535,
-          "totalFame": 511351,
-          "location": "",
-          "equipment": {
-            "MainHand": {
-              "type": "T8_2H_BOW_HELL@1",
-              "quality": 4
-            },
-            "Head": {
-              "type": "T7_HEAD_PLATE_SET1@1",
-              "quality": 3
-            },
-            "Armor": {
-              "type": "T6_ARMOR_LEATHER_SET3@2",
-              "quality": 3
-            },
-            "Shoes": {
-              "type": "T6_SHOES_LEATHER_AVALON@2",
-              "quality": 3
-            },
-            "Cape": {
-              "type": "T4_CAPEITEM_FW_FORTSTERLING@3",
-              "quality": 4
-            },
-            "Mount": {
-              "type": "T5_MOUNT_ARMORED_HORSE",
-              "quality": 2
-            },
-            "Potion": {
-              "type": "T7_POTION_REVIVE",
-              "quality": 1
-            }
-          },
-          "partySize": 21
-        },
-        {
-          "id": "1361119149",
-          "timestamp": "2026-03-24T22:56:37.215756800Z",
-          "killer": "SantixGG",
-          "killerGuild": "Forever-Gxnk",
-          "killerAlliance": "",
+          "id": "1361134504",
+          "timestamp": "2026-03-24T23:35:13.550466700Z",
+          "killer": "LOCOBY",
+          "killerGuild": "Corranlabola",
+          "killerAlliance": "B4ND",
           "killerIP": 1384,
-          "victim": "LeGionTeamPro",
-          "victimGuild": "ALQUIMISTASyt",
-          "victimAlliance": "",
-          "victimIP": 1213,
-          "totalFame": 417483,
+          "victim": "Angelino09",
+          "victimGuild": "300m",
+          "victimAlliance": "CREME",
+          "victimIP": 1368,
+          "totalFame": 573759,
           "location": "",
           "equipment": {
             "MainHand": {
-              "type": "T4_2H_DUALSWORD@2",
-              "quality": 2
-            },
-            "Head": {
-              "type": "T4_HEAD_PLATE_SET1",
-              "quality": 1
-            },
-            "Armor": {
-              "type": "T5_ARMOR_LEATHER_SET3@2",
-              "quality": 3
-            },
-            "Shoes": {
-              "type": "T8_SHOES_PLATE_SET1",
-              "quality": 3
-            },
-            "Cape": {
-              "type": "T7_CAPEITEM_FW_FORTSTERLING@2",
-              "quality": 1
-            },
-            "Bag": {
-              "type": "T7_BAG",
-              "quality": 1
-            },
-            "Mount": {
-              "type": "T8_MOUNT_DIREBOAR_FW_LYMHURST_ELITE",
-              "quality": 4
-            },
-            "Potion": {
-              "type": "T7_POTION_REVIVE",
-              "quality": 1
-            }
-          },
-          "partySize": 4
-        },
-        {
-          "id": "1361118992",
-          "timestamp": "2026-03-24T22:56:14.442891800Z",
-          "killer": "ALVIKO",
-          "killerGuild": "Mythix",
-          "killerAlliance": "CREME",
-          "killerIP": 1471,
-          "victim": "PaCsz",
-          "victimGuild": "Orden Hospitalaria",
-          "victimAlliance": "ANTRO",
-          "victimIP": 1611,
-          "totalFame": 411843,
-          "location": "",
-          "equipment": {
-            "MainHand": {
-              "type": "T6_MAIN_ARCANESTAFF_UNDEAD@3",
-              "quality": 4
-            },
-            "OffHand": {
-              "type": "T6_OFF_LAMP_UNDEAD@3",
+              "type": "T5_2H_DUALSWORD@3",
               "quality": 4
             },
             "Head": {
-              "type": "T8_HEAD_PLATE_SET1",
-              "quality": 4
-            },
-            "Armor": {
-              "type": "T7_ARMOR_LEATHER_SET3@1",
-              "quality": 4
-            },
-            "Shoes": {
-              "type": "T4_SHOES_LEATHER_AVALON@4",
-              "quality": 4
-            },
-            "Cape": {
-              "type": "T4_CAPEITEM_FW_FORTSTERLING@3",
-              "quality": 4
-            },
-            "Mount": {
-              "type": "T5_MOUNT_COUGAR_KEEPER@1",
-              "quality": 4
-            },
-            "Potion": {
-              "type": "T7_POTION_REVIVE",
-              "quality": 1
-            },
-            "Food": {
-              "type": "T8_MEAL_STEW@3",
-              "quality": 1
-            }
-          },
-          "partySize": 21
-        },
-        {
-          "id": "1361119169",
-          "timestamp": "2026-03-24T22:56:37.575174800Z",
-          "killer": "Xzmistico23",
-          "killerGuild": "HAWKEYE _TF",
-          "killerAlliance": "THOD",
-          "killerIP": 1356,
-          "victim": "JaenrabeiAnky",
-          "victimGuild": "Sangue e Minerio",
-          "victimAlliance": "",
-          "victimIP": 1302,
-          "totalFame": 369827,
-          "location": "",
-          "equipment": {
-            "MainHand": {
-              "type": "T7_MAIN_HOLYSTAFF_AVALON@1",
-              "quality": 4
-            },
-            "OffHand": {
-              "type": "T7_OFF_CENSER_AVALON@1",
-              "quality": 4
-            },
-            "Head": {
-              "type": "T7_HEAD_PLATE_UNDEAD@1",
-              "quality": 4
-            },
-            "Armor": {
-              "type": "T4_ARMOR_CLOTH_SET2@1",
+              "type": "T6_HEAD_PLATE_SET1@3",
               "quality": 5
             },
+            "Armor": {
+              "type": "T8_ARMOR_LEATHER_SET3@1",
+              "quality": 4
+            },
             "Shoes": {
-              "type": "T7_SHOES_LEATHER_UNDEAD@1",
+              "type": "T8_SHOES_GATHERER_ORE@1",
               "quality": 4
             },
             "Cape": {
-              "type": "T7_CAPEITEM_FW_LYMHURST@1",
+              "type": "T5_CAPEITEM_FW_FORTSTERLING@3",
               "quality": 4
             },
             "Bag": {
-              "type": "T4_BAG",
-              "quality": 2
-            },
-            "Mount": {
-              "type": "T4_MOUNT_HORSE",
-              "quality": 4
-            }
-          },
-          "partySize": 4
-        },
-        {
-          "id": "1361119052",
-          "timestamp": "2026-03-24T22:56:24.814427800Z",
-          "killer": "Zekhet",
-          "killerGuild": "Inglorium",
-          "killerAlliance": "Golp3",
-          "killerIP": 1546,
-          "victim": "Tonyrh15",
-          "victimGuild": "Volkzsturm",
-          "victimAlliance": "",
-          "victimIP": 1428,
-          "totalFame": 343764,
-          "location": "",
-          "equipment": {
-            "MainHand": {
-              "type": "T6_2H_ARCANESTAFF@1",
-              "quality": 4
-            },
-            "Head": {
-              "type": "T8_HEAD_LEATHER_SET3",
-              "quality": 4
-            },
-            "Armor": {
-              "type": "T6_ARMOR_PLATE_SET2@2",
-              "quality": 4
-            },
-            "Shoes": {
-              "type": "T5_SHOES_LEATHER_ROYAL@3",
-              "quality": 4
-            },
-            "Cape": {
-              "type": "T4_CAPEITEM_SMUGGLER@3",
+              "type": "T7_BAG@2",
               "quality": 4
             },
             "Mount": {
-              "type": "T6_MOUNT_GIANTSTAG_MOOSE",
+              "type": "UNIQUE_MOUNT_UNDEAD_DIREBOAR_ADC",
               "quality": 1
             },
             "Potion": {
-              "type": "T6_POTION_TORNADO",
+              "type": "T8_POTION_CLEANSE",
               "quality": 1
             }
           },
-          "partySize": 4
+          "partySize": 8
         },
         {
-          "id": "1361119194",
-          "timestamp": "2026-03-24T22:56:41.662175600Z",
-          "killer": "BiggestBoobas",
-          "killerGuild": "The Lonely Men",
-          "killerAlliance": "CREME",
-          "killerIP": 1542,
-          "victim": "Lean1902",
-          "victimGuild": "Error 404 Not Found",
-          "victimAlliance": "ANTRO",
-          "victimIP": 1545,
-          "totalFame": 308690,
+          "id": "1361134412",
+          "timestamp": "2026-03-24T23:34:56.843733500Z",
+          "killer": "kleyguerrero",
+          "killerGuild": "The Rugrats",
+          "killerAlliance": "RDU",
+          "killerIP": 1519,
+          "victim": "OtsugiLenka",
+          "victimGuild": "Dreamfall",
+          "victimAlliance": "",
+          "victimIP": 1524,
+          "totalFame": 461618,
           "location": "",
           "equipment": {
             "MainHand": {
-              "type": "T6_MAIN_HOLYSTAFF_AVALON@2",
-              "quality": 3
+              "type": "T7_MAIN_RAPIER_MORGANA@1",
+              "quality": 4
             },
             "OffHand": {
-              "type": "T6_OFF_HORN_KEEPER@2",
-              "quality": 3
-            },
-            "Head": {
-              "type": "T6_HEAD_PLATE_SET3@2",
-              "quality": 3
-            },
-            "Armor": {
-              "type": "T6_ARMOR_CLOTH_AVALON@2",
-              "quality": 2
-            },
-            "Shoes": {
-              "type": "T6_SHOES_LEATHER_SET1@2",
-              "quality": 2
-            },
-            "Cape": {
-              "type": "T4_CAPEITEM_FW_LYMHURST@3",
-              "quality": 2
-            },
-            "Mount": {
-              "type": "T5_MOUNT_ARMORED_HORSE",
-              "quality": 1
-            },
-            "Potion": {
-              "type": "T7_POTION_REVIVE",
-              "quality": 1
-            }
-          },
-          "partySize": 4
-        },
-        {
-          "id": "1361119114",
-          "timestamp": "2026-03-24T22:56:31.654523700Z",
-          "killer": "nikusv2",
-          "killerGuild": "BombSS",
-          "killerAlliance": "FURIX",
-          "killerIP": 1417,
-          "victim": "Linnded",
-          "victimGuild": "YOU_ARE_DEAD",
-          "victimAlliance": "MTGA",
-          "victimIP": 1355,
-          "totalFame": 257499,
-          "location": "",
-          "equipment": {
-            "MainHand": {
-              "type": "T7_2H_DUALSWORD",
+              "type": "T6_OFF_TOTEM_KEEPER@2",
               "quality": 4
             },
             "Head": {
-              "type": "T4_HEAD_LEATHER_UNDEAD@3",
+              "type": "T6_HEAD_CLOTH_AVALON@2",
               "quality": 4
             },
             "Armor": {
@@ -1428,15 +1076,11 @@
               "quality": 4
             },
             "Shoes": {
-              "type": "T8_SHOES_GATHERER_ORE",
+              "type": "T4_SHOES_CLOTH_FEY@3",
               "quality": 4
             },
             "Cape": {
-              "type": "T5_CAPEITEM_FW_FORTSTERLING@2",
-              "quality": 3
-            },
-            "Bag": {
-              "type": "T5_BAG@2",
+              "type": "T5_CAPEITEM_UNDEAD@2",
               "quality": 4
             },
             "Mount": {
@@ -1448,252 +1092,56 @@
               "quality": 1
             },
             "Food": {
-              "type": "T7_MEAL_PIE",
+              "type": "T8_MEAL_STEW_AVALON@2",
               "quality": 1
             }
           },
-          "partySize": 6
+          "partySize": 3
         },
         {
-          "id": "1361119212",
-          "timestamp": "2026-03-24T22:56:45.905493700Z",
-          "killer": "Rodrolaamaba",
-          "killerGuild": "Sea-Sky Fraternity",
-          "killerAlliance": "UDKs",
-          "killerIP": 1422,
-          "victim": "Fastpaced",
-          "victimGuild": "memepaws",
-          "victimAlliance": "",
-          "victimIP": 1370,
-          "totalFame": 248426,
+          "id": "1361134543",
+          "timestamp": "2026-03-24T23:35:18.946085800Z",
+          "killer": "Pausei",
+          "killerGuild": "desavence",
+          "killerAlliance": "SAB0R",
+          "killerIP": 1367,
+          "victim": "VEMTR4NQUILObb",
+          "victimGuild": "PRIMATA MOD",
+          "victimAlliance": "ST4RK",
+          "victimIP": 1424,
+          "totalFame": 198747,
           "location": "",
           "equipment": {
             "MainHand": {
-              "type": "T5_MAIN_HOLYSTAFF_AVALON@3",
-              "quality": 2
+              "type": "T6_MAIN_AXE@1",
+              "quality": 5
             },
             "OffHand": {
-              "type": "T5_OFF_HORN_KEEPER@3",
-              "quality": 3
+              "type": "T6_OFF_TORCH@1",
+              "quality": 5
             },
             "Head": {
-              "type": "T5_HEAD_CLOTH_HELL@3",
-              "quality": 2
+              "type": "T6_HEAD_LEATHER_SET2@1",
+              "quality": 5
             },
             "Armor": {
-              "type": "T8_ARMOR_CLOTH_SET3",
-              "quality": 3
+              "type": "T7_ARMOR_LEATHER_SET1@1",
+              "quality": 4
             },
             "Shoes": {
-              "type": "T5_SHOES_PLATE_ROYAL@3",
-              "quality": 4
+              "type": "T5_SHOES_PLATE_SET1@3",
+              "quality": 5
             },
             "Cape": {
-              "type": "T5_CAPEITEM_FW_THETFORD@3",
+              "type": "T5_CAPEITEM_SMUGGLER@3",
               "quality": 4
-            },
-            "Bag": {
-              "type": "T4_BAG",
-              "quality": 2
-            },
-            "Mount": {
-              "type": "T4_MOUNT_HORSE",
-              "quality": 3
-            },
-            "Potion": {
-              "type": "T8_POTION_COOLDOWN",
-              "quality": 1
-            }
-          },
-          "partySize": 2
-        },
-        {
-          "id": "1361119196",
-          "timestamp": "2026-03-24T22:56:42.165938300Z",
-          "killer": "Slnfer",
-          "killerGuild": "Mythix",
-          "killerAlliance": "CREME",
-          "killerIP": 1553,
-          "victim": "Jhosetix1",
-          "victimGuild": "Error 404 Not Found",
-          "victimAlliance": "ANTRO",
-          "victimIP": 1447,
-          "totalFame": 212220,
-          "location": "",
-          "equipment": {
-            "MainHand": {
-              "type": "T6_2H_DUALMACE_AVALON@1",
-              "quality": 2
-            },
-            "Head": {
-              "type": "T5_HEAD_LEATHER_SET3@3",
-              "quality": 4
-            },
-            "Armor": {
-              "type": "T7_ARMOR_PLATE_HELL@1",
-              "quality": 3
-            },
-            "Shoes": {
-              "type": "T5_SHOES_LEATHER_MORGANA@3",
-              "quality": 4
-            },
-            "Cape": {
-              "type": "T4_CAPEITEM_SMUGGLER@3",
-              "quality": 4
-            },
-            "Mount": {
-              "type": "T5_MOUNT_ARMORED_HORSE",
-              "quality": 1
-            },
-            "Potion": {
-              "type": "T7_POTION_REVIVE",
-              "quality": 1
-            }
-          },
-          "partySize": 5
-        },
-        {
-          "id": "1361119141",
-          "timestamp": "2026-03-24T22:56:36.666069700Z",
-          "killer": "CherryB00m",
-          "killerGuild": "Life is game",
-          "killerAlliance": "SIUUU",
-          "killerIP": 1391,
-          "victim": "SODIACWOLF",
-          "victimGuild": "Crux Del Sur",
-          "victimAlliance": "ARCH",
-          "victimIP": 1263,
-          "totalFame": 186732,
-          "location": "",
-          "equipment": {
-            "MainHand": {
-              "type": "T8_MAIN_FIRESTAFF",
-              "quality": 1
-            },
-            "OffHand": {
-              "type": "T5_OFF_HORN_KEEPER@1",
-              "quality": 1
-            },
-            "Head": {
-              "type": "T5_HEAD_PLATE_KEEPER@2",
-              "quality": 1
-            },
-            "Armor": {
-              "type": "T5_ARMOR_LEATHER_UNDEAD@2",
-              "quality": 1
-            },
-            "Shoes": {
-              "type": "T4_SHOES_PLATE_SET1@3",
-              "quality": 1
-            },
-            "Cape": {
-              "type": "T4_CAPEITEM_UNDEAD@2",
-              "quality": 1
             },
             "Bag": {
               "type": "T6_BAG@1",
-              "quality": 1
+              "quality": 2
             },
             "Mount": {
-              "type": "T5_MOUNT_ARMORED_HORSE",
-              "quality": 3
-            },
-            "Potion": {
-              "type": "T7_POTION_REVIVE",
-              "quality": 1
-            },
-            "Food": {
-              "type": "T7_MEAL_PIE",
-              "quality": 1
-            }
-          },
-          "partySize": 6
-        },
-        {
-          "id": "1361119014",
-          "timestamp": "2026-03-24T22:56:18.756994500Z",
-          "killer": "Lilpeepzzz",
-          "killerGuild": "Spetsnaz Grail",
-          "killerAlliance": "1979",
-          "killerIP": 1509,
-          "victim": "SUBZEROWO",
-          "victimGuild": "FaIIen AngeIs",
-          "victimAlliance": "ANTRO",
-          "victimIP": 1534,
-          "totalFame": 173583,
-          "location": "",
-          "equipment": {
-            "MainHand": {
-              "type": "T5_2H_DUALMACE_AVALON@2",
-              "quality": 4
-            },
-            "Head": {
-              "type": "T6_HEAD_LEATHER_SET3@2",
-              "quality": 4
-            },
-            "Armor": {
-              "type": "T6_ARMOR_PLATE_HELL@2",
-              "quality": 4
-            },
-            "Shoes": {
-              "type": "T7_SHOES_PLATE_SET3@1",
-              "quality": 4
-            },
-            "Cape": {
-              "type": "T4_CAPEITEM_SMUGGLER@3",
-              "quality": 4
-            },
-            "Mount": {
-              "type": "T5_MOUNT_COUGAR_KEEPER@1",
-              "quality": 1
-            },
-            "Potion": {
-              "type": "T7_POTION_REVIVE",
-              "quality": 1
-            }
-          },
-          "partySize": 13
-        },
-        {
-          "id": "1361119178",
-          "timestamp": "2026-03-24T22:56:39.333570300Z",
-          "killer": "KingZed",
-          "killerGuild": "P R O M I N E N T E S",
-          "killerAlliance": "",
-          "killerIP": 1743,
-          "victim": "Assassinato29",
-          "victimGuild": "Demon Face",
-          "victimAlliance": "",
-          "victimIP": 1012,
-          "totalFame": 172850,
-          "location": "",
-          "equipment": {
-            "MainHand": {
-              "type": "T5_MAIN_SPEAR@1",
-              "quality": 3
-            },
-            "OffHand": {
-              "type": "T5_OFF_TORCH@1",
-              "quality": 4
-            },
-            "Head": {
-              "type": "T5_HEAD_LEATHER_SET2@1",
-              "quality": 3
-            },
-            "Armor": {
-              "type": "T5_ARMOR_LEATHER_SET1@1",
-              "quality": 3
-            },
-            "Shoes": {
-              "type": "T5_SHOES_LEATHER_SET3@1",
-              "quality": 3
-            },
-            "Bag": {
-              "type": "T5_BAG",
-              "quality": 1
-            },
-            "Mount": {
-              "type": "T5_MOUNT_DIREBOAR_FW_LYMHURST",
+              "type": "T5_MOUNT_HORSE",
               "quality": 4
             },
             "Potion": {
@@ -1701,28 +1149,77 @@
               "quality": 1
             },
             "Food": {
-              "type": "T7_FISH_FRESHWATER_ALL_COMMON",
+              "type": "T8_MEAL_SANDWICH",
               "quality": 1
             }
           },
           "partySize": 2
         },
         {
-          "id": "1361119118",
-          "timestamp": "2026-03-24T22:56:32.030508100Z",
-          "killer": "0LIKO",
-          "killerGuild": "Life is game",
-          "killerAlliance": "SIUUU",
-          "killerIP": 1420,
-          "victim": "Kristeck",
-          "victimGuild": "Crux Del Sur",
-          "victimAlliance": "ARCH",
-          "victimIP": 1425,
-          "totalFame": 171098,
+          "id": "1361134434",
+          "timestamp": "2026-03-24T23:34:57.230638200Z",
+          "killer": "SMGKenji",
+          "killerGuild": "VK Army",
+          "killerAlliance": "ARCH",
+          "killerIP": 1396,
+          "victim": "ricknightmareof",
+          "victimGuild": "Gankers LetaLes",
+          "victimAlliance": "BOLAS",
+          "victimIP": 1407,
+          "totalFame": 198692,
           "location": "",
           "equipment": {
             "MainHand": {
-              "type": "T7_2H_LONGBOW@1",
+              "type": "T6_MAIN_AXE@2",
+              "quality": 4
+            },
+            "OffHand": {
+              "type": "T6_OFF_DEMONSKULL_HELL@1",
+              "quality": 4
+            },
+            "Head": {
+              "type": "T5_HEAD_PLATE_AVALON@3",
+              "quality": 4
+            },
+            "Armor": {
+              "type": "T6_ARMOR_LEATHER_SET1@2",
+              "quality": 3
+            },
+            "Shoes": {
+              "type": "T6_SHOES_PLATE_SET1@2",
+              "quality": 3
+            },
+            "Cape": {
+              "type": "T4_CAPEITEM_UNDEAD@2",
+              "quality": 4
+            },
+            "Bag": {
+              "type": "T5_BAG@1",
+              "quality": 3
+            },
+            "Mount": {
+              "type": "T5_MOUNT_ARMORED_HORSE",
+              "quality": 3
+            }
+          },
+          "partySize": 2
+        },
+        {
+          "id": "1361134540",
+          "timestamp": "2026-03-24T23:35:18.665659800Z",
+          "killer": "oEdCigano",
+          "killerGuild": "S L I C E D",
+          "killerAlliance": "SAB0R",
+          "killerIP": 1435,
+          "victim": "VictorDuMal",
+          "victimGuild": "IRMANDADE DOS RENEGADOS",
+          "victimAlliance": "SHR",
+          "victimIP": 1292,
+          "totalFame": 150246,
+          "location": "",
+          "equipment": {
+            "MainHand": {
+              "type": "T4_2H_HAMMER_AVALON@2",
               "quality": 4
             },
             "Head": {
@@ -1730,125 +1227,235 @@
               "quality": 4
             },
             "Armor": {
-              "type": "T7_ARMOR_LEATHER_SET2@1",
+              "type": "T5_ARMOR_PLATE_SET3@2",
               "quality": 4
             },
             "Shoes": {
-              "type": "T6_SHOES_LEATHER_SET2@1",
-              "quality": 4
-            },
-            "Cape": {
-              "type": "T4_CAPEITEM_FW_THETFORD@3",
-              "quality": 4
-            },
-            "Mount": {
-              "type": "T5_MOUNT_COUGAR_KEEPER@1",
+              "type": "T6_SHOES_LEATHER_MORGANA@2",
               "quality": 2
             },
-            "Potion": {
-              "type": "T7_POTION_REVIVE",
+            "Cape": {
+              "type": "T6_CAPEITEM_FW_MARTLOCK@1",
+              "quality": 4
+            },
+            "Bag": {
+              "type": "T5_BAG@3",
+              "quality": 2
+            },
+            "Mount": {
+              "type": "T4_MOUNT_GIANTSTAG",
+              "quality": 1
+            },
+            "Food": {
+              "type": "T8_MEAL_SANDWICH_FISH",
               "quality": 1
             }
           },
-          "partySize": 5
+          "partySize": 4
         },
         {
-          "id": "1361119107",
-          "timestamp": "2026-03-24T22:56:29.955197Z",
-          "killer": "ITACHI2809",
-          "killerGuild": "Spetsnaz Grail",
-          "killerAlliance": "1979",
-          "killerIP": 1510,
-          "victim": "Dyviniti",
-          "victimGuild": "FaIIen AngeIs",
-          "victimAlliance": "ANTRO",
-          "victimIP": 1498,
-          "totalFame": 167994,
+          "id": "1361134537",
+          "timestamp": "2026-03-24T23:35:17.336450900Z",
+          "killer": "kedabra",
+          "killerGuild": "Los Narcisistas",
+          "killerAlliance": "NASTY",
+          "killerIP": 1420,
+          "victim": "iISpIDvagONIi",
+          "victimGuild": "Sektor_Grinda",
+          "victimAlliance": "",
+          "victimIP": 1418,
+          "totalFame": 137415,
           "location": "",
           "equipment": {
             "MainHand": {
-              "type": "T4_MAIN_CURSEDSTAFF_CRYSTAL@3",
+              "type": "T6_MAIN_RAPIER_MORGANA@1",
               "quality": 3
             },
             "OffHand": {
-              "type": "T5_OFF_HORN_KEEPER@3",
-              "quality": 4
+              "type": "T6_OFF_TORCH@1",
+              "quality": 3
             },
             "Head": {
-              "type": "T6_HEAD_LEATHER_SET3@2",
+              "type": "T6_HEAD_CLOTH_HELL@1",
               "quality": 3
             },
             "Armor": {
-              "type": "T5_ARMOR_PLATE_HELL@3",
+              "type": "T6_ARMOR_LEATHER_MORGANA@1",
               "quality": 3
             },
             "Shoes": {
-              "type": "T5_SHOES_LEATHER_MORGANA@3",
+              "type": "T6_SHOES_LEATHER_SET3@1",
               "quality": 3
             },
             "Cape": {
-              "type": "T4_CAPEITEM_FW_LYMHURST@3",
-              "quality": 2
+              "type": "T4_CAPEITEM_AVALON@3",
+              "quality": 3
+            },
+            "Bag": {
+              "type": "T4_BAG",
+              "quality": 1
             },
             "Mount": {
-              "type": "T5_MOUNT_COUGAR_KEEPER@1",
-              "quality": 2
+              "type": "T3_MOUNT_HORSE",
+              "quality": 1
+            },
+            "Food": {
+              "type": "T8_MEAL_STEW",
+              "quality": 1
+            }
+          },
+          "partySize": 2
+        },
+        {
+          "id": "1361134437",
+          "timestamp": "2026-03-24T23:34:58.155860100Z",
+          "killer": "FrajolisXD",
+          "killerGuild": "Last-Pass",
+          "killerAlliance": "IVISA",
+          "killerIP": 1092,
+          "victim": "6ThomasTurbando6",
+          "victimGuild": "ZAVENGERX",
+          "victimAlliance": "",
+          "victimIP": 1372,
+          "totalFame": 120177,
+          "location": "",
+          "equipment": {
+            "MainHand": {
+              "type": "T6_MAIN_AXE@1",
+              "quality": 4
+            },
+            "OffHand": {
+              "type": "T6_OFF_DEMONSKULL_HELL@1",
+              "quality": 4
+            },
+            "Head": {
+              "type": "T6_HEAD_LEATHER_MORGANA@1",
+              "quality": 4
+            },
+            "Armor": {
+              "type": "T5_ARMOR_LEATHER_HELL@2",
+              "quality": 4
+            },
+            "Shoes": {
+              "type": "T6_SHOES_CLOTH_MORGANA@1",
+              "quality": 4
+            },
+            "Cape": {
+              "type": "T5_CAPEITEM_FW_LYMHURST@3",
+              "quality": 4
+            },
+            "Bag": {
+              "type": "T4_BAG@2",
+              "quality": 4
+            },
+            "Mount": {
+              "type": "T5_MOUNT_RAM_FW_MARTLOCK",
+              "quality": 4
             },
             "Potion": {
               "type": "T7_POTION_REVIVE",
               "quality": 1
             },
             "Food": {
-              "type": "T7_MEAL_OMELETTE@2",
+              "type": "T8_MEAL_STEW",
               "quality": 1
             }
           },
-          "partySize": 12
+          "partySize": 2
         },
         {
-          "id": "1361119132",
-          "timestamp": "2026-03-24T22:56:34.430131800Z",
-          "killer": "0LIKO",
-          "killerGuild": "Life is game",
-          "killerAlliance": "SIUUU",
-          "killerIP": 1420,
-          "victim": "AtenasYT",
-          "victimGuild": "Crux Del Sur",
-          "victimAlliance": "ARCH",
-          "victimIP": 1273,
-          "totalFame": 160047,
+          "id": "1361134469",
+          "timestamp": "2026-03-24T23:35:06.063330900Z",
+          "killer": "oliverpdp1",
+          "killerGuild": "IN MOR TAL",
+          "killerAlliance": "",
+          "killerIP": 1336,
+          "victim": "astrovel",
+          "victimGuild": "INVADERS GG",
+          "victimAlliance": "",
+          "victimIP": 1235,
+          "totalFame": 97310,
           "location": "",
           "equipment": {
             "MainHand": {
-              "type": "T4_2H_DOUBLEBLADEDSTAFF_CRYSTAL@3",
+              "type": "T4_2H_DOUBLEBLADEDSTAFF_CRYSTAL@2",
               "quality": 4
             },
             "Head": {
-              "type": "T7_HEAD_CLOTH_SET3@1",
+              "type": "T5_HEAD_PLATE_SET1@1",
               "quality": 4
             },
             "Armor": {
-              "type": "T6_ARMOR_LEATHER_MORGANA@1",
+              "type": "T4_ARMOR_LEATHER_AVALON@2",
               "quality": 4
             },
             "Shoes": {
-              "type": "T6_SHOES_PLATE_SET1",
+              "type": "T6_SHOES_PLATE_SET2@1",
               "quality": 4
             },
             "Cape": {
-              "type": "T4_CAPEITEM_FW_CAERLEON@3",
-              "quality": 4
+              "type": "T4_CAPEITEM_FW_CAERLEON@2",
+              "quality": 3
             },
             "Bag": {
-              "type": "T5_BAG_INSIGHT@1",
-              "quality": 2
+              "type": "T6_BAG@1",
+              "quality": 4
             },
             "Mount": {
-              "type": "T4_MOUNT_GIANTSTAG",
+              "type": "T7_MOUNT_TERRORBIRD_ADC",
+              "quality": 1
+            },
+            "Potion": {
+              "type": "T4_POTION_COOLDOWN",
+              "quality": 1
+            }
+          },
+          "partySize": 4
+        },
+        {
+          "id": "1361134556",
+          "timestamp": "2026-03-24T23:35:20.552242Z",
+          "killer": "Xebecmaru",
+          "killerGuild": "l AsgarD l",
+          "killerAlliance": "TDG",
+          "killerIP": 1113,
+          "victim": "jose2090yt2",
+          "victimGuild": "La Resurreccion del Mall",
+          "victimAlliance": "",
+          "victimIP": 1420,
+          "totalFame": 91206,
+          "location": "",
+          "equipment": {
+            "MainHand": {
+              "type": "T4_2H_BOW_KEEPER@3",
+              "quality": 3
+            },
+            "Head": {
+              "type": "T6_HEAD_PLATE_SET3@1",
+              "quality": 3
+            },
+            "Armor": {
+              "type": "T6_ARMOR_CLOTH_SET2@1",
+              "quality": 3
+            },
+            "Shoes": {
+              "type": "T6_SHOES_LEATHER_SET3@1",
+              "quality": 2
+            },
+            "Cape": {
+              "type": "T4_CAPEITEM_FW_CAERLEON@2",
+              "quality": 3
+            },
+            "Bag": {
+              "type": "T5_BAG",
+              "quality": 3
+            },
+            "Mount": {
+              "type": "T5_MOUNT_SWAMPDRAGON_FW_THETFORD",
               "quality": 4
             },
             "Potion": {
-              "type": "T4_POTION_COOLDOWN@2",
+              "type": "T4_POTION_LAVA",
               "quality": 1
             },
             "Food": {
@@ -1859,37 +1466,86 @@
           "partySize": 5
         },
         {
-          "id": "1361118990",
-          "timestamp": "2026-03-24T22:56:14.401747800Z",
-          "killer": "juupo12",
-          "killerGuild": "Rogue Natives",
-          "killerAlliance": "CREME",
-          "killerIP": 1519,
-          "victim": "Plobom",
-          "victimGuild": "Error 404 Not Found",
-          "victimAlliance": "ANTRO",
-          "victimIP": 1178,
-          "totalFame": 144738,
+          "id": "1361134333",
+          "timestamp": "2026-03-24T23:34:37.754190400Z",
+          "killer": "Charako",
+          "killerGuild": "",
+          "killerAlliance": "",
+          "killerIP": 1224,
+          "victim": "NORWEAD",
+          "victimGuild": "ordotoxo",
+          "victimAlliance": "",
+          "victimIP": 950,
+          "totalFame": 77136,
           "location": "",
           "equipment": {
             "MainHand": {
-              "type": "T5_2H_TWINSCYTHE_HELL@2",
+              "type": "T4_MAIN_CURSEDSTAFF@1",
+              "quality": 3
+            },
+            "OffHand": {
+              "type": "T4_OFF_BOOK@1",
+              "quality": 3
+            },
+            "Head": {
+              "type": "T4_HEAD_PLATE_SET3@1",
+              "quality": 3
+            },
+            "Armor": {
+              "type": "T4_ARMOR_CLOTH_SET2@1",
+              "quality": 3
+            },
+            "Shoes": {
+              "type": "T4_SHOES_PLATE_SET1@1",
+              "quality": 3
+            },
+            "Mount": {
+              "type": "T3_MOUNT_HORSE",
+              "quality": 1
+            },
+            "Potion": {
+              "type": "T6_POTION_HEAL",
+              "quality": 1
+            },
+            "Food": {
+              "type": "T8_MEAL_STEW",
+              "quality": 1
+            }
+          },
+          "partySize": 2
+        },
+        {
+          "id": "1361134376",
+          "timestamp": "2026-03-24T23:34:45.885733Z",
+          "killer": "minerva8",
+          "killerGuild": "osos krikosos",
+          "killerAlliance": "",
+          "killerIP": 1352,
+          "victim": "LKeijo",
+          "victimGuild": "",
+          "victimAlliance": "",
+          "victimIP": 1302,
+          "totalFame": 75465,
+          "location": "",
+          "equipment": {
+            "MainHand": {
+              "type": "T5_2H_DUALSWORD@2",
               "quality": 4
             },
             "Head": {
-              "type": "T6_HEAD_LEATHER_HELL@2",
+              "type": "T6_HEAD_CLOTH_HELL@1",
               "quality": 4
             },
             "Armor": {
-              "type": "T6_ARMOR_PLATE_SET2@2",
+              "type": "T6_ARMOR_LEATHER_SET3@1",
               "quality": 4
             },
             "Shoes": {
-              "type": "T6_SHOES_LEATHER_MORGANA@2",
+              "type": "T4_SHOES_CLOTH_ROYAL@3",
               "quality": 4
             },
             "Cape": {
-              "type": "T4_CAPEITEM_FW_MARTLOCK@2",
+              "type": "T4_CAPEITEM_UNDEAD@2",
               "quality": 4
             },
             "Bag": {
@@ -1897,56 +1553,113 @@
               "quality": 3
             },
             "Mount": {
-              "type": "T4_MOUNT_HORSE",
-              "quality": 3
+              "type": "T5_MOUNT_HORSE",
+              "quality": 2
+            },
+            "Potion": {
+              "type": "T8_POTION_CLEANSE",
+              "quality": 1
+            },
+            "Food": {
+              "type": "T8_MEAL_STEW",
+              "quality": 1
             }
           },
-          "partySize": 21
+          "partySize": 3
         },
         {
-          "id": "1361119174",
-          "timestamp": "2026-03-24T22:56:38.810474200Z",
-          "killer": "luluvroumette",
-          "killerGuild": "les fr valoir",
-          "killerAlliance": "",
-          "killerIP": 1533,
-          "victim": "zZN0xZz",
-          "victimGuild": "NIFFLHEIM",
-          "victimAlliance": "C0SMO",
-          "victimIP": 1385,
-          "totalFame": 132840,
+          "id": "1361134336",
+          "timestamp": "2026-03-24T23:34:37.784744900Z",
+          "killer": "BOXTROX1",
+          "killerGuild": "Els Gats d Or",
+          "killerAlliance": "DOSOC",
+          "killerIP": 1329,
+          "victim": "perceus1",
+          "victimGuild": "",
+          "victimAlliance": "",
+          "victimIP": 1224,
+          "totalFame": 73872,
           "location": "",
           "equipment": {
             "MainHand": {
-              "type": "T5_MAIN_MACE@2",
+              "type": "T6_2H_LONGBOW@1",
               "quality": 2
             },
-            "OffHand": {
-              "type": "T5_OFF_JESTERCANE_HELL@2",
-              "quality": 3
-            },
             "Head": {
-              "type": "T4_HEAD_PLATE_KEEPER@3",
-              "quality": 3
+              "type": "T6_HEAD_PLATE_SET3@1",
+              "quality": 2
             },
             "Armor": {
-              "type": "T4_ARMOR_PLATE_FEY@3",
-              "quality": 3
+              "type": "T6_ARMOR_LEATHER_SET3@1",
+              "quality": 2
             },
             "Shoes": {
-              "type": "T7_SHOES_LEATHER_SET2@1",
-              "quality": 3
+              "type": "T6_SHOES_PLATE_SET1@1",
+              "quality": 2
             },
             "Cape": {
-              "type": "T4_CAPEITEM_SMUGGLER@3",
-              "quality": 3
+              "type": "T6_CAPE@1",
+              "quality": 1
             },
             "Bag": {
-              "type": "T6_BAG@1",
+              "type": "T4_BAG@1",
               "quality": 1
             },
             "Mount": {
-              "type": "T5_MOUNT_COUGAR_KEEPER@1",
+              "type": "T5_MOUNT_HORSE",
+              "quality": 1
+            },
+            "Potion": {
+              "type": "T6_POTION_HEAL",
+              "quality": 1
+            },
+            "Food": {
+              "type": "T7_MEAL_OMELETTE",
+              "quality": 1
+            }
+          },
+          "partySize": 3
+        },
+        {
+          "id": "1361134347",
+          "timestamp": "2026-03-24T23:34:39.591570400Z",
+          "killer": "ricegod1",
+          "killerGuild": "CompletelyStrange",
+          "killerAlliance": "WhyU",
+          "killerIP": 1306,
+          "victim": "FLO4I",
+          "victimGuild": "Royal Ratpack",
+          "victimAlliance": "ULTI",
+          "victimIP": 1304,
+          "totalFame": 72324,
+          "location": "",
+          "equipment": {
+            "MainHand": {
+              "type": "T6_2H_DUALSWORD@1",
+              "quality": 4
+            },
+            "Head": {
+              "type": "T6_HEAD_PLATE_SET3@1",
+              "quality": 4
+            },
+            "Armor": {
+              "type": "T6_ARMOR_LEATHER_SET1@1",
+              "quality": 4
+            },
+            "Shoes": {
+              "type": "T6_SHOES_CLOTH_SET1@1",
+              "quality": 4
+            },
+            "Cape": {
+              "type": "T4_CAPEITEM_AVALON@1",
+              "quality": 4
+            },
+            "Bag": {
+              "type": "T6_BAG",
+              "quality": 3
+            },
+            "Mount": {
+              "type": "T4_MOUNT_HORSE",
               "quality": 1
             },
             "Potion": {
@@ -1954,60 +1667,354 @@
               "quality": 1
             },
             "Food": {
-              "type": "T7_MEAL_OMELETTE@1",
+              "type": "T8_MEAL_STEW",
               "quality": 1
             }
           },
-          "partySize": 11
+          "partySize": 3
         },
         {
-          "id": "1361119072",
-          "timestamp": "2026-03-24T22:56:28.253730100Z",
-          "killer": "DenzelCenkzz",
-          "killerGuild": "Ministry Of Bandits",
-          "killerAlliance": "MTGA",
-          "killerIP": 1553,
-          "victim": "ElTioPino",
-          "victimGuild": "iVoid",
+          "id": "1361134391",
+          "timestamp": "2026-03-24T23:34:52.222332500Z",
+          "killer": "Pratsito",
+          "killerGuild": "Ancestralz",
+          "killerAlliance": "",
+          "killerIP": 1224,
+          "victim": "PhantonVick",
+          "victimGuild": "",
           "victimAlliance": "",
-          "victimIP": 1418,
-          "totalFame": 114129,
+          "victimIP": 1201,
+          "totalFame": 60219,
           "location": "",
           "equipment": {
             "MainHand": {
-              "type": "T4_2H_BOW_CRYSTAL@3",
-              "quality": 4
-            },
-            "Head": {
-              "type": "T5_HEAD_CLOTH_AVALON@2",
-              "quality": 4
-            },
-            "Armor": {
-              "type": "T7_ARMOR_LEATHER_SET3",
-              "quality": 4
-            },
-            "Shoes": {
-              "type": "T7_SHOES_LEATHER_SET2@1",
-              "quality": 4
-            },
-            "Cape": {
-              "type": "T4_CAPEITEM_SMUGGLER@3",
-              "quality": 4
-            },
-            "Bag": {
-              "type": "T5_BAG",
+              "type": "T6_2H_NATURESTAFF",
               "quality": 2
             },
-            "Mount": {
-              "type": "T5_MOUNT_HORSE",
+            "Head": {
+              "type": "T6_HEAD_CLOTH_SET1",
               "quality": 1
             },
+            "Armor": {
+              "type": "T4_ARMOR_CLOTH_HELL@2",
+              "quality": 1
+            },
+            "Shoes": {
+              "type": "T6_SHOES_LEATHER_SET1",
+              "quality": 1
+            },
+            "Cape": {
+              "type": "T4_CAPEITEM_SMUGGLER",
+              "quality": 1
+            },
+            "Bag": {
+              "type": "T2_BAG",
+              "quality": 1
+            },
+            "Mount": {
+              "type": "T5_MOUNT_COUGAR_KEEPER@1",
+              "quality": 2
+            },
             "Potion": {
-              "type": "T6_POTION_HEAL@2",
+              "type": "T7_POTION_STONESKIN",
               "quality": 1
             },
             "Food": {
-              "type": "T8_MEAL_STEW_AVALON@2",
+              "type": "T7_MEAL_OMELETTE",
+              "quality": 1
+            }
+          },
+          "partySize": 5
+        },
+        {
+          "id": "1361134471",
+          "timestamp": "2026-03-24T23:35:06.132535800Z",
+          "killer": "JhuniorRohs3",
+          "killerGuild": "cadets of life",
+          "killerAlliance": "",
+          "killerIP": 1536,
+          "victim": "0verDose1",
+          "victimGuild": "K1llZ0N3",
+          "victimAlliance": "",
+          "victimIP": 1261,
+          "totalFame": 52164,
+          "location": "",
+          "equipment": {
+            "MainHand": {
+              "type": "T4_2H_CROSSBOW_CANNON_AVALON@2",
+              "quality": 4
+            },
+            "Head": {
+              "type": "T4_HEAD_LEATHER_SET3@2",
+              "quality": 4
+            },
+            "Armor": {
+              "type": "T7_ARMOR_CLOTH_SET1",
+              "quality": 3
+            },
+            "Shoes": {
+              "type": "T4_SHOES_CLOTH_ROYAL@2",
+              "quality": 4
+            },
+            "Cape": {
+              "type": "T4_CAPEITEM_MORGANA@2",
+              "quality": 4
+            },
+            "Bag": {
+              "type": "T4_BAG@2",
+              "quality": 4
+            },
+            "Mount": {
+              "type": "T5_MOUNT_COUGAR_KEEPER@1",
+              "quality": 1
+            },
+            "Potion": {
+              "type": "T8_POTION_COOLDOWN",
+              "quality": 1
+            },
+            "Food": {
+              "type": "T8_MEAL_STEW@1",
+              "quality": 1
+            }
+          },
+          "partySize": 3
+        },
+        {
+          "id": "1361134345",
+          "timestamp": "2026-03-24T23:34:39.521526300Z",
+          "killer": "B4nanaKing",
+          "killerGuild": "Overprice",
+          "killerAlliance": "RDU",
+          "killerIP": 1350,
+          "victim": "pikerman",
+          "victimGuild": "CIERVOS DORADOS",
+          "victimAlliance": "DOOR",
+          "victimIP": 955,
+          "totalFame": 46896,
+          "location": "",
+          "equipment": {
+            "MainHand": {
+              "type": "T4_2H_MACE_MORGANA@1",
+              "quality": 2
+            },
+            "Head": {
+              "type": "T7_HEAD_PLATE_SET1",
+              "quality": 2
+            },
+            "Armor": {
+              "type": "T6_ARMOR_PLATE_HELL",
+              "quality": 1
+            },
+            "Shoes": {
+              "type": "T8_SHOES_PLATE_SET1",
+              "quality": 2
+            },
+            "Mount": {
+              "type": "T3_MOUNT_HORSE",
+              "quality": 1
+            }
+          },
+          "partySize": 4
+        },
+        {
+          "id": "1361134295",
+          "timestamp": "2026-03-24T23:34:33.683468300Z",
+          "killer": "lCDemoNN",
+          "killerGuild": "",
+          "killerAlliance": "",
+          "killerIP": 1361,
+          "victim": "SNOWjc",
+          "victimGuild": "Ministry Of Bandits",
+          "victimAlliance": "MTGA",
+          "victimIP": 1283,
+          "totalFame": 44628,
+          "location": "",
+          "equipment": {
+            "MainHand": {
+              "type": "T4_2H_BOW_KEEPER@2",
+              "quality": 4
+            },
+            "Head": {
+              "type": "T5_HEAD_LEATHER_SET2@1",
+              "quality": 4
+            },
+            "Armor": {
+              "type": "T5_ARMOR_LEATHER_SET1@1",
+              "quality": 4
+            },
+            "Shoes": {
+              "type": "T4_SHOES_PLATE_SET1@2",
+              "quality": 4
+            },
+            "Cape": {
+              "type": "T4_CAPEITEM_FW_THETFORD@1",
+              "quality": 4
+            },
+            "Bag": {
+              "type": "T6_BAG_INSIGHT",
+              "quality": 2
+            },
+            "Mount": {
+              "type": "T3_MOUNT_HORSE",
+              "quality": 2
+            }
+          },
+          "partySize": 2
+        },
+        {
+          "id": "1361134370",
+          "timestamp": "2026-03-24T23:34:45.165206800Z",
+          "killer": "QueirozOtaku",
+          "killerGuild": "Rob1n Hood",
+          "killerAlliance": "",
+          "killerIP": 1048,
+          "victim": "J1nsus",
+          "victimGuild": "",
+          "victimAlliance": "",
+          "victimIP": 1036,
+          "totalFame": 44154,
+          "location": "",
+          "equipment": {
+            "MainHand": {
+              "type": "T6_MAIN_AXE",
+              "quality": 3
+            },
+            "OffHand": {
+              "type": "T6_OFF_DEMONSKULL_HELL",
+              "quality": 3
+            },
+            "Head": {
+              "type": "T4_HEAD_CLOTH_HELL@2",
+              "quality": 3
+            },
+            "Armor": {
+              "type": "T6_ARMOR_LEATHER_AVALON",
+              "quality": 3
+            },
+            "Shoes": {
+              "type": "T6_SHOES_LEATHER_SET3",
+              "quality": 3
+            },
+            "Cape": {
+              "type": "T4_CAPEITEM_SMUGGLER@1",
+              "quality": 3
+            },
+            "Bag": {
+              "type": "T4_BAG",
+              "quality": 3
+            },
+            "Potion": {
+              "type": "T6_POTION_HEAL",
+              "quality": 1
+            },
+            "Food": {
+              "type": "T5_MEAL_ROAST_FISH",
+              "quality": 1
+            }
+          },
+          "partySize": 2
+        },
+        {
+          "id": "1361134550",
+          "timestamp": "2026-03-24T23:35:20.018422100Z",
+          "killer": "TrustMyHands",
+          "killerGuild": "I N S O L E N T",
+          "killerAlliance": "",
+          "killerIP": 1357,
+          "victim": "Rafaxblow",
+          "victimGuild": "Asgard team",
+          "victimAlliance": "B00A",
+          "victimIP": 1312,
+          "totalFame": 42912,
+          "location": "",
+          "equipment": {
+            "MainHand": {
+              "type": "T8_2H_CLAYMORE@2",
+              "quality": 4
+            },
+            "Head": {
+              "type": "T8_HEAD_PLATE_AVALON@3",
+              "quality": 4
+            },
+            "Armor": {
+              "type": "T8_ARMOR_CLOTH_SET2@3",
+              "quality": 4
+            },
+            "Shoes": {
+              "type": "T8_SHOES_CLOTH_AVALON@3",
+              "quality": 4
+            },
+            "Cape": {
+              "type": "T8_CAPEITEM_FW_THETFORD@3",
+              "quality": 4
+            },
+            "Mount": {
+              "type": "T5_MOUNT_DIREBOAR_FW_LYMHURST",
+              "quality": 4
+            },
+            "Potion": {
+              "type": "T7_POTION_STONESKIN",
+              "quality": 1
+            },
+            "Food": {
+              "type": "T8_MEAL_STEW",
+              "quality": 1
+            }
+          },
+          "partySize": 4
+        },
+        {
+          "id": "1361134442",
+          "timestamp": "2026-03-24T23:34:59.366962500Z",
+          "killer": "yaseniacorazon",
+          "killerGuild": "",
+          "killerAlliance": "",
+          "killerIP": 1096,
+          "victim": "FerPleyGM",
+          "victimGuild": "M A N D A T O R Y",
+          "victimAlliance": "FURIX",
+          "victimIP": 1046,
+          "totalFame": 40920,
+          "location": "",
+          "equipment": {
+            "MainHand": {
+              "type": "T5_MAIN_HOLYSTAFF",
+              "quality": 3
+            },
+            "OffHand": {
+              "type": "T5_OFF_CENSER_AVALON",
+              "quality": 1
+            },
+            "Head": {
+              "type": "T5_HEAD_PLATE_SET3",
+              "quality": 2
+            },
+            "Armor": {
+              "type": "T5_ARMOR_LEATHER_SET1",
+              "quality": 2
+            },
+            "Shoes": {
+              "type": "T5_SHOES_PLATE_SET3",
+              "quality": 1
+            },
+            "Cape": {
+              "type": "T5_CAPE@1",
+              "quality": 3
+            },
+            "Bag": {
+              "type": "T5_BAG",
+              "quality": 3
+            },
+            "Mount": {
+              "type": "T4_MOUNT_HORSE",
+              "quality": 1
+            },
+            "Potion": {
+              "type": "T5_POTION_STONESKIN",
+              "quality": 1
+            },
+            "Food": {
+              "type": "T7_MEAL_OMELETTE",
               "quality": 1
             }
           },
@@ -2016,7 +2023,7 @@
       ],
       "battles": [
         {
-          "id": "1361118252",
+          "id": "1361133333",
           "startTime": "",
           "totalKills": 0,
           "totalFame": 0,
@@ -2024,7 +2031,7 @@
           "alliances": []
         },
         {
-          "id": "1361118103",
+          "id": "1361133288",
           "startTime": "",
           "totalKills": 0,
           "totalFame": 0,
@@ -2032,7 +2039,7 @@
           "alliances": []
         },
         {
-          "id": "1361118002",
+          "id": "1361133191",
           "startTime": "",
           "totalKills": 0,
           "totalFame": 0,
@@ -2040,7 +2047,7 @@
           "alliances": []
         },
         {
-          "id": "1361117455",
+          "id": "1361133150",
           "startTime": "",
           "totalKills": 0,
           "totalFame": 0,
@@ -2048,7 +2055,7 @@
           "alliances": []
         },
         {
-          "id": "1361117453",
+          "id": "1361132995",
           "startTime": "",
           "totalKills": 0,
           "totalFame": 0,
@@ -2056,7 +2063,7 @@
           "alliances": []
         },
         {
-          "id": "1361117431",
+          "id": "1361132959",
           "startTime": "",
           "totalKills": 0,
           "totalFame": 0,
@@ -2064,7 +2071,7 @@
           "alliances": []
         },
         {
-          "id": "1361117415",
+          "id": "1361132890",
           "startTime": "",
           "totalKills": 0,
           "totalFame": 0,
@@ -2072,7 +2079,7 @@
           "alliances": []
         },
         {
-          "id": "1361117370",
+          "id": "1361132743",
           "startTime": "",
           "totalKills": 0,
           "totalFame": 0,
@@ -2080,7 +2087,7 @@
           "alliances": []
         },
         {
-          "id": "1361117242",
+          "id": "1361132622",
           "startTime": "",
           "totalKills": 0,
           "totalFame": 0,
@@ -2088,7 +2095,7 @@
           "alliances": []
         },
         {
-          "id": "1361117192",
+          "id": "1361132589",
           "startTime": "",
           "totalKills": 0,
           "totalFame": 0,
@@ -2096,7 +2103,7 @@
           "alliances": []
         },
         {
-          "id": "1361117096",
+          "id": "1361132587",
           "startTime": "",
           "totalKills": 0,
           "totalFame": 0,
@@ -2104,7 +2111,7 @@
           "alliances": []
         },
         {
-          "id": "1361116982",
+          "id": "1361132521",
           "startTime": "",
           "totalKills": 0,
           "totalFame": 0,
@@ -2112,7 +2119,7 @@
           "alliances": []
         },
         {
-          "id": "1361116892",
+          "id": "1361132514",
           "startTime": "",
           "totalKills": 0,
           "totalFame": 0,
@@ -2120,7 +2127,7 @@
           "alliances": []
         },
         {
-          "id": "1361116846",
+          "id": "1361132489",
           "startTime": "",
           "totalKills": 0,
           "totalFame": 0,
@@ -2128,7 +2135,7 @@
           "alliances": []
         },
         {
-          "id": "1361116834",
+          "id": "1361132435",
           "startTime": "",
           "totalKills": 0,
           "totalFame": 0,
@@ -2136,7 +2143,7 @@
           "alliances": []
         },
         {
-          "id": "1361116811",
+          "id": "1361132342",
           "startTime": "",
           "totalKills": 0,
           "totalFame": 0,
@@ -2144,7 +2151,7 @@
           "alliances": []
         },
         {
-          "id": "1361116640",
+          "id": "1361132138",
           "startTime": "",
           "totalKills": 0,
           "totalFame": 0,
@@ -2152,7 +2159,7 @@
           "alliances": []
         },
         {
-          "id": "1361116630",
+          "id": "1361132083",
           "startTime": "",
           "totalKills": 0,
           "totalFame": 0,
@@ -2160,7 +2167,7 @@
           "alliances": []
         },
         {
-          "id": "1361116449",
+          "id": "1361131881",
           "startTime": "",
           "totalKills": 0,
           "totalFame": 0,
@@ -2168,7 +2175,7 @@
           "alliances": []
         },
         {
-          "id": "1361116391",
+          "id": "1361131862",
           "startTime": "",
           "totalKills": 0,
           "totalFame": 0,
@@ -2177,7 +2184,7 @@
         }
       ],
       "ok": true,
-      "fetchedAt": "2026-03-24T23:01:57.590Z"
+      "fetchedAt": "2026-03-24T23:40:30.453Z"
     },
     "eu": {
       "recentKills": [
@@ -4282,7 +4289,7 @@
         }
       ],
       "ok": true,
-      "fetchedAt": "2026-03-24T23:01:58.245Z"
+      "fetchedAt": "2026-03-24T23:40:31.135Z"
     },
     "asia": {
       "recentKills": [
@@ -6408,7 +6415,7 @@
         }
       ],
       "ok": true,
-      "fetchedAt": "2026-03-24T23:01:58.844Z"
+      "fetchedAt": "2026-03-24T23:40:31.955Z"
     }
   }
 }
