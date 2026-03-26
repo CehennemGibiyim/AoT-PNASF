@@ -13,11 +13,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '24'
+
+      - name: Install dependencies
+        run: npm install
+
       - name: Fetch PvP Data
         run: node scripts/pvp-fetcher.cjs
+
       - name: Commit updates
         run: |
           git config --global user.name 'AoT-PNASF Bot'
