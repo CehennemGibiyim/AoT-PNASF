@@ -18,16 +18,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '24'
+          node-version: '24' # Uyarıyı gidermek için 24 yapıldı
+
+      - name: Install Node dependencies
+        run: npm install # Eksik kütüphaneleri kurar
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
       - name: Sync from ao-bin-dumps
         run: |
           python3 scripts/generate-items.py
           python3 scripts/generate-world.py
+
       - name: Commit generated data
         run: |
           git config --global user.name 'AoT-PNASF Bot'
