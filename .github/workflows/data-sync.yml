@@ -22,7 +22,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24' # Uyarıyı gidermek için 24 yapıldı
+          node-version: '24'
 
       - name: Install Node dependencies
         run: npm install # Eksik kütüphaneleri kurar
