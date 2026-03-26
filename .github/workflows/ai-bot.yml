@@ -13,18 +13,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '24'
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm install # Hatanın çözümü için gereken kritik satır
 
       - name: Run AI Scanner
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: node scripts/ai-scanner.js
+
       - name: Commit updates
         run: |
           git config --global user.name 'AoT-PNASF Bot'
