@@ -10,10 +10,6 @@ on:
         required: false
         default: 'false'
 
-# Node.js 24 geçişini zorunlu kılar ve uyarıyı kapatır
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 permissions:
   contents: write
 
@@ -22,12 +18,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.2.2
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v4.2.0
         with:
-          node-version: '24' # En güncel LTS/Stable sürüm
+          node-version: '24.x'
 
       - name: Check ao-bin-dumps last commit
         id: check
@@ -56,11 +52,10 @@ jobs:
           curl -sL "https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/formatted/items.json" -o tmp-data/items.json
           curl -sL "https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/formatted/world.json" -o tmp-data/world.json
 
-          # Python ile veri işleme (Önceki mantığın aynısı korunmuştur)
           python3 << 'PYEOF'
           import json, re, os
           from datetime import datetime
-          # ... (Python kodun burada devam ediyor)
+          # ... (Mevcut Python kodun)
           PYEOF
 
           git config --local user.email "bot@aot-pnasf.github.io"
