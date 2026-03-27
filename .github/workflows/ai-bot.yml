@@ -12,16 +12,17 @@ jobs:
   scan-and-update:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4.2.2
       
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v4.2.0
         with:
-          node-version: '24'
+          node-version: '24.x'
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install # Hatanın çözümü için gereken kritik satır
+        run: npm install
 
       - name: Run AI Scanner
         env:
