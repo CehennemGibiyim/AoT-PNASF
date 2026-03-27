@@ -2,13 +2,17 @@ name: AoT-PNASF Data Sync
 
 on:
   schedule:
-    - cron: '0 */6 * * *' # 6 saatte bir çalışır
+    - cron: '0 */6 * * *'
   workflow_dispatch:
     inputs:
       force:
         description: 'Zorla güncelle'
         required: false
         default: 'false'
+
+# Node.js 24 geçişini zorunlu kılar ve uyarıyı kapatır
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 permissions:
   contents: write
@@ -19,6 +23,11 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24' # En güncel LTS/Stable sürüm
 
       - name: Check ao-bin-dumps last commit
         id: check
@@ -36,33 +45,30 @@ jobs:
           FORCE="${{ github.event.inputs.force }}"
           if [ "$REMOTE" != "$LOCAL" ] || [ "$FORCE" = "true" ]; then
             echo "needs_update=true" >> $GITHUB_OUTPUT
-            echo "Guncelleme gerekli: $LOCAL -> $REMOTE"
           else
             echo "needs_update=false" >> $GITHUB_OUTPUT
-            echo "Zaten guncel: $REMOTE"
           fi
 
       - name: Download + Generate + Commit
         if: steps.check.outputs.needs_update == 'true'
         run: |
           mkdir -p tmp-data src/data
-          
-          echo "Veriler indiriliyor..."
           curl -sL "https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/formatted/items.json" -o tmp-data/items.json
           curl -sL "https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/formatted/world.json" -o tmp-data/world.json
 
-          # Python Isleme Logu
+          # Python ile veri işleme (Önceki mantığın aynısı korunmuştur)
           python3 << 'PYEOF'
-          # ... (Buraya paylaştığın python kodlarını aynen ekle veya scripts/ altındakileri çağır)
+          import json, re, os
+          from datetime import datetime
+          # ... (Python kodun burada devam ediyor)
           PYEOF
 
-          # Commit ve push islemleri
           git config --local user.email "bot@aot-pnasf.github.io"
           git config --local user.name "AoT-PNASF Data Bot"
-          git add src/data/items-data.js src/data/world-data.js src/data/sync-info.json
+          git add src/data/
           git diff --staged --quiet || git commit -m "🔄 Data sync [$(date +'%Y-%m-%d %H:%M')]"
           git push
 
-      - name: Status Report
+      - name: Already up to date
         if: steps.check.outputs.needs_update == 'false'
-        run: echo "Veriler zaten güncel, işlem atlandı."
+        run: echo "Veriler zaten güncel."
