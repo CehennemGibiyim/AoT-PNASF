@@ -1,45 +1,41 @@
-name: Deploy to GitHub Pages
+name: AoT-PNASF AI Smart Feed Bot
 
 on:
-  push:
-    branches: [ main ]
+  schedule:
+    - cron: '0 */6 * * *'
   workflow_dispatch:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
+  contents: write
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  scan-and-update:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4.2.2
-        
+      
       - name: Setup Node.js
         uses: actions/setup-node@v4.2.0
         with:
           node-version: '24'
-          
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-        
-      - name: Upload Artifact
-        uses: actions/upload-pages-artifact@v3.0.1
-        with:
-          path: '.'
-          
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4.0.5
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run AI Scanner
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/ai-scanner.js
+
+      - name: Commit updates
+        run: |
+          git config --global user.name 'AoT-PNASF Bot'
+          git config --global user.email 'bot@aot-pnasf.github.io'
+          git add -A
+          git diff --staged --quiet || git commit -m "AI Bot: Feed güncellendi [$(date '+%Y-%m-%d %H:%M')]"
+          git push
