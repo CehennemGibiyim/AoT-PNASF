@@ -21,13 +21,22 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4.2.2
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4.2.0
         with:
-          node-version: '24'
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+          node-version: '24.x'
+          
+      - name: Configure Pages
+        uses: actions/configure-pages@v5 # v5 en güncel sürümdür
+        
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v3.0.1
         with:
           path: '.'
-      - id: deployment
-        uses: actions/deploy-pages@v4
+          
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4.0.5 # v4.0.5 Node 24 runnerları için optimize edilmiştir
