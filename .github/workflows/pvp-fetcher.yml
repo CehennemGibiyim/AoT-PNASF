@@ -12,12 +12,14 @@ jobs:
   fetch-pvp-data:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      
+      - name: Checkout repo
+        uses: actions/checkout@v4.2.2 # En güncel minor sürüm
+
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v4.2.0 # Node 24 uyumlu en güncel aksiyon
         with:
-          node-version: '24'
+          node-version: '24.x' # 24 serisinin en stabil alt sürümünü otomatik seçer
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm install
