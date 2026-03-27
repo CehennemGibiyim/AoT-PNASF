@@ -5,6 +5,10 @@ on:
     - cron: '*/5 * * * *'
   workflow_dispatch:
 
+# Resmi Node 24 onay değişkeni
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 permissions:
   contents: write
 
@@ -13,13 +17,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4.2.2 # En güncel minor sürüm
-
+        uses: actions/checkout@v4.2.2
+      
       - name: Setup Node.js
-        uses: actions/setup-node@v4.2.0 # Node 24 uyumlu en güncel aksiyon
+        uses: actions/setup-node@v4.2.0
         with:
-          node-version: '24.x' # 24 serisinin en stabil alt sürümünü otomatik seçer
-          cache: 'npm'
+          node-version: '24'
 
       - name: Install dependencies
         run: npm install
