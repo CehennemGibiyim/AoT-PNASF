@@ -5,6 +5,9 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 permissions:
   contents: read
   pages: write
@@ -27,10 +30,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4.2.0
         with:
-          node-version: '24.x'
+          node-version: '24'
           
       - name: Configure Pages
-        uses: actions/configure-pages@v5 # v5 en güncel sürümdür
+        uses: actions/configure-pages@v5
         
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3.0.1
@@ -39,4 +42,4 @@ jobs:
           
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4.0.5 # v4.0.5 Node 24 runnerları için optimize edilmiştir
+        uses: actions/deploy-pages@v4.0.5
