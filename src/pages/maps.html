@@ -1,196 +1,173 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Haritalar & Zonlar — AoT-PNASF</title>
-  <link rel="stylesheet" href="../styles/main.css">
-  <link rel="stylesheet" href="../styles/maps.css">
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Haritalar — AoT-PNASF</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../styles/main.css"/>
+  <link rel="stylesheet" href="../styles/settings.css"/>
+  <link rel="stylesheet" href="../styles/maps.css"/>
 </head>
 <body>
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <div class="nav-container">
-      <a href="../../index.html" class="nav-logo">
-        <span class="logo-aot">AoT</span><span class="logo-sep">·</span><span class="logo-pnasf">PNASF</span>
-      </a>
-      <ul class="nav-links">
-        <li><a href="market.html" data-tr="Market" data-en="Market">Market</a></li>
-        <li><a href="crafting.html" data-tr="Üretim" data-en="Crafting">Üretim</a></li>
-        <li><a href="pvp.html" data-tr="PvP" data-en="PvP">PvP</a></li>
-        <li><a href="maps.html" class="active" data-tr="Haritalar" data-en="Maps">Haritalar</a></li>
-        <li><a href="guides.html" data-tr="Rehberler" data-en="Guides">Rehberler</a></li>
-      </ul>
-      <div class="nav-right">
-        <span class="ai-badge">🤖 AI Aktif</span>
-        <button class="lang-pill" id="langPill">🇹🇷 TR</button>
-        <button class="settings-btn" id="settingsBtn">⚙</button>
-      </div>
+
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a class="nav-logo" href="../../index.html">
+      <span class="logo-aot">AoT</span><span class="logo-dash">—</span><span class="logo-pnasf">PNASF</span>
+      <span class="logo-ai-badge">AI</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="market.html" data-tr="Market" data-en="Market">Market</a></li>
+      <li><a href="crafting.html" data-tr="Üretim" data-en="Crafting">Üretim</a></li>
+      <li><a href="pvp.html" data-tr="PvP & İstatistik" data-en="PvP & Stats">PvP & İstatistik</a></li>
+      <li><a href="maps.html" class="active" data-tr="Haritalar" data-en="Maps">Haritalar</a></li>
+      <li><a href="guides.html" data-tr="Rehberler" data-en="Guides">Rehberler</a></li>
+      <li><a href="tools.html" data-tr="Araçlar" data-en="Tools">Araçlar</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="settings-trigger" onclick="openSettings()">
+        <span class="settings-trigger-flag" id="settingsLangIndicator">🇹🇷 TR</span>
+        <span class="settings-trigger-icon">⚙</span>
+      </button>
+      <div class="ai-status"><span class="ai-dot"></span><span class="ai-text" data-tr="AI Aktif" data-en="AI Active">AI Aktif</span></div>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
     </div>
-  </nav>
+  </div>
+</nav>
 
-  <!-- SETTINGS PANEL -->
-  <div class="settings-overlay" id="settingsOverlay"></div>
-  <div class="settings-panel" id="settingsPanel"></div>
+<main class="maps-main">
 
-  <!-- PAGE HEADER -->
+  <!-- BAŞLIK -->
   <div class="page-header">
-    <div class="page-header-content">
-      <h1 data-tr="🗺️ Dünya Haritası & Zonlar" data-en="🗺️ World Map & Zones">🗺️ Dünya Haritası & Zonlar</h1>
-      <p data-tr="İnteraktif harita, zone bilgileri, şehir bonusları ve kaynak rehberi" data-en="Interactive map, zone info, city bonuses and resource guide">İnteraktif harita, zone bilgileri, şehir bonusları ve kaynak rehberi</p>
+    <div class="page-header-inner">
+      <div class="page-badge"><span class="ai-dot"></span><span data-tr="Canlı Dünya Haritası" data-en="Live World Map">Canlı Dünya Haritası</span></div>
+      <h1 data-tr="Albion Dünya Haritası" data-en="Albion World Map">Albion Dünya Haritası</h1>
+      <p data-tr="Zone'lar, bağlantılar, rota hesaplama — ao-bin-dumps verisiyle" data-en="Zones, connections, route planning — powered by ao-bin-dumps">Zone'lar, bağlantılar, rota hesaplama — ao-bin-dumps verisiyle</p>
     </div>
   </div>
 
-  <!-- TAB NAV -->
-  <div class="tabs-container">
-    <div class="tabs">
-      <button class="tab-btn active" data-tab="world-map" data-tr="🗺️ Dünya Haritası" data-en="🗺️ World Map">🗺️ Dünya Haritası</button>
-      <button class="tab-btn" data-tab="cities" data-tr="🏰 Şehirler" data-en="🏰 Cities">🏰 Şehirler</button>
-      <button class="tab-btn" data-tab="zones" data-tr="⚔️ Zone Rehberi" data-en="⚔️ Zone Guide">⚔️ Zone Rehberi</button>
-      <button class="tab-btn" data-tab="biomes" data-tr="🌿 Biome & Kaynaklar" data-en="🌿 Biomes & Resources">🌿 Biome & Kaynaklar</button>
-      <button class="tab-btn" data-tab="outlands" data-tr="☠️ Outlands" data-en="☠️ Outlands">☠️ Outlands</button>
-      <button class="tab-btn" data-tab="special" data-tr="✨ Özel Bölgeler" data-en="✨ Special Zones">✨ Özel Bölgeler</button>
-    </div>
-  </div>
+  <!-- ARAÇ ÇUBUĞU -->
+  <div class="maps-toolbar">
+    <div class="maps-toolbar-inner">
 
-  <div class="maps-container">
+      <!-- ARAMA -->
+      <div class="map-search-wrap">
+        <span class="map-s-icon">🔍</span>
+        <input type="text" id="mapSearch" class="map-s-input"
+          data-ph-tr="Zone ara... (örn: Caerleon, Merlyn, Brecilien)"
+          data-ph-en="Search zone... (e.g. Caerleon, Merlyn, Brecilien)"
+          placeholder="Zone ara..."
+          oninput="onMapSearch(this.value)"/>
+        <div class="map-search-dd" id="mapSearchDd"></div>
+      </div>
 
-    <!-- TAB: WORLD MAP -->
-    <div class="tab-content active" id="tab-world-map">
-      <div class="map-layout">
-        <div class="map-sidebar">
-          <div class="map-legend">
-            <h3 data-tr="Zone Renkleri" data-en="Zone Colors">Zone Renkleri</h3>
-            <div class="legend-item"><span class="legend-dot blue"></span><span data-tr="Mavi — Güvenli, PvP yok" data-en="Blue — Safe, no PvP">Mavi — Güvenli, PvP yok</span></div>
-            <div class="legend-item"><span class="legend-dot yellow"></span><span data-tr="Sarı — Kısıtlı PvP" data-en="Yellow — Limited PvP">Sarı — Kısıtlı PvP</span></div>
-            <div class="legend-item"><span class="legend-dot red"></span><span data-tr="Kırmızı — Full-loot PvP" data-en="Red — Full-loot PvP">Kırmızı — Full-loot PvP</span></div>
-            <div class="legend-item"><span class="legend-dot black"></span><span data-tr="Siyah — En tehlikeli" data-en="Black — Most dangerous">Siyah — En tehlikeli</span></div>
-          </div>
-
-          <div class="map-legend">
-            <h3 data-tr="Harita Filtreleri" data-en="Map Filters">Harita Filtreleri</h3>
-            <label class="filter-check"><input type="checkbox" id="filterBlue" checked> <span data-tr="Mavi Zonlar" data-en="Blue Zones">Mavi Zonlar</span></label>
-            <label class="filter-check"><input type="checkbox" id="filterYellow" checked> <span data-tr="Sarı Zonlar" data-en="Yellow Zones">Sarı Zonlar</span></label>
-            <label class="filter-check"><input type="checkbox" id="filterRed" checked> <span data-tr="Kırmızı Zonlar" data-en="Red Zones">Kırmızı Zonlar</span></label>
-            <label class="filter-check"><input type="checkbox" id="filterBlack" checked> <span data-tr="Siyah Zonlar" data-en="Black Zones">Siyah Zonlar</span></label>
-            <label class="filter-check"><input type="checkbox" id="filterCities" checked> <span data-tr="Şehirler" data-en="Cities">Şehirler</span></label>
-          </div>
-
-          <div class="map-legend">
-            <h3 data-tr="Hızlı Erişim" data-en="Quick Access">Hızlı Erişim</h3>
-            <div class="quick-links">
-              <button class="quick-link-btn" onclick="focusZone('caerleon')" data-tr="Caerleon" data-en="Caerleon">Caerleon</button>
-              <button class="quick-link-btn" onclick="focusZone('lymhurst')" data-tr="Lymhurst" data-en="Lymhurst">Lymhurst</button>
-              <button class="quick-link-btn" onclick="focusZone('bridgewatch')" data-tr="Bridgewatch" data-en="Bridgewatch">Bridgewatch</button>
-              <button class="quick-link-btn" onclick="focusZone('fortsterling')" data-tr="Fort Sterling" data-en="Fort Sterling">Fort Sterling</button>
-              <button class="quick-link-btn" onclick="focusZone('martlock')" data-tr="Martlock" data-en="Martlock">Martlock</button>
-              <button class="quick-link-btn" onclick="focusZone('thetford')" data-tr="Thetford" data-en="Thetford">Thetford</button>
-              <button class="quick-link-btn" onclick="focusZone('brecilien')" data-tr="Brecilien" data-en="Brecilien">Brecilien</button>
-            </div>
-          </div>
+      <!-- ROTA HESAPLAMA -->
+      <div class="route-wrap">
+        <div class="route-input-group">
+          <span class="route-label" data-tr="Başlangıç" data-en="From">Başlangıç</span>
+          <input type="text" id="routeFrom" class="route-input"
+            placeholder="Zone seç..." readonly
+            onclick="openZonePicker('from')"/>
         </div>
-
-        <div class="map-main">
-          <div class="map-canvas-wrapper">
-            <canvas id="worldMapCanvas"></canvas>
-            <div class="map-tooltip" id="mapTooltip"></div>
-          </div>
-          <div class="map-info-bar">
-            <span id="mapZoneInfo" data-tr="Bir zone'a tıkla veya üzerine gel — detay göreceksin" data-en="Click or hover a zone to see details">Bir zone'a tıkla veya üzerine gel — detay göreceksin</span>
-          </div>
+        <button class="route-swap" onclick="swapRoute()" title="Değiştir">⇄</button>
+        <div class="route-input-group">
+          <span class="route-label" data-tr="Hedef" data-en="To">Hedef</span>
+          <input type="text" id="routeTo" class="route-input"
+            placeholder="Zone seç..." readonly
+            onclick="openZonePicker('to')"/>
         </div>
+        <button class="route-calc-btn" onclick="calcRoute()" data-tr="Rota Hesapla" data-en="Calculate Route">Rota Hesapla</button>
       </div>
-    </div>
 
-    <!-- TAB: CITIES -->
-    <div class="tab-content" id="tab-cities">
-      <div class="cities-grid" id="citiesGrid"></div>
-    </div>
-
-    <!-- TAB: ZONES -->
-    <div class="tab-content" id="tab-zones">
-      <div class="zone-filter-bar">
-        <input type="text" id="zoneSearch" placeholder="Zone ara..." class="zone-search-input" data-placeholder-tr="Zone ara..." data-placeholder-en="Search zones...">
-        <select id="zoneTypeFilter" class="zone-filter-select">
-          <option value="" data-tr="Tüm Tipler" data-en="All Types">Tüm Tipler</option>
-          <option value="blue" data-tr="Mavi" data-en="Blue">Mavi</option>
-          <option value="yellow" data-tr="Sarı" data-en="Yellow">Sarı</option>
-          <option value="red" data-tr="Kırmızı" data-en="Red">Kırmızı</option>
-          <option value="black" data-tr="Siyah" data-en="Black">Siyah</option>
-        </select>
-        <select id="zoneBiomeFilter" class="zone-filter-select">
-          <option value="" data-tr="Tüm Biome'lar" data-en="All Biomes">Tüm Biome'lar</option>
-          <option value="forest" data-tr="Orman" data-en="Forest">Orman</option>
-          <option value="steppe" data-tr="Bozkır" data-en="Steppe">Bozkır</option>
-          <option value="mountain" data-tr="Dağ" data-en="Mountain">Dağ</option>
-          <option value="swamp" data-tr="Bataklık" data-en="Swamp">Bataklık</option>
-          <option value="highlands" data-tr="Yayla" data-en="Highlands">Yayla</option>
-        </select>
+      <!-- FİLTRELER -->
+      <div class="map-filters">
+        <button class="map-filter-btn active" data-filter="all" onclick="filterZones('all',this)" data-tr="Tümü" data-en="All">Tümü</button>
+        <button class="map-filter-btn" data-filter="SAFEAREA" onclick="filterZones('SAFEAREA',this)">🔵 Blue</button>
+        <button class="map-filter-btn" data-filter="YELLOW" onclick="filterZones('YELLOW',this)">🟡 Yellow</button>
+        <button class="map-filter-btn" data-filter="RED" onclick="filterZones('RED',this)">🔴 Red</button>
+        <button class="map-filter-btn" data-filter="BLACK" onclick="filterZones('BLACK',this)">⚫ Black</button>
+        <button class="map-filter-btn" data-filter="ROAD" onclick="filterZones('ROAD',this)">🌫️ Roads</button>
       </div>
-      <div class="zones-table-wrap">
-        <table class="zones-table" id="zonesTable">
-          <thead>
-            <tr>
-              <th data-tr="Zone" data-en="Zone">Zone</th>
-              <th data-tr="Tip" data-en="Type">Tip</th>
-              <th data-tr="Biome" data-en="Biome">Biome</th>
-              <th data-tr="Kaynaklar" data-en="Resources">Kaynaklar</th>
-              <th data-tr="Tier" data-en="Tier">Tier</th>
-              <th data-tr="Bölge" data-en="Region">Bölge</th>
-            </tr>
-          </thead>
-          <tbody id="zonesTbody"></tbody>
-        </table>
+
+    </div>
+  </div>
+
+  <!-- ANA İÇERİK -->
+  <div class="maps-layout">
+
+    <!-- SOL: ZONE LİSTESİ -->
+    <aside class="maps-sidebar">
+      <div class="msb-header">
+        <span class="msb-title" data-tr="Zone Listesi" data-en="Zone List">Zone Listesi</span>
+        <span class="msb-count" id="zoneCount">—</span>
       </div>
+      <div class="zone-list" id="zoneList">
+        <div class="map-loading"><div class="loading-spinner"></div><span data-tr="Yükleniyor..." data-en="Loading...">Yükleniyor...</span></div>
+      </div>
+    </aside>
+
+    <!-- ORTA: CANVAS HARİTA -->
+    <div class="maps-canvas-wrap">
+      <canvas id="mapCanvas"></canvas>
+      <div class="canvas-controls">
+        <button onclick="zoomIn()" title="Yakınlaştır">+</button>
+        <button onclick="zoomOut()" title="Uzaklaştır">−</button>
+        <button onclick="resetView()" title="Sıfırla" data-tr="Sıfırla" data-en="Reset">↺</button>
+      </div>
+      <div class="canvas-tooltip" id="canvasTooltip"></div>
     </div>
 
-    <!-- TAB: BIOMES -->
-    <div class="tab-content" id="tab-biomes">
-      <div class="biomes-grid" id="biomesGrid"></div>
-    </div>
+    <!-- SAĞ: ZONE DETAY -->
+    <aside class="maps-detail" id="mapsDetail">
+      <div class="detail-empty" id="detailEmpty">
+        <div class="de-icon">🗺️</div>
+        <p data-tr="Bir zone seç veya haritaya tıkla" data-en="Select a zone or click on map">Bir zone seç veya haritaya tıkla</p>
+      </div>
+      <div id="detailContent" style="display:none"></div>
 
-    <!-- TAB: OUTLANDS -->
-    <div class="tab-content" id="tab-outlands">
-      <div class="outlands-layout">
-        <div class="outlands-intro">
-          <div class="danger-banner">
-            <span>☠️</span>
-            <div>
-              <strong data-tr="OUTLANDS — TAM YAĞMA PvP" data-en="OUTLANDS — FULL LOOT PvP">OUTLANDS — TAM YAĞMA PvP</strong>
-              <p data-tr="Outlands'te tüm bölgeler Siyah Zone'dur. Öldüğünde tüm eşyaların düşer." data-en="All zones in the Outlands are Black Zones. You drop all items on death.">Outlands'te tüm bölgeler Siyah Zone'dur. Öldüğünde tüm eşyaların düşer.</p>
-            </div>
-          </div>
+      <!-- ROTA SONUCU -->
+      <div id="routeResult" style="display:none" class="route-result">
+        <div class="rr-header">
+          <span class="rr-title" data-tr="🗺️ Rota" data-en="🗺️ Route">🗺️ Rota</span>
+          <button class="rr-close" onclick="clearRoute()">✕</button>
         </div>
-        <div class="outlands-grid" id="outlandsGrid"></div>
+        <div id="routeSteps"></div>
+        <div id="routeStats" class="rr-stats"></div>
       </div>
-    </div>
-
-    <!-- TAB: SPECIAL ZONES -->
-    <div class="tab-content" id="tab-special">
-      <div class="special-zones-grid" id="specialZonesGrid"></div>
-    </div>
+    </aside>
 
   </div>
 
-  <!-- ZONE DETAIL MODAL -->
-  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
-  <div class="zone-modal" id="zoneModal">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <div class="modal-content" id="modalContent"></div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo"><span class="logo-aot">AoT</span><span class="logo-dash">—</span><span class="logo-pnasf">PNASF</span></div>
+    <p class="footer-desc" data-tr="Harita verisi: ao-bin-dumps (ao-data/ao-bin-dumps) · Sandbox Interactive ile resmi bağlantısı yoktur." data-en="Map data: ao-bin-dumps · Not affiliated with Sandbox Interactive.">Harita verisi: ao-bin-dumps</p>
+    <p class="footer-copy">© 2025 AoT-PNASF · Powered by Claude AI</p>
   </div>
+</footer>
 
-  <footer class="site-footer">
-    <div class="footer-content">
-      <span>AoT-PNASF © 2025 — <a href="https://github.com/CehennemGibiyim/AoT-PNASF" target="_blank">GitHub</a></span>
-      <span data-tr="Veriler: Albion Wiki & ao-bin-dumps" data-en="Data: Albion Wiki & ao-bin-dumps">Veriler: Albion Wiki & ao-bin-dumps</span>
-    </div>
-  </footer>
+<!-- ZONE PİCKER MODAL -->
+<div class="zone-picker-overlay" id="zonePickerOverlay" onclick="closeZonePicker()"></div>
+<div class="zone-picker-modal" id="zonePickerModal">
+  <div class="zpm-header">
+    <span class="zpm-title" id="zpmTitle" data-tr="Zone Seç" data-en="Select Zone">Zone Seç</span>
+    <button onclick="closeZonePicker()">✕</button>
+  </div>
+  <input type="text" id="zpmSearch" class="zpm-search"
+    placeholder="Zone ara..." oninput="filterZonePicker(this.value)"/>
+  <div class="zpm-list" id="zpmList"></div>
+</div>
 
-  <script src="../lib/lang.js"></script>
-  <script src="../lib/settings.js"></script>
-  <script src="../lib/settings-panel.js"></script>
-  <script src="../lib/nav.js"></script>
-  <script src="../data/items-data.js"></script>
-  <script src="../lib/maps.js"></script>
+<script src="../lib/lang.js"></script>
+<script src="../lib/settings.js"></script>
+<script src="../lib/settings-panel.js"></script>
+<script src="../lib/nav.js"></script>
+<script src="../data/world-data.js"></script>
+<script src="../lib/maps.js"></script>
 </body>
 </html>

@@ -1,764 +1,631 @@
-/* ===== MAPS.JS ===== */
-'use strict';
+// AoT-PNASF — Haritalar v1
+// world-data.js'den zone verisi çeker, canvas üzerinde gösterir
+// BFS ile rota hesaplama
 
-// =====================================================
-// VERİ — Şehirler, Biome'lar, Zonlar
-// =====================================================
-const CITIES_DATA = [
-  {
-    id: 'caerleon',
-    name: 'Caerleon',
-    icon: '⚔️',
-    biome: 'Highland',
-    biome_tr: 'Yayla',
-    faction: 'Royal',
-    zone_type: 'red',
-    desc_tr: 'Royal Continent\'in merkez başkenti. Black Market\'e ev sahipliği yapar.',
-    desc_en: 'The central capital of the Royal Continent. Home to the Black Market.',
-    bonuses: [
-      { label_tr: 'Refining Bonusu', label_en: 'Refining Bonus', value: 'Tüm kaynaklar %40' },
-      { label_tr: 'Black Market', label_en: 'Black Market', value: '✅ Aktif' },
-      { label_tr: 'Realmgate', label_en: 'Realmgate', value: '❌ Yok (yıkıldı)' },
-    ],
-    tags: ['black-market'],
-    resources_tr: ['Cevher', 'Taş', 'Odun', 'Lif', 'Deri'],
-    resources_en: ['Ore', 'Stone', 'Wood', 'Fiber', 'Hide'],
-    crafting_tr: 'Tüm crafting istasyonları mevcut',
-    crafting_en: 'All crafting stations available',
-    how_to_tr: 'Herhangi bir Royal City\'den kırmızı zonlar üzerinden ulaş',
-    how_to_en: 'Travel through red zones from any Royal City',
-  },
-  {
-    id: 'lymhurst',
-    name: 'Lymhurst',
-    icon: '🌲',
-    biome: 'Forest',
-    biome_tr: 'Orman',
-    faction: 'Lymhurst',
-    zone_type: 'blue',
-    desc_tr: 'Orman biome şehri. Deri ve kumaş ürünleri için en iyi tercih.',
-    desc_en: 'Forest biome city. Best choice for leather and cloth items.',
-    bonuses: [
-      { label_tr: 'Refining Bonusu', label_en: 'Refining Bonus', value: 'Deri %50, Kumaş %50' },
-      { label_tr: 'Crafting Bonusu', label_en: 'Crafting Bonus', value: 'Yaylar, Hafif Zırh' },
-      { label_tr: 'Realmgate', label_en: 'Realmgate', value: '✅ Aktif' },
-    ],
-    tags: ['forest'],
-    resources_tr: ['Odun', 'Deri', 'Taş'],
-    resources_en: ['Wood', 'Hide', 'Stone'],
-    crafting_tr: 'Yay ve hafif zırh craftında %15 bonus',
-    crafting_en: '15% bonus on bow and light armor crafting',
-    how_to_tr: 'Forest Cross başlangıç kasabasından ilerle',
-    how_to_en: 'Progress from Forest Cross starter town',
-  },
-  {
-    id: 'bridgewatch',
-    name: 'Bridgewatch',
-    icon: '🏜️',
-    biome: 'Steppe',
-    biome_tr: 'Bozkır',
-    faction: 'Bridgewatch',
-    zone_type: 'blue',
-    desc_tr: 'Bozkır biome şehri. Cevher ve ok silahları için en iyi tercih.',
-    desc_en: 'Steppe biome city. Best for ore and ranged weapons.',
-    bonuses: [
-      { label_tr: 'Refining Bonusu', label_en: 'Refining Bonus', value: 'Cevher %50' },
-      { label_tr: 'Crafting Bonusu', label_en: 'Crafting Bonus', value: 'Hançerler, Crossbow' },
-      { label_tr: 'Realmgate', label_en: 'Realmgate', value: '✅ Aktif' },
-    ],
-    tags: ['steppe'],
-    resources_tr: ['Cevher', 'Taş', 'Deri'],
-    resources_en: ['Ore', 'Stone', 'Hide'],
-    crafting_tr: 'Hançer ve arbalet craftında %15 bonus',
-    crafting_en: '15% bonus on dagger and crossbow crafting',
-    how_to_tr: 'Steppe Cross başlangıç kasabasından ilerle',
-    how_to_en: 'Progress from Steppe Cross starter town',
-  },
-  {
-    id: 'fortsterling',
-    name: 'Fort Sterling',
-    icon: '⛰️',
-    biome: 'Mountain',
-    biome_tr: 'Dağ',
-    faction: 'Fort Sterling',
-    zone_type: 'blue',
-    desc_tr: 'Dağ biome şehri. Taş ve ağır zırh üretimi için ideal.',
-    desc_en: 'Mountain biome city. Ideal for stone and heavy armor production.',
-    bonuses: [
-      { label_tr: 'Refining Bonusu', label_en: 'Refining Bonus', value: 'Taş %50' },
-      { label_tr: 'Crafting Bonusu', label_en: 'Crafting Bonus', value: 'Çekiçler, Ağır Zırh' },
-      { label_tr: 'Realmgate', label_en: 'Realmgate', value: '✅ Aktif' },
-    ],
-    tags: ['mountain'],
-    resources_tr: ['Cevher', 'Taş', 'Lif'],
-    resources_en: ['Ore', 'Stone', 'Fiber'],
-    crafting_tr: 'Çekiç ve ağır zırh craftında %15 bonus',
-    crafting_en: '15% bonus on hammer and heavy armor crafting',
-    how_to_tr: 'Mountain Cross başlangıç kasabasından ilerle',
-    how_to_en: 'Progress from Mountain Cross starter town',
-  },
-  {
-    id: 'martlock',
-    name: 'Martlock',
-    icon: '🏔️',
-    biome: 'Highlands',
-    biome_tr: 'Yayla',
-    faction: 'Martlock',
-    zone_type: 'blue',
-    desc_tr: 'Yayla biome şehri. Taş ve büyü silahları için en iyi.',
-    desc_en: 'Highlands biome city. Best for stone and magic weapons.',
-    bonuses: [
-      { label_tr: 'Refining Bonusu', label_en: 'Refining Bonus', value: 'Odun %50' },
-      { label_tr: 'Crafting Bonusu', label_en: 'Crafting Bonus', value: 'Kılıçlar, Savaş Baltaları' },
-      { label_tr: 'Realmgate', label_en: 'Realmgate', value: '✅ Aktif' },
-    ],
-    tags: ['highlands'],
-    resources_tr: ['Taş', 'Cevher', 'Odun'],
-    resources_en: ['Stone', 'Ore', 'Wood'],
-    crafting_tr: 'Kılıç ve balta craftında %15 bonus',
-    crafting_en: '15% bonus on sword and axe crafting',
-    how_to_tr: 'Highlands Cross başlangıç kasabasından ilerle',
-    how_to_en: 'Progress from Highlands Cross starter town',
-  },
-  {
-    id: 'thetford',
-    name: 'Thetford',
-    icon: '🌿',
-    biome: 'Swamp',
-    biome_tr: 'Bataklık',
-    faction: 'Thetford',
-    zone_type: 'blue',
-    desc_tr: 'Bataklık biome şehri. Lif ve büyücü silahları için ideal.',
-    desc_en: 'Swamp biome city. Ideal for fiber and mage weapons.',
-    bonuses: [
-      { label_tr: 'Refining Bonusu', label_en: 'Refining Bonus', value: 'Lif %50' },
-      { label_tr: 'Crafting Bonusu', label_en: 'Crafting Bonus', value: 'Asalar, Orta Zırh' },
-      { label_tr: 'Realmgate', label_en: 'Realmgate', value: '✅ Aktif' },
-    ],
-    tags: ['swamp'],
-    resources_tr: ['Lif', 'Odun', 'Deri'],
-    resources_en: ['Fiber', 'Wood', 'Hide'],
-    crafting_tr: 'Asa ve orta zırh craftında %15 bonus',
-    crafting_en: '15% bonus on staff and medium armor crafting',
-    how_to_tr: 'Swamp Cross başlangıç kasabasından ilerle',
-    how_to_en: 'Progress from Swamp Cross starter town',
-  },
-  {
-    id: 'brecilien',
-    name: 'Brecilien',
-    icon: '🌫️',
-    biome: 'Mist',
-    biome_tr: 'Sis',
-    faction: 'Mist',
-    zone_type: 'blue',
-    desc_tr: 'Sisin içindeki gizemli şehir. Özel Crystal Realm erişimi sağlar.',
-    desc_en: 'Mysterious city hidden in the Mists. Provides special Crystal Realm access.',
-    bonuses: [
-      { label_tr: 'Pazar', label_en: 'Market', value: '✅ Aktif' },
-      { label_tr: 'Crystal Realm', label_en: 'Crystal Realm', value: '✅ Özel erişim' },
-      { label_tr: 'Realmgate', label_en: 'Realmgate', value: '✅ Aktif' },
-    ],
-    tags: ['mist'],
-    resources_tr: ['Kristal', 'Özel Mist kaynakları'],
-    resources_en: ['Crystal', 'Special Mist resources'],
-    crafting_tr: 'Mist özel eşya craftı mevcut',
-    crafting_en: 'Mist special item crafting available',
-    how_to_tr: 'Herhangi bir şehirden Mist portalı gir',
-    how_to_en: 'Enter through a Mist portal from any city',
-  },
-  {
-    id: 'arthurs',
-    name: "Arthur's Rest",
-    icon: '🗡️',
-    biome: 'Outlands',
-    biome_tr: 'Outlands',
-    faction: 'Neutral',
-    zone_type: 'black',
-    desc_tr: 'Outlands\'teki küçük kasaba. Siyah zone pazar erişimi sağlar.',
-    desc_en: 'Small town in the Outlands. Provides black zone market access.',
-    bonuses: [
-      { label_tr: 'Pazar', label_en: 'Market', value: '✅ Aktif (BZ)' },
-      { label_tr: 'Crafting', label_en: 'Crafting', value: '✅ Temel istasyonlar' },
-      { label_tr: 'Tehlike', label_en: 'Danger', value: '☠️ Siyah Zone' },
-    ],
-    tags: ['outlands'],
-    resources_tr: ['T8 kaynaklar'],
-    resources_en: ['T8 resources'],
-    crafting_tr: 'Temel crafting istasyonları mevcut',
-    crafting_en: 'Basic crafting stations available',
-    how_to_tr: 'Outlands portalından gir',
-    how_to_en: 'Enter through Outlands portal',
-  },
-  {
-    id: 'morganas',
-    name: "Morgana's Rest",
-    icon: '🔮',
-    biome: 'Outlands',
-    biome_tr: 'Outlands',
-    faction: 'Neutral',
-    zone_type: 'black',
-    desc_tr: 'Outlands\'teki büyü temalı kasaba. Ortak pazar sistemi kullanır.',
-    desc_en: 'Magic-themed town in the Outlands. Shares a market system with the other Rests.',
-    bonuses: [
-      { label_tr: 'Pazar', label_en: 'Market', value: '✅ Aktif (BZ)' },
-      { label_tr: 'Crafting', label_en: 'Crafting', value: '✅ Temel istasyonlar' },
-      { label_tr: 'Tehlike', label_en: 'Danger', value: '☠️ Siyah Zone' },
-    ],
-    tags: ['outlands'],
-    resources_tr: ['T8 kaynaklar'],
-    resources_en: ['T8 resources'],
-    crafting_tr: 'Temel crafting istasyonları mevcut',
-    crafting_en: 'Basic crafting stations available',
-    how_to_tr: 'Outlands portalından gir',
-    how_to_en: 'Enter through Outlands portal',
-  },
-  {
-    id: 'merlyns',
-    name: "Merlyn's Rest",
-    icon: '📖',
-    biome: 'Outlands',
-    biome_tr: 'Outlands',
-    faction: 'Neutral',
-    zone_type: 'black',
-    desc_tr: 'Outlands\'teki bilge kasabası. Rest kasabaları ortak pazar paylaşır.',
-    desc_en: 'The sage town of the Outlands. Rest towns share a common market.',
-    bonuses: [
-      { label_tr: 'Pazar', label_en: 'Market', value: '✅ Aktif (BZ)' },
-      { label_tr: 'Crafting', label_en: 'Crafting', value: '✅ Temel istasyonlar' },
-      { label_tr: 'Tehlike', label_en: 'Danger', value: '☠️ Siyah Zone' },
-    ],
-    tags: ['outlands'],
-    resources_tr: ['T8 kaynaklar'],
-    resources_en: ['T8 resources'],
-    crafting_tr: 'Temel crafting istasyonları mevcut',
-    crafting_en: 'Basic crafting stations available',
-    how_to_tr: 'Outlands portalından gir',
-    how_to_en: 'Enter through Outlands portal',
-  },
-];
+// ─── ZONE RENK & TİP SİSTEMİ ────────────────────────────
+const ZONE_COLORS = {
+  SAFEAREA:   { bg:'#3b82f6', text:'#dbeafe', label:'Blue Zone',   dot:'zone-blue'     },
+  YELLOW:     { bg:'#eab308', text:'#fefce8', label:'Yellow Zone',  dot:'zone-yellow'   },
+  RED:        { bg:'#ef4444', text:'#fef2f2', label:'Red Zone',     dot:'zone-red'      },
+  BLACK:      { bg:'#4b5563', text:'#f9fafb', label:'Black Zone',   dot:'zone-black'    },
+  ROAD:       { bg:'#8b5cf6', text:'#f5f3ff', label:'Road of Avalon',dot:'zone-road'   },
+  MIST:       { bg:'#06b6d4', text:'#ecfeff', label:'Mist Zone',    dot:'zone-mist'     },
+  BRECILIEN:  { bg:'#06b6d4', text:'#ecfeff', label:'Brecilien',    dot:'zone-mist'     },
+  DEFAULT:    { bg:'#6b7280', text:'#f9fafb', label:'Unknown',      dot:'zone-default'  },
+};
 
-const BIOMES_DATA = [
-  {
-    id: 'forest', name_tr: '🌲 Orman', name_en: '🌲 Forest',
-    city_tr: 'Royal City: Lymhurst', city_en: 'Royal City: Lymhurst',
-    color: '#2d5a27',
-    resources: [
-      { emoji: '🪵', tr: 'Odun (Birincil)', en: 'Wood (Primary)' },
-      { emoji: '🦌', tr: 'Deri (İkincil)', en: 'Hide (Secondary)' },
-      { emoji: '🪨', tr: 'Taş (Üçüncül)', en: 'Stone (Tertiary)' },
-    ],
-    craft_tr: 'Lymhurst: Yay ve Hafif Zırh +%15',
-    craft_en: 'Lymhurst: Bow and Light Armor +15%',
-  },
-  {
-    id: 'steppe', name_tr: '🏜️ Bozkır', name_en: '🏜️ Steppe',
-    city_tr: 'Royal City: Bridgewatch', city_en: 'Royal City: Bridgewatch',
-    color: '#8b6914',
-    resources: [
-      { emoji: '⛏️', tr: 'Cevher (Birincil)', en: 'Ore (Primary)' },
-      { emoji: '🦌', tr: 'Deri (İkincil)', en: 'Hide (Secondary)' },
-      { emoji: '🪨', tr: 'Taş (Üçüncül)', en: 'Stone (Tertiary)' },
-    ],
-    craft_tr: 'Bridgewatch: Hançer ve Crossbow +%15',
-    craft_en: 'Bridgewatch: Dagger and Crossbow +15%',
-  },
-  {
-    id: 'mountain', name_tr: '⛰️ Dağ', name_en: '⛰️ Mountain',
-    city_tr: 'Royal City: Fort Sterling', city_en: 'Royal City: Fort Sterling',
-    color: '#4a4a7a',
-    resources: [
-      { emoji: '⛏️', tr: 'Cevher (Birincil)', en: 'Ore (Primary)' },
-      { emoji: '🪨', tr: 'Taş (İkincil)', en: 'Stone (Secondary)' },
-      { emoji: '🌾', tr: 'Lif (Üçüncül)', en: 'Fiber (Tertiary)' },
-    ],
-    craft_tr: 'Fort Sterling: Çekiç ve Ağır Zırh +%15',
-    craft_en: 'Fort Sterling: Hammer and Heavy Armor +15%',
-  },
-  {
-    id: 'highlands', name_tr: '🏔️ Yayla', name_en: '🏔️ Highlands',
-    city_tr: 'Royal City: Martlock', city_en: 'Royal City: Martlock',
-    color: '#6a3a2a',
-    resources: [
-      { emoji: '🪨', tr: 'Taş (Birincil)', en: 'Stone (Primary)' },
-      { emoji: '⛏️', tr: 'Cevher (İkincil)', en: 'Ore (Secondary)' },
-      { emoji: '🪵', tr: 'Odun (Üçüncül)', en: 'Wood (Tertiary)' },
-    ],
-    craft_tr: 'Martlock: Kılıç ve Savaş Baltası +%15',
-    craft_en: 'Martlock: Sword and Axe +15%',
-  },
-  {
-    id: 'swamp', name_tr: '🌿 Bataklık', name_en: '🌿 Swamp',
-    city_tr: 'Royal City: Thetford', city_en: 'Royal City: Thetford',
-    color: '#1a4a1a',
-    resources: [
-      { emoji: '🌾', tr: 'Lif (Birincil)', en: 'Fiber (Primary)' },
-      { emoji: '🪵', tr: 'Odun (İkincil)', en: 'Wood (Secondary)' },
-      { emoji: '🦌', tr: 'Deri (Üçüncül)', en: 'Hide (Tertiary)' },
-    ],
-    craft_tr: 'Thetford: Asa ve Orta Zırh +%15',
-    craft_en: 'Thetford: Staff and Medium Armor +15%',
-  },
-];
+function getZoneColor(zone) {
+  const id  = (zone.id || '').toUpperCase();
+  const col = (zone.color || zone.type || '').toUpperCase();
+  if (id.includes('BRECILIEN') || col.includes('BRECILIEN')) return ZONE_COLORS.BRECILIEN;
+  if (id.includes('ROAD') || col.includes('ROAD'))           return ZONE_COLORS.ROAD;
+  if (id.includes('MIST') || col.includes('MIST'))           return ZONE_COLORS.MIST;
+  if (col.includes('SAFEAREA') || col.includes('BLUE'))      return ZONE_COLORS.SAFEAREA;
+  if (col.includes('YELLOW'))                                return ZONE_COLORS.YELLOW;
+  if (col.includes('RED'))                                   return ZONE_COLORS.RED;
+  if (col.includes('BLACK') || col.includes('OUTLANDS'))     return ZONE_COLORS.BLACK;
+  return ZONE_COLORS.DEFAULT;
+}
 
-const ZONES_DATA = [
-  // ROYAL CONTINENT — Blue
-  { name:'Caerleon', type:'red', biome:'highlands', tier:'1', region_tr:'Royal Continent', region_en:'Royal Continent', resources_tr:['Tüm'], resources_en:['All'] },
-  { name:'Lymhurst', type:'blue', biome:'forest', tier:'1', region_tr:'Royal Continent', region_en:'Royal Continent', resources_tr:['Odun','Deri'], resources_en:['Wood','Hide'] },
-  { name:'Bridgewatch', type:'blue', biome:'steppe', tier:'1', region_tr:'Royal Continent', region_en:'Royal Continent', resources_tr:['Cevher','Taş'], resources_en:['Ore','Stone'] },
-  { name:'Fort Sterling', type:'blue', biome:'mountain', tier:'1', region_tr:'Royal Continent', region_en:'Royal Continent', resources_tr:['Cevher','Taş'], resources_en:['Ore','Stone'] },
-  { name:'Martlock', type:'blue', biome:'highlands', tier:'1', region_tr:'Royal Continent', region_en:'Royal Continent', resources_tr:['Taş','Cevher'], resources_en:['Stone','Ore'] },
-  { name:'Thetford', type:'blue', biome:'swamp', tier:'1', region_tr:'Royal Continent', region_en:'Royal Continent', resources_tr:['Lif','Odun'], resources_en:['Fiber','Wood'] },
-  // Yellow Zones
-  { name:'Forest Cross', type:'yellow', biome:'forest', tier:'2', region_tr:'Royal Continent', region_en:'Royal Continent', resources_tr:['Odun T2-T3','Deri'], resources_en:['Wood T2-T3','Hide'] },
-  { name:'Steppe Cross', type:'yellow', biome:'steppe', tier:'2', region_tr:'Royal Continent', region_en:'Royal Continent', resources_tr:['Cevher T2-T3','Taş'], resources_en:['Ore T2-T3','Stone'] },
-  { name:'Mountain Cross', type:'yellow', biome:'mountain', tier:'2', region_tr:'Royal Continent', region_en:'Royal Continent', resources_tr:['Cevher T2-T3'], resources_en:['Ore T2-T3'] },
-  { name:'Swamp Cross', type:'yellow', biome:'swamp', tier:'2', region_tr:'Royal Continent', region_en:'Royal Continent', resources_tr:['Lif T2-T3'], resources_en:['Fiber T2-T3'] },
-  { name:'Highlands Cross', type:'yellow', biome:'highlands', tier:'2', region_tr:'Royal Continent', region_en:'Royal Continent', resources_tr:['Taş T2-T3'], resources_en:['Stone T2-T3'] },
-  // Red Zones (around Caerleon)
-  { name:'Caerleon Forest', type:'red', biome:'forest', tier:'5-6', region_tr:'Royal Continent', region_en:'Royal Continent', resources_tr:['Odun T5-T6','Deri T5'], resources_en:['Wood T5-T6','Hide T5'] },
-  { name:'Caerleon Steppe', type:'red', biome:'steppe', tier:'5-6', region_tr:'Royal Continent', region_en:'Royal Continent', resources_tr:['Cevher T5-T6'], resources_en:['Ore T5-T6'] },
-  { name:'Caerleon Highlands', type:'red', biome:'highlands', tier:'5-6', region_tr:'Royal Continent', region_en:'Royal Continent', resources_tr:['Taş T5-T6','Cevher T5'], resources_en:['Stone T5-T6','Ore T5'] },
-  // Outlands — Black
-  { name:"Arthur's Rest", type:'black', biome:'steppe', tier:'6-8', region_tr:'Outlands', region_en:'Outlands', resources_tr:['T6-T8 Tüm'], resources_en:['T6-T8 All'] },
-  { name:"Morgana's Rest", type:'black', biome:'swamp', tier:'6-8', region_tr:'Outlands', region_en:'Outlands', resources_tr:['T6-T8 Tüm'], resources_en:['T6-T8 All'] },
-  { name:"Merlyn's Rest", type:'black', biome:'forest', tier:'6-8', region_tr:'Outlands', region_en:'Outlands', resources_tr:['T6-T8 Tüm'], resources_en:['T6-T8 All'] },
-  { name:'Anglia BZ-1', type:'black', biome:'forest', tier:'6', region_tr:'Outlands/Anglia', region_en:'Outlands/Anglia', resources_tr:['Odun T6','Deri T6'], resources_en:['Wood T6','Hide T6'] },
-  { name:'Anglia BZ-2', type:'black', biome:'swamp', tier:'6', region_tr:'Outlands/Anglia', region_en:'Outlands/Anglia', resources_tr:['Lif T6'], resources_en:['Fiber T6'] },
-  { name:'Cumbria BZ-1', type:'black', biome:'mountain', tier:'7', region_tr:'Outlands/Cumbria', region_en:'Outlands/Cumbria', resources_tr:['Cevher T7','Taş T7'], resources_en:['Ore T7','Stone T7'] },
-  { name:'Glouvia BZ-1', type:'black', biome:'steppe', tier:'7', region_tr:'Outlands/Glouvia', region_en:'Outlands/Glouvia', resources_tr:['Cevher T7','Deri T7'], resources_en:['Ore T7','Hide T7'] },
-  { name:'Mercia BZ-1', type:'black', biome:'highlands', tier:'8', region_tr:'Outlands/Mercia', region_en:'Outlands/Mercia', resources_tr:['T8 Tüm'], resources_en:['T8 All'] },
-  { name:'Siluria BZ-1', type:'black', biome:'forest', tier:'8', region_tr:'Outlands/Siluria', region_en:'Outlands/Siluria', resources_tr:['T8 Tüm'], resources_en:['T8 All'] },
-  // Brecilien / Mist
-  { name:'Brecilien', type:'blue', biome:'mist', tier:'Özel', region_tr:'Mist', region_en:'Mist', resources_tr:['Kristal','Mist Kaynakları'], resources_en:['Crystal','Mist Resources'] },
-];
+function getZoneDotClass(zone) {
+  return getZoneColor(zone).dot;
+}
 
-const OUTLANDS_DATA = [
-  { name:'Anglia', emoji:'🌲', level_tr:'Düşük Seviye', level_en:'Low Level', tier:'T4-T6', desc_tr:'Outlands\'ın güneybatısındaki başlangıç bölgesi. Yeni Outlands oyuncuları için idealdir.', desc_en:'Starting region in the southwestern Outlands. Ideal for new Outlands players.' },
-  { name:'Glouvia', emoji:'🏜️', level_tr:'Düşük Seviye', level_en:'Low Level', tier:'T4-T6', desc_tr:'Anglia\'nın kuzeyinde konumlanır. Oberon güncellemesiyle eklendi.', desc_en:'Located north of Anglia. Added with the Oberon update.' },
-  { name:'Cumbria', emoji:'⛰️', level_tr:'Orta Seviye', level_en:'Mid Level', tier:'T5-T7', desc_tr:'Anglia ve Glouvia\'nın doğusunda. Orta seviye kaynak ve PvP içeriği sunar.', desc_en:'East of Anglia and Glouvia. Offers mid-level resources and PvP content.' },
-  { name:'Siluria', emoji:'🌿', level_tr:'Yüksek Seviye', level_en:'High Level', tier:'T6-T8', desc_tr:'Mercia\'nın kuzeydoğusunda. Yüksek tier kaynaklar ve güçlü mob\'lar barındırır.', desc_en:'Northeast of Mercia. High tier resources and powerful mobs.' },
-  { name:'Mercia', emoji:'💀', level_tr:'En Yüksek Seviye', level_en:'Highest Level', tier:'T7-T8', desc_tr:'Outlands\'ın en tehlikeli bölgesi. T8 kaynaklar ve en güçlü içerik burada.', desc_en:'Most dangerous region of the Outlands. T8 resources and strongest content here.' },
-  { name:"Arthur's Rest", emoji:'🗡️', level_tr:'Kasaba', level_en:'Town', tier:'Tüm', desc_tr:'Outlands\'teki güvenli kasaba. Pazar ve temel crafting istasyonları mevcut.', desc_en:'Safe town in the Outlands. Market and basic crafting stations available.' },
-  { name:"Morgana's Rest", emoji:'🔮', level_tr:'Kasaba', level_en:'Town', tier:'Tüm', desc_tr:'Outlands\'teki büyü temalı kasaba. Arthur\'s Rest ile ortak pazar kullanır.', desc_en:'Magic-themed town in the Outlands. Shares market with Arthur\'s Rest.' },
-  { name:"Merlyn's Rest", emoji:'📖', level_tr:'Kasaba', level_en:'Town', tier:'Tüm', desc_tr:'Outlands\'teki üçüncü kasaba. Tüm Rest\'ler ortak pazar sistemiyle çalışır.', desc_en:'Third town in the Outlands. All Rests share a common market system.' },
-];
+// ─── STATE ────────────────────────────────────────────────
+let zones         = [];
+let filteredZones = [];
+let currentFilter = 'all';
+let selectedZone  = null;
+let routeFrom     = null;
+let routeTo       = null;
+let currentRoute  = null;
+let pickerTarget  = null;
 
-const SPECIAL_ZONES = [
-  {
-    title: 'Roads of Avalon', subtitle_tr: '⚔️ Siyah Zone Labirent', subtitle_en: '⚔️ Black Zone Labyrinth',
-    emoji: '🌀',
-    desc_tr: 'Outlands\'ın ortasındaki gizemli yollar. Düzenli aralıklarla yeniden şekillenen bu labirent, T4-T8 kaynaklar, Hideout\'lar ve PvP içeriği sunar. Her portal 3-7 gün sonra kapanır.',
-    desc_en: 'Mysterious roads in the center of the Outlands. This maze reshapes periodically, offering T4-T8 resources, Hideouts, and PvP content. Every portal closes after 3-7 days.',
-    highlights_tr: ['T4-T8 Kaynaklar', 'Hideout kurulabilir', 'Solo ve grup PvP', 'Bosslar ve hazineler'],
-    highlights_en: ['T4-T8 Resources', 'Build a Hideout', 'Solo and group PvP', 'Bosses and treasures'],
-  },
-  {
-    title: 'The Mists', subtitle_tr: '🌫️ Gizemli Sis Bölgesi', subtitle_en: '🌫️ Mysterious Mist Zone',
-    emoji: '🌫️',
-    desc_tr: 'Gizemli portallardan girilir. Her Mist bölgesi benzersizdir ve Brecilien\'e ulaşmanın tek yoludur. Solo oyuncular için tasarlanmıştır.',
-    desc_en: 'Entered through mysterious portals. Each Mist zone is unique and the only way to reach Brecilien. Designed for solo players.',
-    highlights_tr: ['Solo odaklı içerik', 'Brecilien\'e giriş', 'Eşsiz Mist yaratıkları', 'Nadir düşüşler'],
-    highlights_en: ['Solo-focused content', 'Gateway to Brecilien', 'Unique Mist creatures', 'Rare drops'],
-  },
-  {
-    title: 'Brecilien', subtitle_tr: '🏙️ Sis Şehri', subtitle_en: '🏙️ City of the Mists',
-    emoji: '🌆',
-    desc_tr: 'Sisin içinde saklı şehir. Crystal Realm erişimi, özel crafting ve pazar sunar. Buraya ulaşmak için Mist\'lerden geçmek zorunludur.',
-    desc_en: 'City hidden within the Mists. Offers Crystal Realm access, special crafting and market. Must traverse the Mists to reach it.',
-    highlights_tr: ['Crystal Realm erişimi', 'Özel Mist crafting', 'Realmgate mevcut', 'Crystal silahlar'],
-    highlights_en: ['Crystal Realm access', 'Special Mist crafting', 'Realmgate available', 'Crystal weapons'],
-  },
-  {
-    title: 'Crystal Realm', subtitle_tr: '💎 Rekabetçi Arena', subtitle_en: '💎 Competitive Arena',
-    emoji: '💎',
-    desc_tr: 'Belirlenmiş takımların rekabetçi ortamda karşılaştığı özel arena. Crystal Swords ve özel ödüller kazanılabilir. Yalnızca Brecilien üzerinden erişilir.',
-    desc_en: 'Special arena where designated teams compete. Crystal Swords and special rewards can be earned. Accessible only through Brecilien.',
-    highlights_tr: ['Takım bazlı PvP', 'Crystal Sword ödülü', 'Sezon sıralaması', 'Özel eşyalar'],
-    highlights_en: ['Team-based PvP', 'Crystal Sword reward', 'Season ranking', 'Special items'],
-  },
-  {
-    title: 'Corrupted Dungeons', subtitle_tr: '👹 Solo PvPvE Zindanı', subtitle_en: '👹 Solo PvPvE Dungeon',
-    emoji: '👹',
-    desc_tr: 'Solo oyuncular için tasarlanmış özel zindanlar. Hem mob\'larla hem diğer oyuncularla savaş. Kırmızı ve Siyah Zone\'larda mevcuttur.',
-    desc_en: 'Special dungeons designed for solo players. Fight both mobs and other players. Available in Red and Black Zones.',
-    highlights_tr: ['Solo PvP + PvE', 'İstila mekaniği', 'Kırmızı&Siyah Zone', 'Demonic Energy ödülü'],
-    highlights_en: ['Solo PvP + PvE', 'Invasion mechanic', 'Red&Black Zone', 'Demonic Energy reward'],
-  },
-  {
-    title: 'Hellgates', subtitle_tr: '🔥 Takım PvPvE', subtitle_en: '🔥 Team PvPvE',
-    emoji: '🔥',
-    desc_tr: '2v2 veya 5v5 formatında PvPvE zindanlar. Kırmızı ve Siyah Zone\'larda giriş noktaları bulunur. Hellgate Seal gerektirir.',
-    desc_en: 'PvPvE dungeons in 2v2 or 5v5 format. Entry points in Red and Black Zones. Requires a Hellgate Seal.',
-    highlights_tr: ['2v2 / 5v5 format', 'PvP + PvE', 'Hellgate Seal gerekli', 'Yüksek ödüller'],
-    highlights_en: ['2v2 / 5v5 format', 'PvP + PvE', 'Hellgate Seal required', 'High rewards'],
-  },
-];
+// Canvas state
+let canvas, ctx;
+let camX = 0, camY = 0, zoom = 1;
+let isDragging = false, dragStartX = 0, dragStartY = 0;
+let nodePositions = new Map(); // zoneId → {x, y}
 
-// =====================================================
-// CANVAS HARİTASI
-// =====================================================
-const MAP_ZONES = [
-  // Format: { id, label, x, y, w, h, type, city }
-  // ROYAL CONTINENT CENTER
-  { id:'caerleon',    label:'Caerleon',     x:0.48, y:0.47, w:0.06, h:0.04, type:'red',    city:true },
-  // 5 Royal Cities
-  { id:'lymhurst',   label:'Lymhurst',     x:0.30, y:0.42, w:0.07, h:0.04, type:'blue',   city:true },
-  { id:'bridgewatch',label:'Bridgewatch',  x:0.64, y:0.56, w:0.07, h:0.04, type:'blue',   city:true },
-  { id:'fortsterling',label:'Fort Sterling',x:0.48, y:0.28, w:0.07, h:0.04, type:'blue',  city:true },
-  { id:'martlock',   label:'Martlock',     x:0.32, y:0.60, w:0.07, h:0.04, type:'blue',   city:true },
-  { id:'thetford',   label:'Thetford',     x:0.62, y:0.36, w:0.07, h:0.04, type:'blue',   city:true },
-  // Yellow zones (sample)
-  { id:'fc',  label:'Forest Cross',   x:0.22, y:0.38, w:0.06, h:0.03, type:'yellow' },
-  { id:'sc',  label:'Steppe Cross',   x:0.70, y:0.62, w:0.06, h:0.03, type:'yellow' },
-  { id:'mc',  label:'Mountain Cross', x:0.48, y:0.20, w:0.06, h:0.03, type:'yellow' },
-  { id:'swc', label:'Swamp Cross',    x:0.58, y:0.28, w:0.06, h:0.03, type:'yellow' },
-  { id:'hc',  label:'Highlands Cross',x:0.24, y:0.66, w:0.06, h:0.03, type:'yellow' },
-  // Red zones (around Caerleon)
-  { id:'rcf', label:'Red Zone N',     x:0.42, y:0.40, w:0.05, h:0.03, type:'red' },
-  { id:'rcs', label:'Red Zone E',     x:0.56, y:0.47, w:0.05, h:0.03, type:'red' },
-  { id:'rch', label:'Red Zone W',     x:0.38, y:0.52, w:0.05, h:0.03, type:'red' },
-  // Outlands (top area)
-  { id:'anglia',  label:'Anglia',     x:0.16, y:0.12, w:0.10, h:0.06, type:'black' },
-  { id:'glouvia', label:'Glouvia',    x:0.30, y:0.08, w:0.10, h:0.06, type:'black' },
-  { id:'cumbria', label:'Cumbria',    x:0.46, y:0.06, w:0.10, h:0.06, type:'black' },
-  { id:'siluria', label:'Siluria',    x:0.62, y:0.08, w:0.10, h:0.06, type:'black' },
-  { id:'mercia',  label:'Mercia',     x:0.76, y:0.12, w:0.10, h:0.06, type:'black' },
-  { id:'arthurs', label:"Arthur's Rest",  x:0.14, y:0.22, w:0.08, h:0.04, type:'black', city:true },
-  { id:'morganas',label:"Morgana's Rest", x:0.48, y:0.16, w:0.08, h:0.04, type:'black', city:true },
-  { id:'merlyns', label:"Merlyn's Rest",  x:0.78, y:0.22, w:0.08, h:0.04, type:'black', city:true },
-  // Mist / Brecilien (right side)
-  { id:'brecilien',label:'Brecilien', x:0.86, y:0.44, w:0.07, h:0.04, type:'blue',  city:true },
-  { id:'mist1',   label:'The Mists', x:0.86, y:0.36, w:0.07, h:0.05, type:'blue' },
-];
+const getLang = () => localStorage.getItem('aot-lang') || 'tr';
 
-const TYPE_COLORS = { blue:'#4a9eff', yellow:'#f5c842', red:'#ff4a4a', black:'#555555' };
-const TYPE_BG     = { blue:'#0a1a3d', yellow:'#2d2000', red:'#2d0808', black:'#111111' };
+// ─── BAŞLAT ───────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  canvas = document.getElementById('mapCanvas');
+  ctx    = canvas.getContext('2d');
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
 
-function initWorldMap() {
-  const canvas = document.getElementById('worldMapCanvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
+  // Canvas mouse events
+  canvas.addEventListener('mousedown',  onMouseDown);
+  canvas.addEventListener('mousemove',  onMouseMove);
+  canvas.addEventListener('mouseup',    onMouseUp);
+  canvas.addEventListener('mouseleave', onMouseUp);
+  canvas.addEventListener('wheel',      onWheel, { passive:false });
+  canvas.addEventListener('click',      onCanvasClick);
+  canvas.addEventListener('touchstart', onTouchStart, { passive:false });
+  canvas.addEventListener('touchmove',  onTouchMove,  { passive:false });
+  canvas.addEventListener('touchend',   onTouchEnd);
 
-  function resize() {
-    const wrapper = canvas.parentElement;
-    canvas.width  = wrapper.clientWidth;
-    canvas.height = Math.max(480, wrapper.clientWidth * 0.55);
-    draw();
+  loadZones();
+});
+
+// ─── ZONE YÜKLEMESİ ──────────────────────────────────────
+function loadZones() {
+  if (window.AO_ZONES && window.AO_ZONES.length > 0) {
+    zones = window.AO_ZONES;
+    initMap();
+  } else {
+    // world-data.js henüz Data Sync botu tarafından üretilmemiş
+    // Statik temel zone'ları kullan
+    zones = getStaticZones();
+    initMap();
   }
+}
 
-  function draw() {
-    const W = canvas.width, H = canvas.height;
-    ctx.clearRect(0, 0, W, H);
+function initMap() {
+  filteredZones = [...zones];
+  renderZoneList();
+  buildNodePositions();
+  drawMap();
+  document.getElementById('zoneCount').textContent = zones.length.toLocaleString('tr-TR');
+}
 
-    // Background
-    ctx.fillStyle = '#0d1117';
-    ctx.fillRect(0, 0, W, H);
+// ─── STATİK TEMEL ZONE'LAR (world-data.js yokken fallback) ──
+function getStaticZones() {
+  return [
+    // Royal Cities
+    {id:'CAERLEON',       name:'Caerleon',       color:'SAFEAREA', type:'CITY',   exits:['SWAMP_BRIDGEWATCH_ACCESS','HIGHLAND_MARTLOCK_ACCESS','STEPPE_THETFORD_ACCESS','FOREST_LYMHURST_ACCESS','MOUNTAIN_FORTSTERLING_ACCESS']},
+    {id:'SWAMP_BRIDGEWATCH_ACCESS', name:'Bridgewatch',  color:'YELLOW',   type:'CITY',   exits:['CAERLEON']},
+    {id:'HIGHLAND_MARTLOCK_ACCESS', name:'Martlock',     color:'YELLOW',   type:'CITY',   exits:['CAERLEON']},
+    {id:'STEPPE_THETFORD_ACCESS',   name:'Thetford',     color:'YELLOW',   type:'CITY',   exits:['CAERLEON']},
+    {id:'FOREST_LYMHURST_ACCESS',   name:'Lymhurst',     color:'YELLOW',   type:'CITY',   exits:['CAERLEON']},
+    {id:'MOUNTAIN_FORTSTERLING_ACCESS', name:'Fort Sterling', color:'YELLOW', type:'CITY', exits:['CAERLEON']},
+    // Outlands Rests
+    {id:'ARTHURSREST',    name:"Arthur's Rest",   color:'BLACK',    type:'REST',   exits:['MERLINSREST','MORGANASREST']},
+    {id:'MERLINSREST',    name:"Merlyn's Rest",   color:'BLACK',    type:'REST',   exits:['ARTHURSREST','MORGANASREST']},
+    {id:'MORGANASREST',   name:"Morgana's Rest",  color:'BLACK',    type:'REST',   exits:['ARTHURSREST','MERLINSREST']},
+    // Mist
+    {id:'BRECILIEN',      name:'Brecilien',       color:'MIST',     type:'CITY',   exits:[]},
+    // Example zones
+    {id:'BLACKZONE_01',   name:'Black Zone 1',    color:'BLACK',    type:'BLACKZONE', exits:['BLACKZONE_02','ARTHURSREST']},
+    {id:'BLACKZONE_02',   name:'Black Zone 2',    color:'BLACK',    type:'BLACKZONE', exits:['BLACKZONE_01','MERLINSREST']},
+    {id:'REDZONE_01',     name:'Red Zone 1',      color:'RED',      type:'REDZONE',   exits:['CAERLEON','REDZONE_02']},
+    {id:'REDZONE_02',     name:'Red Zone 2',      color:'RED',      type:'REDZONE',   exits:['REDZONE_01']},
+    {id:'YELLOWZONE_01',  name:'Yellow Zone 1',   color:'YELLOW',   type:'YELLOWZONE', exits:['CAERLEON','YELLOWZONE_02']},
+    {id:'YELLOWZONE_02',  name:'Yellow Zone 2',   color:'YELLOW',   type:'YELLOWZONE', exits:['YELLOWZONE_01']},
+    {id:'ROAD_01',        name:'Road of Avalon 1',color:'ROAD',     type:'ROAD',      exits:['ROAD_02']},
+    {id:'ROAD_02',        name:'Road of Avalon 2',color:'ROAD',     type:'ROAD',      exits:['ROAD_01']},
+  ];
+}
 
-    // Grid
-    ctx.strokeStyle = '#ffffff08';
-    ctx.lineWidth = 1;
-    for (let i = 0; i < W; i += 40) { ctx.beginPath(); ctx.moveTo(i,0); ctx.lineTo(i,H); ctx.stroke(); }
-    for (let i = 0; i < H; i += 40) { ctx.beginPath(); ctx.moveTo(0,i); ctx.lineTo(W,i); ctx.stroke(); }
+// ─── ZONE POZİSYON HESAPLAMA ──────────────────────────────
+function buildNodePositions() {
+  // BFS ile zone bağlantılarına göre ağaç pozisyon hesapla
+  nodePositions.clear();
+  if (!zones.length) return;
 
-    // Section labels
-    ctx.font = 'bold 11px sans-serif';
-    ctx.fillStyle = '#ffffff22';
-    ctx.fillText('— OUTLANDS —', W * 0.38, H * 0.05);
-    ctx.fillText('— ROYAL CONTINENT —', W * 0.33, H * 0.78);
+  // Caerleon merkeze
+  const center = zones.find(z => z.id === 'CAERLEON') || zones[0];
+  const W = 900, H = 700;
+  nodePositions.set(center.id, { x: W/2, y: H/2 });
 
-    // Filter state
-    const showBlue   = document.getElementById('filterBlue')?.checked   ?? true;
-    const showYellow = document.getElementById('filterYellow')?.checked ?? true;
-    const showRed    = document.getElementById('filterRed')?.checked    ?? true;
-    const showBlack  = document.getElementById('filterBlack')?.checked  ?? true;
-    const showCities = document.getElementById('filterCities')?.checked ?? true;
+  // BFS ile pozisyon dağıt
+  const visited = new Set([center.id]);
+  const queue   = [{ id: center.id, depth: 0, angle: 0 }];
+  const angleMap = new Map([[center.id, 0]]);
+  const depthCount = new Map([[0, 1]]);
 
-    MAP_ZONES.forEach(z => {
-      if (z.type === 'blue'   && !showBlue)   return;
-      if (z.type === 'yellow' && !showYellow) return;
-      if (z.type === 'red'    && !showRed)    return;
-      if (z.type === 'black'  && !showBlack)  return;
-      if (z.city && !showCities) return;
+  while (queue.length) {
+    const { id, depth } = queue.shift();
+    const zone = zones.find(z => z.id === id);
+    if (!zone) continue;
+    const exits = zone.exits || [];
+    const unvisited = exits.filter(e => !visited.has(e) && zones.find(z => z.id === e));
 
-      const x = z.x * W, y = z.y * H, w = z.w * W, h = z.h * H;
-      const col = TYPE_COLORS[z.type];
-      const bg  = TYPE_BG[z.type];
-
-      // Glow
-      ctx.shadowColor = col;
-      ctx.shadowBlur  = z.city ? 14 : 6;
-
-      // Fill
-      ctx.fillStyle = bg;
-      ctx.beginPath();
-      ctx.roundRect(x, y, w, h, 5);
-      ctx.fill();
-
-      // Border
-      ctx.strokeStyle = col;
-      ctx.lineWidth   = z.city ? 2 : 1;
-      ctx.stroke();
-      ctx.shadowBlur  = 0;
-
-      // City star
-      if (z.city) {
-        ctx.fillStyle = col;
-        ctx.font = `bold ${Math.max(9, w * 0.22)}px sans-serif`;
-        ctx.textAlign = 'center';
-        ctx.fillText('★', x + w/2, y + h * 0.45);
-      }
-
-      // Label
-      ctx.fillStyle = '#ffffff';
-      ctx.font = `${z.city ? 'bold ' : ''}${Math.max(8, Math.min(11, w * 0.18))}px sans-serif`;
-      ctx.textAlign = 'center';
-      ctx.fillText(z.label, x + w/2, y + h - 4);
+    unvisited.forEach((exitId, i) => {
+      visited.add(exitId);
+      const parentPos = nodePositions.get(id) || { x: W/2, y: H/2 };
+      const parentAngle = angleMap.get(id) || 0;
+      const spread = Math.PI * 1.2;
+      const angleStep = unvisited.length > 1 ? spread / (unvisited.length - 1) : 0;
+      const angle = parentAngle - spread/2 + i * angleStep;
+      const dist = Math.max(80, 160 - depth * 20);
+      const x = Math.max(30, Math.min(W-30, parentPos.x + Math.cos(angle) * dist));
+      const y = Math.max(30, Math.min(H-30, parentPos.y + Math.sin(angle) * dist));
+      nodePositions.set(exitId, { x, y });
+      angleMap.set(exitId, angle);
+      queue.push({ id: exitId, depth: depth + 1, angle });
     });
   }
 
-  // Tooltip
-  const tooltip = document.getElementById('mapTooltip');
-  const infoBar  = document.getElementById('mapZoneInfo');
+  // Pozisyon verilemeyen zone'lar için grid
+  let gridX = 50, gridY = 50;
+  zones.forEach(z => {
+    if (!nodePositions.has(z.id)) {
+      nodePositions.set(z.id, { x: gridX, y: gridY });
+      gridX += 80;
+      if (gridX > W - 50) { gridX = 50; gridY += 60; }
+    }
+  });
+}
 
-  canvas.addEventListener('mousemove', e => {
-    const rect = canvas.getBoundingClientRect();
-    const mx = (e.clientX - rect.left) * (canvas.width / rect.width);
-    const my = (e.clientY - rect.top)  * (canvas.height / rect.height);
-    const W = canvas.width, H = canvas.height;
-    const hit = MAP_ZONES.find(z => mx >= z.x*W && mx <= (z.x+z.w)*W && my >= z.y*H && my <= (z.y+z.h)*H);
-    if (hit) {
-      const typeLabel = { blue:'🔵 Mavi — Güvenli', yellow:'🟡 Sarı — Kısıtlı PvP', red:'🔴 Kırmızı — Full PvP', black:'⚫ Siyah — Full Loot' };
-      tooltip.innerHTML = `<strong>${hit.label}</strong><br>${typeLabel[hit.type]}${hit.city ? '<br>🏙️ Şehir' : ''}`;
-      tooltip.style.display = 'block';
-      tooltip.style.left = (e.clientX - rect.left + 12) + 'px';
-      tooltip.style.top  = (e.clientY - rect.top  + 12) + 'px';
-      canvas.style.cursor = hit.city ? 'pointer' : 'crosshair';
-    } else {
-      tooltip.style.display = 'none';
-      canvas.style.cursor = 'crosshair';
+// ─── CANVAS ───────────────────────────────────────────────
+function resizeCanvas() {
+  if (!canvas) return;
+  const rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width  = rect.width  || 800;
+  canvas.height = rect.height || 600;
+  drawMap();
+}
+
+function drawMap() {
+  if (!ctx || !canvas) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Arka plan
+  ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--bg-base').trim() || '#0d1117';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.save();
+  ctx.translate(camX + canvas.width/2, camY + canvas.height/2);
+  ctx.scale(zoom, zoom);
+
+  const visibleZones = currentFilter === 'all' ? zones : filteredZones;
+
+  // Önce bağlantıları çiz
+  visibleZones.forEach(zone => {
+    const from = nodePositions.get(zone.id);
+    if (!from) return;
+    (zone.exits || []).forEach(exitId => {
+      const to = nodePositions.get(exitId);
+      if (!to) return;
+      const isRoute = currentRoute && isRouteEdge(zone.id, exitId);
+      ctx.beginPath();
+      ctx.moveTo(from.x - 450, from.y - 350);
+      ctx.lineTo(to.x - 450,   to.y - 350);
+      ctx.strokeStyle = isRoute ? '#c9a84c' : 'rgba(255,255,255,0.08)';
+      ctx.lineWidth   = isRoute ? 3 : 1;
+      ctx.stroke();
+    });
+  });
+
+  // Sonra node'ları çiz
+  visibleZones.forEach(zone => {
+    const pos = nodePositions.get(zone.id);
+    if (!pos) return;
+    const px = pos.x - 450;
+    const py = pos.y - 350;
+    const col = getZoneColor(zone);
+    const isSelected = selectedZone?.id === zone.id;
+    const isRoute = currentRoute?.path.includes(zone.id);
+    const r = isSelected ? 10 : isRoute ? 9 : 7;
+
+    // Gölge
+    ctx.shadowColor = isSelected ? col.bg : 'transparent';
+    ctx.shadowBlur  = isSelected ? 15 : 0;
+
+    // Çember
+    ctx.beginPath();
+    ctx.arc(px, py, r, 0, Math.PI * 2);
+    ctx.fillStyle = col.bg;
+    ctx.fill();
+    if (isSelected || isRoute) {
+      ctx.strokeStyle = '#c9a84c';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+    ctx.shadowBlur = 0;
+
+    // İsim (yakın zoom'da)
+    if (zoom > 1.2) {
+      ctx.font = `${Math.round(9/zoom * 10)}px Inter, sans-serif`;
+      ctx.fillStyle = 'rgba(255,255,255,0.7)';
+      ctx.textAlign = 'center';
+      const label = zone.name || zone.id;
+      ctx.fillText(label.length > 15 ? label.slice(0,14)+'…' : label, px, py + r + 10);
     }
   });
 
-  canvas.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
-
-  canvas.addEventListener('click', e => {
-    const rect = canvas.getBoundingClientRect();
-    const mx = (e.clientX - rect.left) * (canvas.width / rect.width);
-    const my = (e.clientY - rect.top)  * (canvas.height / rect.height);
-    const W = canvas.width, H = canvas.height;
-    const hit = MAP_ZONES.find(z => mx >= z.x*W && mx <= (z.x+z.w)*W && my >= z.y*H && my <= (z.y+z.h)*H);
-    if (hit) openZoneModal(hit.id, hit.label, hit.type);
-  });
-
-  // Filter changes
-  ['filterBlue','filterYellow','filterRed','filterBlack','filterCities'].forEach(id => {
-    document.getElementById(id)?.addEventListener('change', draw);
-  });
-
-  window.addEventListener('resize', resize);
-  resize();
+  ctx.restore();
 }
 
-window.focusZone = function(id) {
-  const zone = MAP_ZONES.find(z => z.id === id);
-  if (zone) openZoneModal(zone.id, zone.label, zone.type);
-};
+function isRouteEdge(a, b) {
+  if (!currentRoute?.path) return false;
+  const p = currentRoute.path;
+  for (let i = 0; i < p.length - 1; i++) {
+    if ((p[i] === a && p[i+1] === b) || (p[i] === b && p[i+1] === a)) return true;
+  }
+  return false;
+}
 
-function openZoneModal(id, name, type) {
-  const city = CITIES_DATA.find(c => c.id === id);
-  const lang = window._currentLang || 'tr';
-  const modal = document.getElementById('zoneModal');
-  const overlay = document.getElementById('modalOverlay');
-  const content = document.getElementById('modalContent');
-
-  let html = `<h2 style="color:${TYPE_COLORS[type]};margin:0 0 0.5rem">${name}</h2>`;
-  if (city) {
-    html += `<p style="color:var(--text-muted);margin:0 0 1rem;font-size:0.85rem">${lang==='tr' ? city.desc_tr : city.desc_en}</p>`;
-    html += `<table style="width:100%;font-size:0.85rem;border-collapse:collapse">`;
-    city.bonuses.forEach(b => {
-      html += `<tr><td style="padding:0.4rem 0;border-bottom:1px solid var(--border);color:var(--text-muted)">${lang==='tr' ? b.label_tr : b.label_en}</td><td style="text-align:right;color:var(--accent);font-weight:600;border-bottom:1px solid var(--border)">${b.value}</td></tr>`;
-    });
-    html += `</table>`;
-    html += `<div style="margin-top:1rem;font-size:0.82rem;color:var(--text-muted)">🧭 ${lang==='tr' ? city.how_to_tr : city.how_to_en}</div>`;
+// ─── CANVAS MOUSE ─────────────────────────────────────────
+function onMouseDown(e) {
+  isDragging = true;
+  dragStartX = e.clientX - camX;
+  dragStartY = e.clientY - camY;
+}
+function onMouseMove(e) {
+  if (isDragging) {
+    camX = e.clientX - dragStartX;
+    camY = e.clientY - dragStartY;
+    drawMap();
   } else {
-    const typeLabel = { blue:'Mavi Zone — Güvenli', yellow:'Sarı Zone — Kısıtlı PvP', red:'Kırmızı Zone — Full PvP', black:'Siyah Zone — Full Loot' };
-    html += `<p style="color:${TYPE_COLORS[type]}">${typeLabel[type]}</p>`;
+    // Hover tooltip
+    const zone = getZoneAtMouse(e);
+    const tt   = document.getElementById('canvasTooltip');
+    if (zone) {
+      const col = getZoneColor(zone);
+      tt.innerHTML = `<strong>${zone.name||zone.id}</strong><br><span style="color:${col.bg}">${col.label}</span><br><span style="opacity:.6;font-size:11px">${(zone.exits||[]).length} bağlantı</span>`;
+      tt.style.display = 'block';
+      tt.style.left = (e.offsetX + 12) + 'px';
+      tt.style.top  = (e.offsetY + 12) + 'px';
+    } else {
+      tt.style.display = 'none';
+    }
+  }
+}
+function onMouseUp() { isDragging = false; }
+function onWheel(e) {
+  e.preventDefault();
+  const delta = e.deltaY > 0 ? 0.9 : 1.1;
+  zoom = Math.max(0.3, Math.min(5, zoom * delta));
+  drawMap();
+}
+function onCanvasClick(e) {
+  if (Math.abs(e.clientX - (dragStartX + camX)) > 5) return; // Drag değil
+  const zone = getZoneAtMouse(e);
+  if (zone) selectZone(zone.id);
+}
+
+// Touch
+let lastTouchDist = 0;
+function onTouchStart(e) {
+  if (e.touches.length === 2) {
+    lastTouchDist = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
+  } else {
+    isDragging = true;
+    dragStartX = e.touches[0].clientX - camX;
+    dragStartY = e.touches[0].clientY - camY;
+  }
+}
+function onTouchMove(e) {
+  e.preventDefault();
+  if (e.touches.length === 2) {
+    const d = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
+    zoom = Math.max(0.3, Math.min(5, zoom * (d / lastTouchDist)));
+    lastTouchDist = d;
+    drawMap();
+  } else if (isDragging) {
+    camX = e.touches[0].clientX - dragStartX;
+    camY = e.touches[0].clientY - dragStartY;
+    drawMap();
+  }
+}
+function onTouchEnd() { isDragging = false; }
+
+function getZoneAtMouse(e) {
+  const rect = canvas.getBoundingClientRect();
+  const mx = (e.clientX - rect.left - camX - canvas.width/2)  / zoom + 450;
+  const my = (e.clientY - rect.top  - camY - canvas.height/2) / zoom + 350;
+  let closest = null, minDist = 18;
+  filteredZones.forEach(z => {
+    const p = nodePositions.get(z.id);
+    if (!p) return;
+    const d = Math.hypot(p.x - mx, p.y - my);
+    if (d < minDist) { minDist = d; closest = z; }
+  });
+  return closest;
+}
+
+// ─── ZOOM KONTROLLERI ────────────────────────────────────
+function zoomIn()    { zoom = Math.min(5, zoom * 1.3); drawMap(); }
+function zoomOut()   { zoom = Math.max(0.3, zoom / 1.3); drawMap(); }
+function resetView() { camX = 0; camY = 0; zoom = 1; drawMap(); }
+
+// ─── ZONE LİSTESİ ─────────────────────────────────────────
+function renderZoneList() {
+  const list = document.getElementById('zoneList');
+  const lang = getLang();
+  const src  = filteredZones;
+  if (!src.length) {
+    list.innerHTML = `<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:12px">${lang==='tr'?'Zone bulunamadı':'No zones found'}</div>`;
+    return;
+  }
+  list.innerHTML = src.slice(0, 300).map(z => {
+    const col = getZoneColor(z);
+    return `<div class="zone-item ${selectedZone?.id === z.id ? 'selected' : ''}" onclick="selectZone('${z.id}')">
+      <div class="zi-dot ${col.dot}"></div>
+      <div>
+        <div class="zi-name">${z.name || z.id}</div>
+        <div class="zi-type">${col.label}</div>
+      </div>
+    </div>`;
+  }).join('') + (src.length > 300 ? `<div style="padding:10px;text-align:center;color:var(--text-muted);font-size:11px">+${src.length-300} zone daha — arama ile filtrele</div>` : '');
+}
+
+// ─── ZONE SEÇ ─────────────────────────────────────────────
+function selectZone(id) {
+  selectedZone = zones.find(z => z.id === id) || null;
+  renderZoneList();
+  renderZoneDetail();
+  drawMap();
+
+  // Seçilen zone'a odaklan
+  const pos = nodePositions.get(id);
+  if (pos) {
+    camX = -(pos.x - 450) * zoom;
+    camY = -(pos.y - 350) * zoom;
+    drawMap();
+  }
+}
+
+function renderZoneDetail() {
+  const empty = document.getElementById('detailEmpty');
+  const cont  = document.getElementById('detailContent');
+  const lang  = getLang();
+  if (!selectedZone) { empty.style.display='block'; cont.style.display='none'; return; }
+  empty.style.display = 'none';
+  cont.style.display  = 'block';
+  const z   = selectedZone;
+  const col = getZoneColor(z);
+  const exits = (z.exits || []).map(eid => {
+    const ez = zones.find(x => x.id === eid);
+    return ez || { id: eid, name: eid, color:'DEFAULT' };
+  });
+
+  cont.innerHTML = `
+    <div class="detail-zone-name">${z.name || z.id}</div>
+    <div class="detail-zone-id">${z.id}</div>
+    <span class="detail-badge" style="background:${col.bg}22;color:${col.bg};border:1px solid ${col.bg}44">
+      <span style="width:8px;height:8px;border-radius:50%;background:${col.bg};display:inline-block"></span>
+      ${col.label}
+    </span>
+    <div class="detail-section-title">${lang==='tr'?'İstatistikler':'Statistics'}</div>
+    <div style="margin-bottom:14px">
+      <div class="detail-stat"><span class="detail-stat-label">${lang==='tr'?'Bağlantı':'Connections'}</span><span class="detail-stat-val">${exits.length}</span></div>
+      <div class="detail-stat"><span class="detail-stat-label">Zone ID</span><span class="detail-stat-val">${z.id}</span></div>
+      <div class="detail-stat"><span class="detail-stat-label">${lang==='tr'?'Tip':'Type'}</span><span class="detail-stat-val">${z.type || '—'}</span></div>
+    </div>
+    ${exits.length ? `
+    <div class="detail-section-title">${lang==='tr'?'Bağlantılar':'Connections'} (${exits.length})</div>
+    <div class="detail-exits">
+      ${exits.map(e => {
+        const ec = getZoneColor(e);
+        return `<div class="detail-exit-item" onclick="selectZone('${e.id}')">
+          <div style="width:8px;height:8px;border-radius:50%;background:${ec.bg};flex-shrink:0"></div>
+          <span>${e.name || e.id}</span>
+          <span style="margin-left:auto;font-size:10px;color:var(--text-muted)">${ec.label}</span>
+        </div>`;
+      }).join('')}
+    </div>` : ''}
+    <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
+      <button class="route-calc-btn" style="width:100%;margin-bottom:6px"
+        onclick="document.getElementById('routeFrom').value='${z.name||z.id}';routeFrom='${z.id}'">
+        ${lang==='tr'?'Başlangıç Noktası Yap':'Set as Start'}
+      </button>
+      <button class="route-calc-btn" style="width:100%;background:var(--bg-card);color:var(--gold);border:1px solid var(--gold)"
+        onclick="document.getElementById('routeTo').value='${z.name||z.id}';routeTo='${z.id}'">
+        ${lang==='tr'?'Hedef Noktası Yap':'Set as Destination'}
+      </button>
+    </div>`;
+}
+
+// ─── ARAMA ────────────────────────────────────────────────
+let searchTimer;
+function onMapSearch(val) {
+  clearTimeout(searchTimer);
+  const dd = document.getElementById('mapSearchDd');
+  if (!val || val.length < 2) { dd.classList.remove('open'); return; }
+  searchTimer = setTimeout(() => {
+    const q = val.toLowerCase();
+    const results = zones.filter(z =>
+      (z.name || z.id).toLowerCase().includes(q) || z.id.toLowerCase().includes(q)
+    ).slice(0, 12);
+    if (!results.length) { dd.classList.remove('open'); return; }
+    dd.innerHTML = results.map(z => {
+      const col = getZoneColor(z);
+      return `<div class="map-dd-item" onclick="selectZone('${z.id}');document.getElementById('mapSearch').value='';document.getElementById('mapSearchDd').classList.remove('open')">
+        <div class="map-dd-dot ${col.dot}"></div>
+        <div>
+          <div style="font-weight:500;color:var(--text-primary)">${z.name || z.id}</div>
+          <div style="font-size:10px;color:var(--text-muted)">${col.label}</div>
+        </div>
+      </div>`;
+    }).join('');
+    dd.classList.add('open');
+  }, 250);
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('.map-search-wrap'))
+    document.getElementById('mapSearchDd')?.classList.remove('open');
+});
+
+// ─── FİLTRE ───────────────────────────────────────────────
+function filterZones(type, btn) {
+  currentFilter = type;
+  document.querySelectorAll('.map-filter-btn').forEach(b => b.classList.toggle('active', b === btn));
+  filteredZones = type === 'all' ? [...zones] : zones.filter(z => {
+    const col = (z.color || z.type || '').toUpperCase();
+    const id  = (z.id || '').toUpperCase();
+    if (type === 'ROAD')     return id.includes('ROAD')    || col.includes('ROAD');
+    if (type === 'SAFEAREA') return col.includes('SAFEAREA')|| col.includes('BLUE');
+    return col.includes(type);
+  });
+  document.getElementById('zoneCount').textContent = filteredZones.length.toLocaleString('tr-TR');
+  renderZoneList();
+  drawMap();
+}
+
+// ─── ROTA HESAPLAMA (BFS) ─────────────────────────────────
+function calcRoute() {
+  const lang = getLang();
+  if (!routeFrom || !routeTo) {
+    alert(lang==='tr'?'Başlangıç ve hedef zone seçin.':'Please select start and destination zones.');
+    return;
+  }
+  if (routeFrom === routeTo) {
+    alert(lang==='tr'?'Başlangıç ve hedef aynı olamaz.':'Start and destination cannot be same.');
+    return;
   }
 
-  content.innerHTML = html;
-  modal.classList.add('active');
-  overlay.classList.add('active');
+  // BFS
+  const queue   = [[routeFrom]];
+  const visited = new Set([routeFrom]);
+  let found     = null;
+
+  while (queue.length && !found) {
+    const path = queue.shift();
+    const cur  = path[path.length - 1];
+    const zone = zones.find(z => z.id === cur);
+    if (!zone) continue;
+    for (const exit of (zone.exits || [])) {
+      if (visited.has(exit)) continue;
+      visited.add(exit);
+      const newPath = [...path, exit];
+      if (exit === routeTo) { found = newPath; break; }
+      queue.push(newPath);
+    }
+  }
+
+  if (!found) {
+    const rr = document.getElementById('routeResult');
+    const rs = document.getElementById('routeSteps');
+    rs.innerHTML = `<p style="color:var(--text-muted);font-size:13px;padding:12px 0">${lang==='tr'?'Bu iki zone arasında bağlantı bulunamadı.':'No connection found between these zones.'}</p>`;
+    document.getElementById('routeStats').innerHTML = '';
+    rr.style.display = 'block';
+    currentRoute = null;
+    drawMap();
+    return;
+  }
+
+  currentRoute = { path: found };
+  renderRouteResult(found);
+  drawMap();
 }
 
-window.closeModal = function() {
-  document.getElementById('zoneModal').classList.remove('active');
-  document.getElementById('modalOverlay').classList.remove('active');
-};
+function renderRouteResult(path) {
+  const lang  = getLang();
+  const rr    = document.getElementById('routeResult');
+  const rs    = document.getElementById('routeSteps');
+  const stats = document.getElementById('routeStats');
 
-// =====================================================
-// CITIES TAB
-// =====================================================
-function renderCities() {
-  const grid = document.getElementById('citiesGrid');
-  if (!grid) return;
-  const lang = window._currentLang || 'tr';
-  grid.innerHTML = CITIES_DATA.map(c => {
-    const tagHtml = c.tags.map(t => `<span class="city-tag tag-${t}">${t === 'black-market' ? 'Black Market' : t.charAt(0).toUpperCase()+t.slice(1)}</span>`).join('');
-    const bonusRows = c.bonuses.map(b => `<tr><td>${lang==='tr' ? b.label_tr : b.label_en}</td><td>${b.value}</td></tr>`).join('');
-    const res = (lang==='tr' ? c.resources_tr : c.resources_en).join(', ');
-    return `
-    <div class="city-card" onclick="openZoneModal('${c.id}','${c.name}','${c.zone_type}')">
-      <div class="city-card-header" style="background:${TYPE_BG[c.zone_type]};border-bottom:1px solid ${TYPE_COLORS[c.zone_type]}22">
-        <div class="city-icon">${c.icon}</div>
-        <div>
-          <div class="city-name">${c.name}</div>
-          <div class="city-biome">${lang==='tr' ? c.biome_tr : c.biome} · ${lang==='tr' ? 'Faction' : 'Faction'}: ${c.faction}</div>
-        </div>
+  rs.innerHTML = path.map((id, i) => {
+    const z   = zones.find(x => x.id === id) || { id, name:id, color:'DEFAULT' };
+    const col = getZoneColor(z);
+    return `<div class="route-step">
+      <div class="route-step-num">${i+1}</div>
+      <div style="width:8px;height:8px;border-radius:50%;background:${col.bg};flex-shrink:0"></div>
+      <div>
+        <div class="route-step-name">${z.name || z.id}</div>
+        <div class="route-step-type">${col.label}</div>
       </div>
-      <div class="city-card-body">
-        <table class="city-bonus-table">${bonusRows}</table>
-        <div style="font-size:0.82rem;color:var(--text-muted);margin-top:0.6rem">📦 ${res}</div>
-        <div class="city-tags">${tagHtml}</div>
+    </div>`;
+  }).join('');
+
+  // İstatistikler
+  const typeCount = {};
+  path.forEach(id => {
+    const z   = zones.find(x => x.id === id) || { color:'DEFAULT' };
+    const col = getZoneColor(z).label;
+    typeCount[col] = (typeCount[col] || 0) + 1;
+  });
+  stats.innerHTML = `
+    <div class="rr-stat"><strong>${path.length}</strong> ${lang==='tr'?'zone':'zones'}</div>
+    <div class="rr-stat"><strong>${path.length-1}</strong> ${lang==='tr'?'geçiş':'hops'}</div>
+    ${Object.entries(typeCount).map(([type,cnt]) => `<div class="rr-stat"><strong>${cnt}</strong> ${type}</div>`).join('')}`;
+
+  rr.style.display = 'block';
+}
+
+function clearRoute() {
+  currentRoute = null;
+  routeFrom = null;
+  routeTo   = null;
+  document.getElementById('routeFrom').value = '';
+  document.getElementById('routeTo').value   = '';
+  document.getElementById('routeResult').style.display = 'none';
+  drawMap();
+}
+
+function swapRoute() {
+  const tmp   = routeFrom;
+  routeFrom   = routeTo;
+  routeTo     = tmp;
+  const fromEl = document.getElementById('routeFrom');
+  const toEl   = document.getElementById('routeTo');
+  const tmpVal = fromEl.value;
+  fromEl.value = toEl.value;
+  toEl.value   = tmpVal;
+}
+
+// ─── ZONE PİCKER ─────────────────────────────────────────
+function openZonePicker(target) {
+  pickerTarget = target;
+  const lang = getLang();
+  document.getElementById('zpmTitle').textContent = target === 'from'
+    ? (lang==='tr'?'Başlangıç Zone':'Start Zone')
+    : (lang==='tr'?'Hedef Zone':'Destination Zone');
+  document.getElementById('zpmSearch').value = '';
+  renderZonePicker('');
+  document.getElementById('zonePickerOverlay').classList.add('open');
+  document.getElementById('zonePickerModal').classList.add('open');
+  document.getElementById('zpmSearch').focus();
+}
+
+function closeZonePicker() {
+  document.getElementById('zonePickerOverlay').classList.remove('open');
+  document.getElementById('zonePickerModal').classList.remove('open');
+}
+
+function filterZonePicker(val) {
+  renderZonePicker(val);
+}
+
+function renderZonePicker(search) {
+  const list = document.getElementById('zpmList');
+  const q    = search.toLowerCase();
+  const src  = search ? zones.filter(z => (z.name||z.id).toLowerCase().includes(q)) : zones;
+  list.innerHTML = src.slice(0, 100).map(z => {
+    const col = getZoneColor(z);
+    return `<div class="zpm-item" onclick="pickZone('${z.id}','${(z.name||z.id).replace(/'/g,"\\'")}')">
+      <div style="width:10px;height:10px;border-radius:50%;background:${col.bg};flex-shrink:0"></div>
+      <div>
+        <div class="zpm-item-name">${z.name || z.id}</div>
+        <div class="zpm-item-id">${z.id} · ${col.label}</div>
       </div>
     </div>`;
   }).join('');
 }
 
-// =====================================================
-// ZONES TABLE
-// =====================================================
-function renderZones(filter = '', typeFilter = '', biomeFilter = '') {
-  const tbody = document.getElementById('zonesTbody');
-  if (!tbody) return;
-  const lang = window._currentLang || 'tr';
-  const filtered = ZONES_DATA.filter(z => {
-    const name = z.name.toLowerCase();
-    const matchText = !filter || name.includes(filter.toLowerCase());
-    const matchType = !typeFilter || z.type === typeFilter;
-    const matchBiome = !biomeFilter || z.biome === biomeFilter;
-    return matchText && matchType && matchBiome;
-  });
-
-  tbody.innerHTML = filtered.map(z => {
-    const res = (lang==='tr' ? z.resources_tr : z.resources_en);
-    const resHtml = res.map(r => `<span class="res-icon" title="${r}">${r.substring(0,2)}</span>`).join('');
-    const region = lang==='tr' ? z.region_tr : z.region_en;
-    return `<tr>
-      <td><strong>${z.name}</strong></td>
-      <td><span class="zone-type-badge badge-${z.type}">${z.type.toUpperCase()}</span></td>
-      <td>${z.biome}</td>
-      <td><div class="resource-icons">${resHtml}</div></td>
-      <td>${z.tier}</td>
-      <td style="color:var(--text-muted)">${region}</td>
-    </tr>`;
-  }).join('');
+function pickZone(id, name) {
+  if (pickerTarget === 'from') {
+    routeFrom = id;
+    document.getElementById('routeFrom').value = name;
+  } else {
+    routeTo = id;
+    document.getElementById('routeTo').value = name;
+  }
+  closeZonePicker();
 }
-
-// =====================================================
-// BIOMES TAB
-// =====================================================
-function renderBiomes() {
-  const grid = document.getElementById('biomesGrid');
-  if (!grid) return;
-  const lang = window._currentLang || 'tr';
-  grid.innerHTML = BIOMES_DATA.map(b => {
-    const resHtml = b.resources.map(r => `<div class="biome-res-item"><span class="res-emoji">${r.emoji}</span><span>${lang==='tr' ? r.tr : r.en}</span></div>`).join('');
-    return `
-    <div class="biome-card" style="border-color:${b.color}44">
-      <div class="biome-card-header" style="background:${b.color}22;border-bottom:1px solid ${b.color}33">
-        <div class="biome-title" style="color:${b.color === '#2d5a27' ? '#4caf50' : b.color === '#8b6914' ? '#f5c842' : b.color === '#4a4a7a' ? '#9e9eff' : b.color === '#6a3a2a' ? '#ef9a9a' : '#66bb6a'}">${lang==='tr' ? b.name_tr : b.name_en}</div>
-        <div class="biome-city">${lang==='tr' ? b.city_tr : b.city_en}</div>
-      </div>
-      <div class="biome-resources">${resHtml}</div>
-      <div class="craft-bonus">🔨 <strong>${lang==='tr' ? b.craft_tr : b.craft_en}</strong></div>
-    </div>`;
-  }).join('');
-}
-
-// =====================================================
-// OUTLANDS TAB
-// =====================================================
-function renderOutlands() {
-  const grid = document.getElementById('outlandsGrid');
-  if (!grid) return;
-  const lang = window._currentLang || 'tr';
-  grid.innerHTML = OUTLANDS_DATA.map(o => `
-    <div class="outland-card">
-      <div class="outland-card-title">${o.emoji} ${o.name} <span style="font-size:0.75rem;color:var(--text-muted);font-weight:400">· ${lang==='tr' ? o.level_tr : o.level_en} · Tier ${o.tier}</span></div>
-      <div class="outland-info">${lang==='tr' ? o.desc_tr : o.desc_en}</div>
-    </div>
-  `).join('');
-}
-
-// =====================================================
-// SPECIAL ZONES TAB
-// =====================================================
-function renderSpecial() {
-  const grid = document.getElementById('specialZonesGrid');
-  if (!grid) return;
-  const lang = window._currentLang || 'tr';
-  grid.innerHTML = SPECIAL_ZONES.map(s => {
-    const hls = (lang==='tr' ? s.highlights_tr : s.highlights_en).map(h => `<span class="special-highlight">✦ ${h}</span>`).join('  ');
-    return `
-    <div class="special-card">
-      <div class="special-card-title">${s.emoji} ${s.title}</div>
-      <div class="special-card-sub">${lang==='tr' ? s.subtitle_tr : s.subtitle_en}</div>
-      <div class="special-card-body">${lang==='tr' ? s.desc_tr : s.desc_en}</div>
-      <div style="margin-top:0.8rem;font-size:0.8rem;display:flex;flex-wrap:wrap;gap:0.5rem">${hls}</div>
-    </div>`;
-  }).join('');
-}
-
-// =====================================================
-// TABS
-// =====================================================
-function initTabs() {
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('tab-' + btn.dataset.tab)?.classList.add('active');
-    });
-  });
-}
-
-// =====================================================
-// ZONE SEARCH & FILTER
-// =====================================================
-function initZoneFilters() {
-  const search = document.getElementById('zoneSearch');
-  const typeF  = document.getElementById('zoneTypeFilter');
-  const biomeF = document.getElementById('zoneBiomeFilter');
-  const update = () => renderZones(search?.value || '', typeF?.value || '', biomeF?.value || '');
-  search?.addEventListener('input', update);
-  typeF?.addEventListener('change', update);
-  biomeF?.addEventListener('change', update);
-}
-
-// =====================================================
-// INIT
-// =====================================================
-document.addEventListener('DOMContentLoaded', () => {
-  initTabs();
-  initWorldMap();
-  renderCities();
-  renderZones();
-  renderBiomes();
-  renderOutlands();
-  renderSpecial();
-  initZoneFilters();
-
-  // Dil değişince yeniden render
-  document.addEventListener('langChanged', () => {
-    renderCities();
-    renderZones(
-      document.getElementById('zoneSearch')?.value || '',
-      document.getElementById('zoneTypeFilter')?.value || '',
-      document.getElementById('zoneBiomeFilter')?.value || ''
-    );
-    renderBiomes();
-    renderOutlands();
-    renderSpecial();
-  });
-});
