@@ -5,7 +5,7 @@ on:
     - cron: '0 */6 * * *'
   workflow_dispatch:
 
-# GitHub'ın resmi olarak önerdiği Node 24 onay değişkeni
+# RESMİ ÇÖZÜM: Node 24 kullanımını iş akışı düzeyinde onaylıyoruz
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v4.2.2 # Tam sürüm kullanımı
       
       - name: Setup Node.js
         uses: actions/setup-node@v4.2.0
