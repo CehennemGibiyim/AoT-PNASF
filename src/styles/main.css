@@ -756,3 +756,36 @@ img { max-width: 100%; display: block; }
 .sync-panel-btn:hover { opacity:.88; }
 .sync-panel-btn:disabled { opacity:.5; cursor:not-allowed; background:var(--text-muted); }
 .sync-panel-btn.ok-btn { background:var(--teal); }
+
+/* ═══ NAVBAR RESPONSIVE FIX ══════════════════════════════ */
+/* Geniş ekranda nav-inner tam genişlik kullanır */
+@media (min-width: 1400px) {
+  .nav-inner { max-width: 1400px; }
+}
+
+/* Orta ekranlarda linkler küçülür */
+@media (max-width: 1100px) {
+  .nav-inner { gap: 16px; padding: 0 16px; }
+  .nav-links a { font-size: 13px; padding: 6px 8px; }
+  .logo-aot, .logo-pnasf { font-size: 18px; }
+  .ai-status .ai-text { display: none; }
+}
+
+/* Küçük-orta ekran: linkleri gizle, hamburger göster */
+@media (max-width: 900px) {
+  .nav-links { 
+    display: none; 
+    flex-direction: column; 
+    position: absolute; 
+    top: 64px; left: 0; right: 0; 
+    background: var(--bg-card); 
+    border-bottom: 1px solid var(--border); 
+    padding: 12px 16px; 
+    gap: 2px;
+    z-index: 999;
+  }
+  .nav-links.open { display: flex; }
+  .hamburger { display: flex !important; }
+  .ai-status { display: none !important; }
+  .settings-trigger-flag { display: none; }
+}
