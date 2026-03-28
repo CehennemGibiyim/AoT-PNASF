@@ -10,20 +10,15 @@ on:
         required: false
         default: 'false'
 
-permissions:
-  contents: write
-
 jobs:
   sync-data:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4.2.2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4.2.0
-        with:
-          node-version: '24.x'
+        uses: actions/checkout@v4
 
       - name: Check ao-bin-dumps last commit
         id: check
@@ -41,29 +36,91 @@ jobs:
           FORCE="${{ github.event.inputs.force }}"
           if [ "$REMOTE" != "$LOCAL" ] || [ "$FORCE" = "true" ]; then
             echo "needs_update=true" >> $GITHUB_OUTPUT
+            echo "Guncelleme gerekli"
           else
             echo "needs_update=false" >> $GITHUB_OUTPUT
+            echo "Zaten guncel"
           fi
 
       - name: Download + Generate + Commit
         if: steps.check.outputs.needs_update == 'true'
         run: |
           mkdir -p tmp-data src/data
-          curl -sL "https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/formatted/items.json" -o tmp-data/items.json
-          curl -sL "https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/formatted/world.json" -o tmp-data/world.json
 
-          python3 << 'PYEOF'
-          import json, re, os
-          from datetime import datetime
-          # ... (Mevcut Python kodun)
-          PYEOF
+          # ── items.json indir
+          echo "=== items.json indiriliyor ==="
+          curl -sL "https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/formatted/items.json" \
+            -o tmp-data/items.json
+          echo "items.json: $(wc -c < tmp-data/items.json) byte"
 
+          # ── world.json indir
+          echo "=== world.json indiriliyor ==="
+          curl -sL "https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/formatted/world.json" \
+            -o tmp-data/world.json
+          echo "world.json: $(wc -c < tmp-data/world.json) byte"
+
+          # ── cluster/ klasöründen Avalon Roads verisi al
+          echo "=== cluster listesi aliniyor ==="
+          CLUSTER_LIST=$(curl -s "https://api.github.com/repos/ao-data/ao-bin-dumps/contents/cluster" \
+            | python3 -c "
+          import sys,json
+          data = json.load(sys.stdin)
+          if isinstance(data, list):
+              files = [x['name'] for x in data if x['name'].endswith('.json')]
+              print('\n'.join(files[:20]))  # ilk 20 dosya
+          " 2>/dev/null || echo "")
+
+          if [ -n "$CLUSTER_LIST" ]; then
+            mkdir -p tmp-data/cluster
+            echo "$CLUSTER_LIST" | head -10 | while read fname; do
+              echo "  cluster/$fname indiriliyor..."
+              curl -sL "https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/cluster/$fname" \
+                -o "tmp-data/cluster/$fname" 2>/dev/null || true
+            done
+          fi
+
+          # ── items-data.js üret
+          echo "=== items-data.js uretiliyor ==="
+          python3 scripts/generate-items.py
+
+          # ── world-data.js üret (v2)
+          echo "=== world-data.js uretiliyor ==="
+          python3 scripts/generate-world.py
+
+          # ── sync-info.json güncelle
+          ITEM_COUNT=$(python3 -c "
+          import re
+          try:
+              content = open('src/data/items-data.js').read()
+              print(len(re.findall(r'\"id\":', content)))
+          except: print(0)
+          " 2>/dev/null || echo 0)
+
+          ZONE_COUNT=$(python3 -c "
+          import re
+          try:
+              content = open('src/data/world-data.js').read()
+              print(len(re.findall(r'\"id\":', content)))
+          except: print(0)
+          " 2>/dev/null || echo 0)
+
+          NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          REMOTE="${{ steps.check.outputs.remote_date }}"
+
+          printf '{\n  "ao_bin_dumps_commit": "%s",\n  "last_sync": "%s",\n  "items_count": %s,\n  "zones_count": %s\n}\n' \
+            "$REMOTE" "$NOW" "$ITEM_COUNT" "$ZONE_COUNT" > src/data/sync-info.json
+
+          echo "=== Sonuclar ==="
+          echo "Items: $ITEM_COUNT"
+          echo "Zones: $ZONE_COUNT"
+
+          # ── Commit ve push
           git config --local user.email "bot@aot-pnasf.github.io"
           git config --local user.name "AoT-PNASF Data Bot"
-          git add src/data/
-          git diff --staged --quiet || git commit -m "🔄 Data sync [$(date +'%Y-%m-%d %H:%M')]"
+          git add src/data/items-data.js src/data/world-data.js src/data/sync-info.json
+          git diff --staged --quiet || git commit -m "🔄 Data sync [$(date +'%Y-%m-%d %H:%M')] items:$ITEM_COUNT zones:$ZONE_COUNT"
           git push
 
       - name: Already up to date
         if: steps.check.outputs.needs_update == 'false'
-        run: echo "Veriler zaten güncel."
+        run: echo "Zaten guncel, islem yapilmadi"
