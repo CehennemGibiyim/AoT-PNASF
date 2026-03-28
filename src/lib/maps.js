@@ -114,6 +114,16 @@ function getStaticZones() {
     {id:'REDZONE_02',     name:'Red Zone 2',      color:'RED',      type:'REDZONE',   exits:['REDZONE_01']},
     {id:'YELLOWZONE_01',  name:'Yellow Zone 1',   color:'YELLOW',   type:'YELLOWZONE', exits:['CAERLEON','YELLOWZONE_02']},
     {id:'YELLOWZONE_02',  name:'Yellow Zone 2',   color:'YELLOW',   type:'YELLOWZONE', exits:['YELLOWZONE_01']},
+
+  // ── Avalon Roads (fallback — world-data.js yokken)
+  {id:'ROAD_2P_001',name:'Road of Avalon (2p #1)',color:'ROAD',type:'ROAD',exits:['ROAD_2P_002','ROAD_7P_001'],road:true},
+  {id:'ROAD_2P_002',name:'Road of Avalon (2p #2)',color:'ROAD',type:'ROAD',exits:['ROAD_2P_001','ROAD_2P_003'],road:true},
+  {id:'ROAD_2P_003',name:'Road of Avalon (2p #3)',color:'ROAD',type:'ROAD',exits:['ROAD_2P_002'],road:true},
+  {id:'ROAD_7P_001',name:'Road of Avalon (7p #1)',color:'ROAD',type:'ROAD',exits:['ROAD_2P_001','ROAD_7P_002','ROAD_20P_001'],road:true},
+  {id:'ROAD_7P_002',name:'Road of Avalon (7p #2)',color:'ROAD',type:'ROAD',exits:['ROAD_7P_001','ROAD_7P_003'],road:true},
+  {id:'ROAD_7P_003',name:'Road of Avalon (7p #3)',color:'ROAD',type:'ROAD',exits:['ROAD_7P_002'],road:true},
+  {id:'ROAD_20P_001',name:'Road of Avalon (20p #1)',color:'ROAD',type:'ROAD',exits:['ROAD_7P_001','ROAD_20P_002'],road:true},
+  {id:'ROAD_20P_002',name:'Road of Avalon (20p #2)',color:'ROAD',type:'ROAD',exits:['ROAD_20P_001'],road:true},
     {id:'ROAD_01',        name:'Road of Avalon 1',color:'ROAD',     type:'ROAD',      exits:['ROAD_02']},
     {id:'ROAD_02',        name:'Road of Avalon 2',color:'ROAD',     type:'ROAD',      exits:['ROAD_01']},
   ];
