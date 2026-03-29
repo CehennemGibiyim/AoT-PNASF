@@ -74,10 +74,14 @@ document.addEventListener('DOMContentLoaded', () => {
 function loadZones() {
   if (window.AO_ZONES && window.AO_ZONES.length > 0) {
     zones = window.AO_ZONES;
+    // Avalon Roads world.json'da eksik olabilir — her zaman ekle
+    const avalonIds = getAvalonZones().map(z => z.id);
+    const existingIds = zones.map(z => z.id);
+    getAvalonZones().forEach(az => {
+      if (!existingIds.includes(az.id)) zones.push(az);
+    });
     initMap();
   } else {
-    // world-data.js henüz Data Sync botu tarafından üretilmemiş
-    // Statik temel zone'ları kullan
     zones = getStaticZones();
     initMap();
   }
@@ -92,6 +96,27 @@ function initMap() {
 }
 
 // ─── STATİK TEMEL ZONE'LAR (world-data.js yokken fallback) ──
+function getAvalonZones() {
+  return [
+    // Roads of Avalon — 2 kişilik
+    {id:'ROAD_2P_001',name:'Road of Avalon (2p)',color:'ROAD',type:'ROAD',exits:['ROAD_2P_002','ROAD_7P_001'],road:true},
+    {id:'ROAD_2P_002',name:'Road of Avalon (2p)',color:'ROAD',type:'ROAD',exits:['ROAD_2P_001','ROAD_2P_003'],road:true},
+    {id:'ROAD_2P_003',name:'Road of Avalon (2p)',color:'ROAD',type:'ROAD',exits:['ROAD_2P_002','ROAD_7P_002'],road:true},
+    {id:'ROAD_2P_004',name:'Road of Avalon (2p)',color:'ROAD',type:'ROAD',exits:['ROAD_7P_002'],road:true},
+    {id:'ROAD_2P_005',name:'Road of Avalon (2p)',color:'ROAD',type:'ROAD',exits:['ROAD_7P_003'],road:true},
+    // Roads of Avalon — 7 kişilik
+    {id:'ROAD_7P_001',name:'Road of Avalon (7p)',color:'ROAD',type:'ROAD',exits:['ROAD_2P_001','ROAD_7P_002','ROAD_20P_001'],road:true},
+    {id:'ROAD_7P_002',name:'Road of Avalon (7p)',color:'ROAD',type:'ROAD',exits:['ROAD_7P_001','ROAD_7P_003','ROAD_2P_004'],road:true},
+    {id:'ROAD_7P_003',name:'Road of Avalon (7p)',color:'ROAD',type:'ROAD',exits:['ROAD_7P_002','ROAD_20P_002','ROAD_2P_005'],road:true},
+    {id:'ROAD_7P_004',name:'Road of Avalon (7p)',color:'ROAD',type:'ROAD',exits:['ROAD_20P_001','ROAD_7P_005'],road:true},
+    {id:'ROAD_7P_005',name:'Road of Avalon (7p)',color:'ROAD',type:'ROAD',exits:['ROAD_7P_004'],road:true},
+    // Roads of Avalon — 20 kişilik
+    {id:'ROAD_20P_001',name:'Road of Avalon (20p)',color:'ROAD',type:'ROAD',exits:['ROAD_7P_001','ROAD_20P_002','ROAD_7P_004'],road:true},
+    {id:'ROAD_20P_002',name:'Road of Avalon (20p)',color:'ROAD',type:'ROAD',exits:['ROAD_20P_001','ROAD_7P_003'],road:true},
+    {id:'ROAD_20P_003',name:'Road of Avalon (20p)',color:'ROAD',type:'ROAD',exits:['ROAD_20P_002'],road:true},
+  ];
+}
+
 function getStaticZones() {
   return [
     // Royal Cities
