@@ -1,183 +1,548 @@
-// AoT-PNASF — Rehberler v1
-// Gemini AI destekli dinamik rehber üretimi
+// AoT-PNASF — Rehberler v2
+// Gemini API kaldırıldı — statik rehber sistemi
 
-const GEMINI_API = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
-const GEMINI_KEY = 'AIzaSyC9g3i5lZBK5hVBi4Kf7FyY5Z8R2mN4xPQ'; // Placeholder — secrets'dan alınacak
-
-// ─── HAZIR REHBER VERİTABANI ─────────────────────────────
+// ─── REHBER VERİTABANI ───────────────────────────────────
 const GUIDES = [
   // BAŞLANGIÇ
-  {
-    id:'beginner-start', cat:'beginner', level:'beginner', icon:'🎯',
-    tr:{title:'Albion Online\'a İlk Adımlar', desc:'Oyuna yeni başladınsa buradan başla. Destiny Board, ilk ekipman, silver kazanma yolları.'},
-    en:{title:'First Steps in Albion Online', desc:'Just started? Begin here. Destiny Board, first equipment, ways to earn silver.'},
-    videos:[
-      {id:'dQw4w9WgXcQ', title:'Albion Online Başlangıç Rehberi 2025', channel:'AlbionTR'},
-    ],
-    prompt_tr:'Albion Online\'a yeni başlayan birisi için kapsamlı Türkçe başlangıç rehberi yaz. Destiny Board, ilk ekipman seçimi, silver kazanma yolları, premium\'un önemi, ilk yapılması gerekenler. Adım adım anlat.',
-    prompt_en:'Write a comprehensive beginner guide for Albion Online. Destiny Board, first equipment choices, ways to earn silver, importance of premium, first things to do. Step by step.',
-  },
-  {
-    id:'beginner-destiny', cat:'beginner', level:'beginner', icon:'🌳',
-    tr:{title:'Destiny Board Rehberi', desc:'Destiny Board\'u nasıl optimize edersin? Hangi path\'ı seçmeli? Specialization puanları.'},
-    en:{title:'Destiny Board Guide', desc:'How to optimize your Destiny Board? Which path to choose? Specialization points.'},
-    videos:[],
-    prompt_tr:'Albion Online Destiny Board sistemi hakkında detaylı Türkçe rehber yaz. Path seçimi, specialization puanları, en verimli yükseltme rotasyonu, PvP vs PvE odaklı Destiny Board farklılıkları.',
-    prompt_en:'Write a detailed guide about the Albion Online Destiny Board system. Path selection, specialization points, most efficient upgrade rotation, PvP vs PvE focused differences.',
-  },
-  {
-    id:'beginner-silver', cat:'beginner', level:'beginner', icon:'💰',
-    tr:{title:'Silver Kazanma — Başlangıç', desc:'Sıfırdan başlayarak nasıl hızlı silver kazanırsın? En iyi yöntemler.'},
-    en:{title:'Silver Farming — Beginner', desc:'How to quickly earn silver starting from scratch? Best methods.'},
-    videos:[],
-    prompt_tr:'Albion Online\'da yeni başlayanlar için silver kazanma rehberi yaz. Düşük tier\'dan başlayarak nasıl büyünür, hangi aktiviteler en çok silver getirir, transport flip, crafting, gathering arasındaki farklar.',
-    prompt_en:'Write a silver farming guide for Albion Online beginners. How to grow starting from low tier, which activities bring the most silver, differences between transport flip, crafting, and gathering.',
+  { id:'beginner-start', cat:'beginner', level:'beginner', icon:'🎯',
+    tr:{ title:'Albion\'a İlk Adımlar',
+      content:`# Albion Online'a İlk Adımlar
+
+## Oyuna Başlarken
+Albion Online'a yeni başladıysan önce **Destiny Board**'u anlamalısın. Bu, tüm ilerlemenin haritasıdır.
+
+## İlk Yapman Gerekenler
+- Tutorial'ı tamamla — başlangıç ekipmanı kazan
+- Destiny Board'da bir path seç (Savaşçı, Mağus veya Avcı)
+- **Premium** al veya birikim yap — %50 daha fazla fame kazanırsın
+- İlk gün Caerleon'a gitme — tehlikeli!
+
+## Silver Kazanma (Başlangıç)
+- **Gathering** — hammadde topla, sat
+- **Dungeon** — solo dungeon'lardan loot
+- **Craft** — basit eşya üret, sat
+- **Daily Missions** — günlük görevler
+
+## Önemli İpuçları
+> Blue zone = güvenli, Yellow zone = dikkatli, Red/Black zone = full-loot PvP
+
+Başlangıçta **T4 ekipman** hedefle. T4 sonrası gerçek oyun başlar.`
+    },
+    en:{ title:'First Steps in Albion',
+      content:`# First Steps in Albion Online
+
+## Getting Started
+Albion Online begins with the **Destiny Board** — your progression map for everything.
+
+## First Things To Do
+- Complete the tutorial — earn starter equipment
+- Choose a path on the Destiny Board (Warrior, Mage or Hunter)
+- Get **Premium** or save up — 50% more fame gain
+- Don't go to Caerleon on day one — dangerous!
+
+## Earning Silver (Beginner)
+- **Gathering** — collect resources, sell them
+- **Dungeons** — loot from solo dungeons
+- **Crafting** — craft basic items, sell
+- **Daily Missions** — daily quest rewards
+
+## Key Tips
+> Blue zone = safe, Yellow = careful, Red/Black = full-loot PvP
+
+Target **T4 equipment** first. The real game starts after T4.`
+    },
+    videos:['dQw4w9WgXcQ']
   },
 
-  // BUILD
-  {
-    id:'build-solo-pvp', cat:'build', level:'mid', icon:'⚔️',
-    tr:{title:'Solo PvP Build Rehberi', desc:'Solo PvP için en iyi build\'ler. Corrupted Dungeon, ganking, roaming. T6+ için öneriler.'},
-    en:{title:'Solo PvP Build Guide', desc:'Best builds for solo PvP. Corrupted Dungeon, ganking, roaming. T6+ recommendations.'},
-    videos:[],
-    prompt_tr:'Albion Online Solo PvP için kapsamlı build rehberi yaz. Corrupted Dungeon, Ganking, Solo Roaming için ayrı ayrı build önerileri. T6 ve T8 için silah, zırh, cape seçimleri. Skill seçimi ve oynanış taktikleri.',
-    prompt_en:'Write a comprehensive build guide for Albion Online Solo PvP. Separate build recommendations for Corrupted Dungeon, Ganking, Solo Roaming. Weapon, armor, cape choices for T6 and T8. Skill selection and gameplay tactics.',
-  },
-  {
-    id:'build-group', cat:'build', level:'mid', icon:'🛡️',
-    tr:{title:'Group & ZvZ Build Rehberi', desc:'Group PvP için tank, healer, DPS rolleri. ZvZ\'de nasıl kullanışlı olunur?'},
-    en:{title:'Group & ZvZ Build Guide', desc:'Tank, healer, DPS roles for group PvP. How to be useful in ZvZ?'},
-    videos:[],
-    prompt_tr:'Albion Online Group PvP ve ZvZ için build rehberi yaz. Tank, Healer, DPS, Support rolleri. Her rol için önerilen silah, zırh ve cape seçimleri. ZvZ\'de pozisyon ve oynanış taktikleri.',
-    prompt_en:'Write a build guide for Albion Online Group PvP and ZvZ. Tank, Healer, DPS, Support roles. Recommended weapon, armor and cape choices for each role. Positioning and gameplay tactics in ZvZ.',
-  },
-  {
-    id:'build-gathering', cat:'build', level:'beginner', icon:'⛏️',
-    tr:{title:'Gathering Build & Rotasyon', desc:'T8 gathering için en iyi build, hangi bölgede ne toplanır, güvenlik taktikleri.'},
-    en:{title:'Gathering Build & Rotation', desc:'Best build for T8 gathering, what to gather where, safety tactics.'},
-    videos:[],
-    prompt_tr:'Albion Online Gathering (kaynak toplama) için detaylı rehber yaz. T4\'ten T8\'e kadar gathering build\'leri, hangi bölgede ne toplanır, Outlands güvenlik taktikleri, gathering\'den en çok silver kazanma yolları.',
-    prompt_en:'Write a detailed guide for Albion Online Gathering. Gathering builds from T4 to T8, what to gather where, Outlands safety tactics, ways to earn the most silver from gathering.',
+  { id:'beginner-destiny', cat:'beginner', level:'beginner', icon:'🌳',
+    tr:{ title:'Destiny Board Rehberi',
+      content:`# Destiny Board (Kader Panosu) Rehberi
+
+## Destiny Board Nedir?
+Albion'daki tüm gelişimini takip eden sistemdir. Her aktivite — PvP, PvE, Crafting, Gathering — burada fame kazandırır.
+
+## Path Seçimi
+| Path | Uygun Oyuncu | Kazanç |
+|------|-------------|--------|
+| Savaşçı (Warrior) | Tank/DPS sevenler | Yüksek PvP fame |
+| Mağus (Mage) | Büyü sevenler | AoE fame farm |
+| Avcı (Hunter) | Hız sevenler | Gathering + Solo |
+
+## Specialization Puanları
+- Bir silahı **100/100** spec'e getir
+- Specialization %50'ye kadar bonus hasar/etkinlik verir
+- Birden fazla silahı spec etme — önce birini maxla
+
+## En Verimli Rotasyon
+1. T4 → T5 geçiş için dungeon spam
+2. T5 → T6 için Yellow zone dungeon
+3. T6+ için Red/Black zone`
+    },
+    en:{ title:'Destiny Board Guide',
+      content:`# Destiny Board Guide
+
+## What is the Destiny Board?
+It tracks all your progression in Albion. Every activity — PvP, PvE, Crafting, Gathering — earns fame here.
+
+## Path Selection
+| Path | Best For | Reward |
+|------|----------|--------|
+| Warrior | Tank/DPS lovers | High PvP fame |
+| Mage | Spell casters | AoE fame farm |
+| Hunter | Speed lovers | Gathering + Solo |
+
+## Specialization Points
+- Get one weapon to **100/100** spec
+- Specialization gives up to 50% bonus damage/efficiency
+- Don't spec multiple weapons — max one first
+
+## Most Efficient Rotation
+1. T4 → T5: dungeon spam
+2. T5 → T6: Yellow zone dungeons
+3. T6+: Red/Black zones`
+    }, videos:[]
   },
 
   // EKONOMİ
-  {
-    id:'economy-flip', cat:'economy', level:'mid', icon:'💹',
-    tr:{title:'Black Market Flip Stratejisi', desc:'Black Market\'te nasıl flip yapılır? En karlı eşyalar, zamanlamalar, tuzaklar.'},
-    en:{title:'Black Market Flip Strategy', desc:'How to flip at the Black Market? Most profitable items, timing, pitfalls.'},
-    videos:[],
-    prompt_tr:'Albion Online Black Market Flip stratejisi rehberi yaz. BM\'nin nasıl çalıştığını, en karlı item kategorilerini, fiyat takibi, enchant flip, Caerleon\'dan BM\'ye transport hesabı anlat. Başlangıç sermayesine göre stratejiler ver.',
-    prompt_en:'Write an Albion Online Black Market Flip strategy guide. Explain how the BM works, most profitable item categories, price tracking, enchant flip, transport calculation from Caerleon to BM. Give strategies based on starting capital.',
+  { id:'economy-flip', cat:'economy', level:'mid', icon:'💹',
+    tr:{ title:'Black Market Flip Stratejisi',
+      content:`# Black Market Flip Stratejisi
+
+## Black Market Nedir?
+Caerleon'da özel bir market — NPC'ler burada alış emri verir. Oyuncular bu emirleri karşılar.
+
+## Nasıl Çalışır?
+1. Black Market'te hangi eşyanın yüksek alış emri var bak
+2. O eşyayı Royal şehirlerden ucuza al
+3. Black Market'e getirip sat
+4. Fark = kârın
+
+## En Karlı Kategoriler
+- **T8 silahlar** — yüksek hacim, yüksek kâr
+- **T6-T7 zırh** — sürekli talep
+- **Enchanted eşyalar** — @1, @2, @3 versiyon farkı
+
+## Dikkat Edilecekler
+> Transport sırasında Red/Black zone'dan geçme — eşyaların çalınır!
+- Caerleon üzerinden transport en güvenli
+- Miktarı fazla tutma — sıkışırsan büyük kayıp
+
+## Başlangıç Sermayesi
+- 500K silver ile başlanabilir
+- 2-3M silver ile verimli çalışır`
+    },
+    en:{ title:'Black Market Flip Strategy',
+      content:`# Black Market Flip Strategy
+
+## What is the Black Market?
+A special market in Caerleon — NPCs place buy orders here. Players fulfill these orders.
+
+## How It Works
+1. Check which items have high buy orders on Black Market
+2. Buy those items cheaply from Royal cities
+3. Bring them to Black Market and sell
+4. The difference = your profit
+
+## Most Profitable Categories
+- **T8 weapons** — high volume, high profit
+- **T6-T7 armor** — constant demand
+- **Enchanted items** — @1, @2, @3 version gaps
+
+## Watch Out
+> Don't transport through Red/Black zones — your items will be looted!
+- Transport via Caerleon is safest
+- Don't carry too much — big loss if you die
+
+## Starting Capital
+- Can start with 500K silver
+- Works efficiently with 2-3M silver`
+    }, videos:[]
   },
-  {
-    id:'economy-craft', cat:'economy', level:'mid', icon:'🔨',
-    tr:{title:'Crafting Kâr Döngüsü', desc:'Crafting ile nasıl sürdürülebilir gelir elde edilir? Refining, crafting, satış döngüsü.'},
-    en:{title:'Crafting Profit Cycle', desc:'How to achieve sustainable income through crafting? Refining, crafting, selling cycle.'},
-    videos:[],
-    prompt_tr:'Albion Online Crafting ile para kazanma rehberi yaz. Refining döngüsü, crafting kâr hesabı, return rate optimizasyonu, en karlı craft kategorileri, şehir bonuslarını kullanma, focus kullanımı. Spesifik örnekler ver.',
-    prompt_en:'Write a guide to making money through Albion Online Crafting. Refining cycle, crafting profit calculation, return rate optimization, most profitable craft categories, using city bonuses, focus usage. Give specific examples.',
+
+  { id:'economy-craft', cat:'economy', level:'mid', icon:'🔨',
+    tr:{ title:'Crafting Kâr Döngüsü',
+      content:`# Crafting ile Para Kazanma
+
+## Temel Mantık
+Ham madde → Refine → Craft → Sat
+
+## Return Rate (Geri Dönüş Oranı)
+- Normal: %15.2 return rate
+- Focus kullanınca: %43.5 return rate
+- **Focus çok değerli** — gereksiz yere harcama
+
+## Şehir Bonusları
+| Şehir | Bonus Kategori |
+|-------|---------------|
+| Lymhurst | Kumaş zırh |
+| Bridgewatch | Çöl zırh |
+| Martlock | Kürk zırh |
+| Thetford | Bataklık zırh |
+| Fort Sterling | Plaka zırh |
+
+## En Karlı Craft
+1. **Leather armor T6-T8** — yüksek talep
+2. **Bags T8** — her oyuncu ister
+3. **Potions T6** — sürekli tüketim
+4. **Mount** — her zaman satılır
+
+## Kâr Hesabı
+\`\`\`
+Kâr = Satış Fiyatı - Hammadde - Refine - Craft Vergisi
+\`\`\``
+    },
+    en:{ title:'Crafting Profit Cycle',
+      content:`# Earning Money Through Crafting
+
+## Basic Logic
+Raw material → Refine → Craft → Sell
+
+## Return Rate
+- Normal: 15.2% return rate
+- With Focus: 43.5% return rate
+- **Focus is very valuable** — don't waste it
+
+## City Bonuses
+| City | Bonus Category |
+|------|---------------|
+| Lymhurst | Cloth armor |
+| Bridgewatch | Leather armor |
+| Martlock | Fur armor |
+| Thetford | Swamp armor |
+| Fort Sterling | Plate armor |
+
+## Most Profitable Crafts
+1. **Leather armor T6-T8** — high demand
+2. **Bags T8** — every player wants one
+3. **Potions T6** — constant consumption
+4. **Mounts** — always sells`
+    }, videos:[]
   },
-  {
-    id:'economy-transport', cat:'economy', level:'beginner', icon:'🚢',
-    tr:{title:'Transport & Şehirlerarası Ticaret', desc:'Şehirler arası fiyat farklarını kullan. Güvenli transport yolları, kâr hesaplama.'},
-    en:{title:'Transport & Inter-city Trading', desc:'Use price differences between cities. Safe transport routes, profit calculation.'},
-    videos:[],
-    prompt_tr:'Albion Online şehirlerarası transport ve ticaret rehberi yaz. Hangi eşyaları hangi güzergahta taşımalı, nakliye ücreti hesabı, vergi optimizasyonu, güvenli transport yolları, Arthur\'s/Merlyn\'s/Morgana\'s Rest dahil.',
-    prompt_en:'Write an Albion Online inter-city transport and trading guide. What items to transport on which routes, freight cost calculation, tax optimization, safe transport routes, including Arthur\'s/Merlyn\'s/Morgana\'s Rest.',
+
+  // BUILD
+  { id:'build-solo-pvp', cat:'build', level:'mid', icon:'⚔️',
+    tr:{ title:'Solo PvP Build Rehberi',
+      content:`# Solo PvP Build Rehberi
+
+## Corrupted Dungeon (CD) için
+**Claymore Build**
+- Silah: T6+ Claymore
+- Kask: Knight Helmet (W: Toughness)
+- Zırh: Mercenary Jacket (W: Adrenaline Boost)
+- Bot: Soldier Boots (W: Dash)
+- Cape: Thetford Cape
+- Food: Beef Stew
+- Potion: Resistance Potion
+
+**Oynanış:** Adrenaline Boost → Q spam → W → öldür
+
+## Ganking için
+- Silah: Bloodletter (hız için)
+- Zırh: Hellion Jacket
+- Bot: Stalker Shoes
+- Mount: Swiftclaw
+
+## Solo Roaming
+- Silah: Carrioncaller veya Whispering Bow
+- Zırh: Stalker Jacket
+- Bot: Stalker Shoes
+
+## IP Önerisi
+- CD'ye girmek için min. **900 IP** önerilir
+- Rekabetçi olmak için **1100+ IP**`
+    },
+    en:{ title:'Solo PvP Build Guide',
+      content:`# Solo PvP Build Guide
+
+## For Corrupted Dungeon (CD)
+**Claymore Build**
+- Weapon: T6+ Claymore
+- Helmet: Knight Helmet (W: Toughness)
+- Armor: Mercenary Jacket (W: Adrenaline Boost)
+- Boots: Soldier Boots (W: Dash)
+- Cape: Thetford Cape
+- Food: Beef Stew
+- Potion: Resistance Potion
+
+**Gameplay:** Adrenaline Boost → Q spam → W → kill
+
+## For Ganking
+- Weapon: Bloodletter (for speed)
+- Armor: Hellion Jacket
+- Boots: Stalker Shoes
+- Mount: Swiftclaw
+
+## IP Recommendation
+- Min. **900 IP** recommended for CD
+- **1100+ IP** to be competitive`
+    }, videos:[]
+  },
+
+  { id:'build-gathering', cat:'build', level:'beginner', icon:'⛏️',
+    tr:{ title:'Gathering Build & Rotasyon',
+      content:`# Gathering (Kaynak Toplama) Rehberi
+
+## Temel Gathering Build
+- Silah: Sickle (Orak) — gathering speed
+- Kask: Miner/Lumberjack/Skinner Helmet (tipe göre)
+- Zırh: Miner/Lumberjack/Skinner Jacket
+- Bot: Miner/Lumberjack/Skinner Shoes
+- Cape: Undead Cape
+- Mount: Armored Horse veya Ox
+
+## Kaynak Türleri ve Bölgeler
+| Kaynak | Bölge | Not |
+|--------|-------|-----|
+| Ahşap | Forest biome | Lymhurst çevresi |
+| Taş | Mountain biome | Fort Sterling çevresi |
+| Fiber | Swamp biome | Thetford çevresi |
+| Deri | Highland biome | Martlock çevresi |
+| Maden | Steppe biome | Bridgewatch çevresi |
+
+## T8 Gathering için
+- Minimum T6 gathering ekipman
+- Spec 50+ gathering skill
+- **Outlands'a git** — T7/T8 sadece orada bol
+
+## Güvenlik İpuçları
+- Ox kullan — çok taşır ama yavaş
+- Arkadaşlarla git — gank riski azalır
+- Premium olmadan gathering verimli değil`
+    },
+    en:{ title:'Gathering Build & Rotation',
+      content:`# Gathering Guide
+
+## Basic Gathering Build
+- Weapon: Sickle — gathering speed
+- Helmet: Miner/Lumberjack/Skinner (by type)
+- Armor: Matching gathering set
+- Cape: Undead Cape
+- Mount: Armored Horse or Ox
+
+## Resource Types & Zones
+| Resource | Biome | Note |
+|----------|-------|------|
+| Wood | Forest | Around Lymhurst |
+| Stone | Mountain | Around Fort Sterling |
+| Fiber | Swamp | Around Thetford |
+| Hide | Highland | Around Martlock |
+| Ore | Steppe | Around Bridgewatch |
+
+## For T8 Gathering
+- Minimum T6 gathering equipment
+- 50+ spec in gathering skill
+- **Go to Outlands** — T7/T8 is abundant there
+
+## Safety Tips
+- Use Ox — carries more but slow
+- Go with friends — reduces gank risk
+- Gathering isn't efficient without Premium`
+    }, videos:[]
   },
 
   // BÖLGE
-  {
-    id:'zone-royal', cat:'zone', level:'beginner', icon:'🏰',
-    tr:{title:'Royal Continent Rehberi', desc:'Blue, Yellow, Red zone\'lar, şehirler, beginner bölgeler. Royal\'da ne yapılır?'},
-    en:{title:'Royal Continent Guide', desc:'Blue, Yellow, Red zones, cities, beginner areas. What to do in Royal?'},
-    videos:[],
-    prompt_tr:'Albion Online Royal Continent rehberi yaz. Blue Zone, Yellow Zone, Red Zone farklılıkları, her zone\'da ne yapılabilir, güvenlik seviyeleri, başlangıç için en iyi bölgeler, şehirlerin özellikleri (Lymhurst, Bridgewatch, Martlock vs).',
-    prompt_en:'Write an Albion Online Royal Continent guide. Blue Zone, Yellow Zone, Red Zone differences, what can be done in each zone, security levels, best areas for beginners, city features (Lymhurst, Bridgewatch, Martlock etc).',
-  },
-  {
-    id:'zone-outlands', cat:'zone', level:'advanced', icon:'🗡️',
-    tr:{title:'Outlands & Realmgate Rehberi', desc:'Outlands\'a nasıl geçilir, ne yapılır, nasıl hayatta kalınır? Rest\'ler dahil.'},
-    en:{title:'Outlands & Realmgate Guide', desc:'How to get to Outlands, what to do, how to survive? Including Rests.'},
-    videos:[],
-    prompt_tr:'Albion Online Outlands rehberi yaz. Realmgate nedir ve nasıl geçilir, Outlands\'ta hayatta kalma taktikleri, Arthur\'s Rest, Merlyn\'s Rest, Morgana\'s Rest özellikleri, Outlands\'ta gathering ve PvP, kaçış taktikleri.',
-    prompt_en:'Write an Albion Online Outlands guide. What is Realmgate and how to pass, survival tactics in Outlands, features of Arthur\'s Rest, Merlyn\'s Rest, Morgana\'s Rest, gathering and PvP in Outlands, escape tactics.',
-  },
-  {
-    id:'zone-brecilien', cat:'zone', level:'mid', icon:'🌫️',
-    tr:{title:'Brecilien & Mist Zone Rehberi', desc:'Mist Zone nedir? Brecilien\'de ne yapılır? Wisp, Mist Dungeon, cazibesi.'},
-    en:{title:'Brecilien & Mist Zone Guide', desc:'What is the Mist Zone? What to do in Brecilien? Wisp, Mist Dungeon, its appeal.'},
-    videos:[],
-    prompt_tr:'Albion Online Brecilien ve Mist Zone rehberi yaz. Mist\'e nasıl girilir, Brecilien\'de ne yapılır, Wisp toplamak, Mist Dungeon\'lar, Corrupted Dungeon ile farkları, Brecilien\'in ekonomik avantajları.',
-    prompt_en:'Write an Albion Online Brecilien and Mist Zone guide. How to enter the Mist, what to do in Brecilien, collecting Wisps, Mist Dungeons, differences from Corrupted Dungeons, economic advantages of Brecilien.',
+  { id:'zone-brecilien', cat:'zone', level:'mid', icon:'🌫️',
+    tr:{ title:'Brecilien & Mist Zone',
+      content:`# Brecilien & Mist Zone Rehberi
+
+## Mist Zone Nedir?
+Albion'un en yeni bölgesi — ne Blue ne Black. Kendine özgü kuralları var.
+
+## Brecilien'e Nasıl Girilir?
+1. Herhangi bir Royal şehirden Mist portalarını bul
+2. Portal girişi rastgele — her giriş farklı yere çıkarır
+3. Brecilien şehrini bul — ana merkez
+
+## Mist'te Ne Yapılır?
+- **Wisp toplama** — temel para birimi
+- **Mist Dungeon** — solo/küçük grup
+- **Gathering** — Mist kaynakları değerli
+- **Corrupted Dungeon** benzeri 1v1 içerik
+
+## Brecilien Şehri
+- Tüm standart şehir hizmetleri mevcut
+- Market bağlantısı Caerleon ile
+- **Özel craftlar** sadece burada
+
+## İpuçları
+> Mist'te ölürsen eşyaların kalır (düşük güvenlik zonu değil)
+- İlk girişte yön bulmak zor — harita kullan
+- Wisps'i birikim yap — özel eşyalar satın al`
+    },
+    en:{ title:'Brecilien & Mist Zone',
+      content:`# Brecilien & Mist Zone Guide
+
+## What is the Mist Zone?
+Albion's newest region — neither Blue nor Black. Has its own unique rules.
+
+## How to Enter Brecilien
+1. Find Mist portals from any Royal city
+2. Portal entry is random — each entry leads somewhere different
+3. Find the city of Brecilien — main hub
+
+## What To Do in the Mist
+- **Collect Wisps** — primary currency
+- **Mist Dungeons** — solo/small group
+- **Gathering** — Mist resources are valuable
+- **1v1 content** similar to Corrupted Dungeons
+
+## Brecilien City
+- All standard city services available
+- Market connected to Caerleon
+- **Special crafts** only available here`
+    }, videos:[]
   },
 
   // PVP
-  {
-    id:'pvp-corrupted', cat:'pvp', level:'mid', icon:'💀',
-    tr:{title:'Corrupted Dungeon Rehberi', desc:'CD\'ye nasıl girilir, ranking nasıl çıkar, 1v1 taktikler, kazanma stratejileri.'},
-    en:{title:'Corrupted Dungeon Guide', desc:'How to enter CDs, how to rank up, 1v1 tactics, winning strategies.'},
-    videos:[],
-    prompt_tr:'Albion Online Corrupted Dungeon rehberi yaz. CD\'ye giriş, ranking sistemi, 1v1 savaş taktikleri, counterpick mantığı, en iyi CD build\'leri, hellgate ile karşılaştırma, nadir drop ve rewards.',
-    prompt_en:'Write an Albion Online Corrupted Dungeon guide. CD entry, ranking system, 1v1 combat tactics, counterpick logic, best CD builds, comparison with hellgate, rare drops and rewards.',
-  },
-  {
-    id:'pvp-ganking', cat:'pvp', level:'advanced', icon:'🗡️',
-    tr:{title:'Ganking Rehberi', desc:'Gank nasıl yapılır, hangi bölgelerde, nasıl kaçılır, gank karşıtı taktikler.'},
-    en:{title:'Ganking Guide', desc:'How to gank, which areas, how to escape, anti-gank tactics.'},
-    videos:[],
-    prompt_tr:'Albion Online Ganking ve Gank Karşıtı taktikler rehberi yaz. En iyi gank bölgeleri, gank build\'leri, kurbanı nasıl seçersin, ganktan nasıl kaçılır, dismount taktikleri, gathering sırasında güvenlik önlemleri.',
-    prompt_en:'Write an Albion Online Ganking and Anti-Gank tactics guide. Best ganking areas, ganking builds, how to choose targets, how to escape ganks, dismount tactics, security measures while gathering.',
+  { id:'pvp-corrupted', cat:'pvp', level:'mid', icon:'💀',
+    tr:{ title:'Corrupted Dungeon Rehberi',
+      content:`# Corrupted Dungeon (CD) Rehberi
+
+## CD Nedir?
+Albion'un 1v1 PvP içeriği. Dungeon içinde başka oyuncular seni gank edebilir.
+
+## Nasıl Girilir?
+- Red/Black zone'da Corrupted rift bul
+- Minimum 700 IP ile girilebilir
+- Farklı tier'lar var (düşük/orta/yüksek IP)
+
+## Ranking Sistemi
+- Her öldürme/kurban infamy verir/alır
+- Yüksek infamy = daha iyi ödüller
+- Kaçmak infamy kaybettirir
+
+## Temel Taktikler
+**Saldırı:**
+1. Gap close (yakın gel)
+2. Crowd control uygula
+3. Burst damage ver
+4. Sustain'i kır
+
+**Savunma:**
+1. Kite (uzak tut)
+2. Purge (CC temizle)
+3. Position al
+4. Kaç (gerekirse)
+
+## Counterpick Mantığı
+- Ağır zırha karşı → Ignoring resistances build
+- Kite'a karşı → Gap close + slow
+- Burst'a karşı → Tank + sustain
+
+## Ödüller
+- Satchel of Insight (fame)
+- Rare loot
+- Corrupted Soul (artifact)
+
+> **İpucu:** İlk CD'ye T6 ekipman + 900 IP ile gir`
+    },
+    en:{ title:'Corrupted Dungeon Guide',
+      content:`# Corrupted Dungeon (CD) Guide
+
+## What is a CD?
+Albion's 1v1 PvP content. Other players can invade your dungeon.
+
+## How to Enter
+- Find a Corrupted rift in Red/Black zones
+- Minimum 700 IP required
+- Different tiers available (low/mid/high IP)
+
+## Ranking System
+- Each kill/death gives/takes infamy
+- Higher infamy = better rewards
+- Running away loses infamy
+
+## Basic Tactics
+**Offense:**
+1. Gap close
+2. Apply crowd control
+3. Deal burst damage
+4. Break sustain
+
+**Defense:**
+1. Kite (keep distance)
+2. Purge (clear CC)
+3. Positioning
+4. Escape (if needed)
+
+## Rewards
+- Satchel of Insight (fame)
+- Rare loot
+- Corrupted Soul (artifact)`
+    }, videos:[]
   },
 
   // PVE
-  {
-    id:'pve-solo', cat:'pve', level:'beginner', icon:'🐉',
-    tr:{title:'Solo Dungeon & Fame Farm', desc:'Solo dungeon\'larda nasıl etkili fame kazanırsın? En iyi rotasyonlar.'},
-    en:{title:'Solo Dungeon & Fame Farm', desc:'How to earn fame effectively in solo dungeons? Best rotations.'},
-    videos:[],
-    prompt_tr:'Albion Online Solo Dungeon ve Fame Farm rehberi yaz. Solo dungeon seçimi, en iyi fame farm rotasyonları, dungeon\'da loot alma stratejisi, tier\'a göre önerilen bölgeler, efektif saat başı fame kazanımı.',
-    prompt_en:'Write an Albion Online Solo Dungeon and Fame Farm guide. Solo dungeon selection, best fame farm rotations, loot strategy in dungeons, recommended areas by tier, effective fame gain per hour.',
+  { id:'pve-solo', cat:'pve', level:'beginner', icon:'🐉',
+    tr:{ title:'Solo Dungeon & Fame Farm',
+      content:`# Solo Dungeon & Fame Farm Rehberi
+
+## Solo Dungeon Çeşitleri
+| Tip | Güçlük | Ödül |
+|-----|--------|------|
+| Random Dungeon | Kolay | Düşük fame |
+| Solo Dungeon | Orta | İyi fame |
+| Veteran Dungeon | Zor | Yüksek fame |
+| Corrupted Dungeon | PvP | Infamy + loot |
+
+## En İyi Fame Farm Rotasyonu
+**Yellow zone (güvenli):**
+- Solo dungeon → hızlı tamamla → çık → tekrar gir
+- Hedef: saatte 1-2M fame
+
+**Red zone (riskli ama verimli):**
+- Veteran dungeon → 3-5M fame/saat
+- Risk: başka oyuncular gank edebilir
+
+## Önerilen Build (Fame Farm)
+- Silah: Battleaxe veya Wildfire Staff
+- Zırh: Mercenary Jacket
+- Bot: Soldier Boots
+- Food: Pork Omelette (CD reduction)
+
+## İpuçları
+- **Journal** doldur — ekstra fame
+- **Premium** olmadan fame farm verimsiz
+- AoE silahlar dungeon'ı hızlandırır
+- Full clear yerine skip yap — zaman kazan`
+    },
+    en:{ title:'Solo Dungeon & Fame Farm',
+      content:`# Solo Dungeon & Fame Farm Guide
+
+## Solo Dungeon Types
+| Type | Difficulty | Reward |
+|------|------------|--------|
+| Random Dungeon | Easy | Low fame |
+| Solo Dungeon | Medium | Good fame |
+| Veteran Dungeon | Hard | High fame |
+| Corrupted Dungeon | PvP | Infamy + loot |
+
+## Best Fame Farm Rotation
+**Yellow zone (safe):**
+- Solo dungeon → complete fast → exit → re-enter
+- Target: 1-2M fame per hour
+
+**Red zone (risky but efficient):**
+- Veteran dungeon → 3-5M fame/hour
+- Risk: other players can gank you
+
+## Recommended Build
+- Weapon: Battleaxe or Wildfire Staff
+- Armor: Mercenary Jacket
+- Boots: Soldier Boots
+- Food: Pork Omelette (CD reduction)`
+    }, videos:[]
   },
 ];
-
-// YOUTUBE EMBED VERİTABANI — Gerçek video ID'leri (kanallar: Albion TR, Exeree, Lewpac vb.)
-const VIDEO_DB = {
-  beginner: [
-    {id:'YfGOWg4G_Oo', title:'Albion Online 2025 Başlangıç Rehberi', channel:'Albion TR'},
-    {id:'kxbFo5mNwHY', title:'Albion Online Destiny Board Guide', channel:'Lewpac'},
-  ],
-  build: [
-    {id:'9bZkp7q19f0', title:'Best Solo PvP Builds 2025', channel:'Exeree'},
-    {id:'jNQXAC9IVRw', title:'ZvZ Meta Builds Explained', channel:'Albion TV'},
-  ],
-  economy: [
-    {id:'ROlhVmGNMok', title:'Black Market Flip Guide 2025', channel:'Albion Free Market'},
-    {id:'_OBlgSz8sSM', title:'Crafting Money Guide', channel:'AlbionOnline'},
-  ],
-  zone: [
-    {id:'QH2-TGUlwu4', title:'Outlands Guide for Beginners', channel:'Albion Online'},
-    {id:'M7lc1UVf-VE', title:'Brecilien Complete Guide', channel:'GuildMaster'},
-  ],
-  pvp: [
-    {id:'u9Dg-g7t2l4', title:'Corrupted Dungeon Guide 2025', channel:'PvP Master'},
-    {id:'LsoLEjrDogU', title:'Ganking Guide Albion', channel:'GankKing'},
-  ],
-  pve: [
-    {id:'jofNR_WkoCE', title:'Solo Dungeon Guide 2025', channel:'FarmKing'},
-    {id:'2vjPBrBU-TM', title:'Fame Farming Rotation Guide', channel:'AlbionFame'},
-  ],
-};
 
 // ─── STATE ────────────────────────────────────────────────
 let currentCat  = 'all';
 let currentGuide = null;
-let chatOpen     = true;
-let chatHistory  = [];
+let chatOpen    = true;
 
 const getLang = () => localStorage.getItem('aot-lang') || 'tr';
 
-// ─── KATEGORİ SEÇ ────────────────────────────────────────
+// ─── KATEGORİ ────────────────────────────────────────────
 function selectCat(cat, btn) {
   currentCat = cat;
   document.querySelectorAll('.scat').forEach(b => b.classList.toggle('active', b === btn));
@@ -185,312 +550,206 @@ function selectCat(cat, btn) {
   closeDetail();
 }
 
-function filterGuides(q) {
-  renderGuideCards(q);
-}
+function filterGuides(q) { renderGuideCards(q); }
 
 // ─── KART RENDER ─────────────────────────────────────────
 function renderGuideCards(search = '') {
   const lang = getLang();
   const cont = document.getElementById('guideCards');
+  if (!cont) return;
+
   let filtered = GUIDES.filter(g => {
-    const catMatch = currentCat === 'all' || g.cat === currentCat;
-    if (!catMatch) return false;
+    if (currentCat !== 'all' && g.cat !== currentCat) return false;
     if (!search) return true;
     const q = search.toLowerCase();
-    const title = (lang === 'tr' ? g.tr.title : g.en.title).toLowerCase();
-    const desc  = (lang === 'tr' ? g.tr.desc  : g.en.desc).toLowerCase();
-    return title.includes(q) || desc.includes(q);
+    const d = g[lang] || g.tr;
+    return d.title.toLowerCase().includes(q);
   });
+
+  const levelBadge = {
+    beginner: { tr:'Başlangıç', en:'Beginner', cls:'guide-badge-level-beginner' },
+    mid:      { tr:'Orta',      en:'Mid',      cls:'guide-badge-level-mid' },
+    advanced: { tr:'İleri',     en:'Advanced', cls:'guide-badge-level-advanced' },
+  };
 
   if (!filtered.length) {
     cont.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text-muted)">
       <div style="font-size:36px;margin-bottom:12px">📚</div>
-      <p>${lang==='tr'?'Rehber bulunamadı. AI ile oluştur →':'No guide found. Generate with AI →'}</p>
+      <p>${lang==='tr'?'Rehber bulunamadı.':'No guide found.'}</p>
     </div>`;
     return;
   }
 
-  const levelBadge = {
-    beginner: {tr:'Başlangıç', en:'Beginner', cls:'guide-badge-level-beginner'},
-    mid:      {tr:'Orta',      en:'Mid',      cls:'guide-badge-level-mid'},
-    advanced: {tr:'İleri',     en:'Advanced', cls:'guide-badge-level-advanced'},
-  };
-
   cont.innerHTML = filtered.map(g => {
-    const title = lang==='tr' ? g.tr.title : g.en.title;
-    const desc  = lang==='tr' ? g.tr.desc  : g.en.desc;
-    const lvl   = levelBadge[g.level] || levelBadge.beginner;
-    return `<div class="guide-card ai-card" onclick="openGuide('${g.id}')">
+    const d   = g[lang] || g.tr;
+    const lvl = levelBadge[g.level] || levelBadge.beginner;
+    return `<div class="guide-card" onclick="openGuide('${g.id}')">
       <div class="guide-card-header">
         <span class="guide-card-icon">${g.icon}</span>
         <div class="guide-card-badges">
           <span class="guide-badge ${lvl.cls}">${lang==='tr'?lvl.tr:lvl.en}</span>
-          <span class="guide-badge guide-badge-ai">✦ AI</span>
         </div>
       </div>
-      <div class="guide-card-title">${title}</div>
-      <div class="guide-card-desc">${desc}</div>
+      <div class="guide-card-title">${d.title}</div>
+      <div class="guide-card-desc">${d.content.split('\n').find(l=>l&&!l.startsWith('#'))||''}</div>
       <div class="guide-card-footer">
-        <span class="guide-card-time">AI üretimli · güncel</span>
-        <span class="guide-card-arrow">→ Oku</span>
+        <span class="guide-card-time">${lang==='tr'?'Hazır rehber':'Ready guide'}</span>
+        <span class="guide-card-arrow">→ ${lang==='tr'?'Oku':'Read'}</span>
       </div>
     </div>`;
   }).join('');
 }
 
-// ─── REHBERİ AÇ ──────────────────────────────────────────
-async function openGuide(id) {
+// ─── REHBER AÇ ───────────────────────────────────────────
+function openGuide(id) {
   const guide = GUIDES.find(g => g.id === id);
   if (!guide) return;
   currentGuide = guide;
   const lang = getLang();
+  const d    = guide[lang] || guide.tr;
 
-  document.getElementById('guideCards').style.display = 'none';
+  document.getElementById('guideCards').style.display  = 'none';
   document.getElementById('guideDetail').style.display = 'block';
 
-  const content = document.getElementById('guideDetailContent');
-  content.innerHTML = `<div class="ai-loading">
-    <div class="ai-loading-dots"><span></span><span></span><span></span></div>
-    <span>${lang==='tr'?'Gemini AI rehberi oluşturuyor...':'Gemini AI is generating the guide...'}</span>
-  </div>`;
+  document.getElementById('guideDetailContent').innerHTML = markdownToHtml(d.content);
 
-  const prompt = lang === 'tr' ? guide.prompt_tr : guide.prompt_en;
-  const aiLang = document.getElementById('aiGenLang')?.value || lang;
-
-  try {
-    const text = await callGemini(prompt, aiLang);
-    content.innerHTML = markdownToHtml(text);
-    renderVideos(guide.cat);
-  } catch(e) {
-    content.innerHTML = `<div style="color:var(--text-muted);padding:20px;text-align:center">
-      <div style="font-size:36px;margin-bottom:12px">⚠️</div>
-      <p>${lang==='tr'?'Gemini API şu an yanıt vermiyor. Lütfen tekrar deneyin.':'Gemini API is not responding. Please try again.'}</p>
-      <button class="gd-action-btn" onclick="openGuide('${id}')" style="margin-top:12px">🔄 Tekrar Dene</button>
-    </div>`;
-  }
+  // Videolar
+  const vs = document.getElementById('guideVideoSection');
+  if (vs) vs.style.display = 'none';
 }
 
 function closeDetail() {
-  document.getElementById('guideCards').style.display = 'grid';
+  document.getElementById('guideCards').style.display  = 'grid';
   document.getElementById('guideDetail').style.display = 'none';
-  document.getElementById('guideVideoSection').style.display = 'none';
   currentGuide = null;
 }
 
-function renderVideos(cat) {
-  const videos = VIDEO_DB[cat] || [];
-  const videoSection = document.getElementById('guideVideoSection');
-  const videoCont    = document.getElementById('guideVideos');
-  if (!videos.length) { videoSection.style.display = 'none'; return; }
-  videoSection.style.display = 'block';
-  videoCont.innerHTML = videos.map(v => `
-    <div class="video-embed-card" onclick="loadVideo('${v.id}','video-${v.id}')">
-      <div class="video-thumb" id="video-${v.id}">
-        <img class="video-thumb-img" src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" alt="${v.title}" loading="lazy"/>
-        <div class="video-play-btn">▶</div>
-      </div>
-      <div class="video-info">
-        <div class="video-title">${v.title}</div>
-        <div class="video-channel">📺 ${v.channel}</div>
-      </div>
-    </div>`).join('');
-}
-
-function loadVideo(videoId, containerId) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  container.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" allowfullscreen allow="autoplay"></iframe>`;
-}
-
-// ─── AI REHBER OLUŞTUR ────────────────────────────────────
-async function generateGuide() {
-  const prompt = document.getElementById('aiGenPrompt').value.trim();
-  if (!prompt) return;
-  const lang  = document.getElementById('aiGenLang').value;
-  const level = document.getElementById('aiGenLevel').value;
-
-  // Detay ekranını aç
-  document.getElementById('guideCards').style.display = 'none';
-  document.getElementById('guideDetail').style.display = 'block';
-
-  const content = document.getElementById('guideDetailContent');
-  const uiLang = getLang();
-  content.innerHTML = `<div class="ai-loading">
-    <div class="ai-loading-dots"><span></span><span></span><span></span></div>
-    <span>${uiLang==='tr'?'Gemini AI rehberinizi oluşturuyor...':'Gemini AI is creating your guide...'}</span>
-  </div>`;
-
-  const levelMap = {beginner:'başlangıç seviyesinde', mid:'orta seviyede', advanced:'ileri seviyede'};
-  const fullPrompt = lang === 'tr'
-    ? `Albion Online hakkında ${levelMap[level]||''} kapsamlı Türkçe rehber yaz: ${prompt}\n\nMarkdown formatında, başlıklar, maddeler ve tablolar kullanarak yaz. Pratik ve oynanabilir bilgiler ver.`
-    : `Write a comprehensive ${level} level guide about Albion Online: ${prompt}\n\nWrite in Markdown format using headings, bullet points and tables. Give practical and actionable information.`;
-
-  try {
-    const text = await callGemini(fullPrompt, lang);
-    content.innerHTML = markdownToHtml(text);
-    document.getElementById('guideVideoSection').style.display = 'none';
-  } catch(e) {
-    content.innerHTML = `<div style="color:var(--text-muted);padding:20px;text-align:center">
-      <div style="font-size:36px">⚠️</div>
-      <p>${uiLang==='tr'?'Gemini API şu an yanıt vermiyor. Tekrar deneyin.':'Gemini API is not responding. Please retry.'}</p>
-      <button class="gd-action-btn" onclick="generateGuide()" style="margin-top:12px">🔄 Tekrar Dene</button>
-    </div>`;
-  }
-}
-
-function quickGuide(topic) {
-  const inp = document.getElementById('aiGenPrompt');
-  if (inp) inp.value = topic;
-  generateGuide();
-}
-
-function regenerateGuide() {
-  if (currentGuide) openGuide(currentGuide.id);
-  else generateGuide();
-}
-
 function copyGuide() {
-  const content = document.getElementById('guideDetailContent');
-  if (!content) return;
-  navigator.clipboard.writeText(content.innerText).then(() => {
+  const el = document.getElementById('guideDetailContent');
+  if (!el) return;
+  navigator.clipboard.writeText(el.innerText).then(() => {
     const btn = document.querySelector('.gd-action-btn');
-    const lang = getLang();
+    if (!btn) return;
     const orig = btn.textContent;
-    btn.textContent = lang==='tr'?'✓ Kopyalandı!':'✓ Copied!';
+    btn.textContent = getLang()==='tr'?'✓ Kopyalandı!':'✓ Copied!';
     setTimeout(() => btn.textContent = orig, 2000);
   });
 }
 
-// ─── AI CHAT ─────────────────────────────────────────────
+function regenerateGuide() {
+  if (currentGuide) openGuide(currentGuide.id);
+}
+
+// ─── QUICK GUIDE ────────────────────────────────────────
+function quickGuide(topic) {
+  // Başlıkta eşleşen rehberi bul
+  const lang = getLang();
+  const found = GUIDES.find(g => {
+    const d = g[lang] || g.tr;
+    return d.title.toLowerCase().includes(topic.toLowerCase()) ||
+           topic.toLowerCase().includes(g.cat);
+  });
+  if (found) openGuide(found.id);
+}
+
+// ─── AI CHAT — Gemini kaldırıldı, statik yanıtlar ───────
 function toggleChat() {
   chatOpen = !chatOpen;
   const body = document.getElementById('aiChatBody');
   const icon = document.getElementById('chatToggleIcon');
-  body.style.display = chatOpen ? 'block' : 'none';
-  icon.classList.toggle('collapsed', !chatOpen);
+  if (body) body.style.display = chatOpen ? 'block' : 'none';
+  if (icon) icon.classList.toggle('collapsed', !chatOpen);
 }
 
-async function sendChatMsg() {
+function sendChatMsg() {
   const input = document.getElementById('aiChatInput');
-  const msg = input.value.trim();
+  if (!input) return;
+  const msg  = input.value.trim();
   if (!msg) return;
-
-  const lang = getLang();
   input.value = '';
   addChatMsg(msg, 'user');
 
-  const sendBtn = document.querySelector('.ai-chat-send');
-  if (sendBtn) sendBtn.disabled = true;
+  // Statik yanıt sistemi
+  const lang = getLang();
+  const reply = getStaticReply(msg, lang);
+  setTimeout(() => addChatMsg(reply, 'bot'), 500);
+}
 
-  // Typing indicator
-  const typingId = 'typing-' + Date.now();
-  const messages = document.getElementById('aiChatMessages');
-  messages.innerHTML += `<div class="ai-msg" id="${typingId}">
-    <div class="ai-msg-avatar">AI</div>
-    <div class="ai-msg-text"><div class="ai-loading-dots"><span></span><span></span><span></span></div></div>
-  </div>`;
-  messages.scrollTop = messages.scrollHeight;
+function getStaticReply(msg, lang) {
+  const q = msg.toLowerCase();
+  const L = lang === 'tr';
 
-  const systemPrompt = lang === 'tr'
-    ? 'Sen Albion Online uzmanısın. Türkçe, kısa ve net cevaplar ver. Build, ekonomi, bölge, strateji konularında yardım et.'
-    : 'You are an Albion Online expert. Give concise and clear answers. Help with builds, economy, zones, and strategies.';
+  if (q.includes('silver') || q.includes('para'))
+    return L ? 'Silver kazanmak için en iyi yollar: Gathering (T7-T8), Black Market flip, Crafting döngüsü ve Solo dungeon. Rehberler sekmesinde detaylı bilgi var!' : 'Best ways to earn silver: T7-T8 Gathering, Black Market flipping, Crafting cycle and Solo dungeons. Check the guides section for details!';
+  if (q.includes('build') || q.includes('silah') || q.includes('weapon'))
+    return L ? 'Build seçimi oyun stiline göre değişir. Solo PvP için Claymore veya Bloodletter, PvE farm için Battleaxe önerilir. Build rehberini oku!' : 'Build choice depends on playstyle. Claymore or Bloodletter for Solo PvP, Battleaxe for PvE farming. Check the build guide!';
+  if (q.includes('başlangıç') || q.includes('yeni') || q.includes('beginner') || q.includes('new'))
+    return L ? 'Yeni başlayanlar için: Tutorial tamamla → T4 ekipman hedefle → Destiny Board\'da bir path seç → Yellow zone dungeon ile fame topla. Başlangıç rehberini mutlaka oku!' : 'For beginners: Complete tutorial → Target T4 gear → Choose a Destiny Board path → Farm fame in Yellow zone dungeons. Read the beginner guide!';
+  if (q.includes('gathering') || q.includes('topla'))
+    return L ? 'Gathering için: Uygun biome\'a git (ahşap→orman, maden→dağ), gathering ekipman giy, Ox binit kullan. T6+ için Outlands\'a gitmen gerekiyor!' : 'For gathering: Go to the right biome (wood→forest, ore→mountain), wear gathering gear, use Ox mount. For T6+ you need to go to Outlands!';
+  if (q.includes('pvp') || q.includes('corrupted') || q.includes('cd'))
+    return L ? 'Corrupted Dungeon\'a girerken min 900 IP önerilir. Claymore veya Bloodletter iyi başlangıç silahlarıdır. CD rehberini oku!' : 'For Corrupted Dungeons, 900+ IP is recommended. Claymore or Bloodletter are good starter weapons. Read the CD guide!';
+  if (q.includes('brecilien') || q.includes('mist'))
+    return L ? 'Brecilien\'e girmek için Royal şehirlerden Mist portallarını bul. İçeride Wisp topla, Mist Dungeon gir. Brecilien rehberini oku!' : 'To enter Brecilien, find Mist portals from Royal cities. Collect Wisps, run Mist Dungeons. Read the Brecilien guide!';
+  if (q.includes('craft') || q.includes('üretim'))
+    return L ? 'Crafting kârı için şehir bonuslarını kullan! Her şehir farklı zırh tipine bonus verir. Focus kullanarak return rate\'i artır. Crafting rehberini oku!' : 'Use city bonuses for crafting profit! Each city gives bonus to different armor types. Increase return rate with Focus. Read the crafting guide!';
 
-  try {
-    const fullPrompt = `${systemPrompt}\n\nKullanıcı sorusu: ${msg}`;
-    const response = await callGemini(fullPrompt, lang);
-    document.getElementById(typingId)?.remove();
-    addChatMsg(response, 'bot');
-  } catch(e) {
-    document.getElementById(typingId)?.remove();
-    addChatMsg(lang==='tr'?'API şu an yanıt vermiyor. Lütfen tekrar deneyin.':'API not responding. Please try again.', 'bot');
-  }
-
-  if (sendBtn) sendBtn.disabled = false;
+  return L
+    ? 'Bu konu hakkında daha fazla bilgi için soldaki rehber kategorilerini incele! Market, PvP, Crafting ve daha fazlası mevcut.'
+    : 'For more info on this topic, check the guide categories on the left! Market, PvP, Crafting and more available.';
 }
 
 function addChatMsg(text, type) {
   const messages = document.getElementById('aiChatMessages');
+  if (!messages) return;
   const isUser = type === 'user';
-  messages.innerHTML += `<div class="ai-msg ${isUser?'user-msg':''}">
-    <div class="ai-msg-avatar ${isUser?'user-avatar':''}">${isUser?'Sen':'AI'}</div>
-    <div class="ai-msg-text">${text.replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}</div>
-  </div>`;
+  const div = document.createElement('div');
+  div.className = `ai-msg ${isUser ? 'user-msg' : ''}`;
+  div.innerHTML = `
+    <div class="ai-msg-avatar ${isUser?'user-avatar':''}">${isUser?'Sen':'💬'}</div>
+    <div class="ai-msg-text">${text.replace(/</g,'&lt;').replace(/\n/g,'<br>')}</div>`;
+  messages.appendChild(div);
   messages.scrollTop = messages.scrollHeight;
 }
 
-// ─── GEMINI API ───────────────────────────────────────────
-async function callGemini(prompt, lang = 'tr') {
-  // Gemini API key önce window'dan, sonra meta tag'den dene
-  const apiKey = window.GEMINI_API_KEY
-    || document.querySelector('meta[name="gemini-key"]')?.content
-    || GEMINI_KEY;
-
-  const body = {
-    contents: [{ parts: [{ text: prompt }] }],
-    generationConfig: {
-      temperature: 0.7,
-      maxOutputTokens: 2000,
-    },
-  };
-
-  const res = await fetch(`${GEMINI_API}?key=${apiKey}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
-
-  if (!res.ok) {
-    const err = await res.json().catch(()=>({}));
-    throw new Error(err.error?.message || `HTTP ${res.status}`);
-  }
-
-  const data = await res.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-}
-
-// ─── MARKDOWN → HTML ─────────────────────────────────────
+// ─── MARKDOWN → HTML ────────────────────────────────────
 function markdownToHtml(md) {
   if (!md) return '';
   return md
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    // Headings
     .replace(/^### (.+)$/gm,'<h3>$1</h3>')
     .replace(/^## (.+)$/gm,'<h2>$1</h2>')
     .replace(/^# (.+)$/gm,'<h1>$1</h1>')
-    // Bold & italic
-    .replace(/\*\*\*(.+?)\*\*\*/g,'<strong><em>$1</em></strong>')
     .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
     .replace(/\*(.+?)\*/g,'<em>$1</em>')
-    // Code
     .replace(/`(.+?)`/g,'<code>$1</code>')
-    // Blockquote
     .replace(/^&gt; (.+)$/gm,'<blockquote>$1</blockquote>')
-    // HR
     .replace(/^---$/gm,'<hr/>')
-    // Lists
     .replace(/^\- (.+)$/gm,'<li>$1</li>')
     .replace(/^\d+\. (.+)$/gm,'<li>$1</li>')
     .replace(/(<li>.*<\/li>\n?)+/g,'<ul>$&</ul>')
-    // Tables — basit
     .replace(/\|(.+)\|/g, row => {
       const cells = row.slice(1,-1).split('|').map(c=>c.trim());
       if (cells.every(c=>c.match(/^[-:]+$/))) return '';
       return '<tr>' + cells.map(c=>`<td>${c}</td>`).join('') + '</tr>';
     })
-    .replace(/(<tr>.*<\/tr>\n?)+/g, t => `<table>${t}</table>`)
-    // Paragraphs
+    .replace(/(<tr>.*<\/tr>\n?)+/g, t=>`<table>${t}</table>`)
     .replace(/\n\n/g,'</p><p>')
-    .replace(/^([^<].+)$/gm, line => line.startsWith('<')||!line.trim() ? line : `<p>${line}</p>`)
-    // Cleanup
-    .replace(/<p><\/p>/g,'')
-    .replace(/<p>(<h[1-6]|<ul|<ol|<table|<blockquote|<hr)/g,'$1')
-    .replace(/(<\/h[1-6]>|<\/ul>|<\/ol>|<\/table>|<\/blockquote>|<hr\/>)<\/p>/g,'$1');
+    .replace(/^([^<].+)$/gm, l => l.startsWith('<')||!l.trim()?l:`<p>${l}</p>`)
+    .replace(/<p><\/p>/g,'');
 }
 
-// ─── BAŞLAT ───────────────────────────────────────────────
+// ─── BAŞLAT ──────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   renderGuideCards();
-  // Chat başlangıçta açık
-  document.getElementById('aiChatBody').style.display = 'block';
+  const chatBody = document.getElementById('aiChatBody');
+  if (chatBody) chatBody.style.display = 'block';
+
+  // Enter ile mesaj gönder
+  const chatInput = document.getElementById('aiChatInput');
+  if (chatInput) {
+    chatInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter') sendChatMsg();
+    });
+  }
 });
