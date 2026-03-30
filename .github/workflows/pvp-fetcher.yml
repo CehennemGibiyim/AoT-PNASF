@@ -2,12 +2,13 @@ name: AoT-PNASF PvP Data Fetcher
 
 on:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '*/15 * * * *' # Kotayı bitirmemesi için 15 dakikaya çekildi (Önerilen)
   workflow_dispatch:
 
-# Resmi Node 24 onay değişkeni
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+# Çakışmaları önlemek için eklendi (Aynı anda iki işlem çalışmasını engeller)
+concurrency:
+  group: pvp-data-fetch
+  cancel-in-progress: false
 
 permissions:
   contents: write
@@ -22,7 +23,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4.2.0
         with:
-          node-version: '24'
+          node-version: '22' # Stabilite için 22'ye çekildi
+          cache: 'npm'       # Hızlandırmak için eklendi
 
       - name: Install dependencies
         run: npm install
@@ -34,6 +36,8 @@ jobs:
         run: |
           git config --global user.name 'AoT-PNASF Bot'
           git config --global user.email 'bot@aot-pnasf.github.io'
+          # Güncelleme öncesi en son hali çekerek conflict (çakışma) hatalarını önle
+          git pull origin main || true 
           git add -A
           git diff --staged --quiet || git commit -m "PvP Bot: Kill feed güncellendi [$(date '+%Y-%m-%d %H:%M')]"
           git push
