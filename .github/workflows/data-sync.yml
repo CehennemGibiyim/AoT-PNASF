@@ -22,9 +22,13 @@ jobs:
 
       - name: Check ao-bin-dumps last commit
         id: check
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FORCE_INPUT: ${{ github.event.inputs.force }}
         run: |
-          REMOTE=$(curl -s "https://api.github.com/repos/ao-data/ao-bin-dumps/commits/master" \
-            | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['commit']['committer']['date'])" 2>/dev/null || echo "unknown")
+          # API Limitine takılmamak için Authorization header eklendi
+          REMOTE=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" "https://api.github.com/repos/ao-data/ao-bin-dumps/commits/master" \
+            | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('commit',{}).get('committer',{}).get('date', 'unknown'))" 2>/dev/null || echo "unknown")
           echo "remote_date=$REMOTE" >> $GITHUB_OUTPUT
 
           LOCAL=""
@@ -33,7 +37,7 @@ jobs:
           fi
           echo "local_date=$LOCAL" >> $GITHUB_OUTPUT
 
-          FORCE="${{ github.event.inputs.force }}"
+          FORCE="$FORCE_INPUT"
           if [ "$REMOTE" != "$LOCAL" ] || [ "$FORCE" = "true" ]; then
             echo "needs_update=true" >> $GITHUB_OUTPUT
             echo "Guncelleme gerekli"
@@ -44,6 +48,8 @@ jobs:
 
       - name: Download + Generate + Commit
         if: steps.check.outputs.needs_update == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mkdir -p tmp-data src/data
 
@@ -51,23 +57,22 @@ jobs:
           echo "=== items.json indiriliyor ==="
           curl -sL "https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/formatted/items.json" \
             -o tmp-data/items.json
-          echo "items.json: $(wc -c < tmp-data/items.json) byte"
 
           # ── world.json indir
           echo "=== world.json indiriliyor ==="
           curl -sL "https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/formatted/world.json" \
             -o tmp-data/world.json
-          echo "world.json: $(wc -c < tmp-data/world.json) byte"
 
           # ── cluster/ klasöründen Avalon Roads verisi al
           echo "=== cluster listesi aliniyor ==="
-          CLUSTER_LIST=$(curl -s "https://api.github.com/repos/ao-data/ao-bin-dumps/contents/cluster" \
+          # API Limitine takılmamak için Authorization header eklendi
+          CLUSTER_LIST=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" "https://api.github.com/repos/ao-data/ao-bin-dumps/contents/cluster" \
             | python3 -c "
           import sys,json
           data = json.load(sys.stdin)
           if isinstance(data, list):
               files = [x['name'] for x in data if x['name'].endswith('.json')]
-              print('\n'.join(files[:20]))  # ilk 20 dosya
+              print('\n'.join(files[:20]))
           " 2>/dev/null || echo "")
 
           if [ -n "$CLUSTER_LIST" ]; then
@@ -88,31 +93,14 @@ jobs:
           python3 scripts/generate-world.py
 
           # ── sync-info.json güncelle
-          ITEM_COUNT=$(python3 -c "
-          import re
-          try:
-              content = open('src/data/items-data.js').read()
-              print(len(re.findall(r'\"id\":', content)))
-          except: print(0)
-          " 2>/dev/null || echo 0)
-
-          ZONE_COUNT=$(python3 -c "
-          import re
-          try:
-              content = open('src/data/world-data.js').read()
-              print(len(re.findall(r'\"id\":', content)))
-          except: print(0)
-          " 2>/dev/null || echo 0)
+          ITEM_COUNT=$(python3 -c "import re; print(len(re.findall(r'\"id\":', open('src/data/items-data.js').read())))" 2>/dev/null || echo 0)
+          ZONE_COUNT=$(python3 -c "import re; print(len(re.findall(r'\"id\":', open('src/data/world-data.js').read())))" 2>/dev/null || echo 0)
 
           NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
           REMOTE="${{ steps.check.outputs.remote_date }}"
 
           printf '{\n  "ao_bin_dumps_commit": "%s",\n  "last_sync": "%s",\n  "items_count": %s,\n  "zones_count": %s\n}\n' \
             "$REMOTE" "$NOW" "$ITEM_COUNT" "$ZONE_COUNT" > src/data/sync-info.json
-
-          echo "=== Sonuclar ==="
-          echo "Items: $ITEM_COUNT"
-          echo "Zones: $ZONE_COUNT"
 
           # ── Commit ve push
           git config --local user.email "bot@aot-pnasf.github.io"
