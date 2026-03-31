@@ -1,1 +1,206 @@
-<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Araçlar — AoT-PNASF</title><link rel="stylesheet" href="../styles/main.css"/><link rel="stylesheet" href="../styles/settings.css"/></head><body><nav class="navbar" id="navbar"><div class="nav-inner"><a class="nav-logo" href="../../index.html"><span class="logo-aot">AoT</span><span class="logo-dash">—</span><span class="logo-pnasf">PNASF</span><span class="logo-ai-badge">AI</span></a><ul class="nav-links" id="navLinks"><li><a href="market.html">Market</a></li><li><a href="crafting.html">Üretim</a></li><li><a href="pvp.html">PvP</a></li><li><a href="maps.html">Haritalar</a></li><li><a href="guides.html">Rehberler</a></li><li><a href="tools.html" class="active">Araçlar</a></li></ul><div class="nav-right"><button class="settings-trigger" onclick="openSettings()"><span class="settings-trigger-flag" id="settingsLangIndicator">🇹🇷 TR</span><span class="settings-trigger-icon">⚙</span></button><div class="ai-status"><span class="ai-dot"></span><span class="ai-text">AI Aktif</span></div><button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button></div></div></nav><main style="padding:120px 24px;text-align:center;color:var(--text-muted)"><div style="font-size:56px;margin-bottom:16px">🛠️</div><h1 style="font-family:var(--font-display);color:var(--gold);margin-bottom:12px">Araçlar</h1><p>Aşama 7 — Build & Meta yakında geliyor!</p></main><script src="../lib/lang.js"></script><script src="../lib/settings.js"></script><script src="../lib/settings-panel.js"></script><script src="../lib/nav.js"></script></body></html>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Araçlar — AoT-PNASF</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../styles/main.css"/>
+  <link rel="stylesheet" href="../styles/settings.css"/>
+  <link rel="stylesheet" href="../styles/tools.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a class="nav-logo" href="../../index.html">
+      <span class="logo-aot">AoT</span><span class="logo-dash">—</span><span class="logo-pnasf">PNASF</span>
+      <span class="logo-ai-badge">AI</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="market.html" data-tr="Market" data-en="Market">Market</a></li>
+      <li><a href="crafting.html" data-tr="Üretim" data-en="Crafting">Üretim</a></li>
+      <li><a href="pvp.html" data-tr="PvP" data-en="PvP">PvP</a></li>
+      <li><a href="maps.html" data-tr="Haritalar" data-en="Maps">Haritalar</a></li>
+      <li><a href="guides.html" data-tr="Rehberler" data-en="Guides">Rehberler</a></li>
+      <li><a href="tools.html" class="active" data-tr="Araçlar" data-en="Tools">Araçlar</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="settings-trigger" onclick="openSettings()">
+        <span class="settings-trigger-flag" id="settingsLangIndicator">🇹🇷 TR</span>
+        <span class="settings-trigger-icon">⚙</span>
+      </button>
+      <div class="ai-status"><span class="ai-dot"></span><span class="ai-text" data-tr="AI Aktif" data-en="AI Active">AI Aktif</span></div>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<main class="tools-main">
+
+  <!-- BAŞLIK -->
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="page-badge"><span class="ai-dot"></span><span data-tr="Build & Meta Araçları" data-en="Build & Meta Tools">Build & Meta Araçları</span></div>
+      <h1 data-tr="Araçlar & Meta" data-en="Tools & Meta">Araçlar & Meta</h1>
+      <p data-tr="Party Builder, Dungeon Rehberi, PvP Killboard — hepsi bir arada" data-en="Party Builder, Dungeon Guide, PvP Killboard — all in one">Party Builder, Dungeon Rehberi, PvP Killboard — hepsi bir arada</p>
+    </div>
+  </div>
+
+  <!-- ANA SEKMELER -->
+  <div class="tools-tabs">
+    <div class="tools-tabs-inner">
+      <button class="tools-tab active" onclick="switchToolsTab('party',this)" data-tr="🎮 Party Builder" data-en="🎮 Party Builder">🎮 Party Builder</button>
+      <button class="tools-tab" onclick="switchToolsTab('dungeon',this)" data-tr="⚔️ Dungeon Rehberi" data-en="⚔️ Dungeon Guide">⚔️ Dungeon Rehberi</button>
+      <button class="tools-tab" onclick="switchToolsTab('killboard',this)" data-tr="💀 PvP Killboard" data-en="💀 PvP Killboard">💀 PvP Killboard</button>
+      <button class="tools-tab" onclick="switchToolsTab('builds',this)" data-tr="🛡️ Build Önerileri" data-en="🛡️ Build Suggestions">🛡️ Build Önerileri</button>
+    </div>
+  </div>
+
+  <!-- ══ PARTY BUILDER ══ -->
+  <div class="tools-panel" id="tab-party">
+    <div class="tools-inner">
+
+      <div class="party-layout">
+        <!-- Sol: Aktiviteler -->
+        <div class="party-left">
+          <div class="party-section-title" data-tr="🎯 Aktivite Seç" data-en="🎯 Select Activity">🎯 Aktivite Seç</div>
+          <div class="activity-list" id="activityList"></div>
+        </div>
+
+        <!-- Sağ: Parti Kurucusu -->
+        <div class="party-right">
+          <div id="partyDetailPanel">
+            <div class="party-empty">
+              <div style="font-size:48px;margin-bottom:12px">⚔️</div>
+              <p data-tr="Soldan bir aktivite seç" data-en="Select an activity from the left">Soldan bir aktivite seç</p>
+            </div>
+          </div>
+
+          <!-- Mevcut Parti -->
+          <div class="current-party-box" id="currentPartyBox" style="display:none">
+            <div class="cpb-header">
+              <span class="cpb-title" data-tr="Mevcut Parti" data-en="Current Party">Mevcut Parti</span>
+              <button class="cpb-clear" onclick="clearParty()" data-tr="Temizle" data-en="Clear">Temizle</button>
+            </div>
+            <div class="party-members-list" id="partyMembersList"></div>
+            <button class="party-done-btn" onclick="finalizeParty()" data-tr="Parti Tamamlandı!" data-en="Party Complete!">Parti Tamamlandı!</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ DUNGEON REHBERİ ══ -->
+  <div class="tools-panel" id="tab-dungeon" style="display:none">
+    <div class="tools-inner">
+      <div class="dungeon-layout">
+
+        <!-- Sol: Dungeon Listesi -->
+        <div class="dungeon-left">
+          <div class="party-section-title" data-tr="🗺️ Dungeon Seç" data-en="🗺️ Select Dungeon">🗺️ Dungeon Seç</div>
+          <div class="dungeon-list" id="dungeonList"></div>
+        </div>
+
+        <!-- Sağ: Detaylar -->
+        <div class="dungeon-right" id="dungeonDetail">
+          <div class="party-empty">
+            <div style="font-size:48px;margin-bottom:12px">🗺️</div>
+            <p data-tr="Soldan bir dungeon seç" data-en="Select a dungeon from the left">Soldan bir dungeon seç</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PVP KILLBOARD ══ -->
+  <div class="tools-panel" id="tab-killboard" style="display:none">
+    <div class="tools-inner">
+
+      <!-- Filtreler -->
+      <div class="kb-filters">
+        <div class="kb-filter-group">
+          <select class="kb-select" id="kbServer" onchange="loadKillboard()">
+            <option value="us">🌎 US</option>
+            <option value="eu">🌍 EU</option>
+            <option value="asia">🌏 Asia</option>
+          </select>
+          <div class="kb-type-tabs">
+            <button class="kb-tab active" onclick="switchKbTab('recent',this)" data-tr="Son Kill'ler" data-en="Recent Kills">Son Kill'ler</button>
+            <button class="kb-tab" onclick="switchKbTab('top',this)" data-tr="En Yüksek IP" data-en="Highest IP">En Yüksek IP</button>
+            <button class="kb-tab" onclick="switchKbTab('battles',this)" data-tr="Muharebeler" data-en="Battles">Muharebeler</button>
+          </div>
+        </div>
+        <div class="kb-filter-group">
+          <div class="kb-filter-tags">
+            <button class="kb-ftag active" data-filter="all" onclick="setKbFilter('all',this)" data-tr="Tümü" data-en="All">Tümü</button>
+            <button class="kb-ftag" data-filter="ZVZ" onclick="setKbFilter('ZVZ',this)">ZvZ</button>
+            <button class="kb-ftag" data-filter="SOLO" onclick="setKbFilter('SOLO',this)">Solo</button>
+            <button class="kb-ftag" data-filter="GANKING" onclick="setKbFilter('GANKING',this)">Ganking</button>
+            <button class="kb-ftag" data-filter="AVALON" onclick="setKbFilter('AVALON',this)">Avalon</button>
+          </div>
+          <button class="kb-refresh-btn" onclick="loadKillboard()">🔄</button>
+        </div>
+      </div>
+
+      <!-- Saatlik Aktivite Grafiği -->
+      <div class="kb-chart-box">
+        <div class="kb-chart-title" data-tr="📊 Saatlik PvP Aktivitesi" data-en="📊 Hourly PvP Activity">📊 Saatlik PvP Aktivitesi</div>
+        <canvas id="killboardChart" height="120"></canvas>
+      </div>
+
+      <!-- Kill Feed -->
+      <div id="killboardContent">
+        <div class="tools-loading"><div class="loading-spinner"></div><span data-tr="Killboard yükleniyor..." data-en="Loading killboard...">Killboard yükleniyor...</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ BUILD ÖNERİLERİ ══ -->
+  <div class="tools-panel" id="tab-builds" style="display:none">
+    <div class="tools-inner">
+      <div class="builds-filter-bar">
+        <select class="kb-select" id="buildRole" onchange="renderBuilds()">
+          <option value="all" data-tr="Tüm Roller" data-en="All Roles">Tüm Roller</option>
+          <option value="tank" data-tr="Tank" data-en="Tank">Tank</option>
+          <option value="healer" data-tr="Healer" data-en="Healer">Healer</option>
+          <option value="dps" data-tr="DPS" data-en="DPS">DPS</option>
+          <option value="support" data-tr="Support" data-en="Support">Support</option>
+        </select>
+        <select class="kb-select" id="buildContent" onchange="renderBuilds()">
+          <option value="all" data-tr="Tüm İçerikler" data-en="All Content">Tüm İçerikler</option>
+          <option value="solo" data-tr="Solo PvP" data-en="Solo PvP">Solo PvP</option>
+          <option value="group" data-tr="Group PvP" data-en="Group PvP">Group PvP</option>
+          <option value="zvz" data-tr="ZvZ" data-en="ZvZ">ZvZ</option>
+          <option value="pve" data-tr="PvE / Fame" data-en="PvE / Fame">PvE / Fame</option>
+          <option value="gathering" data-tr="Gathering" data-en="Gathering">Gathering</option>
+        </select>
+      </div>
+      <div class="builds-grid" id="buildsGrid"></div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo"><span class="logo-aot">AoT</span><span class="logo-dash">—</span><span class="logo-pnasf">PNASF</span></div>
+    <p class="footer-copy">© 2025 AoT-PNASF · Powered by Claude AI</p>
+  </div>
+</footer>
+
+<script src="../lib/lang.js"></script>
+<script src="../lib/settings.js"></script>
+<script src="../lib/settings-panel.js"></script>
+<script src="../data/items-data.js"></script>
+<script src="../lib/nav.js"></script>
+<script src="../lib/sync-button.js"></script>
+<script src="../lib/tools.js"></script>
+</body>
+</html>
