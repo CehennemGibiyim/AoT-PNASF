@@ -348,8 +348,8 @@ python -m http.server 8080
 | ✅ Aşama 3 | Crafting & Üretim (6 modül) | **Tamamlandı** |
 | ✅ Aşama 4 | PvP & İstatistik + GitHub Actions Bot | **Tamamlandı** |
 | ✅ Aşama 5 | Rehberler + Gemini AI Chat | **Tamamlandı** |
-| 🔜 Aşama 6 | Haritalar (world.json + pathfinding) | **Geliştiriliyor** |
-| 🔜 Aşama 7 | Build & Meta + Party Builder + Avalon Dungeon | **Geliştiriliyor** |
+| ✅ Aşama 6 | Haritalar (world.json + pathfinding) | **Tamamlandı** |
+| ✅ Aşama 7 | Build & Meta + Party Builder + Avalon Dungeon | **Tamamlandı** |
 | 🔜 Aşama 8 | ao-bin-dumps Tam Entegrasyon + Güncelle Butonu | **Planlandı** |
 | 🔜 Aşama 9 | PvP Killboard Analizi (Saatlik grafik, filtreler) | **Planlandı** |
 
