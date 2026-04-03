@@ -220,9 +220,9 @@ https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/cluster/
 ### 1. AI Smart Feed Bot (`ai-bot.yml`)
 ```yaml
 Tetiklenme: Her 6 saatte bir
-Görev: Albion forumu + patch notlarını tarar
+Görev: Albion Steam News API üzerinden haberleri ve patch notlarını tarar (Cloudflare 403 engelini atlatır)
 Çıktı: src/data/feed.json güncellenir
-API: Google Gemini API
+API: Google Gemini API & Steam API
 ```
 
 ### 2. PvP Feed Fetcher (`pvp-fetcher.yml`)
