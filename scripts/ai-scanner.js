@@ -15,11 +15,23 @@ function loadFeed() {
   catch { return { last_updated: '', bot_version: '2.0.0', updates: [] }; }
 }
 
-// NOT: Eğer dosyanızın başında bu zaten varsa silebilirsiniz!
 async function scanRSS() {
-  // Varsayılan Albion RSS Tarama fonksiyonunuz
-  console.log('RSS Taranıyor...');
-  return []; // Sizin kendi mantığınız buraya gelecek
+  console.log('Steam News API (AppID 761890) üzerinden haberler taranıyor...');
+  try {
+    const res = await fetch('https://api.steampowered.com/ISteamNews/GetNewsForApp/v2/?appid=761890&count=10', {
+      headers: { 'User-Agent': 'Mozilla/5.0 AoT-PNASF Bot/2.0' },
+      signal: AbortSignal.timeout(15000)
+    });
+    if (!res.ok) throw new Error(`HTTP Status ${res.status}`);
+    const json = await res.json();
+    const newsItems = json?.appnews?.newsitems || [];
+    const titles = newsItems.map(item => item.title.trim()).filter(Boolean);
+    console.log(`Steam API: ${titles.length} başlık bulundu.`);
+    return titles;
+  } catch (e) {
+    console.log(`Steam API Hatası: ${e.message}`);
+    return [];
+  }
 }
 
 async function scanNews() {

@@ -1,1 +1,199 @@
-<!-- Updated maps.html content here -->
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Haritalar & Zonlar — AoT-PNASF</title>
+  <meta name="description" content="Albion Online dünya haritası, zone risk rehberi, şehir crafting bonusları ve Roads of Avalon sandık/kaynak verileri."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../styles/main.css"/>
+  <link rel="stylesheet" href="../styles/settings.css"/>
+  <link rel="stylesheet" href="../styles/maps.css"/>
+  
+  <!-- Leaflet Harita Kütüphanesi -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a class="nav-logo" href="../../index.html"><span class="logo-aot">AoT</span><span class="logo-dash">—</span><span class="logo-pnasf">PNASF</span><span class="logo-ai-badge">AI</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="market.html" data-tr="Market" data-en="Market">Market</a></li>
+      <li><a href="crafting.html" data-tr="Üretim" data-en="Crafting">Üretim</a></li>
+      <li><a href="pvp.html" data-tr="PvP &amp; İstatistik" data-en="PvP &amp; Stats">PvP &amp; İstatistik</a></li>
+      <li><a href="maps.html" class="active" data-tr="Haritalar" data-en="Maps">Haritalar</a></li>
+      <li><a href="guides.html" data-tr="Rehberler" data-en="Guides">Rehberler</a></li>
+      <li><a href="tools.html" data-tr="Araçlar" data-en="Tools">Araçlar</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="settings-trigger" onclick="openSettings()">
+        <span class="settings-trigger-flag" id="settingsLangIndicator">🇹🇷 TR</span>
+        <span class="settings-trigger-icon">⚙</span>
+      </button>
+      <div class="ai-status"><span class="ai-dot"></span><span class="ai-text" data-tr="AI Aktif" data-en="AI Active">AI Aktif</span></div>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- SAYFA BAŞLIĞI -->
+<div class="maps-page-header">
+  <div class="maps-page-header-inner">
+    <div class="page-badge"><span class="ai-dot"></span><span data-tr="Dünya Haritası &amp; Zone Rehberi" data-en="World Map &amp; Zone Guide">Dünya Haritası &amp; Zone Rehberi</span></div>
+    <h1 data-tr="Harita &amp; Zonlar" data-en="Maps &amp; Zones">Harita &amp; Zonlar</h1>
+    <p data-tr="Zone tipleri, crafting bonusları, Avalon yolları — tam rehber" data-en="Zone types, crafting bonuses, Avalon roads — complete guide">Zone tipleri, crafting bonusları, Avalon yolları — tam rehber</p>
+  </div>
+</div>
+
+<!-- VIEW SEKME ÇUBUĞU -->
+<div class="maps-view-bar">
+  <div class="maps-view-bar-inner">
+    <button class="map-view-tab active" data-view="zones" onclick="switchView('zones')">
+      🗺️ <span data-tr="Bölgeler & Bonuslar" data-en="Zones & Bonuses">Bölgeler &amp; Bonuslar</span>
+    </button>
+    <button class="map-view-tab" data-view="avalon" onclick="switchView('avalon')">
+      🟣 <span data-tr="Roads of Avalon" data-en="Roads of Avalon">Roads of Avalon</span>
+    </button>
+    <button class="map-view-tab" data-view="map" onclick="switchView('map')">
+      🔗 <span data-tr="Bağlantı Haritası (BFS)" data-en="Connection Map (BFS)">Bağlantı Haritası (BFS)</span>
+    </button>
+    <div class="mvb-search-wrap">
+      <span class="mf-icon">🔍</span>
+      <input type="text" id="mapSearch" class="mf-input" placeholder="Zone ara..." oninput="onMapSearch(this.value)" autocomplete="off"/>
+      <div class="mkt-search-dd" id="mapSearchDd"></div>
+    </div>
+    <div class="mvb-count"><span id="zoneCount">—</span> <span data-tr="zone" data-en="zones">zone</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- GÖRÜNÜM 1: BÖLGELER & BONUSLAR (KARTLAR) -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="view-zones" class="view-container" style="display:block">
+  <!-- Zone Filtresi -->
+  <div class="maps-filter-bar">
+    <div class="maps-filter-bar-inner">
+      <button class="map-filter-btn active" onclick="filterZones('all',this)" data-tr="Tümü" data-en="All">Tümü</button>
+      <button class="map-filter-btn zone-btn-blue" onclick="filterZones('SAFEAREA',this)">🔵 Blue Zone</button>
+      <button class="map-filter-btn zone-btn-yellow" onclick="filterZones('YELLOW',this)">🟡 Yellow Zone</button>
+      <button class="map-filter-btn zone-btn-red" onclick="filterZones('RED',this)">🔴 Red Zone</button>
+      <button class="map-filter-btn zone-btn-black" onclick="filterZones('BLACK',this)">⚫ Black Zone</button>
+      <button class="map-filter-btn zone-btn-road" onclick="filterZones('ROAD',this)">🟣 Road of Avalon</button>
+      <button class="map-filter-btn zone-btn-mist" onclick="filterZones('MIST',this)">🌫️ Mist Zone</button>
+    </div>
+  </div>
+
+  <div class="zones-content">
+    <div id="bonus-section"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- GÖRÜNÜM 2: ROADS OF AVALON -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="view-avalon" class="view-container" style="display:none">
+  <div class="zones-content" id="avalon-section"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- GÖRÜNÜM 3: CANVAS HARITA + BFS ROTA -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="view-map" class="view-container maps-layout" style="display:none">
+  <!-- SOL: ROTA BULUCU -->
+  <div class="maps-sidebar">
+    <div class="msb-header">
+      <span class="msb-title" data-tr="Rota Bulucu" data-en="Pathfinder">Rota Bulucu</span>
+      <span class="msb-count" id="mapSideCount">BFS</span>
+    </div>
+
+    <!-- Zone Filtreleri (canvas için) -->
+    <div class="msb-filters">
+      <button class="map-filter-btn active" onclick="filterZones('all',this)" data-tr="Tümü" data-en="All">Tümü</button>
+      <button class="map-filter-btn" onclick="filterZones('SAFEAREA',this)">🔵</button>
+      <button class="map-filter-btn" onclick="filterZones('YELLOW',this)">🟡</button>
+      <button class="map-filter-btn" onclick="filterZones('RED',this)">🔴</button>
+      <button class="map-filter-btn" onclick="filterZones('BLACK',this)">⚫</button>
+      <button class="map-filter-btn" onclick="filterZones('ROAD',this)">🟣</button>
+    </div>
+
+    <!-- Rota Girdileri -->
+    <div class="route-section">
+      <div class="route-input-wrap">
+        <span class="route-lbl" data-tr="Başlangıç:" data-en="Start:">Başlangıç:</span>
+        <input type="text" id="routeFrom" class="route-inp" readonly onclick="openZonePicker('from')" placeholder="Zone seç..."/>
+      </div>
+      <button class="route-swap" onclick="swapRoute()">⇅</button>
+      <div class="route-input-wrap">
+        <span class="route-lbl" data-tr="Hedef:" data-en="Target:">Hedef:</span>
+        <input type="text" id="routeTo" class="route-inp" readonly onclick="openZonePicker('to')" placeholder="Zone seç..."/>
+      </div>
+      <div class="route-action-btns">
+        <button class="btn-calc" onclick="calcRoute()" data-tr="Rota Bul" data-en="Find Route">Rota Bul</button>
+        <button class="btn-clear" onclick="clearRoute()" data-tr="Temizle" data-en="Clear">Temizle</button>
+      </div>
+      <div id="routeResult" class="route-result" style="display:none">
+        <div class="route-stats" id="routeStats"></div>
+        <div class="route-steps" id="routeSteps"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ORTA: CANVAS -->
+  <div class="maps-canvas-wrap">
+    <div class="canvas-controls">
+      <button onclick="zoomIn()" title="Yakınlaştır">+</button>
+      <button onclick="zoomOut()" title="Uzaklaştır">−</button>
+      <button onclick="resetView()" title="Sıfırla">⊞</button>
+    </div>
+    <div id="mapCanvas" style="width:100%; height:100%; border-radius: 8px; z-index: 10;"></div>
+    <div class="canvas-hint">🖱️ Haritayı Kaydır &amp; Yakınlaştır</div>
+  </div>
+
+  <!-- SAĞ: DETAY PANELİ -->
+  <div class="maps-detail-panel">
+    <div class="detail-box">
+      <div id="detailEmpty" class="detail-empty">
+        <div class="de-icon">🗺️</div>
+        <p data-tr="Haritadan bir zone seçin" data-en="Select a zone from the map">Haritadan bir zone seçin</p>
+      </div>
+      <div id="detailContent" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo"><span class="logo-aot">AoT</span><span class="logo-dash">—</span><span class="logo-pnasf">PNASF</span></div>
+    <p class="footer-desc" data-tr="Dünya haritası verileri: ao-bin-dumps &amp; Albion Online Wiki." data-en="World map data: ao-bin-dumps &amp; Albion Online Wiki.">Dünya haritası verileri: ao-bin-dumps &amp; Albion Online Wiki.</p>
+    <p class="footer-copy">© 2025 AoT-PNASF · Powered by AI</p>
+  </div>
+</footer>
+
+<!-- ZONE PİCKER MODAL -->
+<div class="zpm-overlay" id="zonePickerOverlay" onclick="closeZonePicker()"></div>
+<div class="zpm-modal" id="zonePickerModal">
+  <div class="zpm-header">
+    <div class="zpm-title" id="zpmTitle">Zone Seç</div>
+    <button class="zpm-close" onclick="closeZonePicker()">✕</button>
+  </div>
+  <input type="text" class="zpm-search" id="zpmSearch" placeholder="Arama..." oninput="filterZonePicker(this.value)" autocomplete="off"/>
+  <div class="zpm-list" id="zpmList"></div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="../lib/lang.js"></script>
+<script src="../lib/sync-button.js"></script>
+<script src="../lib/settings.js"></script>
+<script src="../lib/settings-panel.js"></script>
+<script src="../data/world-data.js"></script>
+<script src="../data/zone-bonuses.js"></script>
+<script src="../lib/nav.js"></script>
+<script src="../lib/maps.js"></script>
+</body>
+</html>

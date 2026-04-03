@@ -10,7 +10,32 @@ const GI_SEARCH = {
   eu:   'https://gameinfo-ams.albiononline.com/api/gameinfo',
   asia: 'https://gameinfo-sgp.albiononline.com/api/gameinfo',
 };
-const PROXY = 'https://api.allorigins.win/get?url=';
+
+// ─── PROXY YARDIMCISI ─────────────────────────────────────
+async function fetchGI(url) {
+  const proxies = [
+    `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+    `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+    `https://corsproxy.io/?url=${encodeURIComponent(url)}`
+  ];
+  
+  for (const proxy of proxies) {
+    try {
+      const res = await fetch(proxy, { signal: AbortSignal.timeout(6000) });
+      if (!res.ok) continue;
+      const text = await res.text();
+      try {
+        const json = JSON.parse(text);
+        // allorigins.win/get döndürdüyse
+        if (json && json.contents && typeof json.contents === 'string') {
+          return JSON.parse(json.contents);
+        }
+        return json;
+      } catch (e) { continue; }
+    } catch (e) { continue; }
+  }
+  throw new Error("Tüm proxy'ler başarısız oldu.");
+}
 
 // ─── STATE ────────────────────────────────────────────────
 let pvpServer   = 'us';
@@ -146,11 +171,7 @@ async function onPvpSearch(val) {
   searchTimer = setTimeout(async () => {
     try {
       const apiUrl = `${GI_SEARCH[pvpServer]}/search?q=${encodeURIComponent(val)}`;
-      const proxied = `${PROXY}${encodeURIComponent(apiUrl)}`;
-      const res  = await fetch(proxied, { signal: AbortSignal.timeout(10000) });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const wrapper = await res.json();
-      const data = JSON.parse(wrapper.contents || '{}');
+      const data = await fetchGI(apiUrl);
       const lang = getLang();
       const results = searchType === 'guild'    ? (data.guilds    || [])
                     : searchType === 'alliance' ? (data.alliances || [])
@@ -181,16 +202,30 @@ async function onPvpSearch(val) {
 async function doSearch() {
   const val = document.getElementById('pvpSearch').value.trim();
   if (!val) return;
-  // İlk sonucu otomatik seç
+  const lang = getLang();
+  
+  // Profil alanını yükleniyor yap
+  document.querySelectorAll('.pvp-panel').forEach(p => p.style.display='none');
+  const cont = document.getElementById('profileContent');
+  const empty = document.getElementById('profileEmpty');
+  if (empty) empty.style.display = 'none';
+  document.getElementById('tab-profile').style.display = 'block';
+  cont.style.display = 'block';
+  cont.innerHTML = '<div class="pvp-loading"><div class="loading-spinner"></div><span>Bulunuyor...</span></div>';
+
   try {
     const apiUrl  = `${GI_SEARCH[pvpServer]}/search?q=${encodeURIComponent(val)}`;
-    const proxied = `${PROXY}${encodeURIComponent(apiUrl)}`;
-    const res     = await fetch(proxied, { signal: AbortSignal.timeout(10000) });
-    const wrapper = await res.json();
-    const data    = JSON.parse(wrapper.contents || '{}');
+    const data    = await fetchGI(apiUrl);
     const results = searchType === 'guild' ? (data.guilds||[]) : (data.players||[]);
-    if (results.length) selectEntity(results[0].Id, results[0].Name, searchType);
-  } catch(e) {}
+    
+    if (results.length > 0) {
+      selectEntity(results[0].Id, results[0].Name, searchType);
+    } else {
+      cont.innerHTML = `<div class="pvp-error"><div class="err-icon">🔍</div><p>${lang==='tr'?'Hiçbir sonuç bulunamadı.':'No results found.'}</p></div>`;
+    }
+  } catch(e) {
+    cont.innerHTML = `<div class="pvp-error"><div class="err-icon">⚠️</div><p>${lang==='tr'?'Arama sunucularına şu an ulaşılamıyor. Lütfen biraz sonra tekrar deneyin.':'Search servers are currently unreachable. Please try again later.'}</p></div>`;
+  }
 }
 
 function selectEntity(id, name, type) {
@@ -221,15 +256,11 @@ async function loadPlayerProfile(playerId, playerName) {
     const killsUrl = `${GI_SEARCH[pvpServer]}/players/${playerId}/kills?limit=10&offset=0`;
     const deathUrl = `${GI_SEARCH[pvpServer]}/players/${playerId}/deaths?limit=10&offset=0`;
 
-    const [profRes, killsRes, deathsRes] = await Promise.all([
-      fetch(`${PROXY}${encodeURIComponent(profUrl)}`,  {signal:AbortSignal.timeout(12000)}),
-      fetch(`${PROXY}${encodeURIComponent(killsUrl)}`, {signal:AbortSignal.timeout(12000)}),
-      fetch(`${PROXY}${encodeURIComponent(deathUrl)}`, {signal:AbortSignal.timeout(12000)}),
+    const [profile, killsRaw, deathsRaw] = await Promise.all([
+      fetchGI(profUrl).catch(() => null),
+      fetchGI(killsUrl).catch(() => []),
+      fetchGI(deathUrl).catch(() => [])
     ]);
-
-    const profile = JSON.parse((await profRes.json()).contents  || 'null');
-    const killsRaw= JSON.parse((await killsRes.json()).contents || '[]');
-    const deathsRaw=JSON.parse((await deathsRes.json()).contents|| '[]');
 
     if (!profile) throw new Error('empty profile');
 
@@ -335,12 +366,10 @@ async function loadGuildProfile(guildId, guildName) {
   try {
     const gUrl = `${GI_SEARCH[pvpServer]}/guilds/${guildId}`;
     const kUrl = `${GI_SEARCH[pvpServer]}/events?guildId=${guildId}&limit=10&sort=recent`;
-    const [gRes, kRes] = await Promise.all([
-      fetch(`${PROXY}${encodeURIComponent(gUrl)}`, {signal:AbortSignal.timeout(12000)}),
-      fetch(`${PROXY}${encodeURIComponent(kUrl)}`, {signal:AbortSignal.timeout(12000)}),
+    const [guild, killsRaw] = await Promise.all([
+      fetchGI(gUrl).catch(() => null),
+      fetchGI(kUrl).catch(() => [])
     ]);
-    const guild  = JSON.parse((await gRes.json()).contents || 'null');
-    const killsRaw = JSON.parse((await kRes.json()).contents || '[]');
     if (!guild) throw new Error('empty');
     const kills = (Array.isArray(killsRaw)?killsRaw:[]).map(e=>({
       timestamp: e.TimeStamp||'', killer: e.Killer?.Name||'?', killerGuild:'',

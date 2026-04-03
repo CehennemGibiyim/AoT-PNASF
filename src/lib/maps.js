@@ -1,25 +1,24 @@
-// AoT-PNASF — Haritalar v1
-// world-data.js'den zone verisi çeker, canvas üzerinde gösterir
-// BFS ile rota hesaplama
+// AoT-PNASF — Haritalar v2 (Tam Yeniden Yazım)
+// Zone kartları + Canvas harita + Avalon detayları
 
-// ─── ZONE RENK & TİP SİSTEMİ ────────────────────────────
+// ─── ZONE RENK & TİP SİSTEMİ ─────────────────────────────
 const ZONE_COLORS = {
-  SAFEAREA:   { bg:'#3b82f6', text:'#dbeafe', label:'Blue Zone',   dot:'zone-blue'     },
-  YELLOW:     { bg:'#eab308', text:'#fefce8', label:'Yellow Zone',  dot:'zone-yellow'   },
-  RED:        { bg:'#ef4444', text:'#fef2f2', label:'Red Zone',     dot:'zone-red'      },
-  BLACK:      { bg:'#4b5563', text:'#f9fafb', label:'Black Zone',   dot:'zone-black'    },
-  ROAD:       { bg:'#8b5cf6', text:'#f5f3ff', label:'Road of Avalon',dot:'zone-road'   },
-  MIST:       { bg:'#06b6d4', text:'#ecfeff', label:'Mist Zone',    dot:'zone-mist'     },
-  BRECILIEN:  { bg:'#06b6d4', text:'#ecfeff', label:'Brecilien',    dot:'zone-mist'     },
-  DEFAULT:    { bg:'#6b7280', text:'#f9fafb', label:'Unknown',      dot:'zone-default'  },
+  SAFEAREA:  { bg:'#3b82f6', text:'#dbeafe', label:'Blue Zone',     dot:'zone-blue'    },
+  YELLOW:    { bg:'#eab308', text:'#fefce8', label:'Yellow Zone',   dot:'zone-yellow'  },
+  RED:       { bg:'#ef4444', text:'#fef2f2', label:'Red Zone',      dot:'zone-red'     },
+  BLACK:     { bg:'#4b5563', text:'#f9fafb', label:'Black Zone',    dot:'zone-black'   },
+  ROAD:      { bg:'#8b5cf6', text:'#f5f3ff', label:'Road of Avalon',dot:'zone-road'    },
+  MIST:      { bg:'#06b6d4', text:'#ecfeff', label:'Mist Zone',     dot:'zone-mist'    },
+  BRECILIEN: { bg:'#06b6d4', text:'#ecfeff', label:'Brecilien',     dot:'zone-mist'    },
+  DEFAULT:   { bg:'#6b7280', text:'#f9fafb', label:'Bilinmiyor',    dot:'zone-default' },
 };
 
 function getZoneColor(zone) {
-  const id  = (zone.id || '').toUpperCase();
-  const col = (zone.color || zone.type || '').toUpperCase();
+  const id  = (zone.id  || '').toUpperCase();
+  const col = (zone.color || zone.type || zone.zone || '').toUpperCase();
   if (id.includes('BRECILIEN') || col.includes('BRECILIEN')) return ZONE_COLORS.BRECILIEN;
-  if (id.includes('ROAD') || col.includes('ROAD'))           return ZONE_COLORS.ROAD;
-  if (id.includes('MIST') || col.includes('MIST'))           return ZONE_COLORS.MIST;
+  if (id.includes('ROAD')  || col.includes('ROAD'))          return ZONE_COLORS.ROAD;
+  if (id.includes('MIST')  || col.includes('MIST'))          return ZONE_COLORS.MIST;
   if (col.includes('SAFEAREA') || col.includes('BLUE'))      return ZONE_COLORS.SAFEAREA;
   if (col.includes('YELLOW'))                                return ZONE_COLORS.YELLOW;
   if (col.includes('RED'))                                   return ZONE_COLORS.RED;
@@ -27,392 +26,377 @@ function getZoneColor(zone) {
   return ZONE_COLORS.DEFAULT;
 }
 
-function getZoneDotClass(zone) {
-  return getZoneColor(zone).dot;
-}
-
 // ─── STATE ────────────────────────────────────────────────
-let zones         = [];
-let filteredZones = [];
-let currentFilter = 'all';
-let selectedZone  = null;
-let routeFrom     = null;
-let routeTo       = null;
-let currentRoute  = null;
-let pickerTarget  = null;
+let zones = [], filteredZones = [], currentFilter = 'all';
+let selectedZone = null, routeFrom = null, routeTo = null;
+let currentRoute = null, pickerTarget = null;
+let currentView = 'zones'; // 'zones' | 'map' | 'avalon'
 
-// Canvas state
-let canvas, ctx;
-let camX = 0, camY = 0, zoom = 1;
-let isDragging = false, dragStartX = 0, dragStartY = 0;
-let nodePositions = new Map(); // zoneId → {x, y}
+// Leaflet state
+let leafletMap = null;
+let tileLayer = null;
 
 const getLang = () => localStorage.getItem('aot-lang') || 'tr';
 
 // ─── BAŞLAT ───────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  canvas = document.getElementById('mapCanvas');
-  ctx    = canvas.getContext('2d');
-  resizeCanvas();
-  window.addEventListener('resize', resizeCanvas);
-
-  // Canvas mouse events
-  canvas.addEventListener('mousedown',  onMouseDown);
-  canvas.addEventListener('mousemove',  onMouseMove);
-  canvas.addEventListener('mouseup',    onMouseUp);
-  canvas.addEventListener('mouseleave', onMouseUp);
-  canvas.addEventListener('wheel',      onWheel, { passive:false });
-  canvas.addEventListener('click',      onCanvasClick);
-  canvas.addEventListener('touchstart', onTouchStart, { passive:false });
-  canvas.addEventListener('touchmove',  onTouchMove,  { passive:false });
-  canvas.addEventListener('touchend',   onTouchEnd);
-
   loadZones();
+  initViewTabs();
+  renderBonusSection();
+  renderAvalonSection();
 });
+
+// ─── VIEW SEKME SİSTEMİ ───────────────────────────────────
+function initViewTabs() {
+  // Varsayılan görünüm: zone kartları
+  switchView('zones');
+}
+
+function switchView(view) {
+  currentView = view;
+  document.querySelectorAll('.map-view-tab').forEach(t =>
+    t.classList.toggle('active', t.dataset.view === view)
+  );
+  document.getElementById('view-zones').style.display  = view === 'zones'  ? 'block' : 'none';
+  document.getElementById('view-map').style.display    = view === 'map'    ? 'flex'  : 'none';
+  document.getElementById('view-avalon').style.display = view === 'avalon' ? 'block' : 'none';
+
+  if (view === 'map') {
+    if (!leafletMap && window.L) {
+      setTimeout(() => initLeafletMap(), 50);
+    }
+  }
+}
 
 // ─── ZONE YÜKLEMESİ ──────────────────────────────────────
 function loadZones() {
   if (window.AO_ZONES && window.AO_ZONES.length > 0) {
     zones = window.AO_ZONES;
-    // Avalon Roads world.json'da eksik olabilir — her zaman ekle
-    const avalonIds = getAvalonZones().map(z => z.id);
-    const existingIds = zones.map(z => z.id);
     getAvalonZones().forEach(az => {
-      if (!existingIds.includes(az.id)) zones.push(az);
+      if (!zones.find(z => z.id === az.id)) zones.push(az);
     });
-    initMap();
   } else {
     zones = getStaticZones();
-    initMap();
   }
-}
-
-function initMap() {
   filteredZones = [...zones];
-  renderZoneList();
-  buildNodePositions();
-  drawMap();
-  document.getElementById('zoneCount').textContent = zones.length.toLocaleString('tr-TR');
+  const countEl = document.getElementById('zoneCount');
+  if(countEl) countEl.textContent = zones.length.toLocaleString('tr-TR');
 }
 
-// ─── STATİK TEMEL ZONE'LAR (world-data.js yokken fallback) ──
-function getAvalonZones() {
-  return [
-    // Roads of Avalon — 2 kişilik
-    {id:'ROAD_2P_001',name:'Road of Avalon (2p)',color:'ROAD',type:'ROAD',exits:['ROAD_2P_002','ROAD_7P_001'],road:true},
-    {id:'ROAD_2P_002',name:'Road of Avalon (2p)',color:'ROAD',type:'ROAD',exits:['ROAD_2P_001','ROAD_2P_003'],road:true},
-    {id:'ROAD_2P_003',name:'Road of Avalon (2p)',color:'ROAD',type:'ROAD',exits:['ROAD_2P_002','ROAD_7P_002'],road:true},
-    {id:'ROAD_2P_004',name:'Road of Avalon (2p)',color:'ROAD',type:'ROAD',exits:['ROAD_7P_002'],road:true},
-    {id:'ROAD_2P_005',name:'Road of Avalon (2p)',color:'ROAD',type:'ROAD',exits:['ROAD_7P_003'],road:true},
-    // Roads of Avalon — 7 kişilik
-    {id:'ROAD_7P_001',name:'Road of Avalon (7p)',color:'ROAD',type:'ROAD',exits:['ROAD_2P_001','ROAD_7P_002','ROAD_20P_001'],road:true},
-    {id:'ROAD_7P_002',name:'Road of Avalon (7p)',color:'ROAD',type:'ROAD',exits:['ROAD_7P_001','ROAD_7P_003','ROAD_2P_004'],road:true},
-    {id:'ROAD_7P_003',name:'Road of Avalon (7p)',color:'ROAD',type:'ROAD',exits:['ROAD_7P_002','ROAD_20P_002','ROAD_2P_005'],road:true},
-    {id:'ROAD_7P_004',name:'Road of Avalon (7p)',color:'ROAD',type:'ROAD',exits:['ROAD_20P_001','ROAD_7P_005'],road:true},
-    {id:'ROAD_7P_005',name:'Road of Avalon (7p)',color:'ROAD',type:'ROAD',exits:['ROAD_7P_004'],road:true},
-    // Roads of Avalon — 20 kişilik
-    {id:'ROAD_20P_001',name:'Road of Avalon (20p)',color:'ROAD',type:'ROAD',exits:['ROAD_7P_001','ROAD_20P_002','ROAD_7P_004'],road:true},
-    {id:'ROAD_20P_002',name:'Road of Avalon (20p)',color:'ROAD',type:'ROAD',exits:['ROAD_20P_001','ROAD_7P_003'],road:true},
-    {id:'ROAD_20P_003',name:'Road of Avalon (20p)',color:'ROAD',type:'ROAD',exits:['ROAD_20P_002'],road:true},
-  ];
+// ─── ZONE KARTLARI (Ana Görünüm) ───────────────────────────
+function renderBonusSection() {
+  const db  = window.AO_ZONE_BONUSES;
+  const lang = getLang();
+  const container = document.getElementById('bonus-section');
+  if (!container || !db) return;
+
+  // ─ Zone tipi genel bilgi kartları
+  const zoneInfoHtml = Object.entries(db.zoneBonuses).map(([key, z]) => `
+    <div class="zb-info-card" style="border-color:${z.color}33">
+      <div class="zbi-header" style="background:${z.color}18;border-bottom:1px solid ${z.color}33">
+        <span class="zbi-icon">${z.icon}</span>
+        <span class="zbi-label" style="color:${z.color}">${z.label}</span>
+        <span class="zbi-tier" style="background:${z.color}22;color:${z.color}">${z.resourceTier}</span>
+      </div>
+      <div class="zbi-body">
+        <div class="zbi-desc">${z.description}</div>
+        <div class="zbi-stats">
+          <div class="zbi-stat"><span class="zbi-st-lbl">⚔️ PvP Riski</span><span class="zbi-st-val" style="color:${z.color}">${z.pvpRisk}</span></div>
+          <div class="zbi-stat"><span class="zbi-st-lbl">💀 Eşya Kaybı</span><span class="zbi-st-val">${z.lootRisk}</span></div>
+          <div class="zbi-stat"><span class="zbi-st-lbl">⭐ Bonus</span><span class="zbi-st-val">${z.generalBonus}</span></div>
+        </div>
+      </div>
+    </div>`).join('');
+
+  // ─ Şehir crafting kartları
+  const cityHtml = db.cities.map(c => {
+    const col = ZONE_COLORS[c.zone] || ZONE_COLORS.DEFAULT;
+    const craftBonuses = c.bonuses.filter(b => b.type === 'craft');
+    const refineBonuses = c.bonuses.filter(b => b.type === 'refine');
+    const infoBonuses = c.bonuses.filter(b => b.type === 'info');
+    return `
+    <div class="city-card" onclick="selectCityCard('${c.id}', this)">
+      <div class="cc-header" style="background:${col.bg}18;border-bottom:1px solid ${col.bg}33">
+        <span class="cc-icon">${c.icon}</span>
+        <div class="cc-title-wrap">
+          <div class="cc-name">${c.name}</div>
+          <div class="cc-region">${c.region || ''}</div>
+        </div>
+        <span class="cc-zone-badge" style="background:${col.bg}22;color:${col.bg}">
+          <span style="width:7px;height:7px;border-radius:50%;background:${col.bg};display:inline-block"></span>
+          ${col.label}
+        </span>
+      </div>
+      <div class="cc-body">
+        <div class="cc-desc">${c.description}</div>
+        ${craftBonuses.length ? `
+        <div class="cc-bonus-group">
+          <div class="cc-bonus-title">⚔️ Craft Bonusları</div>
+          ${craftBonuses.map(b => `
+          <div class="cc-bonus-row">
+            <span class="cc-bonus-icon">${b.icon}</span>
+            <span class="cc-bonus-label">${b.label}</span>
+            <span class="cc-bonus-val" style="color:#c9a84c">${b.value}</span>
+          </div>`).join('')}
+        </div>` : ''}
+        ${refineBonuses.length ? `
+        <div class="cc-bonus-group">
+          <div class="cc-bonus-title">🔥 Rafine Bonusları</div>
+          ${refineBonuses.map(b => `
+          <div class="cc-bonus-row">
+            <span class="cc-bonus-icon">${b.icon}</span>
+            <span class="cc-bonus-label">${b.label}</span>
+            <span class="cc-bonus-val" style="color:#06b6d4">${b.value}</span>
+          </div>`).join('')}
+        </div>` : ''}
+        ${infoBonuses.length ? `
+        <div class="cc-bonus-group">
+          <div class="cc-bonus-title">ℹ️ Diğer</div>
+          ${infoBonuses.map(b => `
+          <div class="cc-bonus-row">
+            <span class="cc-bonus-icon">${b.icon}</span>
+            <span class="cc-bonus-label">${b.label}</span>
+            <span class="cc-bonus-val">${b.value}</span>
+          </div>`).join('')}
+        </div>` : ''}
+        <div class="cc-resources">
+          ${(c.resources||[]).map(r => `<span class="cc-res-tag">${r}</span>`).join('')}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // ─ Black zone kartları
+  const blackHtml = db.blackZones.map(b => {
+    const col = ZONE_COLORS.BLACK;
+    return `
+    <div class="city-card black-card">
+      <div class="cc-header" style="background:${col.bg}18;border-bottom:1px solid ${col.bg}33">
+        <span class="cc-icon">${b.icon}</span>
+        <div class="cc-title-wrap">
+          <div class="cc-name">${b.name}</div>
+          <div class="cc-region">Outlands — Tam Kayıp PvP</div>
+        </div>
+        <span class="cc-zone-badge" style="background:${col.bg}22;color:#9ca3af">⚫ Black Zone</span>
+      </div>
+      <div class="cc-body">
+        <div class="cc-desc">${b.description}</div>
+        <div class="cc-bonus-group">
+          ${b.bonuses.map(bonus => `
+          <div class="cc-bonus-row">
+            <span class="cc-bonus-icon">${bonus.icon}</span>
+            <span class="cc-bonus-label">${bonus.label}</span>
+            <span class="cc-bonus-val" style="color:#ef4444">${bonus.value}</span>
+          </div>`).join('')}
+        </div>
+        <div class="cc-resources">
+          ${b.resources.map(r => `<span class="cc-res-tag danger">${r}</span>`).join('')}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  container.innerHTML = `
+    <div class="bs-section">
+      <div class="bs-section-title">🗺️ Zone Tipleri & Risk Rehberi</div>
+      <div class="zb-info-grid">${zoneInfoHtml}</div>
+    </div>
+    <div class="bs-section">
+      <div class="bs-section-title">🏙️ Kraliyet Şehirleri — Crafting Bonusları</div>
+      <div class="city-grid">${cityHtml}</div>
+    </div>
+    <div class="bs-section">
+      <div class="bs-section-title">💀 Outlands — Black Zone Üsleri</div>
+      <div class="city-grid">${blackHtml}</div>
+    </div>`;
 }
 
-function getStaticZones() {
-  return [
-    // Royal Cities
-    {id:'CAERLEON',       name:'Caerleon',       color:'SAFEAREA', type:'CITY',   exits:['SWAMP_BRIDGEWATCH_ACCESS','HIGHLAND_MARTLOCK_ACCESS','STEPPE_THETFORD_ACCESS','FOREST_LYMHURST_ACCESS','MOUNTAIN_FORTSTERLING_ACCESS']},
-    {id:'SWAMP_BRIDGEWATCH_ACCESS', name:'Bridgewatch',  color:'YELLOW',   type:'CITY',   exits:['CAERLEON']},
-    {id:'HIGHLAND_MARTLOCK_ACCESS', name:'Martlock',     color:'YELLOW',   type:'CITY',   exits:['CAERLEON']},
-    {id:'STEPPE_THETFORD_ACCESS',   name:'Thetford',     color:'YELLOW',   type:'CITY',   exits:['CAERLEON']},
-    {id:'FOREST_LYMHURST_ACCESS',   name:'Lymhurst',     color:'YELLOW',   type:'CITY',   exits:['CAERLEON']},
-    {id:'MOUNTAIN_FORTSTERLING_ACCESS', name:'Fort Sterling', color:'YELLOW', type:'CITY', exits:['CAERLEON']},
-    // Outlands Rests
-    {id:'ARTHURSREST',    name:"Arthur's Rest",   color:'BLACK',    type:'REST',   exits:['MERLINSREST','MORGANASREST']},
-    {id:'MERLINSREST',    name:"Merlyn's Rest",   color:'BLACK',    type:'REST',   exits:['ARTHURSREST','MORGANASREST']},
-    {id:'MORGANASREST',   name:"Morgana's Rest",  color:'BLACK',    type:'REST',   exits:['ARTHURSREST','MERLINSREST']},
-    // Mist
-    {id:'BRECILIEN',      name:'Brecilien',       color:'MIST',     type:'CITY',   exits:[]},
-    // Example zones
-    {id:'BLACKZONE_01',   name:'Black Zone 1',    color:'BLACK',    type:'BLACKZONE', exits:['BLACKZONE_02','ARTHURSREST']},
-    {id:'BLACKZONE_02',   name:'Black Zone 2',    color:'BLACK',    type:'BLACKZONE', exits:['BLACKZONE_01','MERLINSREST']},
-    {id:'REDZONE_01',     name:'Red Zone 1',      color:'RED',      type:'REDZONE',   exits:['CAERLEON','REDZONE_02']},
-    {id:'REDZONE_02',     name:'Red Zone 2',      color:'RED',      type:'REDZONE',   exits:['REDZONE_01']},
-    {id:'YELLOWZONE_01',  name:'Yellow Zone 1',   color:'YELLOW',   type:'YELLOWZONE', exits:['CAERLEON','YELLOWZONE_02']},
-    {id:'YELLOWZONE_02',  name:'Yellow Zone 2',   color:'YELLOW',   type:'YELLOWZONE', exits:['YELLOWZONE_01']},
-
-  // ── Avalon Roads (fallback — world-data.js yokken)
-  {id:'ROAD_2P_001',name:'Road of Avalon (2p #1)',color:'ROAD',type:'ROAD',exits:['ROAD_2P_002','ROAD_7P_001'],road:true},
-  {id:'ROAD_2P_002',name:'Road of Avalon (2p #2)',color:'ROAD',type:'ROAD',exits:['ROAD_2P_001','ROAD_2P_003'],road:true},
-  {id:'ROAD_2P_003',name:'Road of Avalon (2p #3)',color:'ROAD',type:'ROAD',exits:['ROAD_2P_002'],road:true},
-  {id:'ROAD_7P_001',name:'Road of Avalon (7p #1)',color:'ROAD',type:'ROAD',exits:['ROAD_2P_001','ROAD_7P_002','ROAD_20P_001'],road:true},
-  {id:'ROAD_7P_002',name:'Road of Avalon (7p #2)',color:'ROAD',type:'ROAD',exits:['ROAD_7P_001','ROAD_7P_003'],road:true},
-  {id:'ROAD_7P_003',name:'Road of Avalon (7p #3)',color:'ROAD',type:'ROAD',exits:['ROAD_7P_002'],road:true},
-  {id:'ROAD_20P_001',name:'Road of Avalon (20p #1)',color:'ROAD',type:'ROAD',exits:['ROAD_7P_001','ROAD_20P_002'],road:true},
-  {id:'ROAD_20P_002',name:'Road of Avalon (20p #2)',color:'ROAD',type:'ROAD',exits:['ROAD_20P_001'],road:true},
-    {id:'ROAD_01',        name:'Road of Avalon 1',color:'ROAD',     type:'ROAD',      exits:['ROAD_02']},
-    {id:'ROAD_02',        name:'Road of Avalon 2',color:'ROAD',     type:'ROAD',      exits:['ROAD_01']},
-  ];
+function selectCityCard(id, el) {
+  document.querySelectorAll('.city-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
 }
 
-// ─── ZONE POZİSYON HESAPLAMA ──────────────────────────────
-function buildNodePositions() {
-  // BFS ile zone bağlantılarına göre ağaç pozisyon hesapla
-  nodePositions.clear();
-  if (!zones.length) return;
+// ─── AVALON ROADS SEKSİYONU ───────────────────────────────
+function renderAvalonSection() {
+  const db = window.AO_ZONE_BONUSES;
+  const container = document.getElementById('avalon-section');
+  if (!container || !db) return;
 
-  // Caerleon merkeze
-  const center = zones.find(z => z.id === 'CAERLEON') || zones[0];
-  const W = 900, H = 700;
-  nodePositions.set(center.id, { x: W/2, y: H/2 });
+  const roads = db.avalonRoads;
+  const tiers  = [...new Set(roads.map(r => r.tier))].sort();
+  const sizes  = ['2 Oyuncu', '7 Oyuncu', '20 Oyuncu'];
 
-  // BFS ile pozisyon dağıt
-  const visited = new Set([center.id]);
-  const queue   = [{ id: center.id, depth: 0, angle: 0 }];
-  const angleMap = new Map([[center.id, 0]]);
-  const depthCount = new Map([[0, 1]]);
+  // Filtre butonları
+  const filterHtml = `
+    <div class="av-filters">
+      <button class="av-filter-btn active" onclick="filterAvalon('all',this)">Tümü</button>
+      <button class="av-filter-btn" onclick="filterAvalon('2p',this)">👤 2p</button>
+      <button class="av-filter-btn" onclick="filterAvalon('7p',this)">👥 7p</button>
+      <button class="av-filter-btn" onclick="filterAvalon('20p',this)">🏰 20p</button>
+      ${tiers.map(t => `<button class="av-filter-btn tier-btn" onclick="filterAvalonTier(${t},this)">T${t}</button>`).join('')}
+    </div>`;
 
-  while (queue.length) {
-    const { id, depth } = queue.shift();
-    const zone = zones.find(z => z.id === id);
-    if (!zone) continue;
-    const exits = zone.exits || [];
-    const unvisited = exits.filter(e => !visited.has(e) && zones.find(z => z.id === e));
+  const roadCards = roads.map(r => {
+    const totalChests = (r.chests || []).reduce((sum, c) => sum + c.count, 0);
+    const legendaryCount = (r.chests || []).filter(c => c.type === 'Legendary Chest').reduce((s,c) => s+c.count, 0);
+    const tierColor = r.tier <= 5 ? '#22c55e' : r.tier <= 6 ? '#eab308' : r.tier <= 7 ? '#f97316' : '#ef4444';
+    const sizeClass = r.capacity.includes('2') ? 'av-2p' : r.capacity.includes('7') ? 'av-7p' : 'av-20p';
+    return `
+    <div class="av-card ${sizeClass}" data-tier="${r.tier}" data-cap="${r.capacity}" onclick="selectAvalonCard(this)">
+      <div class="av-card-header">
+        <div class="av-card-top">
+          <span class="av-tier-badge" style="background:${tierColor}22;color:${tierColor};border:1px solid ${tierColor}44">T${r.tier}</span>
+          <span class="av-cap-badge">${r.capacity}</span>
+          ${legendaryCount > 0 ? `<span class="av-legendary">👑 ${legendaryCount}x Legendary</span>` : ''}
+        </div>
+        <div class="av-name">${r.name}</div>
+        <div class="av-exits">🚪 ${r.exits} çıkış portali</div>
+      </div>
+      <div class="av-card-body">
+        <!-- Sandıklar -->
+        <div class="av-chests-section">
+          <div class="av-sub-title">📦 Sandıklar (${totalChests} adet)</div>
+          <div class="av-chests-grid">
+            ${(r.chests || []).map(c => {
+              const ctInfo = db.chestTypes[c.type] || { icon:'📦', color:'#6b7280' };
+              return `
+              <div class="av-chest-item" style="border-color:${ctInfo.color}44">
+                <span class="av-chest-icon" style="color:${ctInfo.color}">${ctInfo.icon}</span>
+                <div class="av-chest-info">
+                  <div class="av-chest-name">${c.type}</div>
+                  <div class="av-chest-count" style="color:${ctInfo.color}">×${c.count} adet</div>
+                  <div class="av-chest-loot">${c.loot}</div>
+                </div>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>
+        <!-- Kaynaklar -->
+        <div class="av-resources-section">
+          <div class="av-sub-title">⛏️ Kaynaklar</div>
+          <div class="av-res-list">
+            ${(r.resources || []).map(res => `
+            <div class="av-res-item">
+              <span class="av-res-name">${res.name}</span>
+              <span class="av-res-count">${res.count}</span>
+              <span class="av-res-tier" style="color:${tierColor}">T${res.tier}</span>
+            </div>`).join('')}
+          </div>
+        </div>
+        <!-- Fame bonusu -->
+        <div class="av-bonuses-row">
+          ${(r.bonuses || []).map(b => `
+          <div class="av-bonus-chip">
+            <span>${b.icon}</span>
+            <span>${b.label}: <strong>${b.value}</strong></span>
+          </div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
 
-    unvisited.forEach((exitId, i) => {
-      visited.add(exitId);
-      const parentPos = nodePositions.get(id) || { x: W/2, y: H/2 };
-      const parentAngle = angleMap.get(id) || 0;
-      const spread = Math.PI * 1.2;
-      const angleStep = unvisited.length > 1 ? spread / (unvisited.length - 1) : 0;
-      const angle = parentAngle - spread/2 + i * angleStep;
-      const dist = Math.max(80, 160 - depth * 20);
-      const x = Math.max(30, Math.min(W-30, parentPos.x + Math.cos(angle) * dist));
-      const y = Math.max(30, Math.min(H-30, parentPos.y + Math.sin(angle) * dist));
-      nodePositions.set(exitId, { x, y });
-      angleMap.set(exitId, angle);
-      queue.push({ id: exitId, depth: depth + 1, angle });
-    });
-  }
+  // Sandık tipi rehberi
+  const chestGuideHtml = Object.entries(db.chestTypes).map(([name, info]) => `
+    <div class="chest-guide-item">
+      <span style="color:${info.color};font-size:20px">${info.icon}</span>
+      <div>
+        <div class="cgi-name">${name}</div>
+        <div class="cgi-desc">${info.desc}</div>
+      </div>
+    </div>`).join('');
 
-  // Pozisyon verilemeyen zone'lar için grid
-  let gridX = 50, gridY = 50;
-  zones.forEach(z => {
-    if (!nodePositions.has(z.id)) {
-      nodePositions.set(z.id, { x: gridX, y: gridY });
-      gridX += 80;
-      if (gridX > W - 50) { gridX = 50; gridY += 60; }
-    }
+  container.innerHTML = `
+    <div class="av-header-section">
+      <div class="av-main-title">🟣 Roads of Avalon — Detaylı Harita Rehberi</div>
+      <div class="av-main-desc">Avalon yolları her sunucu resetinde farklı bağlantılar oluşturur. Kapasite, tier ve sandık sayıları sabit kalır.</div>
+    </div>
+    ${filterHtml}
+    <div class="av-cards-grid" id="avalonGrid">${roadCards}</div>
+    <div class="bs-section" style="margin-top:28px">
+      <div class="bs-section-title">📦 Sandık Tipi Rehberi</div>
+      <div class="chest-guide-grid">${chestGuideHtml}</div>
+    </div>`;
+}
+
+function filterAvalon(type, btn) {
+  document.querySelectorAll('.av-filter-btn:not(.tier-btn)').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.av-card').forEach(card => {
+    if (type === 'all') { card.style.display = ''; return; }
+    const cap = card.dataset.cap || '';
+    card.style.display = cap.includes(type === '2p' ? '2' : type === '7p' ? '7' : '20') ? '' : 'none';
   });
 }
 
-// ─── CANVAS ───────────────────────────────────────────────
-function resizeCanvas() {
-  if (!canvas) return;
-  const rect = canvas.parentElement.getBoundingClientRect();
-  canvas.width  = rect.width  || 800;
-  canvas.height = rect.height || 600;
-  drawMap();
+function filterAvalonTier(tier, btn) {
+  document.querySelectorAll('.av-filter-btn.tier-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.av-card').forEach(card => {
+    card.style.display = card.dataset.tier == tier ? '' : 'none';
+  });
+}
+
+function selectAvalonCard(el) {
+  document.querySelectorAll('.av-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// ─── LEAFLET HARİTA SİSTEMİ (Gerçek Oyun Haritası) ───────────────────────────────────
+function initLeafletMap() {
+  const container = document.getElementById('mapCanvas');
+  if (!container) return;
+
+  // Leaflet map başlatma
+  leafletMap = L.map('mapCanvas', {
+    crs: L.CRS.Simple, // Gerçek dünya projeksiyonu yerine oyun haritası
+    minZoom: 1,
+    maxZoom: 7,
+    zoomSnap: 0.5,
+    attributionControl: false
+  });
+
+  // Kullanıcının albiononline2d'den sağladığı tile url'si
+  // Formatımız https://cdn.albiononline2d.com/map/maptiles/{z}/map_{x}_{y}.png
+  const tileUrl = 'https://cdn.albiononline2d.com/map/maptiles/{z}/map_{x}_{y}.png';
+
+  tileLayer = L.tileLayer(tileUrl, {
+    noWrap: true,
+    tms: false,
+    maxNativeZoom: 7
+  }).addTo(leafletMap);
+
+  // Haritanın merkezine odaklan (Yaklaşık bir başlangıç noktası, Royal Continent merkezi)
+  leafletMap.setView([0, 0], 2);
+
+  // Şehirleri görsel olarak haritaya ekleme (Temsili koordinatlar)
+  addCityMarkers();
+}
+
+function addCityMarkers() {
+  if (!leafletMap) return;
+
+  // Şu an için elimizde tam koordinat listesi olmadığından geçici temsili butonlar eklenecek
+  // Kullanıcı haritayı incelerken biz ilerleyen süreçte koordinatları oturtacağız.
+  
+  // Örnek: Tıkladığımızda koordinatları loglamak için
+  leafletMap.on('click', function(e) {
+    console.log("Haritaya tıklandı: LatLng", e.latlng);
+  });
 }
 
 function drawMap() {
-  if (!ctx || !canvas) return;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  // Arka plan
-  ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--bg-base').trim() || '#0d1117';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  ctx.save();
-  ctx.translate(camX + canvas.width/2, camY + canvas.height/2);
-  ctx.scale(zoom, zoom);
-
-  const visibleZones = currentFilter === 'all' ? zones : filteredZones;
-
-  // Önce bağlantıları çiz
-  visibleZones.forEach(zone => {
-    const from = nodePositions.get(zone.id);
-    if (!from) return;
-    (zone.exits || []).forEach(exitId => {
-      const to = nodePositions.get(exitId);
-      if (!to) return;
-      const isRoute = currentRoute && isRouteEdge(zone.id, exitId);
-      ctx.beginPath();
-      ctx.moveTo(from.x - 450, from.y - 350);
-      ctx.lineTo(to.x - 450,   to.y - 350);
-      ctx.strokeStyle = isRoute ? '#c9a84c' : 'rgba(255,255,255,0.08)';
-      ctx.lineWidth   = isRoute ? 3 : 1;
-      ctx.stroke();
-    });
-  });
-
-  // Sonra node'ları çiz
-  visibleZones.forEach(zone => {
-    const pos = nodePositions.get(zone.id);
-    if (!pos) return;
-    const px = pos.x - 450;
-    const py = pos.y - 350;
-    const col = getZoneColor(zone);
-    const isSelected = selectedZone?.id === zone.id;
-    const isRoute = currentRoute?.path.includes(zone.id);
-    const r = isSelected ? 10 : isRoute ? 9 : 7;
-
-    // Gölge
-    ctx.shadowColor = isSelected ? col.bg : 'transparent';
-    ctx.shadowBlur  = isSelected ? 15 : 0;
-
-    // Çember
-    ctx.beginPath();
-    ctx.arc(px, py, r, 0, Math.PI * 2);
-    ctx.fillStyle = col.bg;
-    ctx.fill();
-    if (isSelected || isRoute) {
-      ctx.strokeStyle = '#c9a84c';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-    }
-    ctx.shadowBlur = 0;
-
-    // İsim (yakın zoom'da)
-    if (zoom > 1.2) {
-      ctx.font = `${Math.round(9/zoom * 10)}px Inter, sans-serif`;
-      ctx.fillStyle = 'rgba(255,255,255,0.7)';
-      ctx.textAlign = 'center';
-      const label = zone.name || zone.id;
-      ctx.fillText(label.length > 15 ? label.slice(0,14)+'…' : label, px, py + r + 10);
-    }
-  });
-
-  ctx.restore();
+  // Leaflet otomatik render ettiği için bu metodu boş bırakıyoruz, sadece BFS state güncellemelerinde çalışabilir
 }
 
-function isRouteEdge(a, b) {
-  if (!currentRoute?.path) return false;
-  const p = currentRoute.path;
-  for (let i = 0; i < p.length - 1; i++) {
-    if ((p[i] === a && p[i+1] === b) || (p[i] === b && p[i+1] === a)) return true;
-  }
-  return false;
-}
+function zoomIn()    { if(leafletMap) leafletMap.zoomIn(); }
+function zoomOut()   { if(leafletMap) leafletMap.zoomOut(); }
+function resetView() { if(leafletMap) leafletMap.setView([0, 0], 2); }
 
-// ─── CANVAS MOUSE ─────────────────────────────────────────
-function onMouseDown(e) {
-  isDragging = true;
-  dragStartX = e.clientX - camX;
-  dragStartY = e.clientY - camY;
-}
-function onMouseMove(e) {
-  if (isDragging) {
-    camX = e.clientX - dragStartX;
-    camY = e.clientY - dragStartY;
-    drawMap();
-  } else {
-    // Hover tooltip
-    const zone = getZoneAtMouse(e);
-    const tt   = document.getElementById('canvasTooltip');
-    if (zone) {
-      const col = getZoneColor(zone);
-      tt.innerHTML = `<strong>${zone.name||zone.id}</strong><br><span style="color:${col.bg}">${col.label}</span><br><span style="opacity:.6;font-size:11px">${(zone.exits||[]).length} bağlantı</span>`;
-      tt.style.display = 'block';
-      tt.style.left = (e.offsetX + 12) + 'px';
-      tt.style.top  = (e.offsetY + 12) + 'px';
-    } else {
-      tt.style.display = 'none';
-    }
-  }
-}
-function onMouseUp() { isDragging = false; }
-function onWheel(e) {
-  e.preventDefault();
-  const delta = e.deltaY > 0 ? 0.9 : 1.1;
-  zoom = Math.max(0.3, Math.min(5, zoom * delta));
-  drawMap();
-}
-function onCanvasClick(e) {
-  if (Math.abs(e.clientX - (dragStartX + camX)) > 5) return; // Drag değil
-  const zone = getZoneAtMouse(e);
-  if (zone) selectZone(zone.id);
-}
 
-// Touch
-let lastTouchDist = 0;
-function onTouchStart(e) {
-  if (e.touches.length === 2) {
-    lastTouchDist = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
-  } else {
-    isDragging = true;
-    dragStartX = e.touches[0].clientX - camX;
-    dragStartY = e.touches[0].clientY - camY;
-  }
-}
-function onTouchMove(e) {
-  e.preventDefault();
-  if (e.touches.length === 2) {
-    const d = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
-    zoom = Math.max(0.3, Math.min(5, zoom * (d / lastTouchDist)));
-    lastTouchDist = d;
-    drawMap();
-  } else if (isDragging) {
-    camX = e.touches[0].clientX - dragStartX;
-    camY = e.touches[0].clientY - dragStartY;
-    drawMap();
-  }
-}
-function onTouchEnd() { isDragging = false; }
-
-function getZoneAtMouse(e) {
-  const rect = canvas.getBoundingClientRect();
-  const mx = (e.clientX - rect.left - camX - canvas.width/2)  / zoom + 450;
-  const my = (e.clientY - rect.top  - camY - canvas.height/2) / zoom + 350;
-  let closest = null, minDist = 18;
-  filteredZones.forEach(z => {
-    const p = nodePositions.get(z.id);
-    if (!p) return;
-    const d = Math.hypot(p.x - mx, p.y - my);
-    if (d < minDist) { minDist = d; closest = z; }
-  });
-  return closest;
-}
-
-// ─── ZOOM KONTROLLERI ────────────────────────────────────
-function zoomIn()    { zoom = Math.min(5, zoom * 1.3); drawMap(); }
-function zoomOut()   { zoom = Math.max(0.3, zoom / 1.3); drawMap(); }
-function resetView() { camX = 0; camY = 0; zoom = 1; drawMap(); }
-
-// ─── ZONE LİSTESİ ─────────────────────────────────────────
-function renderZoneList() {
-  const list = document.getElementById('zoneList');
-  const lang = getLang();
-  const src  = filteredZones;
-  if (!src.length) {
-    list.innerHTML = `<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:12px">${lang==='tr'?'Zone bulunamadı':'No zones found'}</div>`;
-    return;
-  }
-  list.innerHTML = src.slice(0, 300).map(z => {
-    const col = getZoneColor(z);
-    return `<div class="zone-item ${selectedZone?.id === z.id ? 'selected' : ''}" onclick="selectZone('${z.id}')">
-      <div class="zi-dot ${col.dot}"></div>
-      <div>
-        <div class="zi-name">${z.name || z.id}</div>
-        <div class="zi-type">${col.label}</div>
-      </div>
-    </div>`;
-  }).join('') + (src.length > 300 ? `<div style="padding:10px;text-align:center;color:var(--text-muted);font-size:11px">+${src.length-300} zone daha — arama ile filtrele</div>` : '');
-}
-
-// ─── ZONE SEÇ ─────────────────────────────────────────────
+// ─── ZONE SEÇ & DETAY ─────────────────────────────────────
 function selectZone(id) {
   selectedZone = zones.find(z => z.id === id) || null;
-  renderZoneList();
   renderZoneDetail();
-  drawMap();
-
-  // Seçilen zone'a odaklan
-  const pos = nodePositions.get(id);
-  if (pos) {
-    camX = -(pos.x - 450) * zoom;
-    camY = -(pos.y - 350) * zoom;
-    drawMap();
-  }
 }
 
 function renderZoneDetail() {
@@ -424,10 +408,13 @@ function renderZoneDetail() {
   cont.style.display  = 'block';
   const z   = selectedZone;
   const col = getZoneColor(z);
-  const exits = (z.exits || []).map(eid => {
-    const ez = zones.find(x => x.id === eid);
-    return ez || { id: eid, name: eid, color:'DEFAULT' };
-  });
+  const exits = (z.exits || []).map(eid => zones.find(x => x.id === eid) || { id:eid, name:eid, color:'DEFAULT' });
+
+  // Zone bonusunu bul
+  const db = window.AO_ZONE_BONUSES;
+  const zoneKey = (z.color || z.type || '').toUpperCase();
+  const zBonus  = db ? db.zoneBonuses[zoneKey] : null;
+  const cityData = db ? [...(db.cities||[]), ...(db.blackZones||[])].find(c => c.id === z.id) : null;
 
   cont.innerHTML = `
     <div class="detail-zone-name">${z.name || z.id}</div>
@@ -436,6 +423,23 @@ function renderZoneDetail() {
       <span style="width:8px;height:8px;border-radius:50%;background:${col.bg};display:inline-block"></span>
       ${col.label}
     </span>
+    ${zBonus ? `
+    <div class="detail-section-title" style="margin-top:12px">${lang==='tr'?'Bölge Özellikleri':'Zone Properties'}</div>
+    <div style="margin-bottom:12px">
+      <div class="detail-stat"><span class="detail-stat-label">⚔️ PvP Riski</span><span class="detail-stat-val" style="color:${col.bg}">${zBonus.pvpRisk}</span></div>
+      <div class="detail-stat"><span class="detail-stat-label">💀 Eşya Kaybı</span><span class="detail-stat-val">${zBonus.lootRisk}</span></div>
+      <div class="detail-stat"><span class="detail-stat-label">⛏️ Kaynak Tier</span><span class="detail-stat-val">${zBonus.resourceTier}</span></div>
+      <div class="detail-stat"><span class="detail-stat-label">⭐ Genel Bonus</span><span class="detail-stat-val" style="color:#c9a84c;font-size:10px">${zBonus.generalBonus}</span></div>
+    </div>` : ''}
+    ${cityData ? `
+    <div class="detail-section-title">${lang==='tr'?'Şehir Bonusları':'City Bonuses'}</div>
+    <div style="margin-bottom:12px">
+      ${cityData.bonuses.map(b => `
+      <div class="detail-stat">
+        <span class="detail-stat-label">${b.icon} ${b.label}</span>
+        <span class="detail-stat-val" style="color:${b.type==='craft'?'#c9a84c':b.type==='refine'?'#06b6d4':'var(--text-primary)'}">${b.value}</span>
+      </div>`).join('')}
+    </div>` : ''}
     <div class="detail-section-title">${lang==='tr'?'İstatistikler':'Statistics'}</div>
     <div style="margin-bottom:14px">
       <div class="detail-stat"><span class="detail-stat-label">${lang==='tr'?'Bağlantı':'Connections'}</span><span class="detail-stat-val">${exits.length}</span></div>
@@ -457,45 +461,115 @@ function renderZoneDetail() {
     <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border)">
       <button class="route-calc-btn" style="width:100%;margin-bottom:6px"
         onclick="document.getElementById('routeFrom').value='${z.name||z.id}';routeFrom='${z.id}'">
-        ${lang==='tr'?'Başlangıç Noktası Yap':'Set as Start'}
+        ${lang==='tr'?'Başlangıç Yap':'Set as Start'}
       </button>
       <button class="route-calc-btn" style="width:100%;background:var(--bg-card);color:var(--gold);border:1px solid var(--gold)"
         onclick="document.getElementById('routeTo').value='${z.name||z.id}';routeTo='${z.id}'">
-        ${lang==='tr'?'Hedef Noktası Yap':'Set as Destination'}
+        ${lang==='tr'?'Hedef Yap':'Set as Destination'}
       </button>
+    </div>
+    
+    <!-- Hideout Crafting Simulator -->
+    <div class="ho-sim-wrap" style="margin-top:20px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:12px;">
+      <div class="detail-section-title" style="margin:0 0 10px 0; color:var(--text-primary);">🛠️ Craft & Hideout Simülatörü</div>
+      <div style="font-size:11px; color:var(--text-muted); margin-bottom:12px;">
+        Seçili bölgenin (Black Zone veya Şehir) baz üretim bonusu üzerine Hideout/HQ seviyesi ve Focus (Odak) ekleyerek <strong>Net Geri Dönüş (RRR)</strong> oranını hesaplayın.
+      </div>
+      
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div>
+          <label style="font-size:11px; color:var(--text-muted); display:block; margin-bottom:2px;">Temel Bölge Bonusu (Örn: 18%)</label>
+          <input type="number" id="simBaseBonus" value="0" style="width:100%; background:#0d1117; border:1px solid var(--border); color:white; padding:6px; border-radius:4px; font-size:12px;" onchange="calcSimRRR()" onkeyup="calcSimRRR()"/>
+        </div>
+        <div>
+          <label style="font-size:11px; color:var(--text-muted); display:block; margin-bottom:2px;">Hideout Gücü / Seviyesi</label>
+          <select id="simHoLevel" style="width:100%; background:#0d1117; border:1px solid var(--border); color:white; padding:6px; border-radius:4px; font-size:12px;" onchange="calcSimRRR()">
+            <option value="0">Hideout Yok (Şehir/Açık Dünya)</option>
+            <option value="1">Level 1 (HO / HQ 1) -> +%7 Bonus</option>
+            <option value="2">Level 2 (HQ 2) -> +%14 Bonus</option>
+            <option value="3">Level 3 (HQ 3+) -> +%21 Bonus</option>
+          </select>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; margin-top:4px;">
+          <input type="checkbox" id="simFocus" style="cursor:pointer" onchange="calcSimRRR()"/>
+          <label for="simFocus" style="font-size:12px; color:var(--text-primary); cursor:pointer">Odak (Focus) Kullan (+43.5% Base)</label>
+        </div>
+      </div>
+      
+      <div style="margin-top:14px; padding:10px; background:#0d1117; border-radius:6px; text-align:center; border:1px solid var(--border);">
+        <div style="font-size:11px; color:var(--text-muted); margin-bottom:4px;">Net Kaynak Geri Dönüşü (RRR)</div>
+        <div id="simResult" style="font-size:18px; font-weight:600; color:var(--gold);">%0.0</div>
+      </div>
     </div>`;
+    
+    // Default base bonusu seçili zona göre tespit etme
+    setTimeout(() => {
+        let defaultBonus = 0;
+        // BZ bölge kalite bonusu veya şehirlerin base craft bonusları
+        if (col.bg === '#4b5563') defaultBonus = 18; // Black Zone varsayılan
+        if (col.bg === '#3b82f6') defaultBonus = 15.2; // Royal Şehir varsayılanı (Focus'suz salt)
+        const inpt = document.getElementById('simBaseBonus');
+        if (inpt) { inpt.value = defaultBonus; calcSimRRR(); }
+    }, 50);
 }
+
+// Net RRR = 1 - 1 / (1 + (ToplamBonus/100))
+window.calcSimRRR = function() {
+    const base = parseFloat(document.getElementById('simBaseBonus').value) || 0;
+    const ho = parseInt(document.getElementById('simHoLevel').value) || 0;
+    const focus = document.getElementById('simFocus').checked;
+    
+    // Albion Online RRR production formulü: Yüzde bonuslar toplanır
+    // HO levelleri ortalama +7, +14, +21 production bonus ekler
+    let totalProd = base;
+    if (ho === 1) totalProd += 7.0;
+    if (ho === 2) totalProd += 14.0;
+    if (ho === 3) totalProd += 21.0;
+    if (focus) totalProd += 43.5;
+    
+    // RRR Formulü
+    const rrr = 1 - (1 / (1 + (totalProd / 100)));
+    const percentage = rrr * 100;
+    
+    document.getElementById('simResult').innerHTML = '<span style="color:#22c55e">+' + parseFloat(totalProd).toFixed(1) + '% Bonus</span> <br> %' + percentage.toFixed(2) + ' RRR';
+}
+
 
 // ─── ARAMA ────────────────────────────────────────────────
 let searchTimer;
 function onMapSearch(val) {
   clearTimeout(searchTimer);
   const dd = document.getElementById('mapSearchDd');
-  if (!val || val.length < 2) { dd.classList.remove('open'); return; }
+  if (!val || val.length < 2) { if(dd) dd.classList.remove('open'); return; }
   searchTimer = setTimeout(() => {
     const q = val.toLowerCase();
-    const results = zones.filter(z =>
-      (z.name || z.id).toLowerCase().includes(q) || z.id.toLowerCase().includes(q)
-    ).slice(0, 12);
-    if (!results.length) { dd.classList.remove('open'); return; }
+    const results = zones.filter(z => (z.name||z.id).toLowerCase().includes(q) || z.id.toLowerCase().includes(q)).slice(0, 20);
+    if (!results.length || !dd) { dd && dd.classList.remove('open'); return; }
     dd.innerHTML = results.map(z => {
       const col = getZoneColor(z);
       return `<div class="map-dd-item" onclick="selectZone('${z.id}');document.getElementById('mapSearch').value='';document.getElementById('mapSearchDd').classList.remove('open')">
         <div class="map-dd-dot ${col.dot}"></div>
-        <div>
-          <div style="font-weight:500;color:var(--text-primary)">${z.name || z.id}</div>
-          <div style="font-size:10px;color:var(--text-muted)">${col.label}</div>
-        </div>
+        <div><div style="font-weight:500;color:var(--text-primary)">${z.name||z.id}</div><div style="font-size:10px;color:var(--text-muted)">${col.label} • ${z.id}</div></div>
       </div>`;
     }).join('');
+    // position:fixed koordinatlarını input'un pozisyonuna göre ayarla
+    const inp = document.getElementById('mapSearch');
+    if (inp) {
+      const rect = inp.getBoundingClientRect();
+      dd.style.top    = (rect.bottom + 6) + 'px';
+      dd.style.left   = rect.left + 'px';
+      dd.style.width  = Math.max(rect.width, 300) + 'px';
+    }
     dd.classList.add('open');
-  }, 250);
+  }, 180);
 }
 
 document.addEventListener('click', e => {
-  if (!e.target.closest('.map-search-wrap'))
+  if (!e.target.closest('.mvb-search-wrap') && !e.target.closest('.mkt-search-dd')) {
     document.getElementById('mapSearchDd')?.classList.remove('open');
+  }
 });
+
 
 // ─── FİLTRE ───────────────────────────────────────────────
 function filterZones(type, btn) {
@@ -504,163 +578,134 @@ function filterZones(type, btn) {
   filteredZones = type === 'all' ? [...zones] : zones.filter(z => {
     const col = (z.color || z.type || '').toUpperCase();
     const id  = (z.id || '').toUpperCase();
-    if (type === 'ROAD')     return id.includes('ROAD')    || col.includes('ROAD');
-    if (type === 'SAFEAREA') return col.includes('SAFEAREA')|| col.includes('BLUE');
+    if (type === 'ROAD')     return id.includes('ROAD') || col.includes('ROAD');
+    if (type === 'SAFEAREA') return col.includes('SAFEAREA') || col.includes('BLUE');
     return col.includes(type);
   });
-  document.getElementById('zoneCount').textContent = filteredZones.length.toLocaleString('tr-TR');
-  renderZoneList();
-  drawMap();
+  const countEl = document.getElementById('zoneCount');
+  if(countEl) countEl.textContent = filteredZones.length.toLocaleString('tr-TR');
 }
 
 // ─── ROTA HESAPLAMA (BFS) ─────────────────────────────────
 function calcRoute() {
   const lang = getLang();
-  if (!routeFrom || !routeTo) {
-    alert(lang==='tr'?'Başlangıç ve hedef zone seçin.':'Please select start and destination zones.');
-    return;
-  }
-  if (routeFrom === routeTo) {
-    alert(lang==='tr'?'Başlangıç ve hedef aynı olamaz.':'Start and destination cannot be same.');
-    return;
-  }
-
-  // BFS
-  const queue   = [[routeFrom]];
-  const visited = new Set([routeFrom]);
-  let found     = null;
-
+  if (!routeFrom || !routeTo) { alert(lang==='tr'?'Başlangıç ve hedef zone seçin.':'Select start and destination zones.'); return; }
+  if (routeFrom === routeTo)  { alert(lang==='tr'?'Başlangıç ve hedef aynı olamaz.':'Start and destination cannot be same.'); return; }
+  const queue = [[routeFrom]], visited = new Set([routeFrom]);
+  let found = null;
   while (queue.length && !found) {
-    const path = queue.shift();
-    const cur  = path[path.length - 1];
+    const path = queue.shift(), cur = path[path.length - 1];
     const zone = zones.find(z => z.id === cur);
     if (!zone) continue;
     for (const exit of (zone.exits || [])) {
       if (visited.has(exit)) continue;
       visited.add(exit);
-      const newPath = [...path, exit];
-      if (exit === routeTo) { found = newPath; break; }
-      queue.push(newPath);
+      const np = [...path, exit];
+      if (exit === routeTo) { found = np; break; }
+      queue.push(np);
     }
   }
-
   if (!found) {
-    const rr = document.getElementById('routeResult');
-    const rs = document.getElementById('routeSteps');
-    rs.innerHTML = `<p style="color:var(--text-muted);font-size:13px;padding:12px 0">${lang==='tr'?'Bu iki zone arasında bağlantı bulunamadı.':'No connection found between these zones.'}</p>`;
+    document.getElementById('routeSteps').innerHTML = `<p style="color:var(--text-muted);font-size:13px;padding:12px 0">${lang==='tr'?'Bu iki zone arasında bağlantı bulunamadı.':'No connection found.'}</p>`;
     document.getElementById('routeStats').innerHTML = '';
-    rr.style.display = 'block';
-    currentRoute = null;
-    drawMap();
-    return;
+    document.getElementById('routeResult').style.display = 'block';
+    currentRoute = null; return;
   }
-
   currentRoute = { path: found };
   renderRouteResult(found);
-  drawMap();
 }
 
 function renderRouteResult(path) {
-  const lang  = getLang();
-  const rr    = document.getElementById('routeResult');
-  const rs    = document.getElementById('routeSteps');
-  const stats = document.getElementById('routeStats');
-
+  const lang = getLang();
+  const rs = document.getElementById('routeSteps'), stats = document.getElementById('routeStats');
   rs.innerHTML = path.map((id, i) => {
-    const z   = zones.find(x => x.id === id) || { id, name:id, color:'DEFAULT' };
+    const z = zones.find(x => x.id === id) || { id, name:id, color:'DEFAULT' };
     const col = getZoneColor(z);
     return `<div class="route-step">
       <div class="route-step-num">${i+1}</div>
       <div style="width:8px;height:8px;border-radius:50%;background:${col.bg};flex-shrink:0"></div>
-      <div>
-        <div class="route-step-name">${z.name || z.id}</div>
-        <div class="route-step-type">${col.label}</div>
-      </div>
+      <div><div class="route-step-name">${z.name||z.id}</div><div class="route-step-type">${col.label}</div></div>
     </div>`;
   }).join('');
-
-  // İstatistikler
   const typeCount = {};
-  path.forEach(id => {
-    const z   = zones.find(x => x.id === id) || { color:'DEFAULT' };
-    const col = getZoneColor(z).label;
-    typeCount[col] = (typeCount[col] || 0) + 1;
-  });
-  stats.innerHTML = `
-    <div class="rr-stat"><strong>${path.length}</strong> ${lang==='tr'?'zone':'zones'}</div>
-    <div class="rr-stat"><strong>${path.length-1}</strong> ${lang==='tr'?'geçiş':'hops'}</div>
-    ${Object.entries(typeCount).map(([type,cnt]) => `<div class="rr-stat"><strong>${cnt}</strong> ${type}</div>`).join('')}`;
-
-  rr.style.display = 'block';
+  path.forEach(id => { const z = zones.find(x => x.id === id)||{color:'DEFAULT'}; const l=getZoneColor(z).label; typeCount[l]=(typeCount[l]||0)+1; });
+  stats.innerHTML = `<div class="rr-stat"><strong>${path.length}</strong> zone</div><div class="rr-stat"><strong>${path.length-1}</strong> geçiş</div>
+    ${Object.entries(typeCount).map(([t,c]) => `<div class="rr-stat"><strong>${c}</strong> ${t}</div>`).join('')}`;
+  document.getElementById('routeResult').style.display = 'block';
 }
 
 function clearRoute() {
-  currentRoute = null;
-  routeFrom = null;
-  routeTo   = null;
+  currentRoute = null; routeFrom = null; routeTo = null;
   document.getElementById('routeFrom').value = '';
   document.getElementById('routeTo').value   = '';
   document.getElementById('routeResult').style.display = 'none';
-  drawMap();
 }
 
 function swapRoute() {
-  const tmp   = routeFrom;
-  routeFrom   = routeTo;
-  routeTo     = tmp;
-  const fromEl = document.getElementById('routeFrom');
-  const toEl   = document.getElementById('routeTo');
-  const tmpVal = fromEl.value;
-  fromEl.value = toEl.value;
-  toEl.value   = tmpVal;
+  const tmp = routeFrom; routeFrom = routeTo; routeTo = tmp;
+  const fe = document.getElementById('routeFrom'), te = document.getElementById('routeTo');
+  const tv = fe.value; fe.value = te.value; te.value = tv;
 }
 
 // ─── ZONE PİCKER ─────────────────────────────────────────
 function openZonePicker(target) {
   pickerTarget = target;
   const lang = getLang();
-  document.getElementById('zpmTitle').textContent = target === 'from'
-    ? (lang==='tr'?'Başlangıç Zone':'Start Zone')
-    : (lang==='tr'?'Hedef Zone':'Destination Zone');
+  document.getElementById('zpmTitle').textContent = target==='from' ? (lang==='tr'?'Başlangıç Zone':'Start Zone') : (lang==='tr'?'Hedef Zone':'Destination Zone');
   document.getElementById('zpmSearch').value = '';
   renderZonePicker('');
   document.getElementById('zonePickerOverlay').classList.add('open');
   document.getElementById('zonePickerModal').classList.add('open');
   document.getElementById('zpmSearch').focus();
 }
-
 function closeZonePicker() {
   document.getElementById('zonePickerOverlay').classList.remove('open');
   document.getElementById('zonePickerModal').classList.remove('open');
 }
-
-function filterZonePicker(val) {
-  renderZonePicker(val);
-}
-
+function filterZonePicker(val) { renderZonePicker(val); }
 function renderZonePicker(search) {
-  const list = document.getElementById('zpmList');
-  const q    = search.toLowerCase();
+  const list = document.getElementById('zpmList'), q = search.toLowerCase();
   const src  = search ? zones.filter(z => (z.name||z.id).toLowerCase().includes(q)) : zones;
-  list.innerHTML = src.slice(0, 100).map(z => {
+  list.innerHTML = src.slice(0,100).map(z => {
     const col = getZoneColor(z);
     return `<div class="zpm-item" onclick="pickZone('${z.id}','${(z.name||z.id).replace(/'/g,"\\'")}')">
       <div style="width:10px;height:10px;border-radius:50%;background:${col.bg};flex-shrink:0"></div>
-      <div>
-        <div class="zpm-item-name">${z.name || z.id}</div>
-        <div class="zpm-item-id">${z.id} · ${col.label}</div>
-      </div>
+      <div><div class="zpm-item-name">${z.name||z.id}</div><div class="zpm-item-id">${z.id} · ${col.label}</div></div>
     </div>`;
   }).join('');
 }
-
 function pickZone(id, name) {
-  if (pickerTarget === 'from') {
-    routeFrom = id;
-    document.getElementById('routeFrom').value = name;
-  } else {
-    routeTo = id;
-    document.getElementById('routeTo').value = name;
-  }
+  if (pickerTarget === 'from') { routeFrom=id; document.getElementById('routeFrom').value=name; }
+  else { routeTo=id; document.getElementById('routeTo').value=name; }
   closeZonePicker();
+}
+
+// ─── STATİK ZONE FALLBACK ─────────────────────────────────
+function getAvalonZones() {
+  return [
+    {id:'ROAD_2P_001',name:'Road of Avalon (2p)',color:'ROAD',type:'ROAD',exits:['ROAD_2P_002','ROAD_7P_001'],road:true},
+    {id:'ROAD_2P_002',name:'Road of Avalon (2p)',color:'ROAD',type:'ROAD',exits:['ROAD_2P_001','ROAD_7P_002'],road:true},
+    {id:'ROAD_7P_001',name:'Road of Avalon (7p)',color:'ROAD',type:'ROAD',exits:['ROAD_2P_001','ROAD_7P_002','ROAD_20P_001'],road:true},
+    {id:'ROAD_7P_002',name:'Road of Avalon (7p)',color:'ROAD',type:'ROAD',exits:['ROAD_7P_001','ROAD_20P_002'],road:true},
+    {id:'ROAD_20P_001',name:'Road of Avalon (20p)',color:'ROAD',type:'ROAD',exits:['ROAD_7P_001','ROAD_20P_002'],road:true},
+    {id:'ROAD_20P_002',name:'Road of Avalon (20p)',color:'ROAD',type:'ROAD',exits:['ROAD_20P_001','ROAD_7P_002'],road:true},
+  ];
+}
+
+function getStaticZones() {
+  return [
+    {id:'CAERLEON',name:'Caerleon',color:'SAFEAREA',type:'CITY',exits:['SWAMP_BRIDGEWATCH_ACCESS','HIGHLAND_MARTLOCK_ACCESS','STEPPE_THETFORD_ACCESS','FOREST_LYMHURST_ACCESS','MOUNTAIN_FORTSTERLING_ACCESS']},
+    {id:'SWAMP_BRIDGEWATCH_ACCESS',name:'Bridgewatch',color:'SAFEAREA',type:'CITY',exits:['CAERLEON']},
+    {id:'HIGHLAND_MARTLOCK_ACCESS',name:'Martlock',color:'SAFEAREA',type:'CITY',exits:['CAERLEON']},
+    {id:'STEPPE_THETFORD_ACCESS',name:'Thetford',color:'SAFEAREA',type:'CITY',exits:['CAERLEON']},
+    {id:'FOREST_LYMHURST_ACCESS',name:'Lymhurst',color:'SAFEAREA',type:'CITY',exits:['CAERLEON']},
+    {id:'MOUNTAIN_FORTSTERLING_ACCESS',name:'Fort Sterling',color:'SAFEAREA',type:'CITY',exits:['CAERLEON']},
+    {id:'ARTHURSREST',name:"Arthur's Rest",color:'BLACK',type:'REST',exits:['MERLINSREST','MORGANASREST']},
+    {id:'MERLINSREST',name:"Merlyn's Rest",color:'BLACK',type:'REST',exits:['ARTHURSREST','MORGANASREST']},
+    {id:'MORGANASREST',name:"Morgana's Rest",color:'BLACK',type:'REST',exits:['ARTHURSREST','MERLINSREST']},
+    {id:'BRECILIEN',name:'Brecilien',color:'MIST',type:'CITY',exits:[]},
+    {id:'REDZONE_01',name:'Red Zone (Örnek)',color:'RED',type:'REDZONE',exits:['CAERLEON']},
+    {id:'YELLOWZONE_01',name:'Yellow Zone (Örnek)',color:'YELLOW',type:'YELLOWZONE',exits:['CAERLEON']},
+    ...getAvalonZones(),
+  ];
 }

@@ -33,14 +33,8 @@ async function checkUpdate() {
 }
 
 async function triggerUpdate() {
-  try {
-    var res = await fetch('https://api.github.com/repos/' + REPO + '/dispatches', {
-      method: 'POST',
-      headers: { 'Content-Type':'application/json', 'Accept':'application/vnd.github.v3+json' },
-      body: JSON.stringify({ event_type:'manual-sync', client_payload:{ source:'web-button' } }),
-    });
-    return res.status === 204 || res.status === 200;
-  } catch(e) { return false; }
+  // Seçenek 1: Manuel tetikleme yerine otomatik süreç kullanıldığı için bu fonksiyon iptal edildi.
+  return 'cancelled'; 
 }
 
 // ── NAVBAR BUTONU ──────────────────────────────────────
@@ -53,8 +47,8 @@ async function initNavSyncBtn() {
     var btn  = document.createElement('button');
     btn.id        = 'navSyncBtn';
     btn.className = 'sync-nav-btn';
-    btn.title     = lang === 'tr' ? 'Veri Güncelle' : 'Update Data';
-    btn.innerHTML = '<span>🔄</span><span id="navSyncLabel">' + (lang==='tr'?'Veri':'Data') + '</span>';
+    btn.title     = lang === 'tr' ? 'Veri Durumu' : 'Data Status';
+    btn.innerHTML = '<span>📘</span><span id="navSyncLabel">' + (lang==='tr'?'Veri':'Data') + '</span>';
     btn.onclick   = doNavSync;
 
     var settingsBtn = navRight.querySelector('.settings-trigger');
@@ -70,18 +64,11 @@ async function initNavSyncBtn() {
 }
 
 async function doNavSync() {
-  var btn   = document.getElementById('navSyncBtn');
-  var label = document.getElementById('navSyncLabel');
-  var lang  = localStorage.getItem('aot-lang') || 'tr';
-  if (!btn || btn.disabled) return;
-  btn.disabled = true;
-  if (label) label.textContent = lang==='tr'?'...':'...';
-  var ok = await triggerUpdate();
-  if (label) label.textContent = ok ? (lang==='tr'?'✓ Başlatıldı':'✓ Started') : (lang==='tr'?'⚠ Hata':'⚠ Error');
-  setTimeout(function() {
-    btn.disabled = false;
-    if (label) label.textContent = lang==='tr'?'Veri':'Data';
-  }, 5000);
+  var lang = localStorage.getItem('aot-lang') || 'tr';
+  var msg = lang === 'tr'
+    ? "Tüm veriler (Market, PvP vb.) arka planda sunucu tarafından otomatik olarak senkronize edilmektedir.\nSizin ekstra bir güncelleme yapmanıza gerek yoktur."
+    : "All data (Market, PvP etc.) is automatically synchronized by the server in the background.\nNo manual update is required.";
+  alert(msg);
 }
 
 // ── SAYFA PANELİ ──────────────────────────────────────
@@ -104,31 +91,16 @@ async function initSyncPanel(containerId) {
             '<span class="sync-panel-val">' + info.lastSync + '</span>' +
           '</div>' +
           '<div class="sync-panel-item">' +
-            '<span class="sync-panel-label">' + (lang==='tr'?'Durum':'Status') + '</span>' +
-            '<span class="sync-panel-val ok">✅ ' + (lang==='tr'?'Güncel':'Up to date') + '</span>' +
+            '<span class="sync-panel-label">' + (lang==='tr'?'Sistem':'System') + '</span>' +
+            '<span class="sync-panel-val ok">🔄 ' + (lang==='tr'?'Otomatik':'Auto Sync') + '</span>' +
           '</div>' +
         '</div>' +
-        '<button class="sync-panel-btn" id="sp-btn-' + containerId + '" onclick="window._doSyncPanel(this)">' +
-          '<span class="ai-dot"></span> ' +
-          '<span>' + (lang==='tr'?'Güncelle':'Update') + '</span>' +
-        '</button>' +
       '</div>';
   } catch(e) { /* panel hatası sessiz geç */ }
 }
 
 window._doSyncPanel = async function(btn) {
-  var lang = localStorage.getItem('aot-lang') || 'tr';
-  if (btn) btn.disabled = true;
-  var ok = await triggerUpdate();
-  if (btn) {
-    btn.innerHTML = ok
-      ? '<span class="ai-dot"></span> ' + (lang==='tr'?'✓ Başlatıldı! (2-3dk)':'✓ Started! (2-3min)')
-      : '⚠️ ' + (lang==='tr'?'Hata':'Error');
-    setTimeout(function() {
-      btn.disabled = false;
-      btn.innerHTML = '<span class="ai-dot"></span> ' + (lang==='tr'?'Güncelle':'Update');
-    }, 8000);
-  }
+  // Buton kaldırıldığı için boş fonksiyon olarak bırakıldı.
 };
 
 // Global erişim

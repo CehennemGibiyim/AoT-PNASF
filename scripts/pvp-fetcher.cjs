@@ -14,7 +14,7 @@ const GI_HOSTS = {
   asia: 'gameinfo-sgp.albiononline.com',
 };
 
-function httpsGet(hostname, urlPath, ms = 12000) {
+function httpsGet(hostname, urlPath, ms = 20000) {
   return new Promise((resolve, reject) => {
     const req = https.request(
       { hostname, path: urlPath, method: 'GET', headers: { 'User-Agent': 'AoT-PNASF/3.0', 'Accept': 'application/json' } },
@@ -31,6 +31,18 @@ function httpsGet(hostname, urlPath, ms = 12000) {
     req.on('error', e => reject(e));
     req.end();
   });
+}
+
+// ─── RETRY MEKANİZMASI ───
+async function fetchWithRetry(hostname, urlPath, retries = 2) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      return await httpsGet(hostname, urlPath);
+    } catch (err) {
+      if (i === retries - 1) throw err;
+      await new Promise(r => setTimeout(r, 2000)); // 2 sn bekle ve tekrar dene
+    }
+  }
 }
 
 function cleanEq(eq) {
@@ -83,7 +95,7 @@ async function fetchServer(key, hostname) {
   const d = { recentKills:[], topKills:[], battles:[], ok:false, fetchedAt: new Date().toISOString() };
 
   try {
-    const events = await httpsGet(hostname, '/api/gameinfo/events?limit=51&offset=0');
+    const events = await fetchWithRetry(hostname, '/api/gameinfo/events?limit=51&offset=0');
     if (Array.isArray(events) && events.length > 0) {
       d.recentKills = events.slice(0, 20).map(cleanKill).filter(Boolean);
       d.topKills    = [...events]
@@ -97,7 +109,7 @@ async function fetchServer(key, hostname) {
   } catch(e) { console.warn(`  ✗ Kill: ${e.message}`); }
 
   try {
-    const battles = await httpsGet(hostname, '/api/gameinfo/battles?sort=recent&limit=20&offset=0');
+    const battles = await fetchWithRetry(hostname, '/api/gameinfo/battles?sort=recent&limit=20&offset=0');
     if (Array.isArray(battles) && battles.length > 0) {
       d.battles = battles.map(cleanBattle).filter(Boolean);
       console.log(`  ✓ Battle: ${d.battles.length}`);
