@@ -1,0 +1,35 @@
+{
+  "name": "aot-pnasf",
+  "version": "1.0.0",
+  "description": "Albion Online Tools - Powered Nexus & AI Smart Feed",
+  "main": "index.html",
+  "scripts": {
+    "build": "echo 'Static site - no build needed'",
+    "dev": "npx serve .",
+    "update-feed": "node scripts/pvp-fetcher.cjs",
+    "ai-scan": "node scripts/ai-scanner.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cehennemgibiyim/AoT-PNASF.git"
+  },
+  "keywords": [
+    "albion-online",
+    "albion",
+    "pvp",
+    "market",
+    "crafting",
+    "tools",
+    "gaming"
+  ],
+  "author": "CehennemGibiyim",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cehennemgibiyim/AoT-PNASF/issues"
+  },
+  "homepage": "https://cehennemgibiyim.github.io/AoT-PNASF/",
+  "dependencies": {
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {}
+}

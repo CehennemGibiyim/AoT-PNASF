@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="obsidian-gold">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://render.albiononline.com https://www.gstatic.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://miniapps.ai; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; connect-src 'self' https: wss:; img-src 'self' https: http: data:;">
+  <title data-i18n="app-title">AoT-PNASF | Albion Online Platformu</title>
+  
+  <!-- AI Dönen Sarý Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%230a0d14'/%3E%3Ccircle cx='32' cy='32' r='24' fill='none' stroke='%23d4af37' stroke-width='3'/%3E%3Cpath d='M32 16 L38 28 L32 28 L38 44 L26 32 L32 32 L26 16 Z' fill='%23d4af37'/%3E%3C/svg%3E">
+  <link rel="shortcut icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%230a0d14'/%3E%3Ccircle cx='32' cy='32' r='24' fill='none' stroke='%23d4af37' stroke-width='3'/%3E%3Cpath d='M32 16 L38 28 L32 28 L38 44 L26 32 L32 32 L26 16 Z' fill='%23d4af37'/%3E%3C/svg%3E">
+  <script>
+    // Service Worker Kaydı
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/serviceworker.js')
+          .then((registration) => {
+            console.log('[SW] Service Worker kaydedildi:', registration.scope);
+          })
+          .catch((error) => {
+            console.error('[SW] Service Worker kayıt hatası:', error);
+          });
+      });
+    }
+
+    // ns_setupCallback hatasini kesin olarak cozmek icin en agresif yontem
+    (function() {
+      // globalThis tanimla
+      if (typeof globalThis === 'undefined') {
+        if (typeof window !== 'undefined') {
+          window.globalThis = window;
+        } else if (typeof self !== 'undefined') {
+          self.globalThis = self;
+        }
+      }
+
+      // ns_setupCallback tanimla
+      var setupCallback = function() {};
+
+      if (typeof globalThis !== 'undefined') {
+        globalThis.ns_setupCallback = setupCallback;
+      }
+      if (typeof window !== 'undefined') {
+        window.ns_setupCallback = setupCallback;
+      }
+      if (typeof self !== 'undefined') {
+        self.ns_setupCallback = setupCallback;
+      }
+      
+      // Proxy ile otomatik tanimlama
+      if (typeof globalThis !== 'undefined') {
+        Object.defineProperty(globalThis, 'ns_setupCallback', {
+          get: function() { return setupCallback; },
+          set: function() { setupCallback = arguments[0] || setupCallback; },
+          configurable: true
+        });
+      }
+    })();
+  </script>
+  <!-- Tailwind CSS - Senkron HEAD yüklemesi (tema düzgün çalışsın diye) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'albion': {
+              '900': 'var(--bg-900)',
+              '800': 'var(--bg-800)',
+              '700': 'var(--bg-700)',
+              'accent': 'var(--accent)',
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  
+  
+  
+  <!-- HTML2Canvas isteğe bağlı olarak yükleniyor -->
+  <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var html2canvas = document.createElement('script');
+      html2canvas.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+      document.head.appendChild(html2canvas);
+    });
+  </script>
+</head>
+<body class="h-screen overflow-hidden flex flex-col font-sans transition-colors duration-300">
+
+  <!-- Navbar -->
+  <header class="bg-albion-800 border-b border-albion-700 z-50 shrink-0 shadow-md relative">
+    <div class="px-4 py-2 flex items-center justify-between min-h-[80px]">
+      
+      <!-- Left: Mobile Menu Trigger & Server Badge -->
+      <div class="flex items-center w-1/4 z-10 gap-3">
+        <button id="mobileMenuBtn" class="md:hidden text-gray-400 hover:text-white px-2 text-2xl">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <!-- Sunucu Badge (Global) -->
+        <div class="hidden md:flex items-center px-3 py-1 bg-albion-900 border border-albion-700 rounded-md">
+          <i class="fa-solid fa-server text-albion-accent text-xs mr-2"></i>
+          <span id="globalServerBadge" class="text-xs font-bold text-white uppercase tracking-wider">EU</span>
+        </div>
+      </div>
+
+      <!-- Center: Centered Brand & Title -->
+      <div class="absolute left-0 right-0 flex flex-col items-center justify-center pointer-events-none z-0 mt-1">
+        <div class="flex items-center space-x-3 pointer-events-auto cursor-pointer group" id="brandLogo">
+          <div class="relative flex items-center justify-center w-10 h-10 bg-black/40 rounded-full border border-albion-accent shadow-[0_0_15px_rgba(212,175,55,0.4)] group-hover:shadow-[0_0_25px_rgba(212,175,55,0.7)] transition-shadow duration-300">
+            <i class="fa-solid fa-atom text-2xl text-albion-accent animate-[spin_6s_linear_infinite]"></i>
+            <i class="fa-solid fa-bolt absolute text-[10px] text-white animate-pulse"></i>
+          </div>
+          <h1 class="font-black text-2xl md:text-3xl text-white tracking-widest leading-none drop-shadow-lg">AoT-PNASF</h1>
+        </div>
+        <div class="flex flex-col items-center text-center mt-1.5 pointer-events-auto">
+          <span class="text-[11px] md:text-[13px] text-albion-accent font-black tracking-wide drop-shadow-md" data-i18n="app-subtitle">Türkiye'nin 1 Numaralı AI Destekli Albion Platformu</span>
+        </div>
+      </div>
+
+      <!-- Right: Settings / Lang -->
+      <div class="flex justify-end items-center w-1/4 gap-3 z-10">
+        <button id="settingsBtn" onclick="openSettingsPanel()" class="flex items-center space-x-2 bg-albion-900 border border-albion-700 rounded-md px-3 py-1.5 hover:bg-albion-700 transition-colors group shadow-md">
+          <span id="currentLangDisplay" class="font-bold text-xs text-gray-300 group-hover:text-white uppercase">TR</span>
+          <i class="fa-solid fa-gear text-albion-accent text-sm group-hover:rotate-45 transition-transform duration-300"></i>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Tab Navigation -->
+    <nav id="navMenu" class="hidden md:flex flex-col md:flex-row bg-albion-900/80 px-2 py-0 gap-1 flex-wrap justify-center border-t border-albion-700/50 backdrop-blur-sm">
+      <button data-tab="tab-home" class="tab-btn px-4 py-3 text-sm font-bold border-b-2 border-albion-accent text-albion-accent transition-colors flex-1 md:flex-none text-center hover:bg-albion-800/50">
+        <i class="fa-solid fa-house mr-1.5"></i> <span data-i18n="nav-home">Ana Sayfa</span>
+      </button>
+      <button data-tab="tab-events" class="tab-btn px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-gray-400 hover:text-white transition-colors flex-1 md:flex-none text-center hover:bg-albion-800/50">
+        <i class="fa-solid fa-clock mr-1.5"></i> <span data-i18n="nav-events">Etkinlikler</span>
+      </button>
+      <button data-tab="tab-crafting" class="tab-btn px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-gray-400 hover:text-white transition-colors flex-1 md:flex-none text-center hover:bg-albion-800/50">
+        <i class="fa-solid fa-hammer mr-1.5"></i> <span data-i18n="nav-crafting">Crafting & Üretim</span>
+      </button>
+      <button data-tab="tab-pvp" class="tab-btn px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-gray-400 hover:text-white transition-colors flex-1 md:flex-none text-center hover:bg-albion-800/50">
+        <i class="fa-solid fa-khanda mr-1.5"></i> <span data-i18n="nav-pvp">PvP & İstatistik</span>
+      </button>
+      <button data-tab="tab-avalon" class="tab-btn px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-gray-400 hover:text-white transition-colors flex-1 md:flex-none text-center hover:bg-albion-800/50">
+        <i class="fa-solid fa-route mr-1.5"></i> <span data-i18n="nav-avalon">Avalon Roads</span>
+      </button>
+      <button data-tab="tab-gathering" class="tab-btn px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-gray-400 hover:text-white transition-colors flex-1 md:flex-none text-center hover:bg-albion-800/50">
+        <i class="fa-solid fa-leaf mr-1.5"></i> <span data-i18n="nav-gathering">Toplayıcılık</span>
+      </button>
+      <button data-tab="tab-loot-logger" class="tab-btn px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-gray-400 hover:text-white transition-colors flex-1 md:flex-none text-center hover:bg-albion-800/50">
+        <i class="fa-solid fa-box-open mr-1.5"></i> <span data-i18n="nav-lootLogger">Loot Logger</span>
+      </button>
+      <button data-tab="tab-arbitrage" class="tab-btn px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-gray-400 hover:text-white transition-colors flex-1 md:flex-none text-center hover:bg-albion-800/50">
+        <i class="fa-solid fa-sack-dollar mr-1.5"></i> <span data-i18n="nav-arbitrage">Karaborsa & Fırsatlar</span>
+      </button>
+      <button data-tab="tab-ai-build" class="tab-btn px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-gray-400 hover:text-white transition-colors flex-1 md:flex-none text-center hover:bg-albion-800/50">
+        <i class="fa-solid fa-robot mr-1.5"></i> <span data-i18n="nav-aiBuild">AI Rehber</span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- Main Content Areas -->
+  <main class="flex-1 h-full overflow-y-auto overflow-x-hidden bg-albion-900 relative custom-scroll transition-colors duration-300 p-4 md:p-6">
+    
+    <!-- 1. Ana Sayfa (Home) -->
+    <section id="tab-home" class="tab-content flex h-full flex-col animate-fade-in">
+      <div class="max-w-[1400px] mx-auto w-full space-y-6 animate-fade-in flex-1">
+        
+        <!-- News & Countdown Banner -->
+        <div class="bg-gradient-to-r from-albion-900 to-albion-800 border border-albion-700 rounded-xl overflow-hidden shadow-lg flex items-stretch shrink-0 group">
+          <div class="bg-albion-accent/10 border-r border-albion-700 px-4 py-3 flex items-center relative overflow-hidden shrink-0 min-w-[160px] md:min-w-[200px]">
+             <div class="absolute inset-0 bg-gradient-to-r from-albion-accent/20 to-transparent"></div>
+             <i class="fa-solid fa-arrows-rotate text-albion-accent mr-3 animate-spin-slow text-lg"></i>
+             <div class="flex flex-col relative z-10">
+               <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider flex items-center" data-i18n="home-nextUpdate">
+                 PİYASA EŞİTLEMESİ
+               </span>
+               <span id="updateCountdown" class="text-sm md:text-base font-black text-white tracking-widest font-mono drop-shadow-md">--:--:--</span>
+             </div>
+          </div>
+          <div class="flex-1 overflow-hidden relative flex items-center bg-black/20 marquee-container">
+             <div class="animate-marquee-left whitespace-nowrap text-xs md:text-sm text-gray-300 font-medium flex items-center py-3">
+                
+                <span id="marketTicker">Yükleniyor...</span>
+             </div>
+          </div>
+        </div>
+
+        <!-- Canlı İstatistik Çubuğu -->
+        <div id="liveStatsBarlAnchor"></div>
+
+        <!-- ⚡ Silver Kazanç Hesaplayıcı -->
+        <div id="silverCalcAnchor"></div>
+
+        <!-- Market / Üretim Sekme Başlıkları ve Top PKer -->
+        <div class="flex flex-col w-full gap-6 mt-6">
+          <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 bg-[#0d1117] border border-gray-800 rounded-xl p-1.5 w-full md:w-max shadow-lg mx-auto md:mx-0">
+            <button id="dashTabGold" onclick="switchDashTab('gold')" class="flex-1 md:flex-none px-6 py-2.5 text-sm font-black rounded-lg bg-albion-accent text-black transition-all flex items-center justify-center gap-2">
+              <i class="fa-solid fa-coins text-xs"></i> Gold & İstatistik
+            </button>
+            <button id="dashTabKillboard" onclick="switchDashTab('killboard')" class="flex-1 md:flex-none px-6 py-2.5 text-sm font-black rounded-lg text-gray-400 hover:text-white transition-all flex items-center justify-center gap-2">
+              <i class="fa-solid fa-skull-crossbones text-xs"></i> Killboard
+            </button>
+          </div>
+
+          <!-- ── PANEL 1: Gold İstatistikleri (varsayılan) ── -->
+        <div id="dashPanelGold" class="w-full pb-10 flex flex-col items-center justify-start transition-all">
+           <div class="w-full max-w-5xl bg-albion-800 border border-gray-700 rounded-2xl shadow-lg flex flex-col overflow-hidden transition-colors">
+              <div class="p-5 border-b border-gray-700 bg-albion-900/50 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+                  <div class="flex flex-col">
+                   <h3 class="font-bold text-white flex items-center text-sm md:text-base mb-1">
+                      <i class="fa-solid fa-chart-line text-albion-accent mr-2"></i> <span data-i18n="home-goldTitle">Altın İstatistikleri</span>
+                   </h3>
+                   <div class="flex flex-col mt-1">
+                      <span class="text-yellow-400 font-black text-xl drop-shadow-md" id="staticGoldPrice"><i class="fa-solid fa-coins mr-1 text-yellow-500"></i>--</span>
+                      <div class="flex items-center space-x-2 mt-1">
+                        <span class="text-xs font-bold px-2 py-0.5 rounded bg-green-900/20 text-green-400 border border-green-500/30" id="staticGoldBuy">Alış: --</span>
+                        <span class="text-xs font-bold px-2 py-0.5 rounded bg-red-900/20 text-red-400 border border-red-500/30" id="staticGoldSell">Satış: --</span>
+                        <span class="text-xs font-bold px-2 py-0.5 rounded bg-gray-800 border border-gray-700 ml-1" id="staticGoldChange">--</span>
+                      </div>
+                   </div>
+                 </div>
+
+                 <!-- OYUNDA AKTİF OYUNCU (Orta Kısım) -->
+                 <div class="flex flex-row items-stretch justify-center gap-2">
+                   <!-- Global Oyuncu -->
+                   <div class="flex flex-col items-center justify-center bg-black/40 border border-albion-700/50 rounded-xl px-5 py-2 shadow-inner group cursor-default transition-all hover:border-albion-accent/50">
+                      <div class="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1 flex items-center">
+                        <i class="fa-solid fa-earth-americas mr-1.5 text-gray-500 group-hover:text-albion-accent transition-colors"></i> <span data-i18n="home-onlinePlayers">Aktif Oyuncu</span>
+                      </div>
+                      <div class="flex items-center">
+                         <span class="relative flex h-2.5 w-2.5 mr-2.5">
+                           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                           <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500 shadow-[0_0_8px_#22c55e]"></span>
+                         </span>
+                         <span id="gameActivePlayers" class="text-white font-black text-xl md:text-2xl tracking-wider font-mono drop-shadow-lg">Yükleniyor..</span>
+                      </div>
+                   </div>
+                 </div>
+
+                 <div class="flex space-x-1 bg-albion-900 rounded-lg p-1 border border-gray-700" id="chartTimeframe">
+                    <button class="px-3 py-1.5 text-xs font-bold rounded bg-albion-accent text-white" data-tf="daily">Günlük</button>
+                    <button class="px-3 py-1.5 text-xs font-bold rounded text-gray-400 hover:text-white" data-tf="weekly">Haftalık</button>
+                    <button class="px-3 py-1.5 text-xs font-bold rounded text-gray-400 hover:text-white" data-tf="monthly">Aylık</button>
+                 </div>
+              </div>
+              <div class="p-5 flex-1 relative min-h-[350px]">
+                 <canvas id="goldStatsChart"></canvas>
+              </div>
+           </div>
+        </div>
+
+        <!-- ── PANEL 2: Killboard Iframe ── -->
+        <div id="dashPanelKillboard" class="hidden w-full min-h-0 pb-4" style="min-height:700px">
+          <div class="w-full h-full rounded-2xl overflow-hidden border border-gray-700 shadow-xl" style="min-height:700px">
+            <iframe id="killboardIframe"
+              src=""
+              style="width:100%;height:100%;min-height:700px;border:none;background:#0d1117;display:block"
+              loading="lazy"
+              title="Killboard">
+            </iframe>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="tab-events" class="tab-content hidden h-full flex-col animate-fade-in"><div class="w-full h-full" id="eventsApp"></div></section>
+    <section id="tab-crafting" class="tab-content hidden h-full flex-col animate-fade-in"><div class="w-full h-full" id="craftingApp"></div></section>
+    <section id="tab-pvp" class="tab-content hidden h-full flex-col animate-fade-in"><div class="w-full h-full" id="pvpApp"></div></section>
+    <section id="tab-avalon" class="tab-content hidden h-full flex-col animate-fade-in"><div class="w-full h-full" id="avalonApp"></div></section>
+    <section id="tab-gathering" class="tab-content hidden h-full flex-col animate-fade-in"><div class="w-full h-full" id="gatheringApp"></div></section>
+    <section id="tab-loot-logger" class="tab-content hidden h-full flex-col animate-fade-in"><div class="w-full h-full" id="lootApp"></div></section>
+    <section id="tab-arbitrage" class="tab-content hidden h-full flex-col animate-fade-in"><div class="w-full h-full" id="arbitrageApp"></div></section>
+
+    <!-- 8. Guides / AI Build -->
+    <section id="tab-ai-build" class="tab-content hidden h-full flex-col animate-fade-in">
+      <div class="max-w-6xl mx-auto w-full h-full flex flex-col pb-6 pt-2">
+        
+        <!-- Tab Toggles for AI Build -->
+        <div class="flex flex-col md:flex-row gap-2 mb-6 bg-albion-800 p-2 rounded-lg border border-gray-700 w-full md:w-max mx-auto md:mx-0 shadow-lg shrink-0">
+          <button id="btnAiPersonal" class="flex-1 md:flex-none px-6 py-2 bg-albion-accent text-black font-bold rounded shadow-md transition-colors flex items-center justify-center">
+            <i class="fa-solid fa-user-ninja mr-2"></i> <span data-i18n="aiBuild-personalTab">Kişisel Set (Solo/PvP)</span>
+          </button>
+          <button id="btnAiGroup" class="flex-1 md:flex-none px-6 py-2 bg-transparent text-gray-400 hover:text-white font-bold rounded transition-colors flex items-center justify-center">
+            <i class="fa-solid fa-users mr-2"></i> <span data-i18n="aiBuild-groupTab">Grup Setleri (Content Meta)</span>
+          </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto custom-scroll pr-2 relative">
+          
+          <!-- View 1: Personal AI Build Form -->
+          <div id="aiViewPersonal" class="animate-fade-in max-w-5xl mx-auto">
+            <div class="mb-6">
+              <h2 class="text-2xl font-bold text-white mb-1" data-i18n="aiBuild-title">Kişisel Set (PvE & PvP)</h2>
+              <p class="text-gray-400">Oyun içi orijinal görünümlü silahlardan birini seçin. Yapay zeka size bu silah için hem <strong>PvE</strong> hem de <strong>PvP</strong> olmak üzere iki ayrı Meta build (Q1, W1, E, P1 formatında) sunacaktır.</p>
+            </div>
+            
+            <div class="bg-albion-800 p-4 md:p-5 rounded-xl border border-gray-700 mb-8 shadow-lg transition-colors">
+              <div id="aiPersonalForm" class="space-y-4">
+                
+                <div class="mb-2">
+                   <div class="text-sm font-bold text-gray-400 mb-2 uppercase tracking-wider"><i class="fa-solid fa-khanda mr-1"></i> Eşya Sınıfı Seçin</div>
+                   <div id="weaponCategories" class="flex overflow-x-auto gap-2 pb-2 custom-scroll">
+                      <!-- JS Dolduracak -->
+                   </div>
+                </div>
+
+                <div class="mb-4">
+                   <div id="weaponGrid" class="grid grid-cols-7 sm:grid-cols-10 lg:grid-cols-14 gap-1 bg-albion-900 border border-gray-700 rounded-lg p-3 max-h-[240px] overflow-y-auto custom-scroll shadow-inner">
+                      <!-- JS Dolduracak -->
+                   </div>
+                </div>
+
+                <input type="hidden" id="selectedWeaponId" value="">
+                <input type="hidden" id="selectedWeaponName" value="">
+
+                <div class="flex items-center justify-between bg-[#0a0d14] border border-gray-700 p-3 rounded-lg shadow-inner mb-4">
+                   <div class="flex items-center">
+                      <div id="selectedWeaponIcon" class="w-10 h-10 bg-black/60 border border-gray-600 rounded-lg flex items-center justify-center mr-4 shadow-md">
+                         <i class="fa-solid fa-gavel text-2xl text-gray-600"></i>
+                      </div>
+                      <div>
+                         <div class="text-[10px] text-gray-500 uppercase font-black tracking-widest mb-0.5">Hedef Eşya</div>
+                         <div id="selectedWeaponText" class="text-white font-bold text-sm">Lütfen Yukarıdan Bir Eşya Seçin</div>
+                      </div>
+                   </div>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-bold text-gray-400 mb-1">Ek Notlar / İsteğe Bağlı</label>
+                  <input type="text" id="buildExtra" placeholder="Örn: Ucuz olsun, hareket hızı yüksek olsun" class="w-full bg-albion-900 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-albion-accent outline-none transition-colors">
+                </div>
+                
+                <button type="button" id="btnPersonalSubmit" disabled class="w-full bg-gray-600 text-gray-400 cursor-not-allowed font-black py-4 px-4 rounded-xl transition-transform flex justify-center items-center mt-4 shadow-lg uppercase tracking-wider text-lg">
+                  <i class="fa-solid fa-robot mr-2"></i> Çift Set Olarak Oluştur (PvE & PvP)
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- View 2: Group Content Build Form -->
+          <div id="aiViewGroup" class="hidden animate-fade-in max-w-4xl mx-auto">
+            <div class="mb-6">
+              <h2 class="text-2xl font-bold text-white mb-1">Content Build (Grup & Meta)</h2>
+              <p class="text-gray-400">En popüler grup içeriklerine özel, AI destekli meta kompozisyonları (Tank, Healer, DPS dağılımları ve detaylı taktikler).</p>
+            </div>
+            
+            <div class="bg-albion-800 p-6 rounded-xl border border-gray-700 mb-8 shadow-lg transition-colors">
+              <div id="aiGroupForm" class="space-y-4">
+                <div>
+                  <label class="block text-sm font-bold text-gray-400 mb-1" data-i18n="aiBuild-contentLabel">Oynamak İstediğiniz İçerik</label>
+                  <select id="buildContentGroup" class="w-full bg-albion-900 border border-gray-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-albion-accent outline-none transition-colors cursor-pointer text-lg font-semibold">
+                    <option value="Group Dungeon (5 Core + 2 Flex)">Grup Zindanı (Group Dungeon 5+2)</option>
+                    <option value="Group Camp (4 Core + 3 Flex)">Grup Kampı (Group Camp 4+3)</option>
+                    <option value="Avalon Gold (Pure PvE - 7 Kişi)">Avalon Altın Sandık (Sadece PvE - 7 Kişi)</option>
+                    <option value="Avalon Gold & Dive (PvPvE - 7 Kişi)">Avalon Altın & Dive (PvP+PvE Meta - 7 Kişi)</option>
+                    <option value="Avalon Dungeon (10 Core Roles)">Avalon Zindanı (10+10 Core Meta)</option>
+                    <option value="HCE (Hardcore Expeditions 5 Core)">HCE (Hardcore Expeditions)</option>
+                    <option value="Ganking (Grup)">Ganking (Grup Yakalama)</option>
+                    <option value="Tracking (Grup)">Tracking (Grup İz Sürme)</option>
+                    <option value="Faction Warfare (ZvZ Grup)">Faction ZvZ (Büyük Ölçekli)</option>
+                  </select>
+                </div>
+                <button type="button" id="btnGroupSubmit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-3 px-4 rounded-lg transition-transform hover:scale-[1.01] flex justify-center items-center mt-2 shadow-lg uppercase tracking-wider text-lg">
+                  <i class="fa-solid fa-users-viewfinder mr-2"></i> <span data-i18n="aiBuild-submitGroup">Meta Kompozisyonunu Getir</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Shared AI Loading & Result Containers -->
+          <div id="aiBuildLoading" class="hidden flex-col items-center justify-center py-12">
+            <div class="relative flex items-center justify-center w-24 h-24 bg-black/40 rounded-full border border-albion-accent shadow-[0_0_20px_rgba(212,175,55,0.4)] mb-6">
+              <i class="fa-solid fa-atom text-5xl text-albion-accent animate-[spin_6s_linear_infinite]"></i>
+              <i class="fa-solid fa-robot absolute text-2xl text-white animate-pulse"></i>
+            </div>
+            <p class="text-gray-400 font-bold" data-i18n="aiBuild-loading">Yapay Zeka build'i hazırlıyor, lütfen bekleyin...</p>
+          </div>
+          
+          <div id="aiBuildResult" class="hidden space-y-6"></div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="data/items-data.js"></script>
+  <script src="js/image-cache.js"></script>
+  <script src="js/settings-panel.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/i18n-helper.js"></script>
+  <script src="js/events.js"></script>
+  <script src="js/crafting-new.js"></script>
+  <script src="js/crafting.js"></script>
+  <script src="js/pvp.js"></script>
+  <script src="js/avalon.js"></script>
+  <script src="js/gathering.js"></script>
+  <script src="js/loot.js"></script>
+  <script src="js/arbitrage.js"></script>
+  <script src="js/ai-build.js"></script>
+  <script src="js/smart-scanner.js"></script>
+  <script src="js/silver-calculator.js"></script>
+  <script>
+    function switchDashTab(tab) {
+      const panels = {
+        gold:   document.getElementById('dashPanelGold'),
+        killboard: document.getElementById('dashPanelKillboard'),
+      };
+      const btns = {
+        gold:   document.getElementById('dashTabGold'),
+        killboard: document.getElementById('dashTabKillboard'),
+      };
+
+      const activeClass   = 'flex-1 md:flex-none px-6 py-2.5 text-sm font-black rounded-lg bg-albion-accent text-black transition-all flex items-center justify-center gap-2';
+      const inactiveClass = 'flex-1 md:flex-none px-6 py-2.5 text-sm font-black rounded-lg text-gray-400 hover:text-white transition-all flex items-center justify-center gap-2';
+
+      Object.keys(panels).forEach(k => {
+        if(panels[k]) panels[k].classList.add('hidden');
+        if(btns[k]) btns[k].className = inactiveClass;
+      });
+
+      if(panels[tab]) panels[tab].classList.remove('hidden');
+      if(btns[tab]) btns[tab].className = activeClass;
+
+      if (tab === 'killboard') {
+         const iframe = document.getElementById('killboardIframe');
+         if (!iframe.src || iframe.src === window.location.href || iframe.getAttribute('data-loaded') !== '1') {
+           iframe.src = 'https://killboard-1.com/eu';
+           iframe.setAttribute('data-loaded', '1');
+           const cont = document.getElementById('dashPanelKillboard');
+           iframe.style.height = Math.max(700, window.innerHeight - 300) + 'px';
+           cont.style.minHeight = iframe.style.height;
+         }
+      }
+    }
+
+    window.addEventListener('resize', () => {
+      const el = document.getElementById('killboardIframe');
+      if (el && el.getAttribute('data-loaded') === '1') {
+        el.style.height = Math.max(700, window.innerHeight - 300) + 'px';
+      }
+    });
+  </script>
+
+  <!-- ZIP INDIRICI WIDGET -->
+  <button onclick="downloadProjectAsZip()" class="fixed bottom-4 left-4 z-[9999] bg-albion-accent hover:bg-albion-accent_hover text-black px-4 py-3 rounded-xl shadow-[0_0_15px_rgba(212,175,55,0.4)] flex items-center gap-2 font-black transition-all hover:scale-105 border border-yellow-300">
+    <i class="fa-solid fa-file-zipper text-xl"></i>
+    <span class="text-sm">Projeyi İndir (ZIP)</span>
+  </button>
+  <script src="js/zipper.js"></script>
+
+</body>
+</html>
