@@ -1,0 +1,53 @@
+name: AI Smart Feed Bot
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # Her 6 saatte bir
+  workflow_dispatch:  # Manuel tetikleme desteği
+
+jobs:
+  update-feed:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install Dependencies
+        run: npm install
+      
+      - name: Run AI Scanner
+        run: node scripts/ai-scanner.js
+      
+      - name: Commit Changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action Bot"
+          
+          git add data/
+          
+          # Değişiklik varsa commit et
+          if git diff --staged --quiet; then
+            echo "ℹ️ Değişiklik yok, atlanıyor"
+            exit 0
+          fi
+          
+          git commit -m "🤖 AI Bot: Otomatik veri güncellemesi [$(date +'%Y-%m-%d %H:%M')]"
+          git push
+          
+          echo "✅ Değişiklikler commitlendi ve push edildi"
+      
+      - name: Summary
+        run: |
+          echo "================================"
+          echo "🎉 AI Smart Feed Bot Tamamlandı"
+          echo "================================"
+          echo "📅 $(date)"
+          echo "================================"
