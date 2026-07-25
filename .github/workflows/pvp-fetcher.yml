@@ -1,0 +1,53 @@
+name: PvP Feed Fetcher
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # Her 5 dakikada bir
+  workflow_dispatch:  # Manuel tetikleme
+
+jobs:
+  fetch-pvp:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install Dependencies
+        run: npm install
+      
+      - name: Fetch PvP Data
+        run: node scripts/pvp-fetcher.cjs
+      
+      - name: Commit Changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action Bot"
+          
+          git add data/pvp-feed.json
+          
+          # Değişiklik varsa commit et
+          if git diff --staged --quiet; then
+            echo "ℹ️ Yeni PvP verisi yok"
+            exit 0
+          fi
+          
+          git commit -m "⚔️ PvP Feed Güncellendi [$(date +'%H:%M')]"
+          git push
+          
+          echo "✅ PvP feed güncellendi"
+      
+      - name: Summary
+        run: |
+          echo "================================"
+          echo "⚔️ PvP Feed Bot Tamamlandı"
+          echo "================================"
+          echo "📅 $(date)"
+          echo "================================"

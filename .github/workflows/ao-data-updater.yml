@@ -1,0 +1,37 @@
+name: AO Data Pipeline Updater
+
+on:
+  schedule:
+    # Her gece saat 03:00'te otomatik çalıştır (UTC saat dilimine göre)
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+    # GitHub üzerinden manuel olarak tetikleme butonu
+
+jobs:
+  update-game-data:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run Data Extractor Bot (ao-data-extractor.cjs)
+        run: node scripts/ao-data-extractor.cjs
+
+      - name: Commit and Push Updated Data files
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+          # Oluşturulan veya güncellenen dosyaları git'e ekle
+          git add data/items-weight.json locales/tr-official.json data/spells-data.json
+          
+          # Sadece değişiklik varsa commit at, yoksa atla
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(data): auto-update Albion item weights and official TR locales" && git push)
