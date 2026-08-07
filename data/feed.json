@@ -1,28 +1,28 @@
 {
-  "lastUpdate": "2026-08-07T06:59:47.977Z",
+  "lastUpdate": "2026-08-07T12:39:17.838Z",
   "source": "ai-scanner",
   "items": [
     {
-      "title": "Guild Savaşı Sonuçları",
-      "type": "pvp",
-      "summary": "Dün geceki ZvZ savaşlarında 500M+ fame kazanıldı.",
-      "date": "2026-08-07T06:59:47.977Z",
+      "title": "Yeni Patch Yayımlandı",
+      "type": "update",
+      "summary": "Yeni özellikler ve düzeltmeler içeren güncelleme yayınlandı.",
+      "date": "2026-08-07T12:39:17.838Z",
       "url": "https://albiononline.com/news",
       "aiGenerated": true
     },
     {
-      "title": "Guild Savaşı Sonuçları",
-      "type": "pvp",
-      "summary": "Dün geceki ZvZ savaşlarında 500M+ fame kazanıldı.",
-      "date": "2026-08-07T05:59:47.977Z",
+      "title": "Sezon Ödülleri Açıklandı",
+      "type": "news",
+      "summary": "Crystal League yeni sezon ödülleri belli oldu.",
+      "date": "2026-08-07T11:39:17.838Z",
       "url": "https://albiononline.com/news",
       "aiGenerated": true
     },
     {
-      "title": "Farming Etkinliği",
+      "title": "Crafting Bonus Günü",
       "type": "event",
-      "summary": "Hafta sonu özel farming etkinliği başlıyor.",
-      "date": "2026-08-07T04:59:47.977Z",
+      "summary": "Caerleon crafting return rate %50 arttı.",
+      "date": "2026-08-07T10:39:17.838Z",
       "url": "https://albiononline.com/news",
       "aiGenerated": true
     }
