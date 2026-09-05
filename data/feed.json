@@ -1,12 +1,12 @@
 {
-  "lastUpdate": "2026-09-05T14:12:20.136Z",
+  "lastUpdate": "2026-09-05T19:41:48.651Z",
   "source": "ai-scanner",
   "items": [
     {
       "title": "Guild Savaşı Sonuçları",
       "type": "pvp",
       "summary": "Dün geceki ZvZ savaşlarında 500M+ fame kazanıldı.",
-      "date": "2026-09-05T14:12:20.136Z",
+      "date": "2026-09-05T19:41:48.651Z",
       "url": "https://albiononline.com/news",
       "aiGenerated": true
     },
@@ -14,15 +14,15 @@
       "title": "Farming Etkinliği",
       "type": "event",
       "summary": "Hafta sonu özel farming etkinliği başlıyor.",
-      "date": "2026-09-05T13:12:20.136Z",
+      "date": "2026-09-05T18:41:48.651Z",
       "url": "https://albiononline.com/news",
       "aiGenerated": true
     },
     {
-      "title": "Farming Etkinliği",
-      "type": "event",
-      "summary": "Hafta sonu özel farming etkinliği başlıyor.",
-      "date": "2026-09-05T12:12:20.136Z",
+      "title": "Market Dalgalanması",
+      "type": "alert",
+      "summary": "Black Market fiyatlarında anormal artış gözlemlendi.",
+      "date": "2026-09-05T17:41:48.651Z",
       "url": "https://albiononline.com/news",
       "aiGenerated": true
     }
