@@ -1,28 +1,28 @@
 {
-  "lastUpdate": "2026-09-18T10:13:45.884Z",
+  "lastUpdate": "2026-09-18T15:25:23.299Z",
   "source": "ai-scanner",
   "items": [
-    {
-      "title": "Yeni Patch Yayımlandı",
-      "type": "update",
-      "summary": "Yeni özellikler ve düzeltmeler içeren güncelleme yayınlandı.",
-      "date": "2026-09-18T10:13:45.884Z",
-      "url": "https://albiononline.com/news",
-      "aiGenerated": true
-    },
     {
       "title": "Guild Savaşı Sonuçları",
       "type": "pvp",
       "summary": "Dün geceki ZvZ savaşlarında 500M+ fame kazanıldı.",
-      "date": "2026-09-18T09:13:45.884Z",
+      "date": "2026-09-18T15:25:23.299Z",
       "url": "https://albiononline.com/news",
       "aiGenerated": true
     },
     {
-      "title": "Yeni Patch Yayımlandı",
-      "type": "update",
-      "summary": "Yeni özellikler ve düzeltmeler içeren güncelleme yayınlandı.",
-      "date": "2026-09-18T08:13:45.884Z",
+      "title": "Farming Etkinliği",
+      "type": "event",
+      "summary": "Hafta sonu özel farming etkinliği başlıyor.",
+      "date": "2026-09-18T14:25:23.299Z",
+      "url": "https://albiononline.com/news",
+      "aiGenerated": true
+    },
+    {
+      "title": "Farming Etkinliği",
+      "type": "event",
+      "summary": "Hafta sonu özel farming etkinliği başlıyor.",
+      "date": "2026-09-18T13:25:23.299Z",
       "url": "https://albiononline.com/news",
       "aiGenerated": true
     }
