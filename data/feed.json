@@ -1,12 +1,12 @@
 {
-  "lastUpdate": "2026-09-28T12:19:54.144Z",
+  "lastUpdate": "2026-09-28T22:44:28.508Z",
   "source": "ai-scanner",
   "items": [
     {
       "title": "Market Dalgalanması",
       "type": "alert",
       "summary": "Black Market fiyatlarında anormal artış gözlemlendi.",
-      "date": "2026-09-28T12:19:54.143Z",
+      "date": "2026-09-28T22:44:28.502Z",
       "url": "https://albiononline.com/news",
       "aiGenerated": true
     },
@@ -14,15 +14,15 @@
       "title": "Market Dalgalanması",
       "type": "alert",
       "summary": "Black Market fiyatlarında anormal artış gözlemlendi.",
-      "date": "2026-09-28T11:19:54.143Z",
+      "date": "2026-09-28T21:44:28.503Z",
       "url": "https://albiononline.com/news",
       "aiGenerated": true
     },
     {
-      "title": "Guild Savaşı Sonuçları",
-      "type": "pvp",
-      "summary": "Dün geceki ZvZ savaşlarında 500M+ fame kazanıldı.",
-      "date": "2026-09-28T10:19:54.143Z",
+      "title": "Market Dalgalanması",
+      "type": "alert",
+      "summary": "Black Market fiyatlarında anormal artış gözlemlendi.",
+      "date": "2026-09-28T20:44:28.503Z",
       "url": "https://albiononline.com/news",
       "aiGenerated": true
     }
