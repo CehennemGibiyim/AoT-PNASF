@@ -2,10 +2,9 @@ name: AO Data Pipeline Updater
 
 on:
   schedule:
-    # Her gece saat 03:00'te otomatik çalıştır (UTC saat dilimine göre)
+    # Her gece saat 03:00 UTC'de çalışır.
     - cron: '0 3 * * *'
   workflow_dispatch:
-    # GitHub üzerinden manuel olarak tetikleme butonu
 
 jobs:
   update-game-data:
@@ -22,16 +21,51 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Run Data Extractor Bot (ao-data-extractor.cjs)
+      - name: Create pre-update backup
+        run: |
+          backup_name="aot-pnasf-pre-update-${GITHUB_RUN_ID}"
+          mkdir -p "$backup_name"
+          cp -a data "$backup_name/data"
+          cp -a locales "$backup_name/locales"
+          cat > "$backup_name/manifest.json" <<EOF
+          {
+            "created_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "repository": "${GITHUB_REPOSITORY}",
+            "commit": "${GITHUB_SHA}",
+            "run_id": "${GITHUB_RUN_ID}",
+            "purpose": "Albion veri güncellemesi öncesi yedek"
+          }
+          EOF
+          tar -czf "${backup_name}.tar.gz" "$backup_name"
+
+      - name: Upload pre-update backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: aot-pnasf-pre-update-${{ github.run_id }}
+          path: aot-pnasf-pre-update-${{ github.run_id }}.tar.gz
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Extract Latest Albion Data
         run: node scripts/ao-data-extractor.cjs
 
-      - name: Commit and Push Updated Data files
+      - name: Split official locale catalog
+        run: npm run split-locales
+
+      - name: Validate Generated Data
+        run: npm run validate:generated
+
+      - name: Run Quality Checks
+        run: npm run quality
+
+      - name: Commit Updated Game Data
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          
-          # Oluşturulan veya güncellenen dosyaları git'e ekle
-          git add data/items-weight.json locales/tr-official.json data/spells-data.json
-          
-          # Sadece değişiklik varsa commit at, yoksa atla
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(data): auto-update Albion item weights and official TR locales" && git push)
+          git add data/items-data.js data/items-*.js data/items-weight.json data/spells-data.json data/sync-info.json locales/tr-official.json locales/tr-official-*.json
+          if git diff --staged --quiet; then
+            echo "Güncel veri değişmedi."
+            exit 0
+          fi
+          git commit -m "chore(data): update Albion items, weights, spells and Turkish names"
+          git push
