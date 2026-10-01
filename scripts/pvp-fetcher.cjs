@@ -6,7 +6,7 @@ const fs    = require('fs');
 const path  = require('path');
 
 // Repo kök klasörüne göre output path
-const OUTPUT = path.resolve(__dirname, '..', 'src', 'data', 'pvp-feed.json');
+const OUTPUT = path.resolve(__dirname, '..', 'data', 'pvp-feed.json');
 
 const GI_HOSTS = {
   us:   'gameinfo.albiononline.com',

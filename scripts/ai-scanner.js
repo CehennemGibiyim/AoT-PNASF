@@ -1,151 +1,173 @@
 #!/usr/bin/env node
 /**
- * AI Scanner - Gemini AI Tarayıcı
- * Albion Online verilerini AI ile analiz eder ve fırsatlar oluşturur
+ * AoT-PNASF verified data scanner.
+ * Gerçek piyasa API'si ve resmi Albion haber sayfası kullanılmadan
+ * fırsat veya etkinlik uydurmaz.
  */
 
 const fs = require('fs');
 const path = require('path');
 
-const CONFIG = {
-  outputDir: path.join(__dirname, '..', 'data'),
-  opportunitiesFile: 'opportunities.json',
-  feedFile: 'feed.json'
-};
+const ROOT = path.join(__dirname, '..');
+const DATA_DIR = path.join(ROOT, 'data');
+const ITEMS_FILE = path.join(DATA_DIR, 'items-data.js');
+const OPPORTUNITIES_FILE = path.join(DATA_DIR, 'opportunities.json');
+const FEED_FILE = path.join(DATA_DIR, 'feed.json');
+const PRICE_API = 'https://europe.albion-online-data.com/api/v2/stats/prices';
+const NEWS_URL = 'https://albiononline.com/news';
+const LOCATIONS = ['Caerleon', 'Bridgewatch', 'Martlock', 'Lymhurst', 'Thetford', 'Fort Sterling'];
+const REQUEST_TIMEOUT = 25000;
 
-// Simüle edilmiş AI analizi
-class AIScanner {
-  constructor() {
-    this.opportunities = [];
-    this.newsItems = [];
-  }
+function readJson(file, fallback) {
+  try { return JSON.parse(fs.readFileSync(file, 'utf8')); }
+  catch (_) { return fallback; }
+}
 
-  // Market fırsatları oluştur
-  generateOpportunities() {
-    const cities = ['Caerleon', 'Bridgewatch', 'Martlock', 'Lymhurst', 'Thetford', 'Fort Sterling'];
-    const itemTypes = [
-      { item: 'T6_BAG', name: 'Deri Sırt Çantası', basePrice: 45000 },
-      { item: 'T7_BAG', name: 'Büyük Deri Çanta', basePrice: 125000 },
-      { item: 'T6_CAPE', name: 'Cloak', basePrice: 28000 },
-      { item: 'T7_CAPE', name: 'Fort Sterling Cape', basePrice: 75000 },
-      { item: 'T6_2H_CLAYMORE', name: 'Claymore', basePrice: 95000 },
-      { item: 'T6_MOUNT_HORSE', name: 'At', basePrice: 8500 },
-      { item: 'T8_MOUNT_HORSE', name: 'Raptor', basePrice: 45000 },
-      { item: 'T6_POTION_HEAL', name: 'Healing Potion', basePrice: 1200 },
-      { item: 'T7_FOOD_SOUP', name: 'Avalonian Soup', basePrice: 3500 },
-      { item: 'T6_ARMOR_PLATE', name: 'Plate Armor', basePrice: 65000 }
+function writeJson(file, value) {
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  fs.writeFileSync(file, JSON.stringify(value, null, 2) + '\n', 'utf8');
+}
+
+function loadItems() {
+  try {
+    const source = fs.readFileSync(ITEMS_FILE, 'utf8');
+    const match = source.match(/window\.AO_ITEMS\s*=\s*(\[[\s\S]*?\]);/);
+    if (!match) return [];
+    const items = JSON.parse(match[1]);
+    const preferred = [
+      'T6_2H_CLAYMORE', 'T7_2H_CLAYMORE', 'T8_2H_CLAYMORE',
+      'T6_BAG', 'T7_BAG', 'T8_BAG',
+      'T6_CAPE', 'T7_CAPE', 'T8_CAPE',
+      'T6_POTION_HEAL', 'T7_POTION_HEAL', 'T8_POTION_HEAL',
+      'T6_ARMOR_PLATE', 'T7_ARMOR_PLATE', 'T8_ARMOR_PLATE',
+      'T6_MOUNT_HORSE', 'T7_MOUNT_HORSE', 'T8_MOUNT_HORSE'
     ];
-
-    const opportunities = [];
-    const types = ['transport', 'flip', 'crafting'];
-    
-    // Her eşya için rastgele fırsat oluştur
-    for (let i = 0; i < 8; i++) {
-      const item = itemTypes[Math.floor(Math.random() * itemTypes.length)];
-      const type = types[Math.floor(Math.random() * types.length)];
-      const from = cities[Math.floor(Math.random() * cities.length)];
-      let to = cities[Math.floor(Math.random() * cities.length)];
-      
-      // Aynı şehir olmasın
-      while (to === from) {
-        to = cities[Math.floor(Math.random() * cities.length)];
-      }
-      
-      // Rastgele kâr hesapla
-      const buyPrice = Math.floor(item.basePrice * (0.8 + Math.random() * 0.4));
-      const sellPrice = Math.floor(buyPrice * (1.2 + Math.random() * 0.8));
-      const profit = sellPrice - buyPrice;
-      const profitPercent = ((profit / buyPrice) * 100).toFixed(1);
-      
-      // Urgency belirle
-      let urgency = 'low';
-      if (parseFloat(profitPercent) > 50) urgency = 'high';
-      else if (parseFloat(profitPercent) > 30) urgency = 'medium';
-      
-      opportunities.push({
-        id: `opp_${Date.now()}_${i}`,
-        type,
-        item: item.item,
-        itemName: item.name,
-        from,
-        to,
-        buyPrice,
-        sellPrice,
-        profit,
-        profitPercent,
-        timestamp: new Date().toISOString(),
-        urgency,
-        aiGenerated: true,
-        aiConfidence: Math.floor(70 + Math.random() * 30)  // 70-100%
-      });
-    }
-    
-    // Kâra göre sırala
-    return opportunities.sort((a, b) => b.profit - a.profit);
-  }
-
-  // Haber öğeleri oluştur
-  generateNews() {
-    const newsTemplates = [
-      { title: 'Yeni Patch Yayımlandı', type: 'update', summary: 'Yeni özellikler ve düzeltmeler içeren güncelleme yayınlandı.' },
-      { title: 'Sezon Ödülleri Açıklandı', type: 'news', summary: 'Crystal League yeni sezon ödülleri belli oldu.' },
-      { title: 'Market Dalgalanması', type: 'alert', summary: 'Black Market fiyatlarında anormal artış gözlemlendi.' },
-      { title: 'Guild Savaşı Sonuçları', type: 'pvp', summary: 'Dün geceki ZvZ savaşlarında 500M+ fame kazanıldı.' },
-      { title: 'Farming Etkinliği', type: 'event', summary: 'Hafta sonu özel farming etkinliği başlıyor.' },
-      { title: 'Crafting Bonus Günü', type: 'event', summary: 'Caerleon crafting return rate %50 arttı.' }
-    ];
-    
-    // Rastgele 3 haber seç
-    const selected = [];
-    for (let i = 0; i < 3; i++) {
-      const template = newsTemplates[Math.floor(Math.random() * newsTemplates.length)];
-      selected.push({
-        ...template,
-        date: new Date(Date.now() - i * 3600000).toISOString(),  // Her biri 1 saat önce
-        url: 'https://albiononline.com/news',
-        aiGenerated: true
-      });
-    }
-    
-    return selected;
-  }
-
-  // Tüm verileri kaydet
-  saveData() {
-    const opportunities = this.generateOpportunities();
-    const news = this.generateNews();
-    
-    // Opportunities kaydet
-    const oppData = {
-      lastUpdate: new Date().toISOString(),
-      generatedBy: 'ai-scanner',
-      aiVersion: '1.0',
-      opportunities
-    };
-    
-    fs.writeFileSync(
-      path.join(CONFIG.outputDir, CONFIG.opportunitiesFile),
-      JSON.stringify(oppData, null, 2)
-    );
-    
-    // Feed kaydet
-    const feedData = {
-      lastUpdate: new Date().toISOString(),
-      source: 'ai-scanner',
-      items: news
-    };
-    
-    fs.writeFileSync(
-      path.join(CONFIG.outputDir, CONFIG.feedFile),
-      JSON.stringify(feedData, null, 2)
-    );
-    
-    console.log('✅ AI Scanner completed');
-    console.log(`📊 ${opportunities.length} opportunities generated`);
-    console.log(`📰 ${news.length} news items generated`);
+    const ids = new Set(items.flatMap(item => (item.tiers || []).map(tier => `T${tier}_${item.id}`)));
+    const selected = preferred.filter(id => ids.has(id));
+    if (selected.length) return selected;
+    return items
+      .filter(item => item.tiers?.length && ['weapon', 'sword', 'armor', 'bag', 'cape', 'potion', 'food', 'mount'].includes(item.cat))
+      .slice(0, 40)
+      .flatMap(item => [`T${item.tiers[Math.min(2, item.tiers.length - 1)]}_${item.id}`]);
+  } catch (error) {
+    console.warn('[Scanner] Eşya verisi okunamadı:', error.message);
+    return [];
   }
 }
 
-// Run
-const scanner = new AIScanner();
-scanner.saveData();
+async function fetchText(url) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
+  try {
+    const response = await fetch(url, {
+      signal: controller.signal,
+      headers: { 'User-Agent': 'AoT-PNASF/verified-scanner', Accept: 'application/json,text/html' }
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return await response.text();
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function fetchPrices(itemIds) {
+  if (!itemIds.length) return [];
+  const url = `${PRICE_API}/${itemIds.join(',')}.json?locations=${encodeURIComponent(LOCATIONS.join(','))}&qualities=1`;
+  const text = await fetchText(url);
+  const data = JSON.parse(text);
+  return Array.isArray(data) ? data : [];
+}
+
+function buildOpportunities(rows) {
+  const grouped = new Map();
+  for (const row of rows) {
+    const sell = Number(row.sell_price_min || 0);
+    const buy = Number(row.buy_price_max || 0);
+    if (!row.item_id || !row.city || sell <= 0 || buy <= 0) continue;
+    const current = grouped.get(row.item_id) || { buys: [], sells: [] };
+    current.sells.push({ city: row.city, price: sell, at: row.sell_price_min_date || row.timestamp });
+    current.buys.push({ city: row.city, price: buy, at: row.buy_price_max_date || row.timestamp });
+    grouped.set(row.item_id, current);
+  }
+
+  const results = [];
+  for (const [item, values] of grouped) {
+    const cheapest = values.sells.sort((a, b) => a.price - b.price)[0];
+    const highest = values.buys.sort((a, b) => b.price - a.price)[0];
+    if (!cheapest || !highest || cheapest.city === highest.city) continue;
+    const gross = highest.price - cheapest.price;
+    const profit = Math.floor(gross * 0.92);
+    if (profit < 500) continue;
+    results.push({
+      id: `market_${item}_${cheapest.city}_${highest.city}`,
+      type: 'flip',
+      item,
+      itemName: item,
+      from: cheapest.city,
+      to: highest.city,
+      buyPrice: Math.round(cheapest.price),
+      sellPrice: Math.round(highest.price),
+      profit,
+      profitPercent: ((profit / cheapest.price) * 100).toFixed(1),
+      timestamp: new Date().toISOString(),
+      source: 'albion-online-data.com',
+      verified: true
+    });
+  }
+  return results.sort((a, b) => b.profit - a.profit).slice(0, 20);
+}
+
+function stripHtml(value) {
+  return value.replace(/<[^>]*>/g, ' ').replace(/&amp;/g, '&').replace(/&#39;|&apos;/g, "'")
+    .replace(/&quot;/g, '"').replace(/\s+/g, ' ').trim();
+}
+
+async function fetchOfficialNews() {
+  const html = await fetchText(NEWS_URL);
+  const seen = new Set();
+  const items = [];
+  const pattern = /<a[^>]+href=["'](\/news\/[^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi;
+  let match;
+  while ((match = pattern.exec(html)) && items.length < 8) {
+    const title = stripHtml(match[2]);
+    const url = new URL(match[1], NEWS_URL).toString();
+    if (title.length < 8 || seen.has(url) || /read more|devamını oku/i.test(title)) continue;
+    seen.add(url);
+    items.push({ title, type: 'official-news', summary: 'Albion Online resmi haber kaynağı', date: new Date().toISOString(), url, verified: true });
+  }
+  return items;
+}
+
+async function main() {
+  console.log('[Scanner] Doğrulanmış veri taraması:', new Date().toISOString());
+  const itemIds = loadItems();
+  try {
+    const rows = await fetchPrices(itemIds);
+    const opportunities = buildOpportunities(rows);
+    if (opportunities.length) {
+      writeJson(OPPORTUNITIES_FILE, { lastUpdate: new Date().toISOString(), generatedBy: 'market-api', source: PRICE_API, opportunities });
+      console.log(`[Scanner] ${opportunities.length} gerçek piyasa fırsatı kaydedildi.`);
+    } else {
+      console.warn('[Scanner] Geçerli fiyat bulunamadı; eski fırsat verisi korunuyor.');
+    }
+  } catch (error) {
+    console.warn('[Scanner] Piyasa verisi alınamadı; eski fırsat verisi korunuyor:', error.message);
+  }
+
+  try {
+    const news = await fetchOfficialNews();
+    if (news.length) {
+      writeJson(FEED_FILE, { lastUpdate: new Date().toISOString(), source: NEWS_URL, items: news });
+      console.log(`[Scanner] ${news.length} resmi haber kaydedildi.`);
+    } else {
+      console.warn('[Scanner] Resmi haber başlığı bulunamadı; mevcut feed korunuyor.');
+    }
+  } catch (error) {
+    console.warn('[Scanner] Resmi haber alınamadı; mevcut feed korunuyor:', error.message);
+  }
+}
+
+main().catch(error => {
+  console.error('[Scanner] Beklenmeyen hata:', error.message);
+  process.exitCode = 1;
+});

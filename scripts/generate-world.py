@@ -111,6 +111,11 @@ for c, n in sorted(cats.items(), key=lambda x:-x[1]):
 out = f"// AoT-PNASF World Data — {datetime.utcnow().isoformat()} — {len(zones)} zone\n"
 out += "window.AO_ZONES = " + json.dumps(zones, ensure_ascii=False) + ";\n"
 
-with open("src/data/world-data.js","w",encoding="utf-8") as f:
+import os
+
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+output_path = os.path.join(ROOT, "data", "world-data.js")
+os.makedirs(os.path.dirname(output_path), exist_ok=True)
+with open(output_path, "w", encoding="utf-8") as f:
     f.write(out)
 print(f"world-data.js yazildi: {round(len(out)/1024)} KB")

@@ -86,7 +86,7 @@ const outlandsBiomes = [
   }
 ];
 
-document.addEventListener('DOMContentLoaded', () => {
+function initCraftingModule() {
   const container = document.getElementById('craftingApp');
   if (!container) return;
 
@@ -746,4 +746,6 @@ document.addEventListener('DOMContentLoaded', () => {
   btnCalc.addEventListener('click', () => { resetTabs(); activateTab(btnCalc); renderCalc(); });
 
   renderRoyalMap();
-});
+}
+
+window.initCraftingModule = initCraftingModule;

@@ -20,8 +20,6 @@
   let opportunities = [];
   let currentOpportunityIndex = 0;
   let isAutoUpdateEnabled = true;
-  let opportunityTimer = null;
-  let feedTimer = null;
 
   // ==========================================================
   // AI Smart Feed - Otomatik Güncelleme Sistemi
@@ -200,17 +198,16 @@
 
     // Otomatik güncelleme başlat
     startAutoUpdate() {
-      if (opportunityTimer || feedTimer) return;
       // Fırsatları periyodik güncelle
-      opportunityTimer = setInterval(() => {
-        if (isAutoUpdateEnabled && !document.hidden) {
+      setInterval(() => {
+        if (isAutoUpdateEnabled) {
           this.fetchOpportunities();
         }
       }, CONFIG.opportunitiesInterval);
 
       // Haberleri periyodik kontrol et
-      feedTimer = setInterval(() => {
-        if (isAutoUpdateEnabled && !document.hidden) {
+      setInterval(() => {
+        if (isAutoUpdateEnabled) {
           this.fetchNewsFeed();
           this.fetchPvPFeed();
         }

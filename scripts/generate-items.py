@@ -93,6 +93,42 @@ window.AO_NAME = function(id, lang) {
 };
 """
 
-with open("src/data/items-data.js","w",encoding="utf-8") as f:
+import os
+
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+output_path = os.path.join(ROOT, "data", "items-data.js")
+os.makedirs(os.path.dirname(output_path), exist_ok=True)
+with open(output_path, "w", encoding="utf-8") as f:
     f.write(header + body + search_fn)
-print(f"items-data.js yazildi: {round((len(header)+len(body)+len(search_fn))/1024)} KB")
+
+# Keep the legacy aggregate file for compatibility, while publishing smaller
+# category chunks for lazy loading and faster searches.
+categories = {}
+for item in result:
+    categories.setdefault(item.get("cat") or "misc", []).append(item)
+
+for name in os.listdir(os.path.dirname(output_path)):
+    if name.startswith("items-") and name.endswith(".js") and name not in {
+        "items-data.js", "items-index.js", "items-loader.js", "items-manifest.js"
+    }:
+        os.remove(os.path.join(os.path.dirname(output_path), name))
+
+for category, items in sorted(categories.items()):
+    chunk = (
+        f"// Generated category chunk: {category}\n"
+        "window.AO_ITEM_CHUNKS = window.AO_ITEM_CHUNKS || {};\n"
+        f"window.AO_ITEM_CHUNKS[{json.dumps(category)}] = {json.dumps(items, ensure_ascii=False)};\n"
+    )
+    with open(os.path.join(os.path.dirname(output_path), f"items-{category}.js"), "w", encoding="utf-8") as f:
+        f.write(chunk)
+
+manifest = {
+    "version": datetime.utcnow().isoformat(),
+    "mode": "category-chunks",
+    "files": [f"items-{category}.js" for category in sorted(categories)],
+    "fallback": "items-data.js"
+}
+with open(os.path.join(os.path.dirname(output_path), "items-manifest.js"), "w", encoding="utf-8") as f:
+    f.write("// Generated item manifest\nwindow.AO_ITEMS_MANIFEST = " + json.dumps(manifest, indent=2) + ";\n")
+
+print(f"items-data.js yazildi: {round((len(header)+len(body)+len(search_fn))/1024)} KB; {len(categories)} kategori parcasi")

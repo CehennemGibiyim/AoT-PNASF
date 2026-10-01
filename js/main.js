@@ -5,31 +5,64 @@ window.AOT_DATA = {
   locales: {}
 };
 
+let pipelineDataPromise = null;
+
+async function loadOfficialLocaleCatalog() {
+  try {
+    const manifestResponse = await fetch('locales/tr-official-manifest.json', { cache: 'force-cache' });
+    if (!manifestResponse.ok) throw new Error('locale manifest unavailable');
+    const manifest = await manifestResponse.json();
+    const files = Array.isArray(manifest.files) ? manifest.files : [];
+    if (!files.length) throw new Error('locale manifest empty');
+    const responses = await Promise.all(files.map((file) => fetch(`locales/${file}`, { cache: 'force-cache' })));
+    const parts = await Promise.all(responses.map((response) => response.ok ? response.json() : {}));
+    return Object.assign({}, ...parts);
+  } catch (_) {
+    try {
+      const response = await fetch('locales/tr-official.json', { cache: 'force-cache' });
+      return response.ok ? await response.json() : {};
+    } catch (_) {
+      return {};
+    }
+  }
+}
+
 async function loadPipelineData() {
+  if (pipelineDataPromise) return pipelineDataPromise;
+  pipelineDataPromise = (async () => {
+  const readJson = async (response, fallback) => {
+    if (!response || !response.ok) return fallback;
+    try {
+      const value = await response.json();
+      return value && typeof value === 'object' && !Array.isArray(value) ? value : fallback;
+    } catch (_) {
+      return fallback;
+    }
+  };
+
   try {
     const [weightRes, spellRes, localeRes] = await Promise.all([
-      fetch('data/items-weight.json').catch(() => null),
-      fetch('data/spells-data.json').catch(() => null),
-      fetch('locales/tr-official.json').catch(() => null)
+      fetch('data/items-weight.json', { cache: 'force-cache' }).catch(() => null),
+      fetch('data/spells-data.json', { cache: 'force-cache' }).catch(() => null),
+      loadOfficialLocaleCatalog()
     ]);
 
-    if (weightRes && weightRes.ok) window.AOT_DATA.weights = await weightRes.json();
-    if (spellRes && spellRes.ok) window.AOT_DATA.spells = await spellRes.json();
-    if (localeRes && localeRes.ok) {
-      window.AOT_DATA.locales = await localeRes.json();
-      // AO_ITEMS'daki isimleri resmi çevirilerle güncelle
-      if (window.AO_ITEMS) {
-        window.AO_ITEMS.forEach(item => {
-          if (window.AOT_DATA.locales[item.id]) {
-            item.tr = window.AOT_DATA.locales[item.id];
-          }
-        });
-      }
+    window.AOT_DATA.weights = await readJson(weightRes, {});
+    window.AOT_DATA.spells = await readJson(spellRes, {});
+    window.AOT_DATA.locales = localeRes && typeof localeRes === 'object' ? localeRes : {};
+
+    // AO_ITEMS'daki isimleri resmi çevirilerle güncelle
+    if (window.AO_ITEMS) {
+      window.AO_ITEMS.forEach(item => {
+        if (window.AOT_DATA.locales[item.id]) item.tr = window.AOT_DATA.locales[item.id];
+      });
     }
     console.log('✅ Pipeline Data yüklendi:', Object.keys(window.AOT_DATA.weights).length, 'ağırlık,', Object.keys(window.AOT_DATA.locales).length, 'çeviri,', Object.keys(window.AOT_DATA.spells).length, 'yetenek.');
   } catch(e) {
     console.error('Pipeline data yükleme hatası:', e);
   }
+  })();
+  return pipelineDataPromise;
 }
 
 // ns_setupCallback hatasini kesin olarak cozmek icin
@@ -129,23 +162,12 @@ function getAlbionApiDomain() {
   return 'www.albion-online-data.com';
 }
 
-async function fetchWithProxies(targetUrl) {
-  const urls = [
-    targetUrl,
-    'https://api.allorigins.win/raw?url=' + encodeURIComponent(targetUrl),
-    'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(targetUrl),
-    'https://corsproxy.io/?url=' + encodeURIComponent(targetUrl)
-  ];
-  for (let url of urls) {
-    try {
-      const res = await fetch(url);
-      if (res.ok) {
-        const data = await res.json();
-        if (data && Array.isArray(data) && data.length > 0) return data;
-      }
-    } catch(err) {}
-  }
-  return null;
+function parseApiTimestamp(value) {
+  if (!value) return 0;
+  const raw = String(value).trim();
+  const withTimezone = /(?:Z|[+-]\d{2}:?\d{2})$/i.test(raw) ? raw : `${raw}Z`;
+  const parsed = Date.parse(withTimezone);
+  return Number.isFinite(parsed) ? parsed : 0;
 }
 
 let myChartInstance = null;
@@ -184,6 +206,84 @@ function fetchGameActivePlayers() {
     const finalCount = basePlayers + fluctuation;
     el.innerText = finalCount.toLocaleString('tr-TR');
   }
+}
+
+const lazyModuleState = new Map();
+const lazyModuleConfig = {
+  'tab-crafting': { scripts: ['js/crafting.js'], init: 'initCraftingModule', needsItems: true },
+  'tab-arbitrage': { scripts: ['js/arbitrage.js'], init: 'loadArbitrageModule', needsItems: true },
+  'tab-ai-build': { scripts: ['js/ai-build.js'], init: 'initAiBuildModule', needsItems: true },
+  'tab-pvp': { scripts: ['js/pvp.js'], init: 'initPvpModule', needsItems: false }
+};
+function loadLazyScript(src) {
+  const existing = document.querySelector(`script[data-lazy-src="${src}"]`);
+  if (existing) return existing.dataset.lazyLoaded === 'true' ? Promise.resolve() : existing._lazyPromise;
+
+  const script = document.createElement('script');
+  script.src = src;
+  script.dataset.lazySrc = src;
+  script._lazyPromise = new Promise((resolve, reject) => {
+    script.onload = () => {
+      script.dataset.lazyLoaded = 'true';
+      resolve();
+    };
+    script.onerror = () => reject(new Error(`Modül yüklenemedi: ${src}`));
+  });
+  document.body.appendChild(script);
+  return script._lazyPromise;
+}
+function setLazyModuleState(tabId, loading, error = false) {
+  const state = document.getElementById(`${tabId}LazyState`);
+  const section = document.getElementById(tabId);
+  if (!state || !section) return;
+  state.hidden = !loading && !error;
+  state.textContent = error
+    ? window.t?.('lazy-error', 'Bu bölüm yüklenemedi. Lütfen tekrar deneyin.')
+    : window.t?.('lazy-loading', 'Bölüm yükleniyor...');
+  section.setAttribute('aria-busy', loading ? 'true' : 'false');
+}
+async function ensureItemsData() {
+  if (!Array.isArray(window.AO_ITEMS)) {
+    await loadLazyScript('data/items-loader.js');
+    if (window.AO_ITEM_LOADER?.load) await window.AO_ITEM_LOADER.load();
+  }
+  if (!Array.isArray(window.AO_ITEMS)) throw new Error('Eşya verisi alınamadı');
+  await loadPipelineData();
+  if (window.AOT_DATA?.locales) {
+    window.AO_ITEMS.forEach(item => {
+      if (window.AOT_DATA.locales[item.id]) item.tr = window.AOT_DATA.locales[item.id];
+    });
+  }
+  await loadLazyScript('data/items-index.js');
+  if (!window.AO_ITEM_INDEX?.build) throw new Error('Eşya indeksi başlatılamadı');
+  window.AO_ITEM_INDEX.build(window.AO_ITEMS);
+  window.dispatchEvent(new Event('items_data_loaded'));
+}
+async function loadLazyTab(tabId) {
+  const config = lazyModuleConfig[tabId];
+  if (!config) return;
+  if (lazyModuleState.has(tabId)) return lazyModuleState.get(tabId);
+
+  const loadPromise = (async () => {
+    setLazyModuleState(tabId, true);
+    try {
+      if (config.needsItems) await ensureItemsData();
+      for (const script of config.scripts) await loadLazyScript(script);
+      const init = window[config.init];
+      if (typeof init !== 'function') throw new Error(`Başlatıcı bulunamadı: ${config.init}`);
+      await init();
+      if (tabId === 'tab-arbitrage') window.loadArbitrageImagesLazy?.();
+      if (tabId === 'tab-pvp') window.loadImagesLazy?.();
+      setLazyModuleState(tabId, false);
+    } catch (error) {
+      console.error(`${tabId} lazy-load hatası:`, error);
+      setLazyModuleState(tabId, false, true);
+      lazyModuleState.delete(tabId);
+    }
+  })();
+
+  lazyModuleState.set(tabId, loadPromise);
+  return loadPromise;
 }
 
 async function initMainApp() {
@@ -238,6 +338,7 @@ async function initMainApp() {
           targetContent.classList.remove('hidden');
           void targetContent.offsetWidth;
           targetContent.classList.add('flex', 'animate-fade-in');
+          void loadLazyTab(targetId);
         }
       });
     });
@@ -248,10 +349,8 @@ async function initMainApp() {
   const clearCacheBtn = document.getElementById('clearCacheBtn');
   if (clearCacheBtn) clearCacheBtn.addEventListener('click', clearImageCache);
   updateCacheStats();
-  setInterval(updateCacheStats, 5000);
+  setInterval(() => { if (!document.hidden) updateCacheStats(); }, 30000);
 
-  // Start data load asynchronously, so it DOES NOT block UI
-  loadPipelineData();
 }
 
 if (document.readyState === 'loading') {
@@ -313,7 +412,7 @@ async function initHomeDashboardAndTicker() {
 
 function renderChart(timeframe) {
   const ctx = document.getElementById('goldStatsChart');
-  if(!ctx) return;
+  if(!ctx || typeof Chart === 'undefined') return;
   if(myChartInstance) myChartInstance.destroy();
 
   let labels = [];
@@ -474,14 +573,17 @@ async function updateProfitTicker() {
       'POTION_HEAL','POTION_ENERGY','MEAL_STEW','MEAL_OMELETTE',
       'MOUNT_HORSE','MOUNT_OX'
     ];
-    let itemPool = [];
-    baseItems.forEach(b => {
-      for(let t=4; t<=8; t++) {
-        itemPool.push(`T${t}_${b}`);
-        if(!b.startsWith('MOUNT')) itemPool.push(`T${t}_${b}@1`);
-      }
-    });
-    itemPool.sort(() => 0.5 - Math.random());
+    const discoveredItems = (window.AO_ITEMS || [])
+      .filter(item => item && item.id && item.tiers?.length)
+      .flatMap(item => item.tiers.slice(-3).map(tier => `T${tier}_${item.id}`));
+    const itemPool = Array.from(new Set([
+      ...discoveredItems,
+      ...baseItems.flatMap(base => Array.from({ length: 5 }, (_, index) => `T${index + 4}_${base}`))
+    ]));
+    for (let i = itemPool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [itemPool[i], itemPool[j]] = [itemPool[j], itemPool[i]];
+    }
     const items = itemPool.slice(0, 80).join(',');
     
     const locations = encodeURIComponent('Lymhurst,Bridgewatch,Fort Sterling,Martlock,Thetford,Caerleon,Black Market');
@@ -501,11 +603,11 @@ async function updateProfitTicker() {
         let b_price = d.buy_price_max || 0;
 
         if (d.sell_price_min_date) {
-          const t = new Date(d.sell_price_min_date + 'Z').getTime();
+          const t = parseApiTimestamp(d.sell_price_min_date);
           if (now - t > 14400000) s_price = 0; // >4 hours
         }
         if (d.buy_price_max_date) {
-          const t = new Date(d.buy_price_max_date + 'Z').getTime();
+          const t = parseApiTimestamp(d.buy_price_max_date);
           if (now - t > 14400000) b_price = 0; // >4 hours
         }
 
@@ -516,7 +618,7 @@ async function updateProfitTicker() {
         };
         
         if (d.sell_price_min_date) {
-          const updateTime = new Date(d.sell_price_min_date + 'Z').getTime();
+          const updateTime = parseApiTimestamp(d.sell_price_min_date);
           if (updateTime > grouped[key].lastUpdate) grouped[key].lastUpdate = updateTime;
         }
       });
@@ -573,7 +675,7 @@ async function updateProfitTicker() {
           const fallbackUrl = `https://render.albiononline.com/v1/item/${opp.item}.png?size=32`;
 
           html += `
-          <div style="display:inline-flex;align-items:center;margin-right:2rem;background:rgba(212,175,55,0.05);padding:4px 12px;border-radius:8px;border:1px solid rgba(212,175,55,0.2);">
+          <span style="display:inline-flex;align-items:center;margin-right:2rem;background:rgba(212,175,55,0.05);padding:4px 12px;border-radius:8px;border:1px solid rgba(212,175,55,0.2);">
             <img src="${imgUrl}" style="width:24px;height:24px;margin-right:8px;" onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='${fallbackUrl}';}else{this.style.display='none';}">
             <span class="text-green-400 font-bold mr-1">${name}</span> 
             <span class="text-gray-500 text-[10px] uppercase mr-2">(${qName})</span>
@@ -584,7 +686,7 @@ async function updateProfitTicker() {
             <span class="mx-2 text-gray-500">=</span> 
             <span class="text-yellow-400 font-black">+${opp.profit.toLocaleString()}</span> 🥈 kâr! 
             <span class="text-gray-500 ml-2 text-[10px]">[${timeText}]</span>
-          </div>`;
+          </span>`;
         });
         
         ticker.innerHTML = html;
@@ -600,53 +702,13 @@ async function updateProfitTicker() {
   }
 }
 
-// ─── FİYAT VERİLERİNİ YENİLE ─────────────────────────────────
-function refreshPrices() {
-  // Profit ticker'ı yenile
-  updateProfitTicker();
-
-  // Gold fiyatlarını yenile
-  if (typeof updateGoldChart === 'function') {
-    updateGoldChart();
-  }
-
-  // Crafting fiyatlarını yenile
-  if (typeof loadItemPrices === 'function') {
-    loadItemPrices();
-  }
-
-  // Market fiyatlarını yenile
-  if (typeof loadMarketPrices === 'function') {
-    loadMarketPrices();
-  }
-}
-
-// ─── SAYFA İÇERİĞİNİ YENİLE ─────────────────────────────────
-function refreshContent() {
-  // Dil değişikliğinde tüm metinleri yenile
-  const lang = localStorage.getItem('aot-lang') || 'tr';
-  if (typeof _applyLang === 'function') {
-    _applyLang(lang);
-  }
-
-  // Crafting içeriğini yenile
-  if (typeof calcCrafting === 'function') {
-    calcCrafting();
-  }
-
-  // PvP içeriğini yenile
-  if (typeof loadPVPData === 'function') {
-    loadPVPData();
-  }
-}
-
 // Only start the ticker if we're on the dashboard
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
     updateProfitTicker();
-    setInterval(updateProfitTicker, 150000);
+    setInterval(() => { if (!document.hidden) updateProfitTicker(); }, 150000);
   });
 } else {
   updateProfitTicker();
-  setInterval(updateProfitTicker, 150000);
+  setInterval(() => { if (!document.hidden) updateProfitTicker(); }, 150000);
 }

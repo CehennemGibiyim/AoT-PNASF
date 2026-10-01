@@ -1,4 +1,4 @@
-const MODEL_ID = 'ba695aee-f2ec-497f-9335-1c796cb0c30d'; // RolePlay v1 (Ücretsiz)
+const MODEL_ID = 'dc2db118-7888-466a-a8d1-bf9d96bab4b6'; // DeepSeek V4 Flash Instant
 
 // --- MOCK AI SERVICE (Local Testing İçin) ---
 // Gerçek Telegram Mini Apps ortamında bu obje otomatik olarak sağlanır
@@ -13,7 +13,7 @@ if (!window.miniappsAI) {
       
       if (isPersonalBuild) {
         const userMessage = params.messages.find(m => m.role === 'user');
-        const weaponMatch = userMessage.content.match(/"([^"]+)" \(T[^)]+\)/);
+        const weaponMatch = userMessage.content.match(/"([^"]+)" \((T[^)]+)\)/);
         const selectedWeaponName = weaponMatch ? weaponMatch[1] : "Broadsword";
         const selectedWeaponId = weaponMatch ? weaponMatch[2] : "T8_MAIN_SWORD";
         
@@ -82,7 +82,7 @@ if (!window.miniappsAI) {
   };
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+function initAiBuildModule() {
   const btnPersonal = document.getElementById('btnAiPersonal');
   const btnGroup = document.getElementById('btnAiGroup');
   const viewPersonal = document.getElementById('aiViewPersonal');
@@ -930,4 +930,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
   }
-});
+}
+
+window.initAiBuildModule = initAiBuildModule;

@@ -1,6 +1,8 @@
 // AoT-PNASF — Market v4
 // 11 lokasyon · 6 modül · Chart.js grafik · Flip & Arbitraj · Kalite & Enchant
 
+const marketFetch = (url, options) => window.AOTMarketNetwork.request(url, options);
+
 // ─── SABITLER ────────────────────────────────────────────
 const SERVERS = {
   europe: 'https://europe.albion-online-data.com',
@@ -128,7 +130,7 @@ function switchServer(srv, btn) {
 // ─── GOLD FİYATI ─────────────────────────────────────────
 async function loadGoldPrice() {
   try {
-    const res = await fetch(`${API()}/api/v2/stats/gold.json?count=1`);
+    const res = await marketFetch(`${API()}/api/v2/stats/gold.json?count=1`);
     const data = await res.json();
     if (data?.length) {
       const gv = document.getElementById('goldVal');
@@ -193,7 +195,7 @@ async function marketSearchSelect(baseId, name, catKey) {
   const ids = tiers.map(t => `T${t}_${baseId}`);
   showLoading();
   try {
-    const res = await fetch(`${API()}/api/v2/stats/prices/${ids.join(',')}.json?locations=${encodeURIComponent(ALL_LOCS)}`);
+    const res = await marketFetch(`${API()}/api/v2/stats/prices/${ids.join(',')}.json?locations=${encodeURIComponent(ALL_LOCS)}`);
     const data = await res.json();
     currentData = data;
     document.getElementById('tableTitle').textContent = name;
@@ -233,7 +235,7 @@ async function loadCategory(cat) {
   showLoading();
   try {
     const url = `${API()}/api/v2/stats/prices/${filtered.slice(0,60).join(',')}.json?locations=${encodeURIComponent(locs)}`;
-    const res = await fetch(url);
+    const res = await marketFetch(url);
     const data = await res.json();
     currentData = data;
     renderTable(data);
@@ -242,7 +244,10 @@ async function loadCategory(cat) {
 }
 
 function applyFilters() { loadCategory(currentCategory); }
-function refreshPrices() { loadCategory(currentCategory); }
+function refreshPrices() {
+  window.AOTMarketNetwork?.clear();
+  loadCategory(currentCategory);
+}
 
 // ─── TABLO RENDER ─────────────────────────────────────────
 function renderTable(data) {
@@ -425,7 +430,7 @@ async function loadHistory() {
   box.innerHTML = '<div class="loading-state"><div class="loading-spinner"></div><span>Grafik yükleniyor...</span></div>';
   try {
     const url = `${API()}/api/v2/stats/history/${historyItem}.json?locations=${city}&time-scale=${scale}`;
-    const res = await fetch(url);
+    const res = await marketFetch(url);
     const data = await res.json();
     const cityData = data.find(d => d.location === city || d.location === city.replace(' ',''));
     if (!cityData?.data?.length) {
@@ -477,7 +482,7 @@ async function loadTopTraded() {
   const sampleItems = [...CATEGORIES.bags, ...CATEGORIES.swords.slice(0,5), ...CATEGORIES.bows.slice(0,5), ...CATEGORIES.resources.slice(0,10)].slice(0,50);
   try {
     const url = `${API()}/api/v2/stats/history/${sampleItems.join(',')}.json?locations=${city}&time-scale=24`;
-    const res = await fetch(url);
+    const res = await marketFetch(url);
     const data = await res.json();
 
     let rows = data.map(d => {
@@ -547,7 +552,7 @@ async function loadFlips() {
   cont.innerHTML = '<div class="loading-state"><div class="loading-spinner"></div><span>Flip fırsatları hesaplanıyor...</span></div>';
   try {
     const url = `${API()}/api/v2/stats/prices/${flipItems.join(',')}.json?locations=${encodeURIComponent(locs)}`;
-    const res = await fetch(url);
+    const res = await marketFetch(url);
     const data = await res.json();
     flipCache = {};
     data.forEach(d => {
@@ -648,7 +653,7 @@ async function selectQualityItem(baseId, tier, name) {
 
   try {
     const url = `${API()}/api/v2/stats/prices/${allIds.join(',')}.json?locations=Caerleon&qualities=1,2,3,4,5`;
-    const res = await fetch(url);
+    const res = await marketFetch(url);
     const data = await res.json();
 
     // Kaliteye göre grupla
@@ -657,7 +662,7 @@ async function selectQualityItem(baseId, tier, name) {
     const qualNames = QUALITY_NAMES[lang] || QUALITY_NAMES.tr;
 
     // Enchant için ayrı sorgu
-    const enchRes = await fetch(`${API()}/api/v2/stats/prices/${enchIds.join(',')}.json?locations=Caerleon`);
+    const enchRes = await marketFetch(`${API()}/api/v2/stats/prices/${enchIds.join(',')}.json?locations=Caerleon`);
     const enchData = await enchRes.json();
     const byEnch = {};
     enchIds.forEach((id, i) => {
@@ -707,7 +712,7 @@ async function loadGoldChart() {
   if (!box) return;
   try {
     const url = `${API()}/api/v2/stats/gold.json?date=${fmt(startDate)}&end_date=${fmt(endDate)}`;
-    const res = await fetch(url);
+    const res = await marketFetch(url);
     const data = await res.json();
     if (!data?.length) return;
     const labels = data.map(d => d.timestamp?.slice(0,10) || '');
@@ -753,9 +758,9 @@ async function loadCompare() {
   const items = CATEGORIES[currentCategory].slice(0, 20);
   try {
     const [eu, us, asia] = await Promise.all([
-      fetch(`${SERVERS.europe}/api/v2/stats/prices/${items.join(',')}.json?locations=Caerleon`).then(r=>r.json()),
-      fetch(`${SERVERS.west}/api/v2/stats/prices/${items.join(',')}.json?locations=Caerleon`).then(r=>r.json()),
-      fetch(`${SERVERS.east}/api/v2/stats/prices/${items.join(',')}.json?locations=Caerleon`).then(r=>r.json()),
+      marketFetch(`${SERVERS.europe}/api/v2/stats/prices/${items.join(',')}.json?locations=Caerleon`).then(r=>r.json()),
+      marketFetch(`${SERVERS.west}/api/v2/stats/prices/${items.join(',')}.json?locations=Caerleon`).then(r=>r.json()),
+      marketFetch(`${SERVERS.east}/api/v2/stats/prices/${items.join(',')}.json?locations=Caerleon`).then(r=>r.json()),
     ]);
     const byItem = {};
     eu.forEach(d=>{ if(!byItem[d.item_id]) byItem[d.item_id]={}; byItem[d.item_id].eu=d; });

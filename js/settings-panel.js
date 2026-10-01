@@ -221,6 +221,13 @@ function buildSettingsPanel() {
 
       <!-- Önbellek -->
       <div class="sp-section">
+        <div class="sp-label"><i class="fa-solid fa-file-zipper"></i> <span class="sp-acc" data-i18n="settings-projectExport">Proje dışa aktarma</span></div>
+        <div style="font-size:11px;color:var(--text-muted);line-height:1.5;margin-bottom:10px;" data-i18n="settings-projectExportDesc">Tüm proje dosyalarını tek bir ZIP arşivi olarak indirin.</div>
+        <button class="sp-btn-primary" type="button" onclick="downloadProjectAsZip()"><i class="fa-solid fa-download mr-1"></i> <span data-i18n="settings-projectExportButton">Tüm dosyaları ZIP olarak indir</span></button>
+      </div>
+
+      <!-- Önbellek -->
+      <div class="sp-section">
         <div class="sp-label">🗂 <span class="sp-acc" data-i18n="settings-cacheManagement">Önbellek Yönetimi</span></div>
         <div style="display:flex;align-items:center;justify-content:space-between;">
           <div style="font-size:11px;color:var(--text-muted)" id="spCacheInfo">Yükleniyor...</div>
@@ -404,7 +411,7 @@ function selectSpLang(lang) {
 
   // AOT Platform (Miniapps AI) i18n Entegrasyonu
   if (window.miniappI18n && typeof window.miniappI18n.setLocale === 'function') {
-    const mappedLang = lang === 'kr' ? 'ko' : lang;
+    const mappedLang = lang === 'kr' ? 'ko' : lang; 
     window.miniappI18n.setLocale(mappedLang).then(() => {
       // Dinamik JS elementlerinin tam çevrilmesi için sayfayı temiz bir şekilde yeniliyoruz
       setTimeout(() => window.location.reload(), 200);
@@ -412,20 +419,6 @@ function selectSpLang(lang) {
   } else if (typeof _applyLang === 'function') {
     // Test ortamı / Geriye dönük uyumluluk
     _applyLang(lang);
-  }
-
-  // Dinamik içerikleri yenile (eşya isimleri vb.)
-  if (typeof window.AO_ITEMS !== 'undefined' && window.AOT_DATA.locales) {
-    window.AO_ITEMS.forEach(item => {
-      if (window.AOT_DATA.locales[item.id]) {
-        item.tr = window.AOT_DATA.locales[item.id];
-      }
-    });
-  }
-
-  // Sayfa içeriğini yenile
-  if (typeof window.refreshContent === 'function') {
-    window.refreshContent();
   }
 }
 
@@ -445,21 +438,6 @@ function selectSpServer(key) {
   document.querySelectorAll('.sp-srv-btn[data-server]').forEach(b => b.classList.toggle('active', b.dataset.server === key));
   const badge = document.getElementById('globalServerBadge');
   if (badge) badge.textContent = { europe: 'EU', americas: 'NA', asia: 'AS' }[key] || key.toUpperCase();
-
-  // AppConfig.server'ı güncelle
-  if (window.AppConfig) {
-    window.AppConfig.server = key;
-  }
-
-  // Fiyat verilerini yenile
-  if (typeof window.refreshPrices === 'function') {
-    window.refreshPrices();
-  }
-
-  // Sayfa içeriğini yenile
-  if (typeof window.refreshContent === 'function') {
-    window.refreshContent();
-  }
 }
 
 // ─── YAZI BOYU ───────────────────────────────────────────

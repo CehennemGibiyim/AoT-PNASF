@@ -1477,13 +1477,13 @@ function loadArbitrageModule() {
                     if(!grouped[key]) grouped[key] = { itemId: d.item_id, quality: d.quality, royals: [], caerleon: null, blackmarket: null };
                     
                     if(d.city === 'Black Market') {
-                        if(d.buy_price_max > 0 && getMins(d.buy_price_max_date) <= 45) grouped[key].blackmarket = { city: 'Caerleon (Karaborsa)', price: d.buy_price_max, date: d.buy_price_max_date };
-                    }
+                        if(d.buy_price_max > 0 && getMins(d.buy_price_max_date) <= 240) grouped[key].blackmarket = { city: 'Caerleon (Karaborsa)', price: d.buy_price_max, date: d.buy_price_max_date };
+                    } 
                     else if(d.city === 'Caerleon') {
-                        if(d.buy_price_max > 0 && getMins(d.buy_price_max_date) <= 45) grouped[key].caerleon = { city: 'Caerleon (Pazar)', price: d.buy_price_max, date: d.buy_price_max_date };
+                        if(d.buy_price_max > 0 && getMins(d.buy_price_max_date) <= 240) grouped[key].caerleon = { city: 'Caerleon (Pazar)', price: d.buy_price_max, date: d.buy_price_max_date };
                     }
                     else {
-                        if(d.sell_price_min > 0 && getMins(d.sell_price_min_date) <= 45) grouped[key].royals.push({ city: d.city, price: d.sell_price_min, date: d.sell_price_min_date });
+                        if(d.sell_price_min > 0 && getMins(d.sell_price_min_date) <= 240) grouped[key].royals.push({ city: d.city, price: d.sell_price_min, date: d.sell_price_min_date });
                     }
                 });
 
@@ -1671,11 +1671,11 @@ function loadArbitrageModule() {
                             };
                             cityList.forEach(c => grouped[itemKey].cities[c] = { sell: 0, buy: 0 });
                         }
-                        if (d.sell_price_min > 0 && getMins(d.sell_price_min_date) <= 45) {
+                        if (d.sell_price_min > 0 && getMins(d.sell_price_min_date) <= 240) {
                             grouped[itemKey].cities[d.city].sell = d.sell_price_min;
                             grouped[itemKey].bestRecency = Math.min(grouped[itemKey].bestRecency, getMins(d.sell_price_min_date));
                         }
-                        if (d.buy_price_max > 0 && getMins(d.buy_price_max_date) <= 45) {
+                        if (d.buy_price_max > 0 && getMins(d.buy_price_max_date) <= 240) {
                             grouped[itemKey].cities[d.city].buy = d.buy_price_max;
                             grouped[itemKey].bestRecency = Math.min(grouped[itemKey].bestRecency, getMins(d.buy_price_max_date));
                         }
@@ -1813,7 +1813,7 @@ function loadArbitrageModule() {
             bmData = [];
             if(data && data.length > 0) {
                 data.forEach(d => {
-                    if (d.buy_price_max > 0 && getMins(d.buy_price_max_date) <= 45) {
+                    if (d.buy_price_max > 0 && getMins(d.buy_price_max_date) <= 240) {
                         bmData.push({
                             itemId: d.item_id, quality: d.quality, price: d.buy_price_max, date: d.buy_price_max_date
                         });
@@ -1999,11 +1999,11 @@ function loadArbitrageModule() {
                     grouped[key] = { itemId: d.item_id, quality: d.quality, cities: {} };
                     filterCities.forEach(c => grouped[key].cities[c] = { sell: 0, buy: 0, sellDate: null, buyDate: null });
                 }
-                if (d.sell_price_min > 0 && getMins(d.sell_price_min_date) <= 45) {
+                if (d.sell_price_min > 0 && getMins(d.sell_price_min_date) <= 240) {
                     grouped[key].cities[d.city].sell = d.sell_price_min;
                     grouped[key].cities[d.city].sellDate = d.sell_price_min_date;
                 }
-                if (d.buy_price_max > 0 && getMins(d.buy_price_max_date) <= 45) {
+                if (d.buy_price_max > 0 && getMins(d.buy_price_max_date) <= 240) {
                     grouped[key].cities[d.city].buy = d.buy_price_max;
                     grouped[key].cities[d.city].buyDate = d.buy_price_max_date;
                 }
@@ -2281,7 +2281,7 @@ function loadArbitrageModule() {
                 data.forEach(d => {
                     if (!prices[d.item_id]) prices[d.item_id] = {};
                     if (!timestamps[d.item_id]) timestamps[d.item_id] = {};
-                    if (d.sell_price_min > 0 && getMins(d.sell_price_min_date) <= 45) {
+                    if (d.sell_price_min > 0 && getMins(d.sell_price_min_date) <= 240) {
                         prices[d.item_id][d.city] = d.sell_price_min;
                         timestamps[d.item_id][d.city] = d.sell_price_min_date;
                     }
@@ -2558,7 +2558,7 @@ function loadArbitrageModule() {
                             itemId: d.item_id
                         };
                     }
-                    if (d.sell_price_min > 0 && getMins(d.sell_price_min_date) <= 45) {
+                    if (d.sell_price_min > 0 && getMins(d.sell_price_min_date) <= 240) {
                         grouped[d.item_id].prices.push(d.sell_price_min);
                         grouped[d.item_id].cities.add(d.city);
                     }
@@ -2748,7 +2748,7 @@ function loadArbitrageModule() {
                 const prices = {};
                 data.forEach(d => {
                     if (!prices[d.item_id]) prices[d.item_id] = {};
-                    if (d.sell_price_min > 0 && getMins(d.sell_price_min_date) <= 45) {
+                    if (d.sell_price_min > 0 && getMins(d.sell_price_min_date) <= 240) {
                         prices[d.item_id][d.city] = d.sell_price_min;
                     }
                 });
@@ -2881,9 +2881,5 @@ setTimeout(() => {
   }
 }, 1000);
 
-// Sayfa yüklendiğinde otomatik çalıştır
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', loadArbitrageModule);
-} else {
-  loadArbitrageModule();
-}
+// Dashboard lazy loader tarafından sekme açıldığında başlatılır.
+window.loadArbitrageModule = loadArbitrageModule;

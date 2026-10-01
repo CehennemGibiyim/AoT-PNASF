@@ -1,6 +1,20 @@
 {
-  "ao_bin_dumps_commit": "2026-04-16T11:21:18Z",
-  "last_sync": "2026-04-16T14:02:19Z",
-  "items_count": 1034,
-  "zones_count": 1105
+  "schema_version": 1,
+  "data_version": 1,
+  "source": "ao-data/ao-bin-dumps",
+  "source_url": "https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/formatted/items.json",
+  "last_sync": "2026-04-21T02:00:20.233Z",
+  "previous_sync": null,
+  "items_count": 3211,
+  "normalized_items_count": 3211,
+  "weights_count": 45,
+  "spells_count": 6,
+  "zones_count": 1105,
+  "zones_last_sync": "2026-04-16T14:02:19Z",
+  "pvp_last_sync": "2026-04-21T20:37:35.646Z",
+  "feed_last_update": "2026-05-16T13:48:22.222Z",
+  "backup_run_id": null,
+  "validation_run_id": null,
+  "status": "baseline-seeded",
+  "note": "Ağırlık ve yetenek katalogları güvenli başlangıç verisi içeriyor; planlı AO veri senkronu bunları upstream verisiyle güncelleyecek."
 }

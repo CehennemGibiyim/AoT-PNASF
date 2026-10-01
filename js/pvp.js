@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+function initPvpModule() {
   const container = document.getElementById('pvpApp');
   if (!container) return;
 
@@ -522,7 +522,9 @@ Son Görülen Silah: ${currentPlayerStatsForAI.recentWeapon}
      }
   });
 
-});
+}
+
+window.initPvpModule = initPvpModule;
 
 // Resimleri lazy load ile yukle
 let _pvpImgObserver = null;
