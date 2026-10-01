@@ -8,7 +8,7 @@ import json
 import os
 
 # tr.json'dan key'leri oku
-with open('locates/tr.json', 'r', encoding='utf-8') as f:
+with open('locales/tr.json', 'r', encoding='utf-8') as f:
     tr_data = json.load(f)
 
 # Dil tanımları (Kod, İsim)
@@ -37,7 +37,7 @@ translations = {
 
 # Her dil için JSON oluştur
 for lang_code, lang_name in languages.items():
-    output_file = f'locates/{lang_code}.json'
+    output_file = f'locales/{lang_code}.json'
     
     # Eğer dosya zaten varsa (en.json, de.json) skip et
     if os.path.exists(output_file):

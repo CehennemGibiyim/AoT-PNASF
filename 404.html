@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 - Sayfa Bulunamadı | AoT-PNASF</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    :root {
+      --albion-dark: #0a0d14;
+      --albion-accent: #d4af37;
+      --albion-gold: #ffd700;
+    }
+    body {
+      background: var(--albion-dark);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .glitch {
+      font-size: 8rem;
+      font-weight: 900;
+      color: var(--albion-accent);
+      text-shadow: 2px 2px 0px #000;
+      animation: glitch 2s infinite;
+    }
+    @keyframes glitch {
+      0%, 100% { transform: translate(0); }
+      20% { transform: translate(-2px, 2px); }
+      40% { transform: translate(-2px, -2px); }
+      60% { transform: translate(2px, 2px); }
+      80% { transform: translate(2px, -2px); }
+    }
+    .error-container {
+      text-align: center;
+      padding: 2rem;
+    }
+    .back-btn {
+      background: linear-gradient(135deg, var(--albion-accent), #b8860b);
+      color: #000;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+    }
+    .back-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="error-container">
+    <div class="glitch">404</div>
+    <h1 class="text-2xl font-bold text-white mb-4">Sayfa Bulunamadı</h1>
+    <p class="text-gray-400 mb-8 max-w-md mx-auto">
+      Aradığınız sayfa mevcut değil veya taşınmış olabilir. 
+      Ana sayfaya dönerek devam edebilirsiniz.
+    </p>
+    <a href="/AoT-PNASF/" class="back-btn">
+      <i class="fa-solid fa-arrow-left"></i>
+      Ana Sayfaya Dön
+    </a>
+    
+    <div class="mt-8 text-sm text-gray-600">
+      <i class="fa-solid fa-bug mr-1"></i>
+      AoT-PNASF | Albion Online Tools
+    </div>
+  </div>
+
+  <script>
+    // 5 saniye sonra otomatik yönlendirme
+    setTimeout(() => {
+      const countdown = document.createElement('div');
+      countdown.className = 'fixed bottom-4 right-4 bg-albion-800 text-white px-4 py-2 rounded-lg text-sm';
+      countdown.innerHTML = '5 saniye içinde yönlendiriliyor...';
+      document.body.appendChild(countdown);
+      
+      let seconds = 5;
+      const interval = setInterval(() => {
+        seconds--;
+        countdown.innerHTML = `${seconds} saniye içinde yönlendiriliyor...`;
+        if (seconds <= 0) {
+          clearInterval(interval);
+          window.location.href = '/AoT-PNASF/';
+        }
+      }, 1000);
+    }, 1000);
+  </script>
+</body>
+</html>

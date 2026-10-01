@@ -4,7 +4,12 @@
   "description": "Albion Online Tools - Powered Nexus & AI Smart Feed",
   "main": "index.html",
   "scripts": {
-    "build": "echo 'Static site - no build needed'",
+    "build": "npm run validate",
+    "test": "npm run validate && npm run quality",
+    "validate": "node scripts/validate-project.cjs",
+    "validate:generated": "node scripts/validate-project.cjs --generated",
+    "quality": "node scripts/check-quality.cjs",
+    "split-locales": "node scripts/split-locales.cjs",
     "dev": "npx serve .",
     "update-feed": "node scripts/pvp-fetcher.cjs",
     "ai-scan": "node scripts/ai-scanner.js"
@@ -24,10 +29,6 @@
   ],
   "author": "CehennemGibiyim",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/cehennemgibiyim/AoT-PNASF/issues"
-  },
-  "homepage": "https://cehennemgibiyim.github.io/AoT-PNASF/",
   "dependencies": {
     "node-fetch": "^2.7.0"
   },

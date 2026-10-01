@@ -170,6 +170,31 @@ body {
   animation-play-state: paused;
 }
 
+/* Live market ticker: keep the dashboard compact and single-line. */
+#marketTicker {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  height: 34px;
+  line-height: 34px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: clip;
+}
+
+#marketTicker > span {
+  display: inline-flex !important;
+  align-items: center;
+  vertical-align: middle;
+  height: 30px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+#marketTicker img {
+  flex: 0 0 auto;
+}
+
 /* ============================================ */
 /* SETTINGS PANEL - Drawer Style               */
 /* ============================================ */
@@ -234,5 +259,18 @@ body {
 .sp-btn-secondary:hover { border-color:var(--accent); color:var(--accent); }
 .sp-btn-danger { background:rgba(239,68,68,.15); color:#ef4444; border:1px solid rgba(239,68,68,.3); border-radius:7px; padding:6px 12px; font-size:11px; font-weight:700; cursor:pointer; transition:all .2s; }
 @media (max-width:480px) { .sp-drawer { width:100vw; right:-100vw; } }
+
+/* Project ZIP export dialog */
+.project-export-overlay { position:fixed; inset:0; z-index:99999; display:flex; align-items:center; justify-content:center; padding:20px; background:rgba(0,0,0,.78); backdrop-filter:blur(6px); }
+.project-export-card { width:min(420px,100%); padding:30px 24px 24px; text-align:center; color:var(--text-main); background:var(--bg-800); border:1px solid var(--bg-700); border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.5); }
+.project-export-icon { margin-bottom:14px; color:var(--accent); font-size:52px; }
+.project-export-title { margin:0 0 8px; color:var(--accent); font-size:22px; font-weight:800; }
+.project-export-status { min-height:42px; margin:0 auto 18px; color:var(--text-muted); font-size:13px; line-height:1.5; overflow-wrap:anywhere; }
+.project-export-progress { height:10px; margin-bottom:18px; overflow:hidden; background:var(--bg-900); border:1px solid var(--bg-700); border-radius:999px; }
+.project-export-progress span { display:block; width:0; height:100%; background:var(--accent); border-radius:inherit; box-shadow:0 0 12px rgba(var(--accent-rgb),.45); transition:width .2s ease; }
+.project-export-close { min-height:42px; padding:9px 18px; color:var(--text-muted); background:var(--bg-900); border:1px solid var(--bg-700); border-radius:8px; cursor:pointer; font-weight:700; }
+.project-export-close:hover { color:var(--accent); border-color:var(--accent); }
+.project-export-success { color:#4ade80 !important; }
+.project-export-error { color:#f87171 !important; }
 
 

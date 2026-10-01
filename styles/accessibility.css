@@ -1,0 +1,70 @@
+/* Focus, touch and motion safeguards shared by the main shell. */
+:where(button, a, input, select, textarea, [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+button, a, input, select, textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button, [role="button"] {
+  min-height: 44px;
+}
+
+img {
+  max-width: 100%;
+}
+
+/* Keep inactive, already-loaded tabs cheap to paint while preserving layout. */
+.tab-content[aria-busy="false"] {
+  contain: layout paint style;
+  content-visibility: auto;
+  contain-intrinsic-size: 720px;
+}
+
+/* Avoid expensive visual work for off-screen dashboard cards. */
+[data-lazy-render="true"] {
+  content-visibility: auto;
+  contain-intrinsic-size: 320px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.reduce-motion *, .reduce-motion *::before, .reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  scroll-behavior: auto !important;
+  transition-duration: 0.01ms !important;
+}
+
+@media (max-width: 640px) {
+  main {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  #navMenu .tab-btn {
+    width: 100%;
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  #chatWindow {
+    width: min(22rem, calc(100vw - 24px));
+  }
+}
+
+@media (min-width: 768px) {
+  .tab-content[aria-busy="false"] {
+    content-visibility: auto;
+    contain-intrinsic-size: 720px;
+  }
+}
