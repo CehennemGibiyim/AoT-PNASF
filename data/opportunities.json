@@ -1,7 +1,22 @@
 {
-  "lastUpdate": "2026-05-16T13:48:22.222Z",
-  "generatedBy": "verified-market-scanner",
+  "lastUpdate": "2026-10-01T10:16:52.713Z",
+  "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
-  "status": "pending_verified_refresh",
-  "opportunities": []
+  "opportunities": [
+    {
+      "id": "market_T6_BAG_Bridgewatch_Lymhurst",
+      "type": "flip",
+      "item": "T6_BAG",
+      "itemName": "T6_BAG",
+      "from": "Bridgewatch",
+      "to": "Lymhurst",
+      "buyPrice": 36000,
+      "sellPrice": 38102,
+      "profit": 1933,
+      "profitPercent": "5.4",
+      "timestamp": "2026-10-01T10:16:52.713Z",
+      "source": "albion-online-data.com",
+      "verified": true
+    }
+  ]
 }
