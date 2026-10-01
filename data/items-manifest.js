@@ -1,8 +1,43 @@
-/* Generated data manifest. The legacy file remains the safe fallback. */
+// Generated item manifest
 window.AO_ITEMS_MANIFEST = {
-  "version": 1,
-  "mode": "monolith-fallback",
-  "files": [],
+  "version": 2,
+  "mode": "category-chunks",
+  "files": [
+    "items-sword.js",
+    "items-axe.js",
+    "items-bow.js",
+    "items-hammer.js",
+    "items-spear.js",
+    "items-dagger.js",
+    "items-qstaff.js",
+    "items-mace.js",
+    "items-knuckles.js",
+    "items-shape.js",
+    "items-fire.js",
+    "items-frost.js",
+    "items-arcane.js",
+    "items-holy.js",
+    "items-nature.js",
+    "items-curse.js",
+    "items-parmor.js",
+    "items-pshoes.js",
+    "items-phelmet.js",
+    "items-larmor.js",
+    "items-lshoes.js",
+    "items-lhelmet.js",
+    "items-carmor.js",
+    "items-cshoes.js",
+    "items-chelmet.js",
+    "items-bag.js",
+    "items-cape.js",
+    "items-offhand.js",
+    "items-food.js",
+    "items-potion.js",
+    "items-raw.js",
+    "items-refined.js",
+    "items-journal.js",
+    "items-mount.js",
+    "items-misc.js"
+  ],
   "fallback": "items-data.js"
 };
- 

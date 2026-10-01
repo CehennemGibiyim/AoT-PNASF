@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "source": "tr-official.json",
+  "files": [
+    "tr-official-00.json",
+    "tr-official-01.json",
+    "tr-official-02.json",
+    "tr-official-03.json",
+    "tr-official-04.json",
+    "tr-official-05.json",
+    "tr-official-06.json",
+    "tr-official-07.json",
+    "tr-official-08.json",
+    "tr-official-09.json",
+    "tr-official-10.json",
+    "tr-official-11.json",
+    "tr-official-12.json",
+    "tr-official-13.json",
+    "tr-official-14.json",
+    "tr-official-15.json"
+  ]
+}
