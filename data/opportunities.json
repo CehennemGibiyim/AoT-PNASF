@@ -1,20 +1,35 @@
 {
-  "lastUpdate": "2026-10-02T03:05:14.013Z",
+  "lastUpdate": "2026-10-05T02:58:34.999Z",
   "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
   "opportunities": [
     {
-      "id": "market_T6_BAG_Bridgewatch_Thetford",
+      "id": "market_T7_BAG_Bridgewatch_Martlock",
+      "type": "flip",
+      "item": "T7_BAG",
+      "itemName": "T7_BAG",
+      "from": "Bridgewatch",
+      "to": "Martlock",
+      "buyPrice": 94997,
+      "sellPrice": 100807,
+      "profit": 5345,
+      "profitPercent": "5.6",
+      "timestamp": "2026-10-05T02:58:34.999Z",
+      "source": "albion-online-data.com",
+      "verified": true
+    },
+    {
+      "id": "market_T6_BAG_Martlock_Thetford",
       "type": "flip",
       "item": "T6_BAG",
       "itemName": "T6_BAG",
-      "from": "Bridgewatch",
+      "from": "Martlock",
       "to": "Thetford",
-      "buyPrice": 36994,
-      "sellPrice": 38969,
-      "profit": 1817,
-      "profitPercent": "4.9",
-      "timestamp": "2026-10-02T03:05:14.013Z",
+      "buyPrice": 36990,
+      "sellPrice": 39252,
+      "profit": 2081,
+      "profitPercent": "5.6",
+      "timestamp": "2026-10-05T02:58:34.999Z",
       "source": "albion-online-data.com",
       "verified": true
     }
