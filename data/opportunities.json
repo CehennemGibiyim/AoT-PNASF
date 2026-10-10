@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-10-09T12:16:01.485Z",
+  "lastUpdate": "2026-10-10T03:17:49.743Z",
   "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
   "opportunities": [
@@ -10,11 +10,11 @@
       "itemName": "T6_BAG",
       "from": "Fort Sterling",
       "to": "Thetford",
-      "buyPrice": 35000,
-      "sellPrice": 39335,
-      "profit": 3988,
-      "profitPercent": "11.4",
-      "timestamp": "2026-10-09T12:16:01.485Z",
+      "buyPrice": 35554,
+      "sellPrice": 39305,
+      "profit": 3450,
+      "profitPercent": "9.7",
+      "timestamp": "2026-10-10T03:17:49.743Z",
       "source": "albion-online-data.com",
       "verified": true
     }
