@@ -1,35 +1,20 @@
 {
-  "lastUpdate": "2026-10-15T02:18:58.370Z",
+  "lastUpdate": "2026-10-15T10:32:32.472Z",
   "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
   "opportunities": [
     {
-      "id": "market_T7_CAPE_Fort Sterling_Martlock",
-      "type": "flip",
-      "item": "T7_CAPE",
-      "itemName": "T7_CAPE",
-      "from": "Fort Sterling",
-      "to": "Martlock",
-      "buyPrice": 42999,
-      "sellPrice": 60122,
-      "profit": 15753,
-      "profitPercent": "36.6",
-      "timestamp": "2026-10-15T02:18:58.370Z",
-      "source": "albion-online-data.com",
-      "verified": true
-    },
-    {
-      "id": "market_T6_CAPE_Fort Sterling_Martlock",
+      "id": "market_T6_CAPE_Fort Sterling_Lymhurst",
       "type": "flip",
       "item": "T6_CAPE",
       "itemName": "T6_CAPE",
       "from": "Fort Sterling",
-      "to": "Martlock",
+      "to": "Lymhurst",
       "buyPrice": 18102,
-      "sellPrice": 19269,
-      "profit": 1073,
-      "profitPercent": "5.9",
-      "timestamp": "2026-10-15T02:18:58.370Z",
+      "sellPrice": 19222,
+      "profit": 1030,
+      "profitPercent": "5.7",
+      "timestamp": "2026-10-15T10:32:32.472Z",
       "source": "albion-online-data.com",
       "verified": true
     }
