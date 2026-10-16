@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-10-16T10:19:28.985Z",
+  "lastUpdate": "2026-10-16T15:44:58.005Z",
   "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
   "opportunities": [
@@ -11,10 +11,10 @@
       "from": "Caerleon",
       "to": "Lymhurst",
       "buyPrice": 149998,
-      "sellPrice": 155085,
-      "profit": 4680,
-      "profitPercent": "3.1",
-      "timestamp": "2026-10-16T10:19:28.985Z",
+      "sellPrice": 156001,
+      "profit": 5522,
+      "profitPercent": "3.7",
+      "timestamp": "2026-10-16T15:44:58.004Z",
       "source": "albion-online-data.com",
       "verified": true
     },
@@ -29,22 +29,7 @@
       "sellPrice": 99816,
       "profit": 1670,
       "profitPercent": "1.7",
-      "timestamp": "2026-10-16T10:19:28.985Z",
-      "source": "albion-online-data.com",
-      "verified": true
-    },
-    {
-      "id": "market_T6_BAG_Fort Sterling_Thetford",
-      "type": "flip",
-      "item": "T6_BAG",
-      "itemName": "T6_BAG",
-      "from": "Fort Sterling",
-      "to": "Thetford",
-      "buyPrice": 37777,
-      "sellPrice": 39339,
-      "profit": 1437,
-      "profitPercent": "3.8",
-      "timestamp": "2026-10-16T10:19:28.985Z",
+      "timestamp": "2026-10-16T15:44:58.005Z",
       "source": "albion-online-data.com",
       "verified": true
     }
