@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-10-16T15:44:58.005Z",
+  "lastUpdate": "2026-10-16T20:14:24.368Z",
   "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
   "opportunities": [
@@ -11,25 +11,10 @@
       "from": "Caerleon",
       "to": "Lymhurst",
       "buyPrice": 149998,
-      "sellPrice": 156001,
-      "profit": 5522,
+      "sellPrice": 156002,
+      "profit": 5523,
       "profitPercent": "3.7",
-      "timestamp": "2026-10-16T15:44:58.004Z",
-      "source": "albion-online-data.com",
-      "verified": true
-    },
-    {
-      "id": "market_T7_BAG_Fort Sterling_Lymhurst",
-      "type": "flip",
-      "item": "T7_BAG",
-      "itemName": "T7_BAG",
-      "from": "Fort Sterling",
-      "to": "Lymhurst",
-      "buyPrice": 98000,
-      "sellPrice": 99816,
-      "profit": 1670,
-      "profitPercent": "1.7",
-      "timestamp": "2026-10-16T15:44:58.005Z",
+      "timestamp": "2026-10-16T20:14:24.368Z",
       "source": "albion-online-data.com",
       "verified": true
     }
