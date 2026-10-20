@@ -1,35 +1,20 @@
 {
-  "lastUpdate": "2026-10-20T10:37:22.089Z",
+  "lastUpdate": "2026-10-20T16:00:17.205Z",
   "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
   "opportunities": [
     {
-      "id": "market_T7_BAG_Thetford_Lymhurst",
-      "type": "flip",
-      "item": "T7_BAG",
-      "itemName": "T7_BAG",
-      "from": "Thetford",
-      "to": "Lymhurst",
-      "buyPrice": 91794,
-      "sellPrice": 100153,
-      "profit": 7690,
-      "profitPercent": "8.4",
-      "timestamp": "2026-10-20T10:37:22.089Z",
-      "source": "albion-online-data.com",
-      "verified": true
-    },
-    {
-      "id": "market_T6_MOUNT_HORSE_Caerleon_Martlock",
+      "id": "market_T6_MOUNT_HORSE_Caerleon_Lymhurst",
       "type": "flip",
       "item": "T6_MOUNT_HORSE",
       "itemName": "T6_MOUNT_HORSE",
       "from": "Caerleon",
-      "to": "Martlock",
+      "to": "Lymhurst",
       "buyPrice": 149994,
-      "sellPrice": 156038,
-      "profit": 5560,
+      "sellPrice": 156016,
+      "profit": 5540,
       "profitPercent": "3.7",
-      "timestamp": "2026-10-20T10:37:22.089Z",
+      "timestamp": "2026-10-20T16:00:17.205Z",
       "source": "albion-online-data.com",
       "verified": true
     }
