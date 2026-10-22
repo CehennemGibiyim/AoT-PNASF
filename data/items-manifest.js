@@ -1,6 +1,6 @@
 // Generated item manifest
 window.AO_ITEMS_MANIFEST = {
-  "version": 22,
+  "version": 23,
   "mode": "category-chunks",
   "files": [
     "items-sword.js",
