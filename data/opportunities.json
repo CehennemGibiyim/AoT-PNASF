@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-10-25T10:22:16.869Z",
+  "lastUpdate": "2026-10-25T15:14:39.361Z",
   "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
   "opportunities": [
@@ -11,10 +11,10 @@
       "from": "Fort Sterling",
       "to": "Thetford",
       "buyPrice": 37998,
-      "sellPrice": 39935,
-      "profit": 1782,
+      "sellPrice": 39940,
+      "profit": 1786,
       "profitPercent": "4.7",
-      "timestamp": "2026-10-25T10:22:16.869Z",
+      "timestamp": "2026-10-25T15:14:39.361Z",
       "source": "albion-online-data.com",
       "verified": true
     }
