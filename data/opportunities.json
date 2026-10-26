@@ -1,20 +1,20 @@
 {
-  "lastUpdate": "2026-10-25T15:14:39.361Z",
+  "lastUpdate": "2026-10-26T02:15:31.169Z",
   "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
   "opportunities": [
     {
-      "id": "market_T6_BAG_Fort Sterling_Thetford",
+      "id": "market_T7_BAG_Martlock_Lymhurst",
       "type": "flip",
-      "item": "T6_BAG",
-      "itemName": "T6_BAG",
-      "from": "Fort Sterling",
-      "to": "Thetford",
-      "buyPrice": 37998,
-      "sellPrice": 39940,
-      "profit": 1786,
-      "profitPercent": "4.7",
-      "timestamp": "2026-10-25T15:14:39.361Z",
+      "item": "T7_BAG",
+      "itemName": "T7_BAG",
+      "from": "Martlock",
+      "to": "Lymhurst",
+      "buyPrice": 104444,
+      "sellPrice": 105364,
+      "profit": 846,
+      "profitPercent": "0.8",
+      "timestamp": "2026-10-26T02:15:31.169Z",
       "source": "albion-online-data.com",
       "verified": true
     }
