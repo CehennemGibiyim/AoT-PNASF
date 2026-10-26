@@ -1,20 +1,35 @@
 {
-  "lastUpdate": "2026-10-26T11:50:34.490Z",
+  "lastUpdate": "2026-10-26T17:52:29.899Z",
   "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
   "opportunities": [
     {
-      "id": "market_T7_BAG_Thetford_Lymhurst",
+      "id": "market_T7_BAG_Caerleon_Lymhurst",
       "type": "flip",
       "item": "T7_BAG",
       "itemName": "T7_BAG",
-      "from": "Thetford",
+      "from": "Caerleon",
       "to": "Lymhurst",
-      "buyPrice": 99998,
+      "buyPrice": 94895,
       "sellPrice": 105364,
-      "profit": 4936,
-      "profitPercent": "4.9",
-      "timestamp": "2026-10-26T11:50:34.490Z",
+      "profit": 9631,
+      "profitPercent": "10.1",
+      "timestamp": "2026-10-26T17:52:29.899Z",
+      "source": "albion-online-data.com",
+      "verified": true
+    },
+    {
+      "id": "market_T6_2H_CLAYMORE_Caerleon_Lymhurst",
+      "type": "flip",
+      "item": "T6_2H_CLAYMORE",
+      "itemName": "T6_2H_CLAYMORE",
+      "from": "Caerleon",
+      "to": "Lymhurst",
+      "buyPrice": 72884,
+      "sellPrice": 76622,
+      "profit": 3438,
+      "profitPercent": "4.7",
+      "timestamp": "2026-10-26T17:52:29.899Z",
       "source": "albion-online-data.com",
       "verified": true
     }
