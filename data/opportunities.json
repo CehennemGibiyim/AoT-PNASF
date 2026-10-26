@@ -1,20 +1,20 @@
 {
-  "lastUpdate": "2026-10-26T02:15:31.169Z",
+  "lastUpdate": "2026-10-26T11:50:34.490Z",
   "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
   "opportunities": [
     {
-      "id": "market_T7_BAG_Martlock_Lymhurst",
+      "id": "market_T7_BAG_Thetford_Lymhurst",
       "type": "flip",
       "item": "T7_BAG",
       "itemName": "T7_BAG",
-      "from": "Martlock",
+      "from": "Thetford",
       "to": "Lymhurst",
-      "buyPrice": 104444,
+      "buyPrice": 99998,
       "sellPrice": 105364,
-      "profit": 846,
-      "profitPercent": "0.8",
-      "timestamp": "2026-10-26T02:15:31.169Z",
+      "profit": 4936,
+      "profitPercent": "4.9",
+      "timestamp": "2026-10-26T11:50:34.490Z",
       "source": "albion-online-data.com",
       "verified": true
     }
