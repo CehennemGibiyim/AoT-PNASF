@@ -1,20 +1,20 @@
 {
-  "lastUpdate": "2026-10-27T02:51:46.141Z",
+  "lastUpdate": "2026-10-27T11:14:58.256Z",
   "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
   "opportunities": [
     {
-      "id": "market_T6_2H_CLAYMORE_Caerleon_Lymhurst",
+      "id": "market_T6_2H_CLAYMORE_Thetford_Lymhurst",
       "type": "flip",
       "item": "T6_2H_CLAYMORE",
       "itemName": "T6_2H_CLAYMORE",
-      "from": "Caerleon",
+      "from": "Thetford",
       "to": "Lymhurst",
-      "buyPrice": 72884,
+      "buyPrice": 60995,
       "sellPrice": 76682,
-      "profit": 3494,
-      "profitPercent": "4.8",
-      "timestamp": "2026-10-27T02:51:46.141Z",
+      "profit": 14432,
+      "profitPercent": "23.7",
+      "timestamp": "2026-10-27T11:14:58.256Z",
       "source": "albion-online-data.com",
       "verified": true
     }
