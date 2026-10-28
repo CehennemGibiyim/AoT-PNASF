@@ -1,18 +1,18 @@
 {
   "schema_version": 1,
-  "data_version": 28,
+  "data_version": 29,
   "source": "ao-data/ao-bin-dumps",
   "source_url": "https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/formatted/items.json",
-  "last_sync": "2026-10-27T08:39:09.721Z",
-  "previous_sync": "2026-10-26T08:31:55.422Z",
+  "last_sync": "2026-10-28T09:19:06.888Z",
+  "previous_sync": "2026-10-27T08:39:09.721Z",
   "items_count": 12237,
   "normalized_items_count": 3265,
   "weights_count": 45,
   "spells_count": 6,
   "zones_count": 1105,
   "zones_last_sync": "2026-04-16T14:02:19Z",
-  "backup_run_id": "40474968173",
+  "backup_run_id": "40663258314",
   "status": "validated",
-  "validated_at": "2026-10-27T08:39:10.109Z",
-  "validation_run_id": "40474968173"
+  "validated_at": "2026-10-28T09:19:07.296Z",
+  "validation_run_id": "40663258314"
 }
