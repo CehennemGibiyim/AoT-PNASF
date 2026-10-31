@@ -26,17 +26,23 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Validate project and quality checks before deploy
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck, validate project and quality checks
         run: npm test
-      
+
+      - name: Build with Vite
+        run: npm run build
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
-      
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
-      
+          path: 'dist'
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

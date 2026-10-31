@@ -1,23 +1,21 @@
 // AoT-PNASF Service Worker
 // GitHub Pages için önbellekleme sistemi
 
-const CACHE_NAME = 'aot-pnasf-v1';
-const CACHE_VERSION = 'v1';
+const CACHE_NAME = 'aot-pnasf-v2';
+const CACHE_VERSION = 'v2';
 
-// Önbelleğe alınacak kaynaklar
+// Önbelleğe alınacak kaynaklar (derlenmiş betikler hash'li olduğu için
+// çalışma zamanında, istek sırasında önbelleğe alınır)
 const STATIC_CACHE = [
   '/',
   '/index.html',
+  '/crafting.html',
+  '/market.html',
   '/styles.css',
   '/styles/main.css',
   '/styles/crafting.css',
   '/styles/market.css',
   '/styles/settings.css',
-  '/js/main.js',
-  '/js/lang.js',
-  '/js/settings-panel.js',
-  '/js/i18n-helper.js',
-  '/js/image-cache.js',
   '/data/items-data.js',
   '/data/world-data.js',
   '/locales/tr-official.json',
@@ -94,6 +92,25 @@ self.addEventListener('fetch', (event) => {
     return;
   }
   
+  // HTML sayfaları için Network-First: yeni dağıtımlar hemen görünsün,
+  // ağ yoksa önbellekteki kopya kullanılsın
+  if (url.pathname.endsWith('.html') || url.pathname.endsWith('/')) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          if (response.ok) {
+            const responseClone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseClone);
+            });
+          }
+          return response;
+        })
+        .catch(() => caches.match(event.request).then((cached) => cached || Response.error()))
+    );
+    return;
+  }
+
   // Statik kaynaklar için Cache-First stratejisi
   if (STATIC_CACHE.some(path => url.pathname.includes(path.replace('/', ''))) || 
       url.pathname.endsWith('.js') || 

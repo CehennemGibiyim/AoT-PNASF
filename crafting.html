@@ -411,17 +411,17 @@
   </div>
 </footer>
 
-<script src="lib/lang.js"></script>
-<script src="js/sync-button.js"></script>
-<script src="js/settings-lib.js"></script>
-<script src="js/settings-panel.js"></script>
-<script src="js/nav.js"></script>
+<script type="module" src="lib/lang.ts"></script>
+<script type="module" src="js/sync-button.ts"></script>
+<script type="module" src="js/settings-lib.ts"></script>
+<script type="module" src="js/settings-panel.ts"></script>
+<script type="module" src="js/nav.ts"></script>
 <script src="data/items-data.js"></script>
-<script src="js/item-locales.js"></script>
-<script src="js/crafting-new.js"></script>
-<script src="js/crafting-planner.js"></script>
+<script type="module" src="js/item-locales.ts"></script>
+<script type="module" src="js/crafting-new.ts"></script>
+<script type="module" src="js/crafting-planner.ts"></script>
 
-<script>
+<script type="module">
   // Eğer iframe içinde yüklendiyse (örneğin js/crafting.js sekmesinden) navbar ve footer gizle
   if (window.self !== window.top || window.location.search.includes('embedded=1')) {
     const nav = document.getElementById('navbar');
@@ -439,6 +439,6 @@
     document.addEventListener("DOMContentLoaded", () => initSyncPanel("syncPanelContainer"));
   }
 </script>
-<script src="js/accessibility.js"></script>
+<script type="module" src="js/accessibility.ts"></script>
 </body>
 </html>

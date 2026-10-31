@@ -4,13 +4,15 @@
   "description": "Albion Online Tools - Powered Nexus & AI Smart Feed",
   "main": "index.html",
   "scripts": {
-    "build": "npm run validate",
-    "test": "npm run validate && npm run quality",
+    "build": "vite build",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run typecheck && npm run validate && npm run quality",
     "validate": "node scripts/validate-project.cjs",
     "validate:generated": "node scripts/validate-project.cjs --generated",
     "quality": "node scripts/check-quality.cjs",
     "split-locales": "node scripts/split-locales.cjs",
-    "dev": "npx serve .",
+    "dev": "vite",
+    "preview": "vite preview --port 3000 --host 0.0.0.0",
     "update-feed": "node scripts/pvp-fetcher.cjs",
     "ai-scan": "node scripts/ai-scanner.js"
   },
@@ -32,5 +34,9 @@
   "dependencies": {
     "node-fetch": "^2.7.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.5"
+  }
 }

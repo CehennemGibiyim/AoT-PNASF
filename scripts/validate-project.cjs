@@ -216,7 +216,7 @@ function markSyncValidated() {
 }
 
 function main() {
-  for (const relativePath of ['index.html', 'styles.css', 'js/market-network.js', 'data/items-loader.js', 'data/items-index.js', 'data/items-manifest.js', 'locales/tr.json']) read(relativePath);
+  for (const relativePath of ['index.html', 'styles.css', 'js/market-network.ts', 'data/items-loader.js', 'data/items-index.js', 'data/items-manifest.js', 'locales/tr.json']) read(relativePath);
   parseJson('locales/tr.json');
   checkIndexReferences();
   checkJavaScriptSyntax();
