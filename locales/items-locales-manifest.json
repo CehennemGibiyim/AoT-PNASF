@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "source": "https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/formatted/items.json",
+  "generatedAt": "2026-10-31T08:34:49.009Z",
+  "itemCount": 3265,
+  "languages": [
+    {
+      "code": "en",
+      "locale": "EN-US",
+      "file": "items-en.json",
+      "count": 6104
+    },
+    {
+      "code": "ru",
+      "locale": "RU-RU",
+      "file": "items-ru.json",
+      "count": 6098
+    },
+    {
+      "code": "de",
+      "locale": "DE-DE",
+      "file": "items-de.json",
+      "count": 6098
+    },
+    {
+      "code": "fr",
+      "locale": "FR-FR",
+      "file": "items-fr.json",
+      "count": 6098
+    },
+    {
+      "code": "pl",
+      "locale": "PL-PL",
+      "file": "items-pl.json",
+      "count": 6098
+    },
+    {
+      "code": "pt",
+      "locale": "PT-BR",
+      "file": "items-pt.json",
+      "count": 6098
+    },
+    {
+      "code": "es",
+      "locale": "ES-ES",
+      "file": "items-es.json",
+      "count": 6098
+    },
+    {
+      "code": "kr",
+      "locale": "KO-KR",
+      "file": "items-kr.json",
+      "count": 6098
+    },
+    {
+      "code": "it",
+      "locale": "IT-IT",
+      "file": "items-it.json",
+      "count": 6098
+    },
+    {
+      "code": "ja",
+      "locale": "JA-JP",
+      "file": "items-ja.json",
+      "count": 6098
+    },
+    {
+      "code": "zh",
+      "locale": "ZH-CN",
+      "file": "items-zh.json",
+      "count": 6098
+    },
+    {
+      "code": "id",
+      "locale": "ID-ID",
+      "file": "items-id.json",
+      "count": 6098
+    },
+    {
+      "code": "ar",
+      "locale": "AR-SA",
+      "file": "items-ar.json",
+      "count": 6098
+    }
+  ]
+}

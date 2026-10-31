@@ -30,7 +30,7 @@ function _applyLang(lang) {
   // 4. Navbar settings göstergesi
   const indicator = document.getElementById('settingsLangIndicator');
   if (indicator) {
-    const flags = {tr:'🇹🇷',en:'🇬🇧',ru:'🇷🇺',de:'🇩🇪',fr:'🇫🇷',pl:'🇵🇱',pt:'🇵🇹',es:'🇪🇸',kr:'🇰🇷'};
+    const flags = {tr:'🇹🇷',en:'🇬🇧',ru:'🇷🇺',de:'🇩🇪',fr:'🇫🇷',pl:'🇵🇱',pt:'🇵🇹',es:'🇪🇸',kr:'🇰🇷',it:'🇮🇹',ja:'🇯🇵',zh:'🇨🇳',id:'🇮🇩',ar:'🇸🇦'};
     indicator.textContent = (flags[lang] || '🌐') + ' ' + lang.toUpperCase();
   }
 
@@ -39,7 +39,8 @@ function _applyLang(lang) {
   if (ll) ll.textContent = lang.toUpperCase();
 
   // 6. html lang attribute
-  document.documentElement.lang = lang === 'kr' ? 'ko' : lang;
+  const htmlLangs = { kr: 'ko', zh: 'zh-Hans' };
+  document.documentElement.lang = htmlLangs[lang] || lang;
 
   // 7. Settings panel butonlarını güncelle
   document.querySelectorAll('.lang-opt').forEach(b => {

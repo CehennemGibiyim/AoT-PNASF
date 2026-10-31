@@ -1,3 +1,19 @@
+// Güvenli market JSON fetch — market-network.js yoksa doğrudan fetch'e düşer.
+async function fetchMarketJson(url, timeoutMs = 15000) {
+    if (typeof window.fetchWithProxies === 'function') {
+        return window.fetchWithProxies(url);
+    }
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+        const res = await fetch(url, { signal: controller.signal, headers: { 'Accept': 'application/json' } });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return await res.json();
+    } finally {
+        clearTimeout(timer);
+    }
+}
+
 // Global fonksiyon: Arbitrage modülünü yükle
 function loadArbitrageModule() {
     const container = document.getElementById('arbitrageApp');
@@ -1113,10 +1129,16 @@ function loadArbitrageModule() {
         let e = eMatch ? `.${eMatch[1]}` : '';
         let b = itemId.replace(/^T\d+_/, '').replace(/@\d+$/, '');
         
-        if (itemId === "QUESTITEM_TOKEN_SIPHONED_ENERGY") return "Özümlenmiş Enerji";
-        if (itemId === "QUESTITEM_TOKEN_AVALON") return "Avalon Enerjisi";
+    if (itemId === "QUESTITEM_TOKEN_SIPHONED_ENERGY") return "Özümlenmiş Enerji";
+    if (itemId === "QUESTITEM_TOKEN_AVALON") return "Avalon Enerjisi";
 
-        let foundName = b.replace(/_/g, ' ');
+    // Seçili dilde tam eşya adı varsa doğrudan onu kullan (tier ön eki dump'tan gelir)
+    if (window.AOTItemLocales) {
+        const localized = window.AOTItemLocales.getName(itemId, null);
+        if (localized) return `${localized}${e}`;
+    }
+
+    let foundName = b.replace(/_/g, ' ');
         
         // 1. AO_ITEMS'tan Türkçe ismini bul (Varsa)
         if (window.AO_ITEMS) {
@@ -1191,6 +1213,8 @@ function loadArbitrageModule() {
 
         const domain = window.getAlbionApiDomain ? window.getAlbionApiDomain() : 'europe.albion-online-data.com';
         let allData = [];
+        let failures = 0;
+        let lastError = null;
 
         // Throttle requests to avoid rate limits
         const maxConcurrent = 5;
@@ -1200,17 +1224,24 @@ function loadArbitrageModule() {
                 let p = params ? (params.startsWith('?') ? params : '?' + params) : '';
                 const url = `https://${domain}/api/v2/stats/prices/${chunk.join(',')}.json${p}`;
                 try {
-                    const data = await window.fetchWithProxies(url);
+                    const data = await fetchMarketJson(url);
                     if (Array.isArray(data)) {
                         allData = allData.concat(data);
                     }
                 } catch (e) {
-                    console.error("Fetch chunk failed", e);
+                    failures++;
+                    lastError = e;
+                    console.error('Fetch chunk failed', url, e);
                 }
             }));
             if (i + maxConcurrent < chunks.length) {
                 await new Promise(r => setTimeout(r, 200)); // Small delay between batches
             }
+        }
+
+        // İsteklerin tamamı başarısızsa sessizce boş dönmek yerine hatayı göster
+        if (allData.length === 0 && failures === chunks.length && lastError) {
+            throw lastError;
         }
 
         return allData;
@@ -2272,7 +2303,7 @@ function loadArbitrageModule() {
             const locations = encodeURIComponent("Lymhurst,Bridgewatch,Fort Sterling,Martlock,Thetford,Caerleon,Arthur's Rest,Morgana's Rest,Merlyn's Rest");
             const url = `https://${domain}/api/v2/stats/prices/${allItems}.json?locations=${locations}`;
             
-            const data = await window.fetchWithProxies(url);
+            const data = await fetchMarketJson(url);
             
             if (data && data.length > 0) {
                 // Fiyatları grupla
@@ -2545,7 +2576,7 @@ function loadArbitrageModule() {
             const locations = encodeURIComponent('Lymhurst,Bridgewatch,Fort Sterling,Martlock,Thetford,Caerleon');
             const url = `https://${domain}/api/v2/stats/prices/${allItems}.json?locations=${locations}`;
             
-            const data = await window.fetchWithProxies(url);
+            const data = await fetchMarketJson(url);
             
             if (data && data.length > 0) {
                 // Grupla ve analiz et
@@ -2741,7 +2772,7 @@ function loadArbitrageModule() {
             const locations = encodeURIComponent("Lymhurst,Bridgewatch,Fort Sterling,Martlock,Thetford,Caerleon,Arthur's Rest,Morgana's Rest,Merlyn's Rest");
             const url = `https://${domain}/api/v2/stats/prices/${allItems}.json?locations=${locations}`;
             
-            const data = await window.fetchWithProxies(url);
+            const data = await fetchMarketJson(url);
             
             if (data && data.length > 0) {
                 // Fiyatları grupla

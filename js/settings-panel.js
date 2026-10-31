@@ -60,6 +60,14 @@ function buildSettingsPanel() {
   }
   const currentServer = localStorage.getItem('aot-server') || 'europe';
 
+  // Çeviri anahtarı yoksa varsayılan dile düş (yeni diller için güvenli)
+  const langName = (key, fallback) => {
+    try {
+      const value = window.miniappI18n ? window.miniappI18n.t(key) : null;
+      return typeof value === 'string' && value && value !== key ? value : fallback;
+    } catch (_) { return fallback; }
+  };
+
   const langs = {
     tr: { flag: '🇹🇷', name: window.t('settings-langTr', 'Türkçe'), native: 'Türkçe' },
     en: { flag: '🇬🇧', name: window.t('settings-langEn', 'İngilizce'), native: 'English' },
@@ -69,7 +77,12 @@ function buildSettingsPanel() {
     pl: { flag: '🇵🇱', name: window.t('settings-langPl', 'Lehçe'), native: 'Polski' },
     pt: { flag: '🇵🇹', name: window.t('settings-langPt', 'Portekizce'), native: 'Português' },
     es: { flag: '🇪🇸', name: window.t('settings-langEs', 'İspanyolca'), native: 'Español' },
-    kr: { flag: '🇰🇷', name: window.t('settings-langKr', 'Korece'), native: '한국어' }
+    kr: { flag: '🇰🇷', name: window.t('settings-langKr', 'Korece'), native: '한국어' },
+    it: { flag: '🇮🇹', name: langName('settings-langIt', 'İtalyanca'), native: 'Italiano' },
+    ja: { flag: '🇯🇵', name: langName('settings-langJa', 'Japonca'), native: '日本語' },
+    zh: { flag: '🇨🇳', name: langName('settings-langZh', 'Çince'), native: '中文' },
+    id: { flag: '🇮🇩', name: langName('settings-langId', 'Endonezce'), native: 'Bahasa Indonesia' },
+    ar: { flag: '🇸🇦', name: langName('settings-langAr', 'Arapça'), native: 'العربية' }
   };
 
   const servers = {
@@ -406,7 +419,7 @@ function selectSpLang(lang) {
   localStorage.setItem('aot-lang', lang);
   document.querySelectorAll('.sp-lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
   const langDisplay = document.getElementById('currentLangDisplay');
-  const flags = { tr:'TR', en:'EN', ru:'RU', de:'DE', fr:'FR', pl:'PL', pt:'PT', es:'ES', kr:'KR' };
+  const flags = { tr:'TR', en:'EN', ru:'RU', de:'DE', fr:'FR', pl:'PL', pt:'PT', es:'ES', kr:'KR', it:'IT', ja:'JA', zh:'ZH', id:'ID', ar:'AR' };
   if (langDisplay) langDisplay.textContent = flags[lang] || lang.toUpperCase();
 
   // AOT Platform (Miniapps AI) i18n Entegrasyonu
@@ -516,7 +529,7 @@ function clearSpCache() {
         currentLang = ctx.resolvedLocale.split('-')[0];
       }
     }
-    const flags = { tr:'TR', en:'EN', ru:'RU', de:'DE', fr:'FR', pl:'PL', pt:'PT', es:'ES', kr:'KR', ko:'KR' };
+    const flags = { tr:'TR', en:'EN', ru:'RU', de:'DE', fr:'FR', pl:'PL', pt:'PT', es:'ES', kr:'KR', ko:'KR', it:'IT', ja:'JA', zh:'ZH', id:'ID', ar:'AR' };
     const langDisplay = document.getElementById('currentLangDisplay');
     if (langDisplay) langDisplay.textContent = flags[currentLang] || currentLang.toUpperCase();
   }, 100);

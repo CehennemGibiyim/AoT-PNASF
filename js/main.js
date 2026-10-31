@@ -254,6 +254,15 @@ async function ensureItemsData() {
       if (window.AOT_DATA.locales[item.id]) item.tr = window.AOT_DATA.locales[item.id];
     });
   }
+  // Seçili dilin eşya adlarını uygula (locales/items-<lang>.json)
+  if (window.AOTItemLocales) {
+    try {
+      await window.AOTItemLocales.load(localStorage.getItem('aot-lang') || 'tr');
+      window.AOTItemLocales.apply(window.AO_ITEMS);
+    } catch (error) {
+      console.warn('Eşya dil paketi uygulanamadı:', error.message);
+    }
+  }
   await loadLazyScript('data/items-index.js');
   if (!window.AO_ITEM_INDEX?.build) throw new Error('Eşya indeksi başlatılamadı');
   window.AO_ITEM_INDEX.build(window.AO_ITEMS);
@@ -499,6 +508,12 @@ function formatItemNameTr(itemId) {
   
   if (itemId === "QUESTITEM_TOKEN_SIPHONED_ENERGY") return "Özümlenmiş Enerji";
   if (itemId === "QUESTITEM_TOKEN_AVALON") return "Avalon Enerjisi";
+
+  // Seçili dilde tam eşya adı varsa doğrudan onu kullan (tier ön eki dump'tan gelir)
+  if (window.AOTItemLocales) {
+    const localized = window.AOTItemLocales.getName(itemId, null);
+    if (localized) return `${localized}${e}`;
+  }
 
   let foundName = b.replace(/_/g, ' ');
   
