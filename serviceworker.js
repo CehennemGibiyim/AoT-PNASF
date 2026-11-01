@@ -1,25 +1,28 @@
 // AoT-PNASF Service Worker
 // GitHub Pages için önbellekleme sistemi
 
-const CACHE_NAME = 'aot-pnasf-v2';
-const CACHE_VERSION = 'v2';
+const CACHE_NAME = 'aot-pnasf-v3';
+const CACHE_VERSION = 'v3';
 
 // Önbelleğe alınacak kaynaklar (derlenmiş betikler hash'li olduğu için
-// çalışma zamanında, istek sırasında önbelleğe alınır)
+// çalışma zamanında, istek sırasında önbelleğe alınır).
+// YOLLAR GÖRERELİDİR: site GitHub Pages'de /AoT-PNASF/ alt dizininde
+// yayınlandığı için kök mutlak yollar ('/index.html') 404 veriyordu.
 const STATIC_CACHE = [
-  '/',
-  '/index.html',
-  '/crafting.html',
-  '/market.html',
-  '/styles.css',
-  '/styles/main.css',
-  '/styles/crafting.css',
-  '/styles/market.css',
-  '/styles/settings.css',
-  '/data/items-data.js',
-  '/data/world-data.js',
-  '/locales/tr-official.json',
-  '/locales/tr.json'
+  './',
+  './index.html',
+  './crafting.html',
+  './market.html',
+  './styles.css',
+  './styles/main.css',
+  './styles/crafting.css',
+  './styles/market.css',
+  './styles/settings.css',
+  './data/items-data.js',
+  './data/world-data.js',
+  './locales/tr-official.json',
+  './locales/tr.json',
+  './locales/ui-i18n.json'
 ];
 
 // API kaynakları için önbellekleme stratejisi
@@ -112,7 +115,11 @@ self.addEventListener('fetch', (event) => {
   }
 
   // Statik kaynaklar için Cache-First stratejisi
-  if (STATIC_CACHE.some(path => url.pathname.includes(path.replace('/', ''))) || 
+  const staticMatch = STATIC_CACHE.some(path => {
+    const normalized = path.replace(/^\.\//, '').replace(/^\//, '');
+    return normalized && url.pathname.includes(normalized);
+  });
+  if (staticMatch || 
       url.pathname.endsWith('.js') || 
       url.pathname.endsWith('.css') ||
       url.pathname.endsWith('.json')) {

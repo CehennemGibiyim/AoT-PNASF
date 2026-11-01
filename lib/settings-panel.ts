@@ -192,8 +192,14 @@ function selectLang(lang) {
   // Önce kaydet
   localStorage.setItem('aot-lang', lang);
   AO_SETTINGS.save({ lang });
-  // lang.js merkezi fonksiyonunu çağır
-  if (typeof _applyLang === 'function') _applyLang(lang);
+  // Yerel i18n motoru varsa (js/i18n.ts) tüm çeviriyi o yapar:
+  // sözlük + data-i18n + data-tr öznitelikleri + eşya adları + yenileme.
+  if (window.AOTi18n && typeof window.AOTi18n.setLang === 'function') {
+    window.AOTi18n.setLang(lang);
+  } else if (typeof _applyLang === 'function') {
+    // Geriye dönük uyumluluk
+    _applyLang(lang);
+  }
   // Settings panel butonları
   document.querySelectorAll('.lang-opt').forEach(b => {
     b.classList.toggle('active', b.dataset.lang === lang);

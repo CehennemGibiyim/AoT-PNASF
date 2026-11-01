@@ -260,17 +260,55 @@ body {
 .sp-btn-danger { background:rgba(239,68,68,.15); color:#ef4444; border:1px solid rgba(239,68,68,.3); border-radius:7px; padding:6px 12px; font-size:11px; font-weight:700; cursor:pointer; transition:all .2s; }
 @media (max-width:480px) { .sp-drawer { width:100vw; right:-100vw; } }
 
-/* Project ZIP export dialog */
-.project-export-overlay { position:fixed; inset:0; z-index:99999; display:flex; align-items:center; justify-content:center; padding:20px; background:rgba(0,0,0,.78); backdrop-filter:blur(6px); }
-.project-export-card { width:min(420px,100%); padding:30px 24px 24px; text-align:center; color:var(--text-main); background:var(--bg-800); border:1px solid var(--bg-700); border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.5); }
-.project-export-icon { margin-bottom:14px; color:var(--accent); font-size:52px; }
-.project-export-title { margin:0 0 8px; color:var(--accent); font-size:22px; font-weight:800; }
-.project-export-status { min-height:42px; margin:0 auto 18px; color:var(--text-muted); font-size:13px; line-height:1.5; overflow-wrap:anywhere; }
-.project-export-progress { height:10px; margin-bottom:18px; overflow:hidden; background:var(--bg-900); border:1px solid var(--bg-700); border-radius:999px; }
-.project-export-progress span { display:block; width:0; height:100%; background:var(--accent); border-radius:inherit; box-shadow:0 0 12px rgba(var(--accent-rgb),.45); transition:width .2s ease; }
-.project-export-close { min-height:42px; padding:9px 18px; color:var(--text-muted); background:var(--bg-900); border:1px solid var(--bg-700); border-radius:8px; cursor:pointer; font-weight:700; }
-.project-export-close:hover { color:var(--accent); border-color:var(--accent); }
-.project-export-success { color:#4ade80 !important; }
-.project-export-error { color:#f87171 !important; }
+/* ═══════════════════════════════════════════════════════════
+   GÖRSEL İYİLEŞTİRME (tüm temalara uygun, --accent-rgb ile)
+   ═══════════════════════════════════════════════════════════ */
+
+/* Aurora arka plan: sayfanın üstünde yumuşak ışık huzmeleri */
+main.custom-scroll::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(900px 420px at 12% -8%, rgba(var(--accent-rgb), .07), transparent 60%),
+    radial-gradient(760px 380px at 88% 0%, rgba(var(--accent-rgb), .05), transparent 55%),
+    radial-gradient(1100px 520px at 50% 110%, rgba(var(--accent-rgb), .04), transparent 60%);
+}
+main.custom-scroll > * { position: relative; z-index: 1; }
+
+/* Navbar: alt kenarda vurgu hattı + cam efekti */
+header.bg-albion-800 {
+  background: linear-gradient(180deg, var(--bg-800) 0%, var(--bg-900) 140%);
+  box-shadow: 0 1px 0 rgba(var(--accent-rgb), .35), 0 8px 28px rgba(0,0,0,.45);
+}
+
+/* Aktif sekme: yumuşak alt ışıma */
+.tab-btn.border-albion-accent {
+  box-shadow: inset 0 -2px 12px rgba(var(--accent-rgb), .25);
+}
+
+/* Panel kartları: hover'da hafif vurgu kenarı */
+.bg-albion-800.border-gray-700,
+.bg-albion-800.border-albion-700 {
+  transition: border-color .25s ease, box-shadow .25s ease, transform .25s ease;
+}
+.bg-albion-800.border-gray-700:hover,
+.bg-albion-800.border-albion-700:hover {
+  border-color: rgba(var(--accent-rgb), .45);
+  box-shadow: 0 0 0 1px rgba(var(--accent-rgb), .12), 0 10px 30px rgba(0,0,0,.35);
+}
+
+/* Sayı/mono alanları: okunabilirliği artır */
+.font-mono { letter-spacing: .04em; }
+
+/* Marka logosu: hafif neon taç */
+#brandLogo h1 {
+  background: linear-gradient(180deg, #ffffff 30%, rgba(var(--accent-rgb), .85));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
 

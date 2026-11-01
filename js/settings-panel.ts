@@ -51,22 +51,11 @@ function buildSettingsPanel() {
 
   const currentTheme = localStorage.getItem('aot-theme') || 'obsidian-gold';
   let currentLang = localStorage.getItem('aot-lang') || 'tr';
-  if (window.miniappI18n && window.miniappI18n.getContext) {
-    const ctx = window.miniappI18n.getContext();
-    if (ctx && ctx.resolvedLocale) {
-      currentLang = ctx.resolvedLocale.split('-')[0]; // tr-TR -> tr
-      if (currentLang === 'ko') currentLang = 'kr';
-    }
-  }
+  if (currentLang === 'ko') currentLang = 'kr';
   const currentServer = localStorage.getItem('aot-server') || 'europe';
 
-  // Çeviri anahtarı yoksa varsayılan dile düş (yeni diller için güvenli)
-  const langName = (key, fallback) => {
-    try {
-      const value = window.miniappI18n ? window.miniappI18n.t(key) : null;
-      return typeof value === 'string' && value && value !== key ? value : fallback;
-    } catch (_) { return fallback; }
-  };
+  // Dil adları yerel i18n motorundan gelir (js/i18n.ts)
+  const langName = (key, fallback) => (window.t ? window.t(key, fallback) : fallback);
 
   const langs = {
     tr: { flag: '🇹🇷', name: window.t('settings-langTr', 'Türkçe'), native: 'Türkçe' },
@@ -226,7 +215,7 @@ function buildSettingsPanel() {
         <div class="sp-label">🔤 <span class="sp-acc" data-i18n="settings-textSize">Metin Boyutu</span></div>
         <div class="sp-srv-row">
           ${['12px','13px','14px','15px','16px'].map(sz => `
-          <div class="sp-srv-btn ${(localStorage.getItem('aot-fontsize')||'14px') === sz ? 'active' : ''}" onclick="selectSpFontSize('${sz}')">
+          <div class="sp-srv-btn ${(localStorage.getItem('aot-fontsize')||'14px') === sz ? 'active' : ''}" data-fontsize="${sz}" onclick="selectSpFontSize('${sz}')">
             <span style="font-size:${sz}">${sz}</span>
           </div>`).join('')}
         </div>
@@ -234,9 +223,7 @@ function buildSettingsPanel() {
 
       <!-- Önbellek -->
       <div class="sp-section">
-        <div class="sp-label"><i class="fa-solid fa-file-zipper"></i> <span class="sp-acc" data-i18n="settings-projectExport">Proje dışa aktarma</span></div>
-        <div style="font-size:11px;color:var(--text-muted);line-height:1.5;margin-bottom:10px;" data-i18n="settings-projectExportDesc">Tüm proje dosyalarını tek bir ZIP arşivi olarak indirin.</div>
-        <button class="sp-btn-primary" type="button" onclick="downloadProjectAsZip()"><i class="fa-solid fa-download mr-1"></i> <span data-i18n="settings-projectExportButton">Tüm dosyaları ZIP olarak indir</span></button>
+        <div style="display:none"></div>
       </div>
 
       <!-- Önbellek -->
@@ -415,6 +402,9 @@ function resetSpCustom() {
 }
 
 // ─── DİL SEÇ ─────────────────────────────────────────────
+// Dil değişimi artık tamamen yerel i18n motoruna (js/i18n.ts) bağlıdır:
+// sözlük uygulanır, eşya adları çevrilir, olay yayılır ve dinamik içerik
+// tazelemesi için sayfa yenilenir.
 function selectSpLang(lang) {
   localStorage.setItem('aot-lang', lang);
   document.querySelectorAll('.sp-lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
@@ -422,15 +412,9 @@ function selectSpLang(lang) {
   const flags = { tr:'TR', en:'EN', ru:'RU', de:'DE', fr:'FR', pl:'PL', pt:'PT', es:'ES', kr:'KR', it:'IT', ja:'JA', zh:'ZH', id:'ID', ar:'AR' };
   if (langDisplay) langDisplay.textContent = flags[lang] || lang.toUpperCase();
 
-  // AOT Platform (Miniapps AI) i18n Entegrasyonu
-  if (window.miniappI18n && typeof window.miniappI18n.setLocale === 'function') {
-    const mappedLang = lang === 'kr' ? 'ko' : lang; 
-    window.miniappI18n.setLocale(mappedLang).then(() => {
-      // Dinamik JS elementlerinin tam çevrilmesi için sayfayı temiz bir şekilde yeniliyoruz
-      setTimeout(() => window.location.reload(), 200);
-    }).catch(err => console.error('AOT i18n hatası:', err));
+  if (window.AOTi18n && typeof window.AOTi18n.setLang === 'function') {
+    window.AOTi18n.setLang(lang);
   } else if (typeof _applyLang === 'function') {
-    // Test ortamı / Geriye dönük uyumluluk
     _applyLang(lang);
   }
 }
@@ -445,20 +429,29 @@ let SP_SERVERS = {
 function selectSpServer(key) {
   localStorage.setItem('aot-server', key);
   window._albionApiDomain = SP_SERVERS[key] || SP_SERVERS.europe;
-  if (typeof window.getAlbionApiDomain === 'function') {
-    window.getAlbionApiDomain = () => SP_SERVERS[key] || SP_SERVERS.europe;
-  }
+
+  // main.ts AppConfig üzerinden okur; orayı da güncelle ve tercihi kalıcı yap
+  if (window.AppConfig) window.AppConfig.server = key;
+  try {
+    const settings = JSON.parse(localStorage.getItem('aot_pnasf_settings') || '{}');
+    settings.server = key;
+    localStorage.setItem('aot_pnasf_settings', JSON.stringify(settings));
+  } catch (_) { /* bozuk kayıt */ }
+
   document.querySelectorAll('.sp-srv-btn[data-server]').forEach(b => b.classList.toggle('active', b.dataset.server === key));
   const badge = document.getElementById('globalServerBadge');
   if (badge) badge.textContent = { europe: 'EU', americas: 'NA', asia: 'AS' }[key] || key.toUpperCase();
+
+  // Altın/fiyat panelleri yeni sunucuya göre yenilensin
+  window.dispatchEvent(new CustomEvent('app_settings_updated'));
 }
 
 // ─── YAZI BOYU ───────────────────────────────────────────
 function selectSpFontSize(sz) {
   document.documentElement.style.fontSize = sz;
   localStorage.setItem('aot-fontsize', sz);
-  document.querySelectorAll('.sp-srv-btn:not([data-server]):not([data-lang])').forEach(b => {
-    b.classList.toggle('active', b.textContent.trim().startsWith(sz));
+  document.querySelectorAll('.sp-srv-btn[data-fontsize]').forEach(b => {
+    b.classList.toggle('active', b.dataset.fontsize === sz);
   });
 }
 
@@ -520,15 +513,9 @@ function clearSpCache() {
     window._albionApiDomain = SP_SERVERS[savedServer];
   }
 
-  // AOT i18n Senkronizasyonu (Navbar)
+  // Navbar dil rozeti senkronizasyonu
   setTimeout(() => {
     let currentLang = localStorage.getItem('aot-lang') || 'tr';
-    if (window.miniappI18n && window.miniappI18n.getContext) {
-      const ctx = window.miniappI18n.getContext();
-      if (ctx && ctx.resolvedLocale) {
-        currentLang = ctx.resolvedLocale.split('-')[0];
-      }
-    }
     const flags = { tr:'TR', en:'EN', ru:'RU', de:'DE', fr:'FR', pl:'PL', pt:'PT', es:'ES', kr:'KR', ko:'KR', it:'IT', ja:'JA', zh:'ZH', id:'ID', ar:'AR' };
     const langDisplay = document.getElementById('currentLangDisplay');
     if (langDisplay) langDisplay.textContent = flags[currentLang] || currentLang.toUpperCase();

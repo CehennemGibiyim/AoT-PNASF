@@ -143,7 +143,6 @@
       let actionCountLocal = 0;
       let newTickerItems = [];
       let prevPrices = Object.fromEntries(priceCache);
-      const isFirstLoad = priceCache.size === 0;
       let loadedItemsCount = new Set();
 
       allData.forEach(entry => {
@@ -167,19 +166,6 @@
           if (Math.abs(Number(pct)) > 5) actionCountLocal++;
           newTickerItems.push({
             id: entry.item_id, quality: entry.quality, city: entry.city, price: curr, change: '+' + pct, up: true
-          });
-        } else if (isFirstLoad) {
-          // İlk yüklemede istatistiklerin 0 kalmaması için yapay bir hareketlilik sağlıyoruz
-          const fakeUp = Math.random() > 0.5;
-          const fakePctRaw = Math.random() * 8.5 + 1.1; // 1.1 ile 9.6 arası
-          const fakePct = fakePctRaw.toFixed(1);
-          
-          if (!fakeUp) falling++;
-          if (fakePctRaw > 5) actionCountLocal++;
-          
-          newTickerItems.push({
-            id: entry.item_id, quality: entry.quality, city: entry.city, price: curr, 
-            change: fakeUp ? '+' + fakePct : '-' + fakePct, up: fakeUp
           });
         }
 

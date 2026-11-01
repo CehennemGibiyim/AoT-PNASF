@@ -12,7 +12,7 @@
 [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 [![Data](https://img.shields.io/badge/Data-AODP%20API-orange?style=for-the-badge)](https://www.albion-online-data.com/)
 
-[🌐 Canlı Site](https://cehennemgibiyim.github.io/AoT-PNASF/) · [📊 Market](https://cehennemgibiyim.github.io/AoT-PNASF/src/pages/market.html) · [⚔️ PvP](https://cehennemgibiyim.github.io/AoT-PNASF/src/pages/pvp.html) · [📚 Rehberler](https://cehennemgibiyim.github.io/AoT-PNASF/src/pages/guides.html)
+[🌐 Canlı Site](https://cehennemgibiyim.github.io/AoT-PNASF/) · [📊 Market](https://cehennemgibiyim.github.io/AoT-PNASF/pages/market.html) · [⚔️ PvP](https://cehennemgibiyim.github.io/AoT-PNASF/pages/pvp.html) · [📚 Rehberler](https://cehennemgibiyim.github.io/AoT-PNASF/pages/guides.html)
 
 </div>
 
@@ -124,7 +124,7 @@ AoT-PNASF
 │   ├── Silver Kazanç Widget (interaktif hesap)
 │   └── Data Client Bölümü (AFM Client yönlendirme)
 │
-├── 💹 Market (src/pages/market.html)
+├── 💹 Market (pages/market.html)
 │   ├── Tab 1: Fiyatlar (11 lokasyon)
 │   ├── Tab 2: Fiyat Geçmişi Grafiği
 │   ├── Tab 3: Top Traded Items
@@ -132,7 +132,7 @@ AoT-PNASF
 │   ├── Tab 5: Kalite & Enchant
 │   └── Tab 6: Gold Grafiği
 │
-├── 🔨 Crafting (src/pages/crafting.html)
+├── 🔨 Crafting (pages/crafting.html)
 │   ├── Tab 1: Crafting Kâr
 │   ├── Tab 2: Refining
 │   ├── Tab 3: Farming
@@ -140,19 +140,19 @@ AoT-PNASF
 │   ├── Tab 5: Journal
 │   └── Tab 6: Black Market
 │
-├── ⚔️ PvP (src/pages/pvp.html)
+├── ⚔️ PvP (pages/pvp.html)
 │   ├── Tab 1: Oyuncu/Guild/Alliance Profil
 │   ├── Tab 2: Kill Feed (canlı)
 │   └── Tab 3: Battle Board
 │
-├── 🗺️ Haritalar (src/pages/maps.html) [Aşama 6 — Yakında]
+├── 🗺️ Haritalar (pages/maps.html) [Aşama 6 — Yakında]
 │
-├── 📚 Rehberler (src/pages/guides.html)
+├── 📚 Rehberler (pages/guides.html)
 │   ├── Sol: Kategori + AI Üretici + Popüler Konular
 │   ├── Sağ: Rehber İçeriği + YouTube Embed
 │   └── Alt: Sabit AI Chat Paneli
 │
-└── 🛠️ Araçlar (src/pages/tools.html) [Aşama 7 — Yakında]
+└── 🛠️ Araçlar (pages/tools.html) [Aşama 7 — Yakında]
     ├── Party Builder & Aktivite Planlayıcısı
     ├── Avalon Dungeon Rehberleri
     └── PvP Killboard Analizi
@@ -221,7 +221,7 @@ https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/cluster/
 ```yaml
 Tetiklenme: Her 6 saatte bir
 Görev: Albion Steam News API üzerinden haberleri ve patch notlarını tarar (Cloudflare 403 engelini atlatır)
-Çıktı: src/data/feed.json güncellenir
+Çıktı: data/feed.json güncellenir
 API: Google Gemini API & Steam API
 ```
 
@@ -229,7 +229,7 @@ API: Google Gemini API & Steam API
 ```yaml
 Tetiklenme: Her 5 dakikada bir
 Görev: GameInfo API'den kill feed + battle çeker
-Çıktı: src/data/pvp-feed.json güncellenir
+Çıktı: data/pvp-feed.json güncellenir
 Sunucular: EU + US + Asia (3'ü birden)
 ```
 
@@ -243,7 +243,7 @@ Görev: GitHub Pages'e deploy
 ```yaml
 Tetiklenme: ao-bin-dumps commit tarihi değişince
 Görev: items.json + world.json çeker, items-data.js üretir
-Çıktı: src/data/items-data.js otomatik güncellenir
+Çıktı: data/items-data.js otomatik güncellenir
 Bonus: Web sitesinde "Güncelle" butonu — herkes tetikleyebilir
 ```
 
@@ -267,40 +267,36 @@ AoT-PNASF/
 │   ├── ai-scanner.js                # Gemini AI tarayıcı
 │   └── pvp-fetcher.cjs              # PvP veri çekici (CommonJS)
 │
-└── 📁 src/
-    ├── 📁 data/
-    │   ├── items-data.js            # Tüm eşya veritabanı (2000+)
-    │   ├── feed.json                # AI haber feed
-    │   └── pvp-feed.json            # PvP kill feed (5dk'da bir)
+└── 📁 Proje Kök Dizini
+    ├── 📁 data/                    # Eşya/market/world JSON & JS verileri
+    │   ├── items-data.js           # Tüm eşya veritabanı (3000+)
+    │   ├── items-index.js          # Hızlı arama indeksi
+    │   ├── feed.json               # AI haber feed
+    │   └── pvp-feed.json           # PvP kill feed (5dk'da bir)
     │
-    ├── 📁 lib/
-    │   ├── lang.js                  # 9 dil sistemi
-    │   ├── nav.js                   # Navbar & mobil menü
-    │   ├── settings.js              # Tema & ayarlar core
-    │   ├── settings-panel.js        # Ayarlar paneli UI
-    │   ├── feed.js                  # AI feed render
-    │   ├── home.js                  # Ana sayfa logic
-    │   ├── market.js                # Market modülü
-    │   ├── crafting.js              # Crafting modülü
-    │   ├── pvp.js                   # PvP modülü
-    │   └── guides.js                # Rehberler & AI chat
+    ├── 📁 js/                      # Ana uygulama modülleri (TypeScript)
+    │   ├── i18n.ts                 # 14 dil i18n motoru (merkezi)
+    │   ├── main.ts / settings-panel.ts / events.ts ...
+    │   └── crafting.ts / pvp.ts / arbitrage.ts / ai-build.ts ...
     │
-    ├── 📁 styles/
-    │   ├── main.css                 # Global stiller & değişkenler
-    │   ├── settings.css             # Ayarlar paneli stilleri
-    │   ├── home.css                 # Ana sayfa stilleri
-    │   ├── market.css               # Market stilleri
-    │   ├── crafting.css             # Crafting stilleri
-    │   ├── pvp.css                  # PvP stilleri
-    │   └── guides.css               # Rehberler stilleri
+    ├── 📁 lib/                     # Alt sayfa (pages/) paylaşımlı modülleri
+    │   ├── lang.ts                 # Alt sayfa dil sistemi (i18n motoruna bağlı)
+    │   └── settings-panel.ts       # Alt sayfa ayarlar paneli
     │
-    └── 📁 pages/
-        ├── market.html              # Market & Ekonomi
-        ├── crafting.html            # Crafting & Üretim
-        ├── pvp.html                 # PvP & İstatistik
-        ├── guides.html              # Rehberler
-        ├── maps.html                # Haritalar (Aşama 6)
-        └── tools.html               # Araçlar (Aşama 7)
+    ├── 📁 locales/
+    │   ├── ui-i18n.json            # Arayüz sözlüğü: 284 anahtar × 14 dil
+    │   └── tr-official/            # Resmî Türkçe eşya adları (shard'lar)
+    │
+    ├── 📁 pages/                   # Alt sayfalar
+    │   ├── market.html             # Market & Ekonomi
+    │   ├── crafting.html           # Crafting & Üretim
+    │   ├── pvp.html                # PvP & İstatistik
+    │   ├── guides.html             # Rehberler
+    │   ├── maps.html               # Haritalar
+    │   └── tools.html              # Araçlar
+    │
+    ├── 📁 styles/ + styles.css     # Global & modül CSS'leri
+    └── 📁 scripts/                 # AI bot, PvP fetcher, doğrulayıcılar
 ```
 
 ---
@@ -325,17 +321,28 @@ GEMINI_API_KEY=your_gemini_api_key_here
 # https://kullaniciadiniz.github.io/AoT-PNASF/
 ```
 
-### Lokal geliştirme
+### Lokal geliştirme (Vite + TypeScript)
 
 ```bash
-# Basit HTTP server
-npx serve .
+# 1. Bağımlılıkları yükle
+npm install
 
-# veya Python
-python -m http.server 8080
+# 2. Geliştirme sunucusu (hot-reload ile)
+npm run dev
 
-# Site: http://localhost:8080
+# 3. Kalite kapıları (CI ile aynı)
+npm test        # typecheck + validate + quality
+npm run build   # Vite production build
+
+# Site: http://localhost:5173
 ```
+
+### Dil / i18n Sistemi
+
+- Arayüz çevirileri **yerel** bir motordur: `js/i18n.ts` + `locales/ui-i18n.json` (284 anahtar × 14 dil: TR/EN/RU/DE/FR/PL/PT/ES/KR/IT/JA/ZH/ID/AR).
+- HTML'de `data-i18n="anahtar"`, `data-i18n-ph="anahtar"` (placeholder) ve `data-i18n-title="anahtar"` öznitelikleri kullanılır; eski `data-tr`/`data-en` öznitelikleri de desteklenir.
+- Yeni çeviri eklemek için `locales/ui-i18n.json` içinde **tüm 14 dile** değer girin (eksik dil otomatik olarak TR→EN sırasıyla düşer).
+- Dil değişimi Ayarlar panelinden yapılır; seçim `localStorage` + kullanıcı ayarlarına yazılır, eşya adları da yeni dile geçer.
 
 ---
 

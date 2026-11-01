@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://render.albiononline.com https://www.gstatic.com https://www.googleapis.com https://firebaseinstallations.googleapis.com https://miniapps.ai; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; connect-src 'self' https: wss:; img-src 'self' https: http: data:;">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://render.albiononline.com https://www.gstatic.com https://www.googleapis.com https://firebaseinstallations.googleapis.com; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https: data:; connect-src 'self' https: wss:; img-src 'self' https: http: data:;">
   <title data-i18n="app-title">AoT-PNASF | Albion Online Platformu</title>
   
   <!-- AI Dönen Sarý Favicon -->
@@ -13,7 +13,7 @@
     // Service Worker Kaydı
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/serviceworker.js')
+        navigator.serviceWorker.register('serviceworker.js')
           .then((registration) => {
             console.log('[SW] Service Worker kaydedildi:', registration.scope);
           })
@@ -70,16 +70,23 @@
               '700': 'var(--bg-700)',
               'accent': 'var(--accent)',
             }
+          },
+          fontFamily: {
+            'sans': ['Rajdhani', 'Segoe UI', 'Tahoma', 'Geneva', 'Verdana', 'sans-serif'],
+            'mono': ['Space Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
           }
         }
       }
     };
   </script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts: Rajdhani (arayüz) + Space Mono (sayılar) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   
   
@@ -163,6 +170,16 @@
       <button data-tab="tab-ai-build" class="tab-btn px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-gray-400 hover:text-white transition-colors flex-1 md:flex-none text-center hover:bg-albion-800/50">
         <i class="fa-solid fa-robot mr-1.5"></i> <span data-i18n="nav-aiBuild">AI Rehber</span>
       </button>
+      <!-- Bağlantılı alt sayfalar (artık kopuk değil) -->
+      <a href="pages/maps.html" target="_blank" rel="noopener" class="px-4 py-3 text-sm font-semibold text-gray-400 hover:text-albion-accent transition-colors flex-1 md:flex-none text-center hover:bg-albion-800/50 flex items-center justify-center">
+        <i class="fa-solid fa-map mr-1.5"></i> <span data-i18n="nav-maps">Haritalar</span>
+      </a>
+      <a href="pages/guides.html" target="_blank" rel="noopener" class="px-4 py-3 text-sm font-semibold text-gray-400 hover:text-albion-accent transition-colors flex-1 md:flex-none text-center hover:bg-albion-800/50 flex items-center justify-center">
+        <i class="fa-solid fa-book-open mr-1.5"></i> <span data-i18n="nav-guides">Rehberler</span>
+      </a>
+      <a href="pages/tools.html" target="_blank" rel="noopener" class="px-4 py-3 text-sm font-semibold text-gray-400 hover:text-albion-accent transition-colors flex-1 md:flex-none text-center hover:bg-albion-800/50 flex items-center justify-center">
+        <i class="fa-solid fa-screwdriver-wrench mr-1.5"></i> <span data-i18n="nav-tools">Araçlar</span>
+      </a>
     </nav>
   </header>
 
@@ -196,6 +213,21 @@
         <!-- Canlı İstatistik Çubuğu -->
         <div id="liveStatsBarlAnchor"></div>
 
+        <!-- ⚡ Hızlı Eşya Arama -->
+        <div class="bg-albion-800 border border-gray-700 rounded-xl p-4 shadow-lg">
+          <h3 class="text-sm font-bold text-white flex items-center mb-3">
+            <i class="fa-solid fa-magnifying-glass text-albion-accent mr-2"></i>
+            <span data-i18n="home-searchTitle">Hızlı Eşya Arama</span>
+          </h3>
+          <div class="flex gap-2">
+            <input id="quickSearchInput" data-i18n-ph="home-searchPlaceholder" placeholder="Eşya adı veya ID yazın..." autocomplete="off" class="flex-1 bg-albion-900 border border-albion-700 rounded-lg px-3 py-2 text-sm text-white focus:border-albion-accent focus:outline-none"/>
+            <button id="quickSearchBtn" class="bg-albion-accent hover:bg-albion-accent_hover text-black font-bold px-4 py-2 rounded-lg text-sm transition-colors">
+              <i class="fa-solid fa-magnifying-glass mr-1"></i><span data-i18n="home-searchBtn">Ara</span>
+            </button>
+          </div>
+          <div id="quickSearchResults" class="mt-3 space-y-2"></div>
+        </div>
+
         <!-- ⚡ Silver Kazanç Hesaplayıcı -->
         <div id="silverCalcAnchor"></div>
 
@@ -224,6 +256,12 @@
                         <span class="text-xs font-bold px-2 py-0.5 rounded bg-green-900/20 text-green-400 border border-green-500/30" id="staticGoldBuy">Alış: --</span>
                         <span class="text-xs font-bold px-2 py-0.5 rounded bg-red-900/20 text-red-400 border border-red-500/30" id="staticGoldSell">Satış: --</span>
                         <span class="text-xs font-bold px-2 py-0.5 rounded bg-gray-800 border border-gray-700 ml-1" id="staticGoldChange">--</span>
+                      </div>
+                      <div class="flex items-center space-x-2 mt-1.5 flex-wrap">
+                        <span class="text-xs font-bold px-2 py-0.5 rounded bg-albion-900 text-albion-accent border border-albion-accent/40">
+                          <i class="fa-solid fa-crown mr-1"></i><span data-i18n="home-premiumTitle">Premium Maliyeti</span>: <span id="premiumCost30d">--</span>
+                        </span>
+                        <span class="text-[10px] text-gray-500" data-i18n="home-premiumNote">30 günlük premium, güncel altın fiyatından hesaplanır (2.500 altın).</span>
                       </div>
                    </div>
                  </div>
@@ -394,14 +432,13 @@
   </main>
 
   <script src="data/items-data.js"></script>
+  <script type="module" src="js/i18n.ts"></script>
   <script type="module" src="js/image-cache.ts"></script>
   <script type="module" src="js/settings-panel.ts"></script>
   <script type="module" src="js/item-locales.ts"></script>
   <script type="module" src="js/market-network.ts"></script>
   <script type="module" src="js/main.ts"></script>
-  <script type="module" src="js/i18n-helper.ts"></script>
   <script type="module" src="js/events.ts"></script>
-  <script type="module" src="js/crafting-new.ts"></script>
   <script type="module" src="js/crafting.ts"></script>
   <script type="module" src="js/pvp.ts"></script>
   <script type="module" src="js/avalon.ts"></script>
@@ -411,6 +448,8 @@
   <script type="module" src="js/ai-build.ts"></script>
   <script type="module" src="js/smart-scanner.ts"></script>
   <script type="module" src="js/silver-calculator.ts"></script>
+  <script type="module" src="js/live-stats-bar.ts"></script>
+  <script type="module" src="js/quick-search.ts"></script>
   <script>
     function switchDashTab(tab) {
       const panels = {
@@ -453,12 +492,7 @@
     });
   </script>
 
-  <!-- ZIP INDIRICI WIDGET -->
-  <button onclick="downloadProjectAsZip()" class="fixed bottom-4 left-4 z-[9999] bg-albion-accent hover:bg-albion-accent_hover text-black px-4 py-3 rounded-xl shadow-[0_0_15px_rgba(212,175,55,0.4)] flex items-center gap-2 font-black transition-all hover:scale-105 border border-yellow-300">
-    <i class="fa-solid fa-file-zipper text-xl"></i>
-    <span class="text-sm">Projeyi İndir (ZIP)</span>
-  </button>
-  <script type="module" src="js/zipper.ts"></script>
+  <!-- ZIP INDIRICI WIDGET (kaldırıldı — özellik Ayarlar panelinden de silindi) -->
 
 </body>
 </html>

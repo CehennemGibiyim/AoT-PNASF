@@ -44,6 +44,20 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
       </div>
 
+      <!-- Bandit Assault (AODP canlı veri) -->
+      <div id="banditAssaultBox" class="bg-albion-900 border border-gray-700 p-4 rounded-xl shadow-lg shrink-0 transition-colors">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-sm font-bold text-white flex items-center">
+            <i class="fa-solid fa-flag text-red-400 mr-2"></i>
+            <span>${window.t('events-banditTitle', 'Bandit Assault (Canlı)')}</span>
+          </h3>
+          <span class="text-[10px] text-gray-500">AODP</span>
+        </div>
+        <div id="banditAssaultContent" class="text-xs text-gray-400">
+          ${window.t('loading', 'Yükleniyor...')}
+        </div>
+      </div>
+
       <!-- Feed Section: Dynamic Schedule List -->
       <div class="flex-1 overflow-y-auto pr-2 space-y-4 pb-10" id="scheduleGrid">
         <!-- Populated by JS -->
@@ -71,20 +85,74 @@ document.addEventListener('DOMContentLoaded', () => {
     currentServer = window.AppConfig.server;
     updateServerDisplay();
     refreshSchedule();
+    loadBanditAssault();
   });
 
   window.addEventListener('app_settings_updated', () => {
     currentServer = window.AppConfig.server;
     updateServerDisplay();
     refreshSchedule();
+    loadBanditAssault();
   });
 
   // Initialize
   function initializeApp() {
     updateServerDisplay();
     refreshSchedule();
+    loadBanditAssault();
     if (timerInterval) clearInterval(timerInterval);
     timerInterval = setInterval(tickCountdowns, 1000);
+  }
+
+  // ─── BANDIT ASSAULT (AODP festivities) ────────────────────
+  const API_DOMAINS: Record<string, string> = {
+    europe: 'europe.albion-online-data.com',
+    americas: 'west.albion-online-data.com',
+    asia: 'east.albion-online-data.com'
+  };
+
+  function loadBanditAssault() {
+    const box = document.getElementById('banditAssaultContent');
+    if (!box) return;
+    box.innerHTML = `<span class="animate-pulse">${window.t('loading', 'Yükleniyor...')}</span>`;
+
+    const domain = API_DOMAINS[currentServer] || API_DOMAINS.europe;
+    const url = `https://${domain}/api/v2/stats/festivities`;
+
+    fetch(url)
+      .then(r => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+      .then(data => {
+        const rows = Array.isArray(data) ? data : (Array.isArray(data?.events) ? data.events : []);
+        const bandits = rows.filter((row: any) => {
+          const label = String(row?.event_type || row?.event || row?.name || '').toLowerCase();
+          return !label || label.includes('bandit'); // etiket belirsizse hefi göster
+        });
+
+        if (!bandits.length) {
+          box.innerHTML = `<div class="text-gray-500">${window.t('events-banditNone', 'Şu an aktif Bandit Assault yok.')}</div>`;
+          return;
+        }
+
+        box.innerHTML = bandits.map((row: any) => {
+          const zone = row.zone_name || row.zone || row.event_zone || row.map || '—';
+          const label = row.event_type || row.event || 'BANDIT_ASSAULT';
+          const start = row.starts_at || row.start;
+          const end = row.ends_at || row.end;
+          const fmt = (v: any) => {
+            if (!v) return '';
+            const d = new Date(v);
+            return Number.isNaN(d.getTime()) ? '' : d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          };
+          const times = [start ? `${window.t('events-banditStart', 'Başlangıç')}: ${fmt(start)}` : '', end ? `${window.t('events-banditEnd', 'Bitiş')}: ${fmt(end)}` : ''].filter(Boolean).join(' · ');
+          return `<div class="flex items-center justify-between bg-albion-800 border border-red-500/30 rounded-lg px-3 py-2 mb-1.5">
+            <span class="text-white font-bold"><i class="fa-solid fa-flag text-red-400 mr-2"></i>${String(zone)}</span>
+            <span class="text-[11px] text-gray-400 font-mono">${String(label)}${times ? ' · ' + times : ''}</span>
+          </div>`;
+        }).join('');
+      })
+      .catch(() => {
+        box.innerHTML = `<div class="text-gray-500">${window.t('events-banditUnavailable', 'Bandit Assault verisi şu anda alınamıyor.')}</div>`;
+      });
   }
 
   function getSortedEvents() {

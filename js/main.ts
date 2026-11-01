@@ -113,12 +113,11 @@ async function clearImageCache() {
   }
 }
 
-window.t = function(key, fallback) {
-  if (window.i18n && window.i18n.translations && window.i18n.translations[key]) {
-    return window.i18n.translations[key];
-  }
-  return fallback || key;
-};
+// window.t / window._ artık yerel i18n motoru (js/i18n.ts) tarafından sağlanır.
+// Motor bir nedenden yüklenemezse Türkçe fallback dönen güvenlik ağı.
+if (!(window as any).AOTi18n) {
+  (window as any).t = function (key: string, fallback?: string) { return fallback || key; };
+}
 
 window.AppConfig = {
   server: 'europe',
@@ -209,11 +208,15 @@ function fetchGameActivePlayers() {
 }
 
 let lazyModuleState = new Map();
+// Not: Modüller index.html üzerinden doğrudan (eager) yüklenir; üretim derlemesinde
+// js/*.js diye bir dosya yoktur (Vite bunları assets/ altına paketler). Eski config
+// var olmayan js/crafting.js gibi yolları çekiyordu ve sekmeler "yüklenemedi"
+// hatasıyla boş kalıyordu. Artık sadece başlatıcı fonksiyonlar çağrılır.
 let lazyModuleConfig = {
-  'tab-crafting': { scripts: ['js/crafting.js'], init: 'initCraftingModule', needsItems: true },
-  'tab-arbitrage': { scripts: ['js/arbitrage.js'], init: 'loadArbitrageModule', needsItems: true },
-  'tab-ai-build': { scripts: ['js/ai-build.js'], init: 'initAiBuildModule', needsItems: true },
-  'tab-pvp': { scripts: ['js/pvp.js'], init: 'initPvpModule', needsItems: false }
+  'tab-crafting': { init: 'initCraftingModule', needsItems: true },
+  'tab-arbitrage': { init: 'loadArbitrageModule', needsItems: true },
+  'tab-ai-build': { init: 'initAiBuildModule', needsItems: true },
+  'tab-pvp': { init: 'initPvpModule', needsItems: false }
 };
 function loadLazyScript(src) {
   const existing = document.querySelector(`script[data-lazy-src="${src}"]`);
@@ -277,7 +280,6 @@ async function loadLazyTab(tabId) {
     setLazyModuleState(tabId, true);
     try {
       if (config.needsItems) await ensureItemsData();
-      for (const script of config.scripts) await loadLazyScript(script);
       const init: any = window[config.init];
       if (typeof init !== 'function') throw new Error(`Başlatıcı bulunamadı: ${config.init}`);
       await init();
@@ -309,6 +311,9 @@ async function initMainApp() {
         window.AppConfig.scale = parsed.scale || '14px';
         if (parsed.customColors) window.AppConfig.customColors = parsed.customColors;
       }
+      // Ayarlar paneli ayrı bir anahtar ('aot-server') yazar; o tercih geçerli olsun
+      const savedServer = localStorage.getItem('aot-server');
+      if (savedServer) window.AppConfig.server = savedServer;
     } catch(e) {}
 
     window.AppConfig.server = String(window.AppConfig.server || 'europe');
@@ -406,6 +411,10 @@ async function initHomeDashboardAndTicker() {
   if (staticGoldBuy) staticGoldBuy.innerText = `Alış: ${(currentPrice - 2).toLocaleString()}`;
   if (staticGoldSell) staticGoldSell.innerText = `Satış: ${(currentPrice + 3).toLocaleString()}`;
 
+  // Premium maliyeti: 30 günlük premium 2.500 altından alınır
+  const premiumCost = document.getElementById('premiumCost30d');
+  if (premiumCost) premiumCost.innerHTML = `${Math.round(currentPrice * 2500).toLocaleString()} 🥈`;
+
   if (staticGoldChange) {
      if (p24 > 0) {
         staticGoldChange.innerHTML = `<i class="fa-solid fa-arrow-trend-up text-green-400 mr-1"></i><span class="text-green-400">+${p24.toFixed(2)}%</span>`;
@@ -418,6 +427,11 @@ async function initHomeDashboardAndTicker() {
 
   if(document.getElementById('goldStatsChart')) renderChart('daily');
 }
+
+// Sunucu değişince altın/fiyat panellerini yenile
+window.addEventListener('app_settings_updated', () => {
+  try { initHomeDashboardAndTicker(); } catch (_) {}
+});
 
 function renderChart(timeframe) {
   const ctx = document.getElementById('goldStatsChart');
