@@ -176,11 +176,11 @@
     <div class="kb-stats" id="kbStats"></div>
     <div class="kb-charts">
       <div class="tp-box">
-        <h3>🕐 <span data-tr="Saatlik Kill Dağılımı" data-en="Hourly Kill Distribution">Saatlik Kill Dağılımı</span></h3>
+        <h3>🕐 <span id="kbTitleHourly" data-tr="Saatlik Kill Dağılımı" data-en="Hourly Kill Distribution">Saatlik Kill Dağılımı</span></h3>
         <div class="kb-chart-wrap"><canvas id="kbChartHourly"></canvas></div>
       </div>
       <div class="tp-box">
-        <h3>⚡ <span data-tr="Saatlik Ortalama IP (Killer vs Victim)" data-en="Hourly Avg IP (Killer vs Victim)">Saatlik Ortalama IP (Killer vs Victim)</span></h3>
+        <h3>⚡ <span id="kbTitleIP" data-tr="Saatlik Ortalama IP (Killer vs Victim)" data-en="Hourly Avg IP (Killer vs Victim)">Saatlik Ortalama IP (Killer vs Victim)</span></h3>
         <div class="kb-chart-wrap"><canvas id="kbChartIP"></canvas></div>
       </div>
       <div class="tp-box">
@@ -188,7 +188,7 @@
         <div class="kb-chart-wrap"><canvas id="kbChartWeapons"></canvas></div>
       </div>
     </div>
-    <p class="kb-note" data-tr="Veri Albion resmi gameinfo API'sinden canlı çekilir; erişim başarısız olursa bot'un son feed'i (data/pvp-feed.json) kullanılır. Kill olayları sunucuların yüksek trafiğinden dolayı son birkaç saati kapsar." data-en="Data is fetched live from the official Albion gameinfo API; if unreachable, the bot's latest feed (data/pvp-feed.json) is used. Kill events cover the last few hours due to high server traffic.">Veri Albion resmi gameinfo API'sinden canlı çekilir; erişim başarısız olursa bot'un son feed'i (data/pvp-feed.json) kullanılır. Kill olayları sunucuların yüksek trafiğinden dolayı son birkaç saati kapsar.</p>
+    <p class="kb-note" data-tr="Veri Albion resmi gameinfo API'sinden canlı çekilir (son ~350 olay); erişim başarısız olursa bot'un son feed'i (data/pvp-feed.json) kullanılır. Yoğun sunucularda bu olaylar birkaç dakikaya sığdığı için grafik dakikalık, sakin dönemlerde saatlik çözünürlükte gösterilir." data-en="Data is fetched live from the official Albion gameinfo API (last ~350 events); if unreachable, the bot's latest feed (data/pvp-feed.json) is used. On busy servers these events span only a few minutes, so the chart shows per-minute resolution; during quiet periods it shows hourly resolution.">Veri Albion resmi gameinfo API'sinden canlı çekilir (son ~350 olay); erişim başarısız olursa bot'un son feed'i (data/pvp-feed.json) kullanılır. Yoğun sunucularda bu olaylar birkaç dakikaya sığdığı için grafik dakikalık, sakin dönemlerde saatlik çözünürlükte gösterilir.</p>
   </section>
 
   <!-- ═══ AVALON & HCE ═══ -->

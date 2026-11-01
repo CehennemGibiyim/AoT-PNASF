@@ -164,22 +164,35 @@
     kbLoaded = true;
     if (statsBox && !kbEvents.length) statsBox.innerHTML = '<div class="kb-empty">…</div>';
 
-    // 1) Canlı gameinfo API
+    // 1) Canlı gameinfo API — çok sayfalı çekim (API limiti: limit≤51, offset≤1000)
     let events: any[] = [];
     let source = 'live';
     try {
       const host = GI_HOSTS[kbServer];
-      const raw = await fetchJson(`https://${host}/api/gameinfo/events?limit=100&offset=0`);
-      if (Array.isArray(raw)) {
-        events = raw.map((e: any) => ({
-          ts: new Date(e.TimeStamp),
-          killerIP: Math.round(e.Killer?.AverageItemPower || 0),
-          victimIP: Math.round(e.Victim?.AverageItemPower || 0),
-          weapon: e.Killer?.Equipment?.MainHand?.Type || '',
-          fame: Number(e.TotalVictimKillFame) || 0,
-          partySize: (e.GroupMembers?.length || 0) + 1
-        })).filter((e: any) => !isNaN(e.ts.getTime()));
-      }
+      const offsets = [0, 51, 102, 153, 204, 255, 306]; // 7 sayfa ≈ 357 olay
+      const pages = await Promise.all(offsets.map((o) =>
+        fetchJson(`https://${host}/api/gameinfo/events?limit=51&offset=${o}`).catch(() => null)
+      ));
+      const seen = new Set<string>();
+      pages.forEach((raw) => {
+        if (!Array.isArray(raw)) return;
+        raw.forEach((e: any) => {
+          const id = String(e.EventId || '');
+          if (id && seen.has(id)) return;
+          if (id) seen.add(id);
+          const ts = new Date(e.TimeStamp);
+          if (isNaN(ts.getTime())) return;
+          events.push({
+            ts,
+            killerIP: Math.round(e.Killer?.AverageItemPower || 0),
+            victimIP: Math.round(e.Victim?.AverageItemPower || 0),
+            weapon: e.Killer?.Equipment?.MainHand?.Type || '',
+            fame: Number(e.TotalVictimKillFame) || 0,
+            partySize: (e.GroupMembers?.length || 0) + 1
+          });
+        });
+      });
+      events.sort((a, b) => b.ts.getTime() - a.ts.getTime());
     } catch (_) { /* canlı erişim yok → feed'e düş */ }
 
     // 2) Bot feed yedeği
@@ -224,11 +237,29 @@
       return;
     }
 
-    // Zaman penceresi filtresi
+    // ── Uyarlanabilir bucket: yoğun sunucuda dakikalık, sakin dönemde saatlik ──
     const now = Date.now();
     const windowMs = kbWindow > 0 ? kbWindow * 3600000 : Infinity;
     const inWindow = kbEvents.filter((e) => now - e.ts.getTime() <= windowMs);
     const evts = inWindow.length ? inWindow : kbEvents;
+    const minTs = Math.min(...evts.map((e) => e.ts.getTime()));
+    const maxTs = Math.max(...evts.map((e) => e.ts.getTime()));
+    const spanMs = maxTs - minTs;
+    const bucketMs = spanMs <= 2 * 3600000 ? 300000 : 3600000; // 5 dk veya 1 saat
+    const tr0 = getLang() === 'tr';
+    const spanText = spanMs >= 3600000
+      ? (tr0 ? `son ${Math.max(1, Math.round(spanMs / 3600000))} saat` : `last ${Math.max(1, Math.round(spanMs / 3600000))}h`)
+      : (tr0 ? `son ${Math.max(1, Math.round(spanMs / 60000))} dakika` : `last ${Math.max(1, Math.round(spanMs / 60000))}m`);
+    const unitLabel = bucketMs === 300000
+      ? (tr0 ? `5 Dakikalık Kill Dağılımı (${spanText})` : `5-Minute Kill Distribution (${spanText})`)
+      : (tr0 ? `Saatlik Kill Dağılımı (${spanText})` : `Hourly Kill Distribution (${spanText})`);
+    const ipUnitLabel = bucketMs === 300000
+      ? (tr0 ? `5 Dakikalık Ort. IP (Killer vs Victim)` : `5-Minute Avg IP (Killer vs Victim)`)
+      : (tr0 ? `Saatlik Ort. IP (Killer vs Victim)` : `Hourly Avg IP (Killer vs Victim)`);
+    const titleHourly = document.getElementById('kbTitleHourly');
+    if (titleHourly) titleHourly.textContent = unitLabel;
+    const titleIP = document.getElementById('kbTitleIP');
+    if (titleIP) titleIP.textContent = ipUnitLabel;
 
     // ── İstatistik kartları ──
     const total = evts.length;
@@ -250,22 +281,19 @@
       { v: `${Math.round(solo / total * 100)}%`, l: tr ? 'Solo Kill Oranı' : 'Solo Kill Rate' }
     ].map((s) => `<div class="kb-stat"><div class="kb-stat-val">${s.v}</div><div class="kb-stat-label">${s.l}</div></div>`).join('');
 
-    // ── Saatlik buckeler ──
-    const minTs = Math.min(...evts.map((e) => e.ts.getTime()));
+    // ── Bucket dizilimi ──
     const startTs = windowMs === Infinity ? minTs : Math.max(minTs, now - windowMs);
-    const bucketMs = 3600000;
-    const startHour = Math.floor(startTs / bucketMs) * bucketMs;
+    const startBucket = Math.floor(startTs / bucketMs) * bucketMs;
     const labels: string[] = [];
     const killBuckets: number[] = [];
     const killerIPBuckets: number[] = [];
     const victimIPBuckets: number[] = [];
-    for (let t = startHour; t <= now; t += bucketMs) {
-      const hourEvents = evts.filter((e) => e.ts.getTime() >= t && e.ts.getTime() < t + bucketMs);
+    for (let t = startBucket; t <= now && labels.length < 60; t += bucketMs) {
+      const bucketEvents = evts.filter((e) => e.ts.getTime() >= t && e.ts.getTime() < t + bucketMs);
       labels.push(new Date(t).toLocaleTimeString(tr ? 'tr-TR' : 'en-US', { hour: '2-digit', minute: '2-digit' }));
-      killBuckets.push(hourEvents.length);
-      killerIPBuckets.push(hourEvents.length ? Math.round(hourEvents.reduce((s, e) => s + e.killerIP, 0) / hourEvents.length) : 0);
-      victimIPBuckets.push(hourEvents.length ? Math.round(hourEvents.reduce((s, e) => s + e.victimIP, 0) / hourEvents.length) : 0);
-      if (labels.length > 24) break; // en fazla 24 bucket
+      killBuckets.push(bucketEvents.length);
+      killerIPBuckets.push(bucketEvents.length ? Math.round(bucketEvents.reduce((s, e) => s + e.killerIP, 0) / bucketEvents.length) : 0);
+      victimIPBuckets.push(bucketEvents.length ? Math.round(bucketEvents.reduce((s, e) => s + e.victimIP, 0) / bucketEvents.length) : 0);
     }
 
     drawChart('kbChartHourly', 'bar', labels, [
