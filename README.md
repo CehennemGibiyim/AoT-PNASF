@@ -145,17 +145,17 @@ AoT-PNASF
 │   ├── Tab 2: Kill Feed (canlı)
 │   └── Tab 3: Battle Board
 │
-├── 🗺️ Haritalar (pages/maps.html) [Aşama 6 — Yakında]
+├── 🗺️ Haritalar (pages/maps.html) [Aşama 6 — Tamamlandı]
 │
 ├── 📚 Rehberler (pages/guides.html)
 │   ├── Sol: Kategori + AI Üretici + Popüler Konular
 │   ├── Sağ: Rehber İçeriği + YouTube Embed
 │   └── Alt: Sabit AI Chat Paneli
 │
-└── 🛠️ Araçlar (pages/tools.html) [Aşama 7 — Yakında]
-    ├── Party Builder & Aktivite Planlayıcısı
-    ├── Avalon Dungeon Rehberleri
-    └── PvP Killboard Analizi
+└── 🛠️ Araçlar (pages/tools.html) [Aşama 7/9 — Tamamlandı]
+    ├── Party Builder (ZvZ & küçük ölçek kompozisyon + sinerjiler)
+    ├── Avalon Dungeon & HCE Rehberleri (boss mekaniği, counter, comp)
+    └── PvP Killboard Analizi (saatlik grafik, IP farkı, silah oranları)
 ```
 
 ---
@@ -357,8 +357,8 @@ npm run build   # Vite production build
 | ✅ Aşama 5 | Rehberler + Gemini AI Chat | **Tamamlandı** |
 | ✅ Aşama 6 | Haritalar (world.json + pathfinding) | **Tamamlandı** |
 | ✅ Aşama 7 | Build & Meta + Party Builder + Avalon Dungeon | **Tamamlandı** |
-| 🔜 Aşama 8 | ao-bin-dumps Tam Entegrasyon + Güncelle Butonu | **Planlandı** |
-| 🔜 Aşama 9 | PvP Killboard Analizi (Saatlik grafik, filtreler) | **Planlandı** |
+| ✅ Aşama 8 | ao-bin-dumps Tam Entegrasyon + Güncelle Butonu (Veri Durumu paneli) | **Tamamlandı** |
+| ✅ Aşama 9 | PvP Killboard Analizi (Saatlik grafik, filtreler) | **Tamamlandı** |
 
 ---
 
