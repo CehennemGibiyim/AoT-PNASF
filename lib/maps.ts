@@ -35,6 +35,10 @@ let currentView = 'zones'; // 'zones' | 'map' | 'avalon'
 // Leaflet state
 let leafletMap = null;
 let tileLayer = null;
+let edgeLayer = null;
+let routeLayer = null;
+let highlightLayer = null;
+let markerById = new Map();
 
 let getLang = () => localStorage.getItem('aot-lang') || 'tr';
 
@@ -70,7 +74,28 @@ function switchView(view) {
 
 // ─── ZONE YÜKLEMESİ ──────────────────────────────────────
 function loadZones() {
-  if (window.AO_ZONES && window.AO_ZONES.length > 0) {
+  if (window.AO_WORLD_ZONES && window.AO_WORLD_ZONES.length > 0) {
+    // ao-bin-dumps index geometrisinden üretilen gerçek dünya zone verisi
+    // (scripts/generate-world-zones.cjs): düğüm konumu + türetilmiş bağlantılar.
+    zones = window.AO_WORLD_ZONES.map((z: any) => ({
+      id: z.id,
+      name: z.id,
+      color: z.type === 'CITY' ? 'SAFEAREA'
+        : z.reg === 5 ? 'MIST'
+        : z.tier >= 7 ? 'BLACK'
+        : z.tier === 6 ? 'RED'
+        : z.tier === 5 ? 'YELLOW'
+        : 'SAFEAREA',
+      type: z.type === 'CITY' ? 'CITY' : 'ZONE',
+      exits: z.exits || [],
+      road: false,
+      wx: z.x, wy: z.y,
+      tier: z.tier, biome: z.biome, resource: z.resource, reg: z.reg,
+    }));
+    getAvalonZones().forEach(az => {
+      if (!zones.find(z => z.id === az.id)) zones.push(az);
+    });
+  } else if (window.AO_ZONES && window.AO_ZONES.length > 0) {
     zones = window.AO_ZONES;
     getAvalonZones().forEach(az => {
       if (!zones.find(z => z.id === az.id)) zones.push(az);
@@ -341,48 +366,109 @@ function selectAvalonCard(el) {
   el.classList.add('selected');
 }
 
-// ─── LEAFLET HARİTA SİSTEMİ (Gerçek Oyun Haritası) ───────────────────────────────────
+// ─── DÜNYA DÜĞÜM HARİTASI (ao-bin-dumps geometrisi) ───────────────────────────
+// Not: oyun dump'ı zone dünya koordinatları içermez; bu harita dump'ın index
+// geometrisinden (region/satır/sütun) türetilmiş şematik düğüm-ilişki grafiğidir.
 function initLeafletMap() {
   const container = document.getElementById('mapCanvas');
-  if (!container) return;
+  if (!container || !window.L || leafletMap) return;
 
-  // Leaflet map başlatma
   leafletMap = L.map('mapCanvas', {
-    crs: L.CRS.Simple, // Gerçek dünya projeksiyonu yerine oyun haritası
-    minZoom: 1,
-    maxZoom: 7,
-    zoomSnap: 0.5,
-    attributionControl: false
+    crs: L.CRS.Simple,
+    minZoom: -2,
+    maxZoom: 4,
+    zoomSnap: 0.25,
+    attributionControl: false,
+    zoomControl: false
   });
 
-  // Kullanıcının albiononline2d'den sağladığı tile url'si
-  // Formatımız https://cdn.albiononline2d.com/map/maptiles/{z}/map_{x}_{y}.png
-  const tileUrl = 'https://cdn.albiononline2d.com/map/maptiles/{z}/map_{x}_{y}.png';
+  const pts = zones.filter((z: any) => z.wx !== undefined).map((z: any) => [z.wy, z.wx]);
+  if (pts.length) {
+    const lats = pts.map(p => p[0]), lngs = pts.map(p => p[1]);
+    const bounds = L.latLngBounds(
+      [Math.min(...lats) - 20, Math.min(...lngs) - 20],
+      [Math.max(...lats) + 20, Math.max(...lngs) + 20]
+    );
+    leafletMap.fitBounds(bounds);
+  }
 
-  tileLayer = L.tileLayer(tileUrl, {
-    noWrap: true,
-    tms: false,
-    maxNativeZoom: 7
-  }).addTo(leafletMap);
-
-  // Haritanın merkezine odaklan (Yaklaşık bir başlangıç noktası, Royal Continent merkezi)
-  leafletMap.setView([0, 0], 2);
-
-  // Şehirleri görsel olarak haritaya ekleme (Temsili koordinatlar)
-  addCityMarkers();
+  edgeLayer = L.layerGroup().addTo(leafletMap);
+  routeLayer = L.layerGroup().addTo(leafletMap);
+  markerById = new Map();
+  renderMapEdges();
+  renderMapMarkers();
 }
 
-function addCityMarkers() {
+function renderMapEdges() {
+  if (!leafletMap || !edgeLayer) return;
+  edgeLayer.clearLayers();
+  const seen = new Set<string>();
+  const lineStyle = { color: '#7d879c', weight: 0.7, opacity: 0.4 };
+  zones.forEach((z: any) => {
+    if (z.wx === undefined) return;
+    (z.exits || []).forEach((eid: string) => {
+      const key = [z.id, eid].sort().join('→');
+      if (seen.has(key)) return;
+      seen.add(key);
+      const n = zones.find((x: any) => x.id === eid);
+      if (!n || n.wx === undefined) return;
+      L.polyline([[z.wy, z.wx], [n.wy, n.wx]], lineStyle).addTo(edgeLayer);
+    });
+  });
+}
+
+function renderMapMarkers() {
   if (!leafletMap) return;
+  markerById = new Map();
+  zones.forEach((z: any) => {
+    if (z.wx === undefined) return;
+    const col = getZoneColor(z);
+    const isCity = z.type === 'CITY';
+    const isCross = typeof z.id === 'string' && z.id.endsWith('Cross');
+    const marker = L.circleMarker([z.wy, z.wx], {
+      radius: isCity ? 7 : isCross ? 5.5 : 3.5,
+      color: '#0a0d14',
+      weight: 1,
+      fillColor: col.bg,
+      fillOpacity: 0.92
+    }).addTo(leafletMap);
+    marker.bindTooltip(`${z.name}${z.tier ? ' · T' + z.tier : ''}${z.biome ? ' · ' + z.biome : ''}`, { direction: 'top', offset: [0, -6] });
+    marker.on('click', () => selectZone(z.id));
+    markerById.set(z.id, marker);
 
-  // Şu an için elimizde tam koordinat listesi olmadığından geçici temsili butonlar eklenecek
-  // Kullanıcı haritayı incelerken biz ilerleyen süreçte koordinatları oturtacağız.
-  
-  // Örnek: Tıkladığımızda koordinatları loglamak için
-  leafletMap.on('click', function(e) {
-    console.log("Haritaya tıklandı: LatLng", e.latlng);
+    if (isCity || isCross) {
+      L.marker([z.wy, z.wx], {
+        interactive: false,
+        icon: L.divIcon({
+          className: '',
+          html: `<div style="transform:translate(-50%,${isCity ? '10px' : '8px'});white-space:nowrap;font:600 10px Rajdhani,sans-serif;color:#e8eaf0;text-shadow:0 1px 3px #000;pointer-events:none">${z.name}</div>`,
+          iconSize: [0, 0]
+        })
+      }).addTo(leafletMap);
+    }
   });
 }
+
+function drawRouteOnMap(path: string[]) {
+  if (!leafletMap || !routeLayer) return;
+  routeLayer.clearLayers();
+  const coords: any[] = [];
+  path.forEach((id: string) => {
+    const z = zones.find((x: any) => x.id === id);
+    if (z && z.wx !== undefined) {
+      coords.push([z.wy, z.wx]);
+      L.circleMarker([z.wy, z.wx], {
+        radius: 6, color: '#fbbf24', weight: 2, fillColor: '#f59e0b', fillOpacity: 0.95
+      }).addTo(routeLayer);
+    }
+  });
+  if (coords.length > 1) {
+    L.polyline(coords, { color: '#fbbf24', weight: 2.5, opacity: 0.9, dashArray: '6 4' }).addTo(routeLayer);
+    leafletMap.fitBounds(L.latLngBounds(coords).pad(0.25));
+  }
+}
+
+function clearRouteOnMap() { if (routeLayer) routeLayer.clearLayers(); }
 
 function drawMap() {
   // Leaflet otomatik render ettiği için bu metodu boş bırakıyoruz, sadece BFS state güncellemelerinde çalışabilir
@@ -390,13 +476,35 @@ function drawMap() {
 
 function zoomIn()    { if(leafletMap) leafletMap.zoomIn(); }
 function zoomOut()   { if(leafletMap) leafletMap.zoomOut(); }
-function resetView() { if(leafletMap) leafletMap.setView([0, 0], 2); }
+function resetView() {
+  if (!leafletMap) return;
+  const pts = zones.filter((z: any) => z.wx !== undefined).map((z: any) => [z.wy, z.wx]);
+  if (!pts.length) { leafletMap.setView([0, 0], 2); return; }
+  const lats = pts.map(p => p[0]), lngs = pts.map(p => p[1]);
+  leafletMap.fitBounds(L.latLngBounds(
+    [Math.min(...lats) - 20, Math.min(...lngs) - 20],
+    [Math.max(...lats) + 20, Math.max(...lngs) + 20]
+  ));
+}
 
 
 // ─── ZONE SEÇ & DETAY ─────────────────────────────────────
 function selectZone(id) {
   selectedZone = zones.find(z => z.id === id) || null;
+  highlightZoneOnMap(id);
   renderZoneDetail();
+}
+
+function highlightZoneOnMap(id) {
+  if (!leafletMap) return;
+  if (highlightLayer) { highlightLayer.remove(); highlightLayer = null; }
+  const z = zones.find(x => x.id === id);
+  if (z && z.wx !== undefined) {
+    highlightLayer = L.circleMarker([z.wy, z.wx], {
+      radius: 10, color: '#d4af37', weight: 2, fill: false, interactive: false
+    }).addTo(leafletMap);
+    leafletMap.panTo([z.wy, z.wx], { animate: true });
+  }
 }
 
 function renderZoneDetail() {
@@ -445,6 +553,9 @@ function renderZoneDetail() {
       <div class="detail-stat"><span class="detail-stat-label">${lang==='tr'?'Bağlantı':'Connections'}</span><span class="detail-stat-val">${exits.length}</span></div>
       <div class="detail-stat"><span class="detail-stat-label">Zone ID</span><span class="detail-stat-val">${z.id}</span></div>
       <div class="detail-stat"><span class="detail-stat-label">${lang==='tr'?'Tip':'Type'}</span><span class="detail-stat-val">${z.type || '—'}</span></div>
+      ${z.tier ? `<div class="detail-stat"><span class="detail-stat-label">Tier</span><span class="detail-stat-val" style="color:#c9a84c">T${z.tier}</span></div>` : ''}
+      ${z.biome ? `<div class="detail-stat"><span class="detail-stat-label">${lang==='tr'?'Biyom':'Biome'}</span><span class="detail-stat-val" style="text-transform:capitalize">${z.biome}</span></div>` : ''}
+      ${z.resource ? `<div class="detail-stat"><span class="detail-stat-label">⛏️ ${lang==='tr'?'Bölge Kaynağı':'Region Resource'}</span><span class="detail-stat-val" style="color:#c9a84c">${z.resource}</span></div>` : ''}
     </div>
     ${exits.length ? `
     <div class="detail-section-title">${lang==='tr'?'Bağlantılar':'Connections'} (${exits.length})</div>
@@ -613,6 +724,7 @@ function calcRoute() {
   }
   currentRoute = { path: found };
   renderRouteResult(found);
+  drawRouteOnMap(found);
 }
 
 function renderRouteResult(path) {
@@ -639,6 +751,7 @@ function clearRoute() {
   document.getElementById('routeFrom').value = '';
   document.getElementById('routeTo').value   = '';
   document.getElementById('routeResult').style.display = 'none';
+  clearRouteOnMap();
 }
 
 function swapRoute() {

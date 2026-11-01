@@ -1,45 +1,96 @@
+// Kraliyet şehir bonusları — kaynak: albiononlinegrind lokal üretim tablosu,
+// albioncraftpro & albionutil (2025-2026 patch, çapraz doğrulama).
+// Bonuslar: şehir içi her üretimde +%18, uzmanlıkta +%15 craft / +%40 refine.
+// products: o şehirde bonus alan üretim kategorileri (icons: crafting hesaplayıcı reçetelerinden).
 let royalCities = [
-  { 
-    id: "fortsterling", name: "Fort Sterling", x: 50, y: 15, 
-    color: "bg-gray-100", textColor: "text-gray-900", border: "border-gray-300", 
+  {
+    id: "fortsterling", name: "Fort Sterling", x: 50, y: 15,
+    color: "bg-gray-100", textColor: "text-gray-900", border: "border-gray-300",
     icon: "fa-mountain", biome: "Mountain (Dağ)",
-    refines: "Wood (Odun)", crafts: ["Hammer", "Spear", "Holy Staff", "Plate Helmet", "Cloth Armor"] 
+    refines: "Wood → Planks (Odun → Kalas)", crafts: ["Hammer", "Spear", "Holy Staff", "Plate Helmet", "Cloth Armor"],
+    products: [
+      { tr: "Çekiç (Hammer)", cat: "hammer" },
+      { tr: "Mızrak (Spear)", cat: "spear" },
+      { tr: "Kutsal Asa (Holy Staff)", cat: "holy" },
+      { tr: "Plaka Kafalık (Plate Helmet)", cat: "phelmet" },
+      { tr: "Kumaş Gövdelik (Cloth Armor)", cat: "carmor" }
+    ]
   },
-  { 
-    id: "lymhurst", name: "Lymhurst", x: 80, y: 35, 
-    color: "bg-green-600", textColor: "text-white", border: "border-green-400", 
+  {
+    id: "lymhurst", name: "Lymhurst", x: 80, y: 35,
+    color: "bg-green-600", textColor: "text-white", border: "border-green-400",
     icon: "fa-tree", biome: "Forest (Orman)",
-    refines: "Fiber (Lif)", crafts: ["Sword", "Bow", "Arcane Staff", "Leather Helmet", "Leather Shoes"] 
+    refines: "Fiber → Cloth (Lif → Kumaş)", crafts: ["Sword", "Bow", "Arcane Staff", "Leather Helmet", "Leather Shoes"],
+    products: [
+      { tr: "Kılıç (Sword)", cat: "sword" },
+      { tr: "Yay (Bow)", cat: "bow" },
+      { tr: "Arkana Asası (Arcane Staff)", cat: "arcane" },
+      { tr: "Deri Kafalık (Leather Helmet)", cat: "lhelmet" },
+      { tr: "Deri Bot (Leather Shoes)", cat: "lshoes" }
+    ]
   },
-  { 
-    id: "thetford", name: "Thetford", x: 20, y: 35, 
-    color: "bg-purple-800", textColor: "text-white", border: "border-purple-400", 
+  {
+    id: "thetford", name: "Thetford", x: 20, y: 35,
+    color: "bg-purple-800", textColor: "text-white", border: "border-purple-400",
     icon: "fa-frog", biome: "Swamp (Bataklık)",
-    refines: "Ore (Maden)", crafts: ["Mace", "Nature Staff", "Fire Staff", "Leather Armor", "Cloth Helmet"] 
+    refines: "Ore → Metal Bar (Maden → Metal Külçe)", crafts: ["Mace", "Nature Staff", "Fire Staff", "Leather Armor", "Cloth Helmet"],
+    products: [
+      { tr: "Gürz (Mace)", cat: "mace" },
+      { tr: "Doğa Asası (Nature Staff)", cat: "nature" },
+      { tr: "Ateş Asası (Fire Staff)", cat: "fire" },
+      { tr: "Deri Gövdelik (Leather Armor)", cat: "larmor" },
+      { tr: "Kumaş Kafalık (Cloth Helmet)", cat: "chelmet" }
+    ]
   },
-  { 
-    id: "martlock", name: "Martlock", x: 30, y: 75, 
-    color: "bg-blue-600", textColor: "text-white", border: "border-blue-400", 
+  {
+    id: "martlock", name: "Martlock", x: 30, y: 75,
+    color: "bg-blue-600", textColor: "text-white", border: "border-blue-400",
     icon: "fa-water", biome: "Highland (Yayla)",
-    refines: "Hide (Deri)", crafts: ["Axe", "Quarterstaff", "Frost Staff", "Plate Shoes", "Offhand"] 
+    refines: "Hide → Leather (Ham Deri → İşl. Deri)", crafts: ["Axe", "Quarterstaff", "Frost Staff", "Plate Shoes", "Offhand"],
+    products: [
+      { tr: "Balta (Axe)", cat: "axe" },
+      { tr: "Quarterstaff (Asa)", cat: "qstaff" },
+      { tr: "Buz Asası (Frost Staff)", cat: "frost" },
+      { tr: "Plaka Bot (Plate Shoes)", cat: "pshoes" },
+      { tr: "İkincil Eşya (Off-hand)", cat: "offhand" }
+    ]
   },
-  { 
-    id: "bridgewatch", name: "Bridgewatch", x: 70, y: 75, 
-    color: "bg-orange-500", textColor: "text-white", border: "border-orange-300", 
+  {
+    id: "bridgewatch", name: "Bridgewatch", x: 70, y: 75,
+    color: "bg-orange-500", textColor: "text-white", border: "border-orange-300",
     icon: "fa-sun", biome: "Steppe (Bozkır)",
-    refines: "Rock (Taş)", crafts: ["Crossbow", "Dagger", "Cursed Staff", "Plate Armor", "Cloth Shoes"] 
+    refines: "Stone → Stone Block (Taş → Taş Blok)", crafts: ["Crossbow", "Dagger", "Cursed Staff", "Plate Armor", "Cloth Shoes"],
+    products: [
+      { tr: "Arbalet (Crossbow)", cat: "bow", cross: true },
+      { tr: "Hançer (Dagger)", cat: "dagger" },
+      { tr: "Lanetli Asa (Cursed Staff)", cat: "curse" },
+      { tr: "Plaka Gövdelik (Plate Armor)", cat: "parmor" },
+      { tr: "Kumaş Ayakkabı (Cloth Shoes)", cat: "cshoes" }
+    ]
   },
-  { 
-    id: "caerleon", name: "Caerleon", x: 50, y: 50, 
-    color: "bg-red-800", textColor: "text-white", border: "border-red-500", 
+  {
+    id: "caerleon", name: "Caerleon", x: 50, y: 50,
+    color: "bg-red-800", textColor: "text-white", border: "border-red-500",
     icon: "fa-skull", biome: "Red Zone",
-    refines: "Yok", crafts: ["Tools", "Gathering Gear", "Potions", "Food", "Mounts", "Capes", "Bags"] 
+    refines: "Yok", crafts: ["War Gloves", "Shapeshifter Staff", "Gathering Gear", "Food", "Potions"],
+    products: [
+      { tr: "Savaş Eldivenleri (War Gloves)", cat: "knuckles" },
+      { tr: "Şekil Değiştiren Asa (Shapeshifter)", cat: "shape" },
+      { tr: "Toplayıcı Setleri (Gathering Gear)", cat: "gatherer" },
+      { tr: "Yemekler (Food)", cat: "food" },
+      { tr: "İksirler (Potions)", cat: "potion" }
+    ]
   },
-  { 
-    id: "brecilien", name: "Brecilien", x: 10, y: 85, 
-    color: "bg-fuchsia-900", textColor: "text-white", border: "border-fuchsia-500", 
+  {
+    id: "brecilien", name: "Brecilien", x: 10, y: 85,
+    color: "bg-fuchsia-900", textColor: "text-white", border: "border-fuchsia-500",
     icon: "fa-moon", biome: "The Mists",
-    refines: "Yok", crafts: ["Brecilien Capes", "Avalonian Weapons", "Fey Armor", "Potions"] 
+    refines: "Yok", crafts: ["Bags & Satchels", "Capes", "Potions", "Farming Crops"],
+    products: [
+      { tr: "Çantalar (Bags & Satchels)", cat: "bag" },
+      { tr: "Pelerinler (Capes)", cat: "cape" },
+      { tr: "İksirler (Potions)", cat: "potion" }
+    ]
   }
 ];
 
@@ -192,8 +243,16 @@ function initCraftingModule() {
                 ${city.crafts.map(c => `<div class="bg-albion-900 border border-gray-600 rounded p-2 text-sm text-gray-200 flex items-center"><i class="fa-solid fa-hammer text-amber-600 mr-2 opacity-70"></i> ${c}</div>`).join('')}
               </div>
             </div>
+            <div class="mt-6 pt-4 border-t border-gray-700">
+              <h4 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-2">${window.t('crafting-cityProducts', 'Bu Şehirde Üretilebilecek Eşyalar (T4 önizleme)')}</h4>
+              <div class="space-y-3 max-h-[320px] overflow-y-auto pr-1" id="cityProductsWrap">
+                <div class="text-gray-500 text-sm animate-pulse">${window.t('loading', 'Yükleniyor...')}</div>
+              </div>
+            </div>
           </div>
         `;
+        const wrap = document.getElementById('cityProductsWrap');
+        if (wrap) renderCityProducts(city).then(html => { wrap.innerHTML = html; });
       });
       
       mapArea.appendChild(cityNode);
@@ -342,6 +401,41 @@ function initCraftingModule() {
       if (!superGroups[groupName]) superGroups[groupName] = [];
       superGroups[groupName].push({ id, ...ALL_CRAFT_RECIPES[id] });
   });
+
+  // Şehir bonusu kategorilerindeki eşya listeleri (reçete DB'den; ikonlar render.albiononline.com'dan)
+  function itemsForCat(cat: string, crossbowOnly = false) {
+    return Object.keys(ALL_CRAFT_RECIPES)
+      .filter(id => {
+        const v: any = (ALL_CRAFT_RECIPES as any)[id];
+        if (v.cat !== cat) return false;
+        // extractor 'bow' kategorisinde arbaletleri de toplar; burada ayırıyoruz
+        if (cat === 'bow') return crossbowOnly ? id.includes('CROSSBOW') : !id.includes('CROSSBOW');
+        return true;
+      })
+      .map(id => ({ id, name: (ALL_CRAFT_RECIPES as any)[id].name }));
+  }
+
+  async function renderCityProducts(city: any) {
+    if (!city.products || !city.products.length) return '<div class="text-gray-500 text-sm italic">—</div>';
+    const parts: string[] = [];
+    for (const p of city.products) {
+      const items = itemsForCat(p.cat, !!p.cross);
+      const tiles: string[] = [];
+      for (const it of items.slice(0, 14)) {
+        const img = await window.createItemImage(`T4_${it.id}`, { size: 32, className: 'w-8 h-8' });
+        tiles.push(`<div class="flex flex-col items-center w-14 shrink-0" title="${it.name}">
+          ${img}
+          <span class="text-[9px] text-gray-400 text-center leading-tight mt-1">${it.name}</span>
+        </div>`);
+      }
+      parts.push(`
+        <div>
+          <div class="text-xs font-bold text-albion-accent mb-1.5 flex items-center"><i class="fa-solid fa-hammer mr-1.5 opacity-70"></i> ${p.tr} <span class="text-gray-500 font-normal ml-1">(${items.length})</span></div>
+          <div class="flex flex-wrap gap-2">${tiles.join('')}${items.length > 14 ? `<div class="text-[10px] text-gray-500 self-center">+${items.length - 14} diğer</div>` : ''}</div>
+        </div>`);
+    }
+    return parts.join('');
+  }
 
   function getLang() { return localStorage.getItem('aot-lang') || 'tr'; }
   function getItemName(fullId) {
