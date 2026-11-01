@@ -101,6 +101,9 @@ function initCraftingModule() {
       <button id="tabBtnCalc" class="flex-1 md:flex-none px-6 py-2 bg-transparent text-gray-400 hover:text-white font-bold rounded transition-colors flex items-center justify-center">
         <i class="fa-solid fa-calculator mr-2"></i> <span>${window.t('crafting-calc', 'Crafting Hesaplayıcı')}</span>
       </button>
+      <button id="tabBtnJournal" class="flex-1 md:flex-none px-6 py-2 bg-transparent text-gray-400 hover:text-white font-bold rounded transition-colors flex items-center justify-center">
+        <i class="fa-solid fa-book-open mr-2"></i> <span>${window.t('crafting-journalTab', 'Journal Kârı')}</span>
+      </button>
     </div>
     <div id="craftingContentArea" class="flex-1 flex flex-col h-full relative"></div>
   `;
@@ -108,10 +111,11 @@ function initCraftingModule() {
   const btnRoyal = document.getElementById('tabBtnRoyal');
   const btnOutlands = document.getElementById('tabBtnOutlands');
   const btnCalc = document.getElementById('tabBtnCalc');
+  const btnJournal = document.getElementById('tabBtnJournal');
   const contentArea = document.getElementById('craftingContentArea');
 
   function resetTabs() {
-    [btnRoyal, btnOutlands, btnCalc].forEach(btn => {
+    [btnRoyal, btnOutlands, btnCalc, btnJournal].forEach(btn => {
       btn.className = "flex-1 md:flex-none px-6 py-2 bg-transparent text-gray-400 hover:text-white font-bold rounded transition-colors flex items-center justify-center";
     });
   }
@@ -741,9 +745,242 @@ function initCraftingModule() {
     updateLayout();
   }
 
+  // RENDER JOURNAL PROFIT CALC
+  const JOURNAL_TYPES = [
+    { id: 'WARRIOR', name: "Blacksmith's Journal", laborer: 'Blacksmith' },
+    { id: 'HUNTER', name: "Fletcher's Journal", laborer: 'Fletcher' },
+    { id: 'MAGE', name: "Imbuer's Journal", laborer: 'Imbuer' },
+    { id: 'TOOLMAKER', name: "Tinker's Journal", laborer: 'Tinkerer' }
+  ];
+  const JOURNAL_CITIES = ['Fort Sterling', 'Lymhurst', 'Thetford', 'Martlock', 'Bridgewatch', 'Caerleon'];
+
+  function renderJournalCalc() {
+    const inputCls = 'w-full bg-albion-900 border border-gray-600 rounded p-2.5 text-white outline-none focus:border-albion-accent transition-colors';
+    const labelCls = 'block text-xs font-bold text-gray-400 mb-1';
+
+    contentArea.innerHTML = `
+      <div class="flex flex-col h-full animate-fade-in pb-10 gap-4">
+        <div class="bg-albion-800 border border-gray-700 p-6 rounded-xl shadow-lg">
+          <h3 class="text-2xl font-bold text-white mb-2"><i class="fa-solid fa-book-open text-albion-accent mr-2"></i> <span>${window.t('crafting-journalTitle', 'Journal Tamamlama Kâr Hesabı')}</span></h3>
+          <p class="text-gray-400 text-sm"><span>${window.t('crafting-journalDesc', "Boş journal'ı craft yaparken doldur, dolu journal'ı sat. Fiyatlar Albion Online Data Project'ten çekilir.")}</span></p>
+        </div>
+
+        <div class="flex flex-col xl:flex-row gap-4">
+          <div class="w-full xl:w-1/3 bg-albion-800 border border-gray-700 rounded-xl p-5 flex flex-col gap-3 shadow-xl">
+            <div class="flex items-center justify-center gap-5 bg-albion-900 border border-gray-700 rounded-lg p-3">
+              <div class="flex flex-col items-center gap-1">
+                <div id="jIconEmpty" class="w-12 h-12 flex items-center justify-center"></div>
+                <span class="text-[10px] text-gray-400">${window.t('crafting-journalEmpty', 'Boş')}</span>
+              </div>
+              <i class="fa-solid fa-arrow-right text-albion-accent"></i>
+              <div class="flex flex-col items-center gap-1">
+                <div id="jIconFull" class="w-12 h-12 flex items-center justify-center"></div>
+                <span class="text-[10px] text-gray-400">${window.t('crafting-journalFull', 'Dolu')}</span>
+              </div>
+            </div>
+
+            <div>
+              <label class="${labelCls}">${window.t('crafting-journalType', 'Journal Türü')}</label>
+              <select id="jType" class="${inputCls}">
+                ${JOURNAL_TYPES.map(t => `<option value="${t.id}">${t.name} — ${t.laborer}</option>`).join('')}
+              </select>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="${labelCls}">${window.t('crafting-journalTier', 'Tier')}</label>
+                <select id="jTier" class="${inputCls}">${[4, 5, 6, 7, 8].map(t => `<option value="${t}">T${t}</option>`).join('')}</select>
+              </div>
+              <div>
+                <label class="${labelCls}">${window.t('crafting-journalCity', 'Fiyat Şehri')}</label>
+                <select id="jCity" class="${inputCls}">${JOURNAL_CITIES.map(c => `<option value="${c}">${c}</option>`).join('')}</select>
+              </div>
+            </div>
+            <div>
+              <label class="${labelCls}">${window.t('crafting-journalEmptyCost', 'Boş Journal Maliyeti')}</label>
+              <input type="number" id="jEmptyCost" value="0" min="0" step="1" class="${inputCls}">
+              <p class="text-[10px] text-gray-500 mt-1">${window.t('crafting-journalEmptyHint', "AODP'de boş journal fiyatı bulunmaz; oyundan/alış fiyatını gir.")}</p>
+            </div>
+            <div>
+              <label class="${labelCls}">${window.t('crafting-journalFullPrice', 'Dolu Journal Satış Fiyatı')}</label>
+              <input type="number" id="jFullPrice" value="0" min="0" step="1" class="${inputCls}">
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="${labelCls}">${window.t('crafting-journalTax', 'Piyasa Vergisi (%)')}</label>
+                <input type="number" id="jTax" value="6.5" min="0" max="100" step="0.1" class="${inputCls}">
+              </div>
+              <div>
+                <label class="${labelCls}">${window.t('crafting-journalQty', 'Journal Adedi')}</label>
+                <input type="number" id="jQty" value="1" min="1" step="1" class="${inputCls}">
+              </div>
+            </div>
+            <button id="jFetchBtn" class="w-full bg-albion-accent text-black font-black py-3 rounded-lg shadow hover:scale-[1.02] transition-transform flex items-center justify-center gap-2 mt-1">
+              <i class="fa-solid fa-cloud-arrow-down"></i> ${window.t('crafting-journalFetch', 'Fiyatları Canlı Çek')}
+            </button>
+            <span id="jStatus" class="text-xs text-gray-400 text-center">${window.t('crafting-journalFetchHint', 'Dolu fiyat son 24 saat ortalaması olarak çekilir.')}</span>
+          </div>
+
+          <div class="w-full xl:w-2/3 flex flex-col gap-4">
+            <div class="bg-black/50 border-2 border-gray-700 rounded-xl p-6 shadow-2xl relative overflow-hidden">
+              <div class="absolute right-0 top-0 w-32 h-32 bg-albion-accent/5 rounded-bl-full pointer-events-none"></div>
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center relative z-10">
+                <div class="bg-black/40 p-4 rounded-lg border border-gray-700 shadow-inner">
+                  <div class="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1">${window.t('crafting-journalNet', 'Net Kâr / Journal')}</div>
+                  <div class="text-xl md:text-2xl font-black text-green-400 tracking-wide drop-shadow-md" id="jResNet">0</div>
+                </div>
+                <div class="bg-black/40 p-4 rounded-lg border border-gray-700 shadow-inner">
+                  <div class="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1">${window.t('crafting-journalTotal', 'Toplam Net Kâr')}</div>
+                  <div class="text-xl md:text-2xl font-black text-blue-400 tracking-wide" id="jResTotal">0</div>
+                </div>
+                <div class="bg-black/40 p-4 rounded-lg border border-gray-700 shadow-inner">
+                  <div class="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1">${window.t('crafting-journalMargin', 'Kâr Marjı')}</div>
+                  <div class="text-xl md:text-2xl font-black text-white tracking-wide" id="jResMargin">%0</div>
+                </div>
+                <div class="bg-black/40 p-4 rounded-lg border border-gray-700 shadow-inner">
+                  <div class="text-[10px] text-gray-400 uppercase font-black tracking-widest mb-1">${window.t('crafting-journalBreakEven', 'Başabaş Dolu Fiyat')}</div>
+                  <div class="text-xl md:text-2xl font-black text-yellow-400 tracking-wide" id="jResBreak">0</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-albion-900 border border-albion-700 rounded-xl p-5 shadow-lg">
+              <h4 class="text-sm font-bold text-albion-accent uppercase tracking-wider mb-2"><i class="fa-solid fa-circle-info mr-2"></i><span>${window.t('crafting-journalHowtoTitle', 'Nasıl doldurulur?')}</span></h4>
+              <p class="text-xs text-gray-300 leading-relaxed"><span>${window.t('crafting-journalHowto', "Journal'ı envanterinde tutarak craft yaparsın; doldurma craft fame'ine bağlıdır ve journal tier'ı en az o seviyedeki craftları gerektirir (T8 journal sadece T8 craftlarla dolar). Dolu journal'ı piyasada satabilir veya emekçiye verebilirsin.")}</span></p>
+              <p class="text-xs text-gray-400 mt-3 font-mono bg-black/30 border border-gray-700 rounded p-2">Net = Dolu × (1 − Vergi) − Boş &nbsp;•&nbsp; Başabaş = Boş ÷ (1 − Vergi)</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const selJType = document.getElementById('jType');
+    const selJTier = document.getElementById('jTier');
+    const selJCity = document.getElementById('jCity');
+    const inEmpty = document.getElementById('jEmptyCost');
+    const inFull = document.getElementById('jFullPrice');
+    const inTax = document.getElementById('jTax');
+    const inQty = document.getElementById('jQty');
+    const btnJFetch = document.getElementById('jFetchBtn');
+    const jStatus = document.getElementById('jStatus');
+
+    function journalIds() {
+      const base = `T${selJTier.value}_JOURNAL_${selJType.value}`;
+      return { empty: base, full: base + '_FULL' };
+    }
+
+    async function updateJournalIcons() {
+      const ids = journalIds();
+      const emptyEl = document.getElementById('jIconEmpty');
+      const fullEl = document.getElementById('jIconFull');
+      if (emptyEl && window.createItemImage) emptyEl.innerHTML = await window.createItemImage(ids.empty, { size: 48 });
+      if (fullEl && window.createItemImage) fullEl.innerHTML = await window.createItemImage(ids.full, { size: 48 });
+    }
+
+    function calcJournal() {
+      const empty = Math.max(0, parseFloat(inEmpty.value) || 0);
+      const full = Math.max(0, parseFloat(inFull.value) || 0);
+      const tax = Math.min(100, Math.max(0, parseFloat(inTax.value) || 0)) / 100;
+      const qty = Math.max(1, parseInt(inQty.value) || 1);
+      const netSell = full * (1 - tax);
+      const per = netSell - empty;
+      const total = per * qty;
+      const margin = empty > 0 ? (per / empty) * 100 : 0;
+      const breakEven = tax < 1 ? empty / (1 - tax) : 0;
+
+      document.getElementById('jResNet').innerText = Math.round(per).toLocaleString();
+      const elTotal = document.getElementById('jResTotal');
+      elTotal.innerText = Math.round(total).toLocaleString();
+      elTotal.className = (total >= 0
+        ? 'text-xl md:text-2xl font-black text-green-400 tracking-wide drop-shadow-md'
+        : 'text-xl md:text-2xl font-black text-red-400 tracking-wide drop-shadow-md');
+      const elMargin = document.getElementById('jResMargin');
+      elMargin.innerText = '%' + margin.toFixed(1);
+      elMargin.className = (margin >= 0
+        ? 'text-xl md:text-2xl font-black text-white tracking-wide'
+        : 'text-xl md:text-2xl font-black text-red-400 tracking-wide');
+      document.getElementById('jResBreak').innerText = Math.round(breakEven).toLocaleString();
+    }
+
+    async function fetchHistoryPrice(id: string, city: string, server: string): Promise<number> {
+      try {
+        const r = await fetch(`https://${server}.albion-online-data.com/api/v2/stats/history/${id}?locations=${encodeURIComponent(city)}&time-scale=24`);
+        if (!r.ok) return 0;
+        const rows = await r.json();
+        if (!Array.isArray(rows)) return 0;
+        const valid = rows.filter(x => x && Number(x.avg_price) > 0);
+        if (!valid.length) return 0;
+        valid.sort((a, b) => String(a.date || a.timestamp || '').localeCompare(String(b.date || b.timestamp || '')));
+        return Math.round(Number(valid[valid.length - 1].avg_price));
+      } catch {
+        return 0;
+      }
+    }
+
+    async function fetchJournalPrices() {
+      btnJFetch.disabled = true;
+      btnJFetch.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ${window.t('crafting-journalFetching', 'Çekiliyor...')}`;
+      try {
+        const server = window.getAppServer ? window.getAppServer() : 'europe';
+        const city = selJCity.value;
+        const ids = journalIds();
+        let fullPrice = 0;
+        let emptyPrice = 0;
+
+        // 1) Güncel ilanlar (prices endpoint — journal'larda genelde boş döner)
+        try {
+          const r = await fetch(`https://${server}.albion-online-data.com/api/v2/stats/prices/${ids.full},${ids.empty}?locations=${encodeURIComponent(city)}`);
+          const items = await r.json();
+          const cutoff = Date.now() - 4 * 3600 * 1000;
+          if (Array.isArray(items)) {
+            for (const m of items) {
+              if (!m || m.city !== city) continue;
+              const ts = new Date(m.sell_price_min_date).getTime();
+              if (ts > cutoff && m.sell_price_min > 0) {
+                if (m.item_id === ids.full && (fullPrice === 0 || m.sell_price_min < fullPrice)) fullPrice = m.sell_price_min;
+                if (m.item_id === ids.empty && (emptyPrice === 0 || m.sell_price_min < emptyPrice)) emptyPrice = m.sell_price_min;
+              }
+            }
+          }
+        } catch { /* history'a düş */ }
+
+        // 2) Fallback: son 24 saat ortalaması (history endpoint)
+        if (!fullPrice) fullPrice = await fetchHistoryPrice(ids.full, city, server);
+        if (!emptyPrice) emptyPrice = await fetchHistoryPrice(ids.empty, city, server);
+
+        if (fullPrice) inFull.value = String(fullPrice);
+        if (emptyPrice) inEmpty.value = String(emptyPrice);
+
+        if (fullPrice) {
+          jStatus.textContent = window.t('crafting-journalUpdated', 'Fiyatlar güncellendi (dolu: son 24 saat ortalaması).');
+          jStatus.className = 'text-xs text-green-400 text-center';
+        } else {
+          jStatus.textContent = window.t('crafting-journalNoData', 'Veri bulunamadı; fiyatı elle gir.');
+          jStatus.className = 'text-xs text-yellow-400 text-center';
+        }
+        calcJournal();
+      } catch (e) {
+        console.error(e);
+        jStatus.textContent = window.t('crafting-journalNoData', 'Veri bulunamadı; fiyatı elle gir.');
+        jStatus.className = 'text-xs text-red-400 text-center';
+      } finally {
+        btnJFetch.disabled = false;
+        btnJFetch.innerHTML = `<i class="fa-solid fa-cloud-arrow-down"></i> ${window.t('crafting-journalFetch', 'Fiyatları Canlı Çek')}`;
+      }
+    }
+
+    [selJType, selJTier].forEach(el => el.addEventListener('change', () => { updateJournalIcons(); calcJournal(); }));
+    selJCity.addEventListener('change', calcJournal);
+    [inEmpty, inFull, inTax, inQty].forEach(el => el.addEventListener('input', calcJournal));
+    btnJFetch.addEventListener('click', fetchJournalPrices);
+
+    updateJournalIcons();
+    calcJournal();
+  }
+
   btnRoyal.addEventListener('click', () => { resetTabs(); activateTab(btnRoyal); renderRoyalMap(); });
   btnOutlands.addEventListener('click', () => { resetTabs(); activateTab(btnOutlands); renderOutlandsPlanner(); });
   btnCalc.addEventListener('click', () => { resetTabs(); activateTab(btnCalc); renderCalc(); });
+  btnJournal.addEventListener('click', () => { resetTabs(); activateTab(btnJournal); renderJournalCalc(); });
 
   renderRoyalMap();
 }
