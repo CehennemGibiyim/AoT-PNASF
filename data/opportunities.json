@@ -1,20 +1,20 @@
 {
-  "lastUpdate": "2026-10-30T21:46:51.553Z",
+  "lastUpdate": "2026-11-01T03:10:28.726Z",
   "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
   "opportunities": [
     {
-      "id": "market_T6_CAPE_Fort Sterling_Lymhurst",
+      "id": "market_T6_CAPE_Thetford_Lymhurst",
       "type": "flip",
       "item": "T6_CAPE",
       "itemName": "T6_CAPE",
-      "from": "Fort Sterling",
+      "from": "Thetford",
       "to": "Lymhurst",
-      "buyPrice": 19911,
-      "sellPrice": 20512,
-      "profit": 552,
-      "profitPercent": "2.8",
-      "timestamp": "2026-10-30T21:46:51.553Z",
+      "buyPrice": 19980,
+      "sellPrice": 20838,
+      "profit": 789,
+      "profitPercent": "3.9",
+      "timestamp": "2026-11-01T03:10:28.725Z",
       "source": "albion-online-data.com",
       "verified": true
     }
