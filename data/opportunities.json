@@ -1,8 +1,23 @@
 {
-  "lastUpdate": "2026-11-01T03:10:28.726Z",
+  "lastUpdate": "2026-11-01T12:16:44.011Z",
   "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
   "opportunities": [
+    {
+      "id": "market_T6_BAG_Thetford_Bridgewatch",
+      "type": "flip",
+      "item": "T6_BAG",
+      "itemName": "T6_BAG",
+      "from": "Thetford",
+      "to": "Bridgewatch",
+      "buyPrice": 34999,
+      "sellPrice": 38709,
+      "profit": 3413,
+      "profitPercent": "9.8",
+      "timestamp": "2026-11-01T12:16:44.011Z",
+      "source": "albion-online-data.com",
+      "verified": true
+    },
     {
       "id": "market_T6_CAPE_Thetford_Lymhurst",
       "type": "flip",
@@ -10,11 +25,11 @@
       "itemName": "T6_CAPE",
       "from": "Thetford",
       "to": "Lymhurst",
-      "buyPrice": 19980,
+      "buyPrice": 19199,
       "sellPrice": 20838,
-      "profit": 789,
-      "profitPercent": "3.9",
-      "timestamp": "2026-11-01T03:10:28.725Z",
+      "profit": 1507,
+      "profitPercent": "7.8",
+      "timestamp": "2026-11-01T12:16:44.011Z",
       "source": "albion-online-data.com",
       "verified": true
     }
