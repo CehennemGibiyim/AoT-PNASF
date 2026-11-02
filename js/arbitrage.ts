@@ -531,6 +531,9 @@ function loadArbitrageModule() {
                 <button id="btnTabArbBM" class="arb-nav-btn flex-1 lg:flex-none px-5 py-2.5 bg-transparent text-gray-400 hover:text-white font-bold rounded transition-colors flex items-center justify-center text-sm md:text-base">
                     <i class="fa-solid fa-skull mr-2"></i> <span data-i18n="arbitrage-tabBM">BM Talepleri</span>
                 </button>
+                <button id="btnTabArbFlip" class="arb-nav-btn flex-1 lg:flex-none px-5 py-2.5 bg-transparent text-gray-400 hover:text-white font-bold rounded transition-colors flex items-center justify-center text-sm md:text-base">
+                    <i class="fa-solid fa-bolt mr-2"></i> Flipper
+                </button>
             </div>
 
             <div class="flex-1 relative flex flex-col min-h-0">
@@ -1038,6 +1041,94 @@ function loadArbitrageModule() {
                                 </thead>
                                 <tbody id="bmTableBody"></tbody>
                             </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEKME 8: FLIPPER (Anlık Kara Borsa Tarayıcısı) -->
+                <div id="viewArbFlip" class="arb-view hidden flex-col h-full absolute inset-0 overflow-y-auto custom-scroll">
+                    <div class="bg-albion-800 border border-gray-700 rounded-xl p-5 shadow-lg mb-5 flex flex-col xl:flex-row gap-4 justify-between items-start xl:items-center shrink-0">
+                        <div>
+                            <h2 class="text-xl md:text-2xl font-black text-white flex items-center">
+                                <i class="fa-solid fa-bolt text-yellow-400 mr-3"></i> Flipper — Anlık Kara Borsa Tarayıcısı
+                            </h2>
+                            <p class="text-gray-400 text-xs md:text-sm mt-1">Kraliyet pazarlarındaki en ucuz ekipmanı Black Market alış emriyle eşler; marjı ve her fiyatın <span class="text-white font-bold">son tarama yaşını</span> gösterir.</p>
+                        </div>
+                        <div class="flex flex-wrap gap-2 items-center w-full xl:w-auto">
+                            <span id="flipperStatus" class="flex items-center gap-2 bg-albion-900 border border-gray-600 px-3 py-2 rounded-lg text-xs font-bold text-gray-400 whitespace-nowrap">
+                                <span class="w-2 h-2 rounded-full bg-gray-500"></span> Duraklatıldı
+                            </span>
+                            <select id="flipperInterval" class="bg-albion-900 border border-gray-600 rounded-lg p-2.5 text-white focus:border-albion-accent outline-none text-sm font-bold">
+                                <option value="60000">Her 1 dakika</option>
+                                <option value="120000" selected>Her 2 dakika</option>
+                                <option value="300000">Her 5 dakika</option>
+                            </select>
+                            <select id="flipperTier" class="bg-albion-900 border border-gray-600 rounded-lg p-2.5 text-white focus:border-albion-accent outline-none text-sm font-bold">
+                                <option value="ALL" selected>Tüm Tierlar</option><option value="4">Tier 4</option><option value="5">Tier 5</option><option value="6">Tier 6</option><option value="7">Tier 7</option><option value="8">Tier 8</option>
+                            </select>
+                            <select id="flipperEnchant" class="bg-albion-900 border border-gray-600 rounded-lg p-2.5 text-white focus:border-albion-accent outline-none text-sm font-bold">
+                                <option value="0" selected>Enchant 0</option><option value="ALL">Tüm Enchantlar</option><option value="1">.1</option><option value="2">.2</option><option value="3">.3</option><option value="4">.4</option>
+                            </select>
+                            <button id="btnFlipScan" class="bg-albion-accent hover:brightness-110 text-black px-4 py-2.5 rounded-lg font-black transition-all shadow-md flex items-center text-sm uppercase tracking-wider">
+                                <i class="fa-solid fa-rotate mr-2"></i> Şimdi Tara
+                            </button>
+                            <button id="btnFlipToggle" class="bg-green-600 hover:bg-green-500 text-white px-4 py-2.5 rounded-lg font-black transition-colors shadow-md flex items-center text-sm uppercase tracking-wider">
+                                <i class="fa-solid fa-play mr-2"></i> Taramayı Başlat
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5 shrink-0">
+                        <div class="bg-albion-800 border border-gray-700 rounded-xl p-4 shadow-lg">
+                            <div class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Aktif Flip Fırsatı</div>
+                            <div id="flipperStatCount" class="text-2xl font-black text-green-400">—</div>
+                        </div>
+                        <div class="bg-albion-800 border border-gray-700 rounded-xl p-4 shadow-lg">
+                            <div class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Taranan Eşya</div>
+                            <div id="flipperStatScanned" class="text-2xl font-black text-blue-400">—</div>
+                        </div>
+                        <div class="bg-albion-800 border border-gray-700 rounded-xl p-4 shadow-lg">
+                            <div class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">En Taze Veri</div>
+                            <div id="flipperStatFresh" class="text-xl md:text-2xl font-black text-cyan-400">—</div>
+                        </div>
+                        <div class="bg-albion-800 border border-gray-700 rounded-xl p-4 shadow-lg">
+                            <div class="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-1">Ort. Veri Yaşı</div>
+                            <div id="flipperStatAvg" class="text-xl md:text-2xl font-black text-orange-400">—</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 xl:grid-cols-3 gap-4 flex-1 min-h-0">
+                        <div class="xl:col-span-2 bg-albion-800 border border-gray-700 rounded-xl shadow-lg relative p-0 overflow-hidden flex flex-col min-h-[320px]">
+                            <div id="flipperLoading" class="hidden absolute inset-0 bg-albion-800/90 backdrop-blur-sm z-20 flex flex-col items-center justify-center">
+                                <i class="fa-solid fa-circle-notch fa-spin text-5xl text-yellow-400 mb-4"></i>
+                                <span class="text-white font-bold tracking-widest uppercase">Pazarlar taranıyor...</span>
+                            </div>
+                            <div class="overflow-x-auto flex-1 custom-scroll">
+                                <table class="w-full text-left text-gray-300 min-w-[560px]">
+                                    <thead class="bg-[#0a0d14] border-b border-gray-700 text-xs uppercase text-gray-400 sticky top-0 z-10">
+                                        <tr>
+                                            <th class="p-4 font-bold whitespace-nowrap">Eşya</th>
+                                            <th class="p-4 font-bold whitespace-nowrap">Alış (En Ucuz)</th>
+                                            <th class="p-4 font-bold whitespace-nowrap">BM Alış Emri</th>
+                                            <th class="p-4 font-bold text-right whitespace-nowrap">Net Kâr</th>
+                                            <th class="p-4 font-bold text-right whitespace-nowrap">Son Tarama</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="flipperTableBody">
+                                        <tr><td colspan="5" class="text-center p-8 text-gray-500"><i class="fa-solid fa-satellite-dish text-2xl mb-2 opacity-50"></i><br>Henüz taranmadı — <b class="text-white">Taramayı Başlat</b> veya <b class="text-white">Şimdi Tara</b> ile pazarları yoklayın.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="bg-albion-800 border border-gray-700 rounded-xl shadow-lg flex flex-col min-h-[320px] overflow-hidden">
+                            <div class="flex items-center justify-between px-4 py-3 border-b border-gray-700 bg-[#0a0d14] shrink-0">
+                                <span class="text-xs font-black text-gray-400 uppercase tracking-widest"><i class="fa-solid fa-terminal mr-2 text-yellow-400"></i>Canlı Tarama Kaydı</span>
+                                <button id="btnFlipperClearLog" class="text-[10px] bg-gray-800 hover:bg-gray-700 border border-gray-600 text-gray-300 px-2 py-1 rounded transition-colors font-bold"><i class="fa-solid fa-trash mr-1"></i>Temizle</button>
+                            </div>
+                            <div id="flipperLog" class="flex-1 overflow-y-auto custom-scroll p-3 space-y-1.5 font-mono text-[11px] leading-relaxed">
+                                <div class="text-gray-600">// Kayıt yok — tarama başladığında olaylar burada listelenir.</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1857,6 +1948,230 @@ function loadArbitrageModule() {
             document.getElementById('bmTableBody').innerHTML = `<tr><td colspan="4" class="text-center p-8 text-red-400">Veri çekilemedi.</td></tr>`;
         } finally {
             loading.classList.add('hidden');
+        }
+    });
+
+    // === FLIPPER: ANLIK KARA BORSA TARAMASI ===
+    // AODP fiyat API'sini periyodik tarar; flip marjlarını ve her fiyatın son tarama yaşını gösterir.
+    const flipState = { running: false, busy: false, scanned: 0, flips: [] as any[] };
+    let flipTimer: any = null;
+
+    const flipLog = (tag: string, msg: string, cls: string) => {
+        const box = document.getElementById('flipperLog');
+        if (!box) return;
+        const placeholder = box.querySelector('.text-gray-600');
+        if (placeholder) placeholder.remove();
+        const t = new Date().toLocaleTimeString('tr-TR');
+        const row = document.createElement('div');
+        row.innerHTML = `<span class="text-gray-600">[${t}]</span> <span class="font-bold ${cls}">[${tag}]</span> <span class="text-gray-300">${msg}</span>`;
+        box.appendChild(row);
+        while (box.children.length > 60) box.removeChild(box.firstChild);
+        box.scrollTop = box.scrollHeight;
+    };
+
+    const setFlipStatus = (mode: 'off' | 'live' | 'busy') => {
+        const el = document.getElementById('flipperStatus');
+        if (!el) return;
+        if (mode === 'live') {
+            el.innerHTML = `<span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span> Canlı Taranıyor`;
+            el.className = 'flex items-center gap-2 bg-green-950/60 border border-green-600/60 px-3 py-2 rounded-lg text-xs font-bold text-green-300 whitespace-nowrap';
+        } else if (mode === 'busy') {
+            el.innerHTML = `<span class="w-2 h-2 rounded-full bg-yellow-400 animate-pulse"></span> Taranıyor...`;
+            el.className = 'flex items-center gap-2 bg-yellow-950/50 border border-yellow-600/60 px-3 py-2 rounded-lg text-xs font-bold text-yellow-300 whitespace-nowrap';
+        } else {
+            const scanned = flipState.scanned > 0;
+            el.innerHTML = `<span class="w-2 h-2 rounded-full bg-gray-500"></span> ${scanned ? 'Tek Tarama (Bekliyor)' : 'Duraklatıldı'}`;
+            el.className = 'flex items-center gap-2 bg-albion-900 border border-gray-600 px-3 py-2 rounded-lg text-xs font-bold text-gray-400 whitespace-nowrap';
+        }
+    };
+
+    const flipAgeStr = (mins: number) => {
+        if (mins > 100000) return 'Bilinmiyor';
+        if (mins < 2) return 'Şimdi';
+        if (mins < 60) return `${mins} dk`;
+        return `${Math.floor(mins / 60)} sa`;
+    };
+
+    const renderFlipStats = () => {
+        const set = (id: string, v: string) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+        set('flipperStatCount', flipState.flips.length ? String(flipState.flips.length) : '0');
+        set('flipperStatScanned', flipState.scanned ? flipState.scanned.toLocaleString('tr-TR') : '—');
+        if (flipState.flips.length) {
+            const ages = flipState.flips.map(f => f.recency).filter(a => a < 100000);
+            if (ages.length) {
+                const fresh = Math.min(...ages);
+                const avg = Math.round(ages.reduce((s, a) => s + a, 0) / ages.length);
+                set('flipperStatFresh', flipAgeStr(fresh));
+                set('flipperStatAvg', flipAgeStr(avg));
+            } else {
+                set('flipperStatFresh', 'Bilinmiyor');
+                set('flipperStatAvg', 'Bilinmiyor');
+            }
+        } else {
+            set('flipperStatFresh', '—');
+            set('flipperStatAvg', '—');
+        }
+    };
+
+    const renderFlipTable = () => {
+        const tbody = document.getElementById('flipperTableBody');
+        if (!tbody) return;
+        if (!flipState.flips.length) {
+            tbody.innerHTML = `<tr><td colspan="5" class="text-center p-8 text-gray-500"><i class="fa-solid fa-ghost text-2xl mb-2 opacity-50"></i><br>Bu taramada eşleşen flip fırsatı bulunamadı — veri tazeliği sınırlı olabilir.</td></tr>`;
+            return;
+        }
+        tbody.innerHTML = flipState.flips.slice(0, 50).map(f => `
+            <tr class="hover:bg-albion-900/50 transition-colors">
+                <td class="p-3 border-b border-gray-700/50">
+                    <div class="flex items-center">
+                        <div class="relative mr-3 shrink-0">
+                            <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" class="w-10 h-10 drop-shadow-lg bg-[#0a0d14] rounded border border-gray-700 p-0.5"
+                                 data-item="${f.itemId}" data-quality="${f.quality || 1}" data-size="96"
+                                 onerror="this.src=window.albionImageCache.getPlaceholderUrl()">
+                            ${getEnchantBadge(f.itemId)}
+                        </div>
+                        <div class="min-w-0">
+                            <div class="font-bold text-white text-sm truncate">${f.itemNameStr}</div>
+                            ${getQualityHtml(f.quality)}
+                        </div>
+                    </div>
+                </td>
+                <td class="p-3 border-b border-gray-700/50 text-xs">${f.buy.city}<div class="font-black text-green-400">${f.buy.price.toLocaleString()} 🥈</div></td>
+                <td class="p-3 border-b border-gray-700/50 text-xs"><span class="text-red-400 font-black">${f.sell.price.toLocaleString()} 🥈</span><div class="text-[9px] text-red-500/70 font-bold">Alış Emri</div></td>
+                <td class="p-3 border-b border-gray-700/50 text-right font-black text-yellow-400">+${f.profit.toLocaleString()}<div class="text-[9px] text-green-400/80 font-bold">%${f.pct}</div></td>
+                <td class="p-3 border-b border-gray-700/50 text-right text-xs">${getTimeAgoStr(f.recency)}</td>
+            </tr>
+        `).join('');
+    };
+
+    const runFlipScan = async () => {
+        if (flipState.busy) return;
+        flipState.busy = true;
+        const loading = document.getElementById('flipperLoading');
+        if (loading) loading.classList.remove('hidden');
+        setFlipStatus('busy');
+        const t0 = Date.now();
+
+        try {
+            const tier = document.getElementById('flipperTier').value || 'ALL';
+            const enchant = document.getElementById('flipperEnchant').value || '0';
+
+            let baseItems: string[] = [];
+            const bmCats = ["🗡️ Silahlar (Weapons)", "🛡️ Zırhlar (Armor)", "🎒 Aksesuarlar (Accessories)"];
+            bmCats.forEach(c => {
+                const catData = ARB_CATEGORIES[c];
+                if (catData) Object.values<any>(catData).forEach(subCat => subCat.forEach(b => baseItems.push(b.id)));
+            });
+            baseItems = [...new Set(baseItems)].filter(itemId => {
+                return !["QUESTITEM_TOKEN_SIPHONED_ENERGY", "QUESTITEM_TOKEN_AVALON", "QUESTITEM_TOKEN_ROYAL",
+                         "RUNE", "SOUL", "RELIC", "SHARD_AVALONIAN", "ESSENCE"].includes(itemId);
+            });
+
+            const itemsToFetch = getItemsToFetch(baseItems, tier, enchant);
+            const chunkCount = Math.ceil(itemsToFetch.length / 100);
+            const data = await fetchPricesInChunks(itemsToFetch, '');
+
+            const grouped: any = {};
+            const validCities = ["Lymhurst", "Bridgewatch", "Fort Sterling", "Martlock", "Thetford", "Caerleon", "Black Market"];
+            (data || []).forEach(d => {
+                if (!validCities.includes(d.city)) return;
+                const key = `${d.item_id}_${d.quality}`;
+                if (!grouped[key]) grouped[key] = { itemId: d.item_id, quality: d.quality, royals: [], blackmarket: null };
+                if (d.city === 'Black Market') {
+                    if (d.buy_price_max > 0 && getMins(d.buy_price_max_date) <= 240) grouped[key].blackmarket = { city: 'Black Market', price: d.buy_price_max, date: d.buy_price_max_date };
+                } else {
+                    if (d.sell_price_min > 0 && getMins(d.sell_price_min_date) <= 240) grouped[key].royals.push({ city: d.city, price: d.sell_price_min, date: d.sell_price_min_date });
+                }
+            });
+
+            const nonEquipment = ['POTION', 'MEAL', 'MOUNT', 'WOOD', 'ROCK', 'ORE', 'FIBER', 'HIDE', 'FISH', 'PLANKS', 'LEATHER', 'STONEBLOCK', 'METALBAR', 'CLOTH'];
+            const flips: any[] = [];
+            for (const key of Object.keys(grouped)) {
+                const info = grouped[key];
+                if (!info.royals.length || !info.blackmarket) continue;
+                if (nonEquipment.some(nx => info.itemId.includes(nx))) continue;
+
+                info.royals.sort((a, b) => a.price - b.price);
+                const bestBuy = info.royals[0];
+                const netProfit = Math.floor(info.blackmarket.price * 0.935) - bestBuy.price;
+                if (netProfit > 500) {
+                    flips.push({
+                        itemId: info.itemId, itemNameStr: formatItemName(info.itemId), quality: info.quality,
+                        buy: bestBuy, sell: info.blackmarket, profit: netProfit,
+                        pct: bestBuy.price > 0 ? Math.round((netProfit / bestBuy.price) * 100) : 0,
+                        recency: Math.max(getMins(bestBuy.date), getMins(info.blackmarket.date))
+                    });
+                }
+            }
+            flips.sort((a, b) => b.profit - a.profit);
+
+            flipState.flips = flips;
+            flipState.scanned = itemsToFetch.length;
+            renderFlipTable();
+            renderFlipStats();
+
+            const secs = ((Date.now() - t0) / 1000).toFixed(1);
+            if (flips.length) {
+                const ages = flips.map(f => f.recency).filter(a => a < 100000);
+                const fresh = ages.length ? Math.min(...ages) : 999999;
+                const avg = ages.length ? Math.round(ages.reduce((s, a) => s + a, 0) / ages.length) : 999999;
+                flipLog('TARAMA', `${itemsToFetch.length.toLocaleString('tr-TR')} eşya sorgulandı (${chunkCount} istek, ${secs} sn) → ${flips.length} flip fırsatı · en taze ${flipAgeStr(fresh)} · ort. ${flipAgeStr(avg)}`, 'text-blue-400');
+            } else {
+                flipLog('TARAMA', `${itemsToFetch.length.toLocaleString('tr-TR')} eşya sorgulandı (${chunkCount} istek, ${secs} sn) — uygun flip fırsatı bulunamadı.`, 'text-blue-400');
+            }
+        } catch (e: any) {
+            flipLog('HATA', `Pazar verisi alınamadı: ${e && e.message ? e.message : e}`, 'text-red-400');
+        } finally {
+            flipState.busy = false;
+            if (loading) loading.classList.add('hidden');
+            setFlipStatus(flipState.running ? 'live' : 'off');
+        }
+    };
+
+    const armFlipTimer = (iv: number) => {
+        if (flipTimer) clearInterval(flipTimer);
+        flipTimer = setInterval(() => runFlipScan(), iv);
+    };
+
+    document.getElementById('btnFlipScan').addEventListener('click', () => runFlipScan());
+
+    document.getElementById('btnFlipToggle').addEventListener('click', () => {
+        const btn = document.getElementById('btnFlipToggle');
+        if (flipState.running) {
+            flipState.running = false;
+            if (flipTimer) { clearInterval(flipTimer); flipTimer = null; }
+            btn.innerHTML = '<i class="fa-solid fa-play mr-2"></i> Taramayı Başlat';
+            btn.classList.remove('bg-red-600', 'hover:bg-red-500');
+            btn.classList.add('bg-green-600', 'hover:bg-green-500');
+            setFlipStatus('off');
+            flipLog('DURDUR', 'Otomatik tarama durduruldu.', 'text-orange-400');
+        } else {
+            flipState.running = true;
+            const iv = parseInt(document.getElementById('flipperInterval').value, 10) || 120000;
+            btn.innerHTML = '<i class="fa-solid fa-stop mr-2"></i> Durdur';
+            btn.classList.remove('bg-green-600', 'hover:bg-green-500');
+            btn.classList.add('bg-red-600', 'hover:bg-red-500');
+            setFlipStatus('live');
+            flipLog('BAŞLAT', `Otomatik tarama başladı — aralık: ${Math.round(iv / 1000)} sn.`, 'text-green-400');
+            armFlipTimer(iv);
+            runFlipScan();
+        }
+    });
+
+    document.getElementById('flipperInterval').addEventListener('change', (e: any) => {
+        if (flipState.running) armFlipTimer(parseInt(e.target.value, 10) || 120000);
+    });
+
+    document.getElementById('btnFlipperClearLog').addEventListener('click', () => {
+        const box = document.getElementById('flipperLog');
+        if (box) box.innerHTML = '<div class="text-gray-600">// Kayıt temizlendi.</div>';
+    });
+
+    // Flipper sekmesi ilk açıldığında tek turluk otomatik tarama
+    document.getElementById('btnTabArbFlip').addEventListener('click', () => {
+        if (flipState.scanned === 0 && !flipState.busy) {
+            flipLog('KAYIT', 'Flipper sekmesi açıldı — ilk tarama başlatılıyor.', 'text-cyan-400');
+            runFlipScan();
         }
     });
 
