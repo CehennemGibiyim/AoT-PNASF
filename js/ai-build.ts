@@ -82,6 +82,31 @@ if (!window.miniappsAI) {
   };
 }
 
+// --- Görsel ID çözümleyici ---
+// Her eşyanın kademesini AO_ITEMS.tiers'tan çözerek render için doğru tier üretir.
+// (AI'ın uydurduğu yanlış tier'ları da otomatik düzeltir: T8_MEAL_OMELETTE → T7_MEAL_OMELETTE)
+let _tierMap: Map<string, number> | null = null;
+function aotTierMap(): Map<string, number> {
+  if (!_tierMap) {
+    _tierMap = new Map();
+    ((window as any).AO_ITEMS || []).forEach((i: any) => {
+      const maxT = i.tiers && i.tiers.length ? Math.max.apply(null, i.tiers) : 8;
+      _tierMap!.set(i.id, maxT);
+    });
+  }
+  return _tierMap;
+}
+function tieredId(raw: string): string {
+  if (!raw || raw === 'NULL' || raw === 'null') return 'NULL';
+  const up = String(raw).toUpperCase().trim();
+  const base = up.replace(/^T\d+_/, '');
+  const maxT = aotTierMap().get(base);
+  if (maxT) return `T${maxT}_${base}`;
+  return /^T\d+/.test(up) ? up : `T8_${up}`;
+}
+const AOT_IMG = (id: string) => `https://render.albiononline.com/v1/item/${id}.png`;
+const AOT_IMG_ERR = "this.onerror=null;this.src=(window.albionImageCache&&window.albionImageCache.getPlaceholderUrl)?window.albionImageCache.getPlaceholderUrl():''";
+
 function initAiBuildModule() {
   const btnPersonal = document.getElementById('btnAiPersonal');
   const btnGroup = document.getElementById('btnAiGroup');
@@ -90,6 +115,12 @@ function initAiBuildModule() {
   
   const resultDiv = document.getElementById('aiBuildResult');
   const loadingDiv = document.getElementById('aiBuildLoading');
+
+  // Grup içerik seçeniğini yerel kompozisyon verisinden doldur (data/group-comps.js)
+  const contentSelect = document.getElementById('buildContentGroup');
+  if (contentSelect && typeof AO_GROUP_COMPS !== 'undefined' && AO_GROUP_COMPS && AO_GROUP_COMPS.length) {
+    contentSelect.innerHTML = AO_GROUP_COMPS.map((c: any) => `<option value="${c.id}">${c.name}</option>`).join('');
+  }
 
   let currentMode = 'personal';
 
@@ -318,7 +349,7 @@ function initAiBuildModule() {
        btn.type = 'button';
        btn.className = `relative w-full aspect-square bg-[#0a0d14] border border-gray-700 rounded p-0.5 hover:border-albion-accent hover:scale-105 transition-all group overflow-hidden shadow-inner flex items-center justify-center shrink-0`;
        
-       const imgStr = `<img loading="lazy" src="https://render.albiononline.com/v1/item/${item.id}" class="w-full h-full object-contain drop-shadow-md transition-opacity" alt="${item.name}" onerror="this.style.display='none'">`;
+       const imgStr = `<img loading="lazy" src="${AOT_IMG(item.id)}" class="w-full h-full object-contain drop-shadow-md transition-opacity" alt="${item.name}" onerror="${AOT_IMG_ERR}">`;
        const titleHover = `<div class="absolute bottom-0 left-0 right-0 bg-black/90 text-[6px] md:text-[7px] text-white font-bold leading-tight py-0.5 px-0.5 text-center truncate opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">${item.name}</div>`;
        
        btn.innerHTML = imgStr + titleHover;
@@ -335,7 +366,7 @@ function initAiBuildModule() {
           btn.classList.add('border-albion-accent', 'shadow-[0_0_10px_rgba(212,175,55,0.4)]');
           
           if (iconTarget) {
-              iconTarget.innerHTML = `<img loading="lazy" src="https://render.albiononline.com/v1/item/${item.id}" class="w-full h-full object-contain p-0.5" onerror="this.style.display='none'">`;
+              iconTarget.innerHTML = `<img loading="lazy" src="${AOT_IMG(item.id)}" class="w-full h-full object-contain p-0.5" alt="${item.name}" onerror="${AOT_IMG_ERR}">`;
           }
           if (textTarget) {
               textTarget.innerText = item.name;
@@ -484,50 +515,25 @@ function initAiBuildModule() {
   }
 
   function renderVisualSlot(slotName, itemData, iconClass) {
-    const cleanId = itemData && itemData.id ? sanitizeItemId(itemData.id) : 'NULL';
+    const cleanId = itemData && itemData.id ? tieredId(sanitizeItemId(itemData.id)) : 'NULL';
     
     if (!itemData || cleanId === 'NULL') {
        return `<div class="w-10 h-10 md:w-12 md:h-12 bg-[#0a0d14] border border-gray-800 rounded flex items-center justify-center opacity-40 shadow-inner"><i class="fa-solid ${iconClass} text-lg md:text-xl text-gray-700"></i></div>`;
     }
     
-    // Consumable itemlar (yemek, iksir)
-    const isConsumable = cleanId.includes('MEAL') || cleanId.includes('POTION');
-    
-    if (isConsumable) {
-       const consumableIcon = cleanId.includes('MEAL') ? 'fa-utensils' : 'fa-flask';
-       return `
-         <div class="relative w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-[#1a2233] to-[#0a0d14] border border-gray-500 rounded shadow-lg flex items-center justify-center p-1 group shrink-0">
-            <i class="fa-solid ${consumableIcon} text-lg md:text-xl text-gray-400 group-hover:text-albion-accent transition-colors"></i>
-            <div class="absolute -bottom-2 md:-bottom-2.5 left-1/2 transform -translate-x-1/2 bg-black/95 border border-gray-600 text-[7px] md:text-[8px] text-white font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none shadow-md">${itemData.name}</div>
-         </div>
-       `;
-    }
-    
+    // Yemek/iksir dahil TÜM eşyalar gerçek oyun görseliyle gösterilir;
+    // görsel gelmezse boş kutu yerine placeholder görünür.
     return `
       <div class="relative w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-[#1a2233] to-[#0a0d14] border border-gray-500 rounded shadow-lg flex items-center justify-center p-1 group shrink-0">
-         <img loading="lazy" src="https://render.albiononline.com/v1/item/${cleanId}" class="w-full h-full object-contain drop-shadow-md group-hover:scale-110 transition-transform" alt="${itemData.name}" onerror="this.style.display='none';">
+         <img loading="lazy" src="${AOT_IMG(cleanId)}" class="w-full h-full object-contain drop-shadow-md group-hover:scale-110 transition-transform" alt="${itemData.name}" onerror="${AOT_IMG_ERR}">
          <div class="absolute -bottom-2 md:-bottom-2.5 left-1/2 transform -translate-x-1/2 bg-black/95 border border-gray-600 text-[7px] md:text-[8px] text-white font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none shadow-md">${itemData.name}</div>
       </div>
     `;
   }
 
   function renderDetailRow(slotName, itemData) {
-    const cleanId = itemData && itemData.id ? sanitizeItemId(itemData.id) : 'NULL';
+    const cleanId = itemData && itemData.id ? tieredId(sanitizeItemId(itemData.id)) : 'NULL';
     if (!itemData || cleanId === 'NULL') return '';
-    
-    const isConsumable = cleanId.includes('MEAL') || cleanId.includes('POTION');
-    const consumableIcon = cleanId.includes('MEAL') ? 'fa-utensils' : 'fa-flask';
-    const slotIconMap = {
-      'Silah': 'fa-gavel',
-      'Kafalık': 'fa-helmet-safety',
-      'Gövdelik': 'fa-shirt',
-      'Ayakkabı': 'fa-shoe-prints',
-      'Pelerin': 'fa-user-ninja',
-      'Off-hand': 'fa-shield',
-      'Yemek': 'fa-utensils',
-      'Iksir': 'fa-flask'
-    };
-    const fallbackIcon = isConsumable ? consumableIcon : (slotIconMap[slotName] || 'fa-box');
     
     let skillsHtml = '';
     if (itemData.skills && itemData.skills.length > 0) {
@@ -557,7 +563,7 @@ function initAiBuildModule() {
     return `
       <div class="bg-albion-900 border border-gray-700 p-2 rounded-lg flex items-start space-x-2.5 hover:border-albion-accent/50 transition-colors shadow-inner w-full">
         <div class="relative w-8 h-8 md:w-10 md:h-10 bg-[#0a0d14] rounded border border-gray-800 flex items-center justify-center p-0.5 shrink-0 group mt-0.5">
-          ${isConsumable ? `<i class="fa-solid ${fallbackIcon} text-sm md:text-base text-gray-400"></i>` : `<img loading="lazy" src="https://render.albiononline.com/v1/item/${cleanId}" class="w-full h-full object-contain group-hover:scale-110 transition-transform" onerror="this.style.display='none';">`}
+          ${`<img loading="lazy" src="${AOT_IMG(cleanId)}" class="w-full h-full object-contain group-hover:scale-110 transition-transform" alt="${itemData.name}" onerror="${AOT_IMG_ERR}">`}
         </div>
         <div class="flex-1 min-w-0">
           <div class="flex items-center gap-1.5 mb-0.5">
@@ -666,65 +672,24 @@ function initAiBuildModule() {
       });
   }
 
-  // --- GROUP BUILD SUBMIT ---
+  // --- GROUP BUILD SUBMIT (yerel doğrulanmış kompozisyonlar; AI halüsinasyonu yok) ---
   const btnGroupSubmit = document.getElementById('btnGroupSubmit');
   if(btnGroupSubmit) {
-      btnGroupSubmit.addEventListener('click', async (e) => {
+      btnGroupSubmit.addEventListener('click', (e) => {
         e.preventDefault();
-        const contentSelect = document.getElementById('buildContentGroup');
-        const content = contentSelect ? contentSelect.value : 'Grup İçeriği';
+        const sel = document.getElementById('buildContentGroup');
+        const compId = sel ? sel.value : '';
+        const comps = (typeof AO_GROUP_COMPS !== 'undefined' && AO_GROUP_COMPS) ? AO_GROUP_COMPS : [];
+        const comp = comps.find((c: any) => c.id === compId);
+
+        if (!comp) {
+          handleError(new Error('Kompozisyon verisi bulunamadı. Sayfayı yenileyin (data/group-comps.js).'));
+          return;
+        }
 
         viewGroup.classList.add('hidden');
         resultDiv.classList.add('hidden');
-        loadingDiv.classList.remove('hidden');
-        loadingDiv.classList.add('flex');
-
-        try {
-          const cacheKey = `ai_build_group_${content.replace(/[^a-z0-9]/gi, '')}`;
-          const cachedData = await getCachedBuild(cacheKey);
-          
-          if (cachedData) {
-             renderGroupBuild(cachedData, content);
-             loadingDiv.classList.add('hidden');
-             loadingDiv.classList.remove('flex');
-             return;
-          }
-
-          let libraryContext = '';
-          if (window.AO_ITEMS) {
-              const equipCats = ['phelmet', 'parmor', 'pshoes', 'chelmet', 'carmor', 'cshoes', 'lhelmet', 'larmor', 'lshoes', 'cape', 'offhand'];
-              const filtered = window.AO_ITEMS.filter(i => equipCats.includes(i.cat));
-              const compactList = filtered.map(i => `${i.en.replace(/^(Novice's|Journeyman's|Adept's|Expert's|Master's|Grandmaster's|Elder's) /i, '')}: ${i.id}`);
-              libraryContext = `\\n\\n[KÜTÜPHANE VERİLERİMİZ - SADECE BU ID'LERİ KULLAN]:\\n` + compactList.join(', ');
-          }
-
-          const prompt = `Sen bir Albion Online Meta kompozisyon uzmanısın. Kullanıcı "${content}" içerik türünü seçti. \\nLütfen bu içerik için en ideal "Meta Grup Kompozisyonunu" oluştur. İstenen yapıya tam uy.${libraryContext}\\nÖNEMLİ KURALLAR:\\n1. "title", "strategy", "roleName" Türkçe olsun. Eşyaların "name" (isim) kısmını İngilizce orijinal haliyle bırak.\\n2. Yetenekleri KESİNLİKLE "Q1: İsim", "W1: İsim", "E: İsim", "P2: Pasif" formatında Türkçe DÖN VE ÇOK KISA (maks 3 kelime) yaz.\\n3. "id" kısmına KESİNLİKLE Kütüphane Verilerimizde geçen gerçek ID'leri yaz (Başına T8_ ekle). Asla uydurma ID'ler kullanma.\\nSadece JSON dön.\\n{\n  "title": "Kompozisyon Adı",\n  "strategy": "Grubun genel stratejisi (kısa ve öz)...",\n  "roles": [\n    {\n      "roleName": "Rol Adı",\n      "items": {\n        "weapon": {"name": "Silah", "id": "T8_MAIN_...", "skills": ["Q1: ...", "W1: ...", "E: ...", "P2: ..."]},\n        "head": {"name": "Kafalık", "id": "T8_HEAD_...", "skills": ["D: ...", "P1: ..."]},\n        "chest": {"name": "Gövdelik", "id": "T8_ARMOR_...", "skills": ["R: ...", "P1: ..."]},\n        "shoes": {"name": "Ayakkabı", "id": "T8_SHOES_...", "skills": ["F: ...", "P1: ..."]}\n      }\n    }\n  ]\n}`;
-
-          if (!window.miniappsAI || !window.miniappsAI.callModel) {
-            throw new Error("AI servisi yüklenemedi. Lütfen sayfayı yenileyin.");
-          }
-
-          const result = await window.miniappsAI.callModel({
-            modelId: MODEL_ID,
-            messages: [
-              { role: 'system', content: 'You are an Albion Online meta group composer. ONLY output valid JSON. KEEP DESCRIPTIONS EXTREMELY SHORT. NEVER translate item names. USE EXACT IN-GAME IDs. NO FAKE IDs.' },
-              { role: 'user', content: prompt }
-            ],
-            timeoutMs: 40000
-          });
-
-          const text = window.miniappsAI.extractText(result);
-          const buildData = parseJSONSafely(text);
-          
-          await setCachedBuild(cacheKey, buildData);
-          renderGroupBuild(buildData, content);
-
-        } catch (err) {
-          handleError(err);
-        } finally {
-          loadingDiv.classList.add('hidden');
-          loadingDiv.classList.remove('flex');
-        }
+        renderGroupBuild(comp, comp.name);
       });
   }
 
@@ -841,32 +806,56 @@ function initAiBuildModule() {
     let rolesHtml = '';
     
     if (data.roles && Array.isArray(data.roles)) {
-       rolesHtml = data.roles.map(role => `
+       rolesHtml = data.roles.map(role => {
+          const items = role.items || {};
+          const countBadge = role.count && role.count > 1
+             ? `<span class="text-[9px] font-black bg-albion-accent text-black px-1.5 py-0.5 rounded shrink-0">×${role.count}</span>`
+             : '';
+          const noteHtml = role.note
+             ? `<p class="text-[9px] md:text-[10px] text-gray-400 italic mt-1 mb-1.5 leading-snug">${role.note}</p>`
+             : '';
+          return `
           <div class="bg-black/30 border border-gray-700 rounded-xl p-3 shadow-lg" style="background-color: rgba(0,0,0,0.3);">
-             <h4 class="text-sm font-black text-white mb-2 border-b border-gray-600 pb-1.5 flex justify-between items-center">
-                <span><i class="fa-solid fa-user-shield text-albion-accent mr-2"></i>${role.roleName}</span>
+             <h4 class="text-sm font-black text-white mb-1.5 border-b border-gray-600 pb-1.5 flex justify-between items-center gap-2">
+                <span class="truncate"><i class="fa-solid fa-user-shield text-albion-accent mr-2"></i>${role.roleName}</span>
+                ${countBadge}
              </h4>
-             
+             ${noteHtml}
              <div class="flex flex-col xl:flex-row gap-2.5">
                 <div class="flex items-center justify-center bg-[#0a0d14] p-2.5 rounded-xl border border-gray-800 shrink-0 shadow-inner">
-                   <div class="grid grid-cols-2 gap-1.5">
-                      ${renderVisualSlot('Kafalık', role.items.head, 'fa-helmet-safety')}
-                      ${renderVisualSlot('Gövdelik', role.items.chest, 'fa-shirt')}
-                      ${renderVisualSlot('Silah', role.items.weapon, 'fa-gavel')}
-                      ${renderVisualSlot('Ayakkabı', role.items.shoes, 'fa-shoe-prints')}
+                   <div class="grid grid-cols-4 gap-1.5">
+                      ${renderVisualSlot('Silah', items.weapon, 'fa-gavel')}
+                      ${renderVisualSlot('Off-hand', items.offhand, 'fa-shield')}
+                      ${renderVisualSlot('Kafalık', items.head, 'fa-helmet-safety')}
+                      ${renderVisualSlot('Gövdelik', items.chest, 'fa-shirt')}
+                      ${renderVisualSlot('Ayakkabı', items.shoes, 'fa-shoe-prints')}
+                      ${renderVisualSlot('Pelerin', items.cape, 'fa-user-ninja')}
+                      ${renderVisualSlot('Yemek', items.food, 'fa-utensils')}
+                      ${renderVisualSlot('İksir', items.potion, 'fa-flask')}
                    </div>
                 </div>
                 
                 <div class="flex-1 flex flex-col gap-1.5 justify-center">
-                   ${renderDetailRow('Silah', role.items.weapon)}
-                   ${renderDetailRow('Kafalık', role.items.head)}
-                   ${renderDetailRow('Gövdelik', role.items.chest)}
-                   ${renderDetailRow('Ayakkabı', role.items.shoes)}
+                   ${renderDetailRow('Silah', items.weapon)}
+                   ${renderDetailRow('Off-hand', items.offhand)}
+                   ${renderDetailRow('Kafalık', items.head)}
+                   ${renderDetailRow('Gövdelik', items.chest)}
+                   ${renderDetailRow('Ayakkabı', items.shoes)}
+                   ${renderDetailRow('Pelerin', items.cape)}
+                   ${renderDetailRow('Yemek', items.food)}
+                   ${renderDetailRow('İksir', items.potion)}
                 </div>
              </div>
           </div>
-       `).join('');
+       `;
+       }).join('');
     }
+
+    const metaBadges = `<div class="flex flex-wrap gap-1.5 mb-2">
+            ${data.players ? `<span class="text-[9px] font-bold bg-blue-900/60 border border-blue-500/60 text-blue-200 px-2 py-0.5 rounded-full"><i class="fa-solid fa-users mr-1"></i>${data.players}</span>` : ''}
+            ${data.difficulty ? `<span class="text-[9px] font-bold bg-purple-900/50 border border-purple-500/60 text-purple-200 px-2 py-0.5 rounded-full"><i class="fa-solid fa-gauge-high mr-1"></i>${data.difficulty}</span>` : ''}
+            <span class="text-[9px] font-bold bg-gray-800 border border-gray-600 text-gray-300 px-2 py-0.5 rounded-full"><i class="fa-solid fa-circle-check mr-1 text-green-400"></i>Doğrulanmış Set</span>
+         </div>`;
 
     let html = `
       <div class="flex justify-between items-center mb-4">
@@ -879,8 +868,8 @@ function initAiBuildModule() {
       <div id="buildExportArea" class="bg-albion-800 p-4 rounded-xl border border-gray-700 shadow-xl max-w-6xl mx-auto" style="background-color: #1a1a1a;">
         <div class="flex justify-between items-start mb-3">
           <div>
-             <h3 class="text-lg md:text-xl font-black text-blue-400 drop-shadow-md mb-1"><i class="fa-solid fa-users-viewfinder mr-2\"></i>${data.title || 'Meta Kompozisyonu'}</h3>
-             <div class="text-[10px] font-bold text-gray-300 bg-black/40 px-2 py-0.5 rounded inline-block border border-gray-700 shadow-sm">${contentStr}</div>
+             <h3 class="text-lg md:text-xl font-black text-blue-400 drop-shadow-md mb-1"><i class="fa-solid fa-users-viewfinder mr-2\"></i>${data.name || data.title || 'Meta Kompozisyonu'}</h3>
+             ${metaBadges}
           </div>
           <div class="text-[7px] md:text-[8px] text-gray-500 font-bold uppercase tracking-widest border border-gray-700 px-1.5 py-0.5 rounded">AoT-PNASF Meta</div>
         </div>

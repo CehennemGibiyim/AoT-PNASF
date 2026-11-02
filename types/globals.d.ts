@@ -10,6 +10,7 @@
 declare global {
   // --- Oyun verisi (data/*.js, klasik betik) ---
   var AO_ITEMS: any;
+  var AO_GROUP_COMPS: any;
   var AO_SEARCH: any;
   var AO_API: any;
   var AO_ICON: any;
