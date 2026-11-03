@@ -9,7 +9,7 @@
  * yalnızca 6 silahı kapsıyor, eksik veriyle sahte seçenek göstermiyoruz.
  */
 
-type SlotItem = { itemId: string; tier: number; enchant: number };
+type SlotItem = { itemId: string; tier: number; enchant: number; skills?: string[] };
 type Build = {
   v: number;
   name: string;
@@ -203,7 +203,8 @@ function bmRender() {
           ${item
             ? `<img src="${bmIconUrl(item, 96)}" alt="${name}" class="w-14 h-14 object-contain drop-shadow-lg" onerror="${bmImgErr()}">
                <span class="text-[11px] font-bold text-white text-center leading-tight line-clamp-2">${name}</span>
-               <span class="text-[10px] font-black text-albion-accent tracking-wider">${bmLabel(item)}</span>`
+               <span class="text-[10px] font-black text-albion-accent tracking-wider">${bmLabel(item)}</span>
+               ${item.skills && item.skills.length ? `<span class="flex gap-0.5 mt-0.5">${item.skills.slice(0, 4).map((s, i) => `<img src="https://render.albiononline.com/v1/spell/${encodeURIComponent(s)}.png?count=1&quality=1" alt="${['Q', 'W', 'E', 'P'][i] || ''}" title="${s}" class="w-4 h-4 object-contain opacity-90" loading="lazy" onerror="this.style.display='none'">`).join('')}</span>` : ''}`
             : `<i class="fa-solid ${def.icon} text-2xl text-gray-600 mb-1"></i>
                <span class="text-[11px] font-bold text-gray-500">${def.label}</span>
                <span class="text-[10px] text-gray-600">+ Ekle</span>`}
@@ -543,6 +544,54 @@ function initBuildMaker() {
 
   if (location.hash.includes('build=')) activate();
 }
+
+/* ─── Dışa açılan API ────────────────────────────────────
+   Build Kütüphanesi'nden gelen hazır setleri oluşturucuya aktarır.
+   Yetenekler (Q/W/E/pasif) kütüphane verisinden gelir ve yalnızca
+   görüntülenir; düzenlenebilir yetenek seçimi henüz yok. */
+function bmSeed(payload: any) {
+  if (!payload || typeof payload !== 'object') return false;
+
+  const next: Build = bmEmpty();
+  next.name = String(payload.name || '').slice(0, 40);
+  const role = String(payload.role || '');
+  const roleMap: Record<string, string> = {
+    'PvP': 'PvP', 'PvE': 'PvE', 'ZvZ': 'ZvZ', 'Ganking': 'Ganking', 'Mists': 'Mists', 'Avalon': 'Avalon'
+  };
+  if (roleMap[role]) next.role = roleMap[role];
+  else if (/zvz/i.test(role)) next.role = 'ZvZ';
+  else if (/mists/i.test(role)) next.role = 'Mists';
+  else if (/gank/i.test(role)) next.role = 'Ganking';
+  else if (/avalon|hce|farm|dungeon|pve/i.test(role)) next.role = 'PvE';
+
+  const slots = payload.slots && typeof payload.slots === 'object' ? payload.slots : {};
+  Object.keys(slots).forEach((key) => {
+    const raw = slots[key];
+    if (!raw || !raw.itemId) return;
+    const tier = Number(raw.tier) || 6;
+    const enchant = Number(raw.enchant) || 0;
+    next.slots[key] = {
+      itemId: String(raw.itemId),
+      tier,
+      enchant,
+      skills: Array.isArray(raw.skills) ? raw.skills.filter((s: any) => typeof s === 'string') : []
+    };
+  });
+
+  // Veri setinde binek yok; varsa mevcut binek korunur.
+  bmState = next;
+  const btn = document.getElementById('btnAiMaker') as HTMLElement | null;
+  btn?.click();
+  bmRender();
+  bmToast('Build oluşturucuya aktarıldı — düzenleyip kaydedebilirsin.', true);
+  return true;
+}
+
+(window as any).AOTBuildMaker = {
+  seed: bmSeed,
+  get: () => bmState,
+  render: bmRender
+};
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initBuildMaker);

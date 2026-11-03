@@ -353,12 +353,31 @@ async function initMainApp() {
           void targetContent.offsetWidth;
           targetContent.classList.add('flex', 'animate-fade-in');
           void loadLazyTab(targetId);
+          // Tek sayfa yönlendirmesi: Haritalar/Rehberler/Araçlar da aynı sekme
+          // mekanizmasını kullanır; adres çubuğunda paylaşılabilir bağlantı kalır.
+          window.dispatchEvent(new CustomEvent('aot:tab-shown', { detail: targetId }));
+          try {
+            const slug = targetId.replace(/^tab-/, '');
+            if (slug !== 'home' && history.replaceState) history.replaceState(null, '', `#${slug}`);
+            else if (history.replaceState) history.replaceState(null, '', location.pathname + location.search);
+          } catch (_) {}
         }
       });
     });
   } catch (err) {
     console.error('Init error:', err);
   }
+
+  // #haritalar / #maps gibi bağlantılarla doğrudan sekmeye git
+  try {
+    const hash = (location.hash || '').replace('#', '').toLowerCase();
+    if (hash) {
+      const map: Record<string, string> = { maps: 'tab-maps', haritalar: 'tab-maps', guides: 'tab-guides', rehberler: 'tab-guides', tools: 'tab-tools', araclar: 'tab-tools' };
+      const target = map[hash] || (`tab-${hash}`);
+      const btn = document.querySelector(`.tab-btn[data-tab="${target}"]`) as HTMLElement | null;
+      if (btn) btn.click();
+    }
+  } catch (_) {}
 
   const clearCacheBtn = document.getElementById('clearCacheBtn');
   if (clearCacheBtn) clearCacheBtn.addEventListener('click', clearImageCache);

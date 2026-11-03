@@ -640,6 +640,63 @@ function regenerateGuide() {
   if (currentGuide) openGuide(currentGuide.id);
 }
 
+// ─── REHBER ÜRETİCİ (yerel, AI'sız) ─────────────────────
+// "AI Rehber Oluştur" kutusu, yazılan konuya en yakın hazır rehberi bulur ve
+// seçilen seviyeye göre bir başlangıç notu ekler. Dış servis çağrısı yoktur;
+// sonuç her zaman gerçek, doğrulanmış rehber içeriğidir.
+function generateGuide() {
+  const promptEl = document.getElementById('aiGenPrompt') as any;
+  const langEl = document.getElementById('aiGenLang') as any;
+  const levelEl = document.getElementById('aiGenLevel') as any;
+  const query = String(promptEl?.value || '').trim();
+  const lang = String(langEl?.value || getLang() || 'tr');
+  const level = String(levelEl?.value || 'beginner');
+
+  if (!query) {
+    const cards = document.getElementById('guideCards');
+    if (cards) cards.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (promptEl) promptEl.focus();
+    return;
+  }
+
+  const words = query.toLowerCase().split(/\s+/).filter((w: string) => w.length > 2);
+  let best: any = null;
+  let bestScore = 0;
+  GUIDES.forEach((g: any) => {
+    const blob = [g.id, g.cat, g.tr?.title, g.en?.title, g.tr?.content, g.en?.content]
+      .filter(Boolean).join(' ').toLowerCase();
+    let score = 0;
+    words.forEach((w: string) => {
+      if (blob.includes(w)) score += 1;
+      if (String(g.tr?.title || '').toLowerCase().includes(w)) score += 2;
+    });
+    if (score > bestScore) { bestScore = score; best = g; }
+  });
+
+  if (best) {
+    openGuide(best.id);
+    const content = document.getElementById('guideDetailContent');
+    if (content) {
+      const levelNote = level === 'advanced'
+        ? (lang === 'tr' ? 'İleri seviye: içeriği mevcut build ve pazar verileriyle birlikte uygula.' : 'Advanced: apply with current build and market data.')
+        : level === 'mid'
+          ? (lang === 'tr' ? 'Orta seviye: temel adımları atla, doğrudan optimizasyon bölümüne geç.' : 'Mid level: skip basics, go to optimisation.')
+          : (lang === 'tr' ? 'Başlangıç seviyesi: adımları sırayla uygula.' : 'Beginner: follow the steps in order.');
+      content.insertAdjacentHTML('afterbegin', `<div class="gd-action-bar" style="margin-bottom:12px">🏷️ ${levelNote} <span style="opacity:.6">· ${best.tr?.title || best.id}</span></div>`);
+      content.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    return;
+  }
+
+  // Eşleşme yoksa: konu başlıklarını öner
+  const cards = document.getElementById('guideCards');
+  if (cards) {
+    cards.style.display = 'grid';
+    cards.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  window.dispatchEvent(new CustomEvent('aot:guide-no-match', { detail: query }));
+}
+
 // ─── QUICK GUIDE ────────────────────────────────────────
 function quickGuide(topic) {
   // Başlıkta eşleşen rehberi bul
@@ -768,6 +825,7 @@ declare global {
   var closeDetail: any;
   var copyGuide: any;
   var regenerateGuide: any;
+  var generateGuide: any;
   var quickGuide: any;
   var toggleChat: any;
   var sendChatMsg: any;
@@ -783,6 +841,7 @@ let openGuide_windowOverride: any;
 let closeDetail_windowOverride: any;
 let copyGuide_windowOverride: any;
 let regenerateGuide_windowOverride: any;
+let generateGuide_windowOverride: any;
 let quickGuide_windowOverride: any;
 let toggleChat_windowOverride: any;
 let sendChatMsg_windowOverride: any;
@@ -837,6 +896,10 @@ Object.defineProperty(window, 'copyGuide', {
 Object.defineProperty(window, 'regenerateGuide', {
   get: () => (regenerateGuide_windowOverride !== undefined ? regenerateGuide_windowOverride : regenerateGuide),
   set: (value) => { regenerateGuide_windowOverride = value; },
+  configurable: true, enumerable: true });
+Object.defineProperty(window, 'generateGuide', {
+  get: () => (generateGuide_windowOverride !== undefined ? generateGuide_windowOverride : generateGuide),
+  set: (value) => { generateGuide_windowOverride = value; },
   configurable: true, enumerable: true });
 Object.defineProperty(window, 'quickGuide', {
   get: () => (quickGuide_windowOverride !== undefined ? quickGuide_windowOverride : quickGuide),

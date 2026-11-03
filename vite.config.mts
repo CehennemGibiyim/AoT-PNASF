@@ -31,18 +31,11 @@ function copyStaticAssets(): Plugin {
   };
 }
 
-// Kök ve pages/ altındaki tüm HTML sayfaları çoklu-giriş olarak derlenir.
+// Uygulama tek sayfa (SPA): Haritalar / Rehberler / Araçlar index.html içinde
+// sekme olarak açılır. Yalnızca kök belge ve 404 girişi derlenir.
 const htmlInputs = [
   'index.html',
-  'crafting.html',
-  'market.html',
   '404.html',
-  'pages/crafting.html',
-  'pages/guides.html',
-  'pages/maps.html',
-  'pages/market.html',
-  'pages/pvp.html',
-  'pages/tools.html',
 ].reduce<Record<string, string>>((acc, rel) => {
   acc[rel.replace(/\.html$/, '').replace('/', '-')] = resolve(root, rel);
   return acc;

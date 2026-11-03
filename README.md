@@ -12,7 +12,7 @@
 [![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 [![Data](https://img.shields.io/badge/Data-AODP%20API-orange?style=for-the-badge)](https://www.albion-online-data.com/)
 
-[🌐 Canlı Site](https://cehennemgibiyim.github.io/AoT-PNASF/) · [📊 Market](https://cehennemgibiyim.github.io/AoT-PNASF/pages/market.html) · [⚔️ PvP](https://cehennemgibiyim.github.io/AoT-PNASF/pages/pvp.html) · [📚 Rehberler](https://cehennemgibiyim.github.io/AoT-PNASF/pages/guides.html)
+[🌐 Canlı Site](https://cehennemgibiyim.github.io/AoT-PNASF/) · [🗺️ Haritalar](https://cehennemgibiyim.github.io/AoT-PNASF/#haritalar) · [📚 Rehberler](https://cehennemgibiyim.github.io/AoT-PNASF/#rehberler) · [🛠️ Araçlar](https://cehennemgibiyim.github.io/AoT-PNASF/#araclar)
 
 </div>
 
@@ -124,39 +124,35 @@ AoT-PNASF
 │   ├── Silver Kazanç Widget (interaktif hesap)
 │   └── Data Client Bölümü (AFM Client yönlendirme)
 │
-├── 💹 Market (pages/market.html)
-│   ├── Tab 1: Fiyatlar (11 lokasyon)
-│   ├── Tab 2: Fiyat Geçmişi Grafiği
-│   ├── Tab 3: Top Traded Items
-│   ├── Tab 4: Flip & Arbitraj
-│   ├── Tab 5: Kalite & Enchant
-│   └── Tab 6: Gold Grafiği
+├── ⚔️ PvP & İstatistik      (tek sayfa sekmesi)
+│   ├── Oyuncu/Guild/Alliance Profil · Kill Feed · Battle Board
 │
-├── 🔨 Crafting (pages/crafting.html)
-│   ├── Tab 1: Crafting Kâr
-│   ├── Tab 2: Refining
-│   ├── Tab 3: Farming
-│   ├── Tab 4: Transport
-│   ├── Tab 5: Journal
-│   └── Tab 6: Black Market
+├── 🔨 Crafting & Üretim     (tek sayfa sekmesi)
+│   ├── Kraliyet Kıtası · Sığınak Planlayıcı · Crafting Hesaplayıcı
+│   ├── Journal Kârı
+│   └── Meta Craft — killboard ekipmanlarından üretim önceliklendirmesi
 │
-├── ⚔️ PvP (pages/pvp.html)
-│   ├── Tab 1: Oyuncu/Guild/Alliance Profil
-│   ├── Tab 2: Kill Feed (canlı)
-│   └── Tab 3: Battle Board
+├── 🧠 AI Rehber             (tek sayfa sekmesi)
+│   ├── Kişisel Set (PvE & PvP) · Grup Setleri (Content Meta)
+│   ├── Build Oluşturucu (9 slot, IP tahmini, kayıt/paylaşım)
+│   └── Build Kütüphanesi (topluluk build'leri + Q/W/E/pasif, otomatik senkron)
 │
-├── 🗺️ Haritalar (pages/maps.html) [Aşama 6 — Tamamlandı]
+├── 🗺️ Haritalar              (tek sayfa sekmesi)
+│   ├── Bölgeler & Bonuslar · Roads of Avalon
+│   └── Bağlantı Haritası (Leaflet, zoom'a duyarlı LOD etiketler)
 │
-├── 📚 Rehberler (pages/guides.html)
-│   ├── Sol: Kategori + AI Üretici + Popüler Konular
-│   ├── Sağ: Rehber İçeriği + YouTube Embed
-│   └── Alt: Sabit AI Chat Paneli
+├── 📚 Rehberler              (tek sayfa sekmesi)
+│   ├── Sol: Kategori + yerel rehber üretici + popüler konular
+│   └── Sağ: Rehber içeriği + sabit soru-cevap paneli
 │
-└── 🛠️ Araçlar (pages/tools.html) [Aşama 7/9 — Tamamlandı]
+└── 🛠️ Araçlar               (tek sayfa sekmesi)
     ├── Party Builder (ZvZ & küçük ölçek kompozisyon + sinerjiler)
-    ├── Avalon Dungeon & HCE Rehberleri (boss mekaniği, counter, comp)
+    ├── Avalon Dungeon & HCE Rehberleri
     └── PvP Killboard Analizi (saatlik grafik, IP farkı, silah oranları)
 ```
+
+> **Not:** Haritalar, Rehberler ve Araçlar artık ayrı HTML sayfaları değil; aynı
+> `index.html` içinde sekme olarak açılır (`#haritalar`, `#rehberler`, `#araclar`).
 
 ---
 
@@ -279,21 +275,14 @@ AoT-PNASF/
     │   ├── main.ts / settings-panel.ts / events.ts ...
     │   └── crafting.ts / pvp.ts / arbitrage.ts / ai-build.ts ...
     │
-    ├── 📁 lib/                     # Alt sayfa (pages/) paylaşımlı modülleri
-    │   ├── lang.ts                 # Alt sayfa dil sistemi (i18n motoruna bağlı)
-    │   └── settings-panel.ts       # Alt sayfa ayarlar paneli
+    ├── 📁 lib/                     # Sekiz içi modüller (tek sayfa)
+    │   ├── maps.ts                 # Harita, zone kartları, BFS rota, Leaflet
+    │   ├── guides.ts               # Rehber kataloğu + yerel rehber üretici
+    │   └── tools.ts                # Party builder, killboard analizi, PvE
     │
     ├── 📁 locales/
     │   ├── ui-i18n.json            # Arayüz sözlüğü: 284 anahtar × 14 dil
     │   └── tr-official/            # Resmî Türkçe eşya adları (shard'lar)
-    │
-    ├── 📁 pages/                   # Alt sayfalar
-    │   ├── market.html             # Market & Ekonomi
-    │   ├── crafting.html           # Crafting & Üretim
-    │   ├── pvp.html                # PvP & İstatistik
-    │   ├── guides.html             # Rehberler
-    │   ├── maps.html               # Haritalar
-    │   └── tools.html              # Araçlar
     │
     ├── 📁 styles/ + styles.css     # Global & modül CSS'leri
     └── 📁 scripts/                 # AI bot, PvP fetcher, doğrulayıcılar

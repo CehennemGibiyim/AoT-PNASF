@@ -1,0 +1,45 @@
+name: Build Library Sync
+
+on:
+  schedule:
+    # Her 6 saatte bir topluluk build kütüphanesini tazeler.
+    - cron: '15 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      pages:
+        description: 'Çekilecek sayfa sayısı (48 build/sayfa)'
+        required: false
+        default: '16'
+
+jobs:
+  sync-builds:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch community builds
+        run: node scripts/builds-fetcher.cjs --pages=${{ github.event.inputs.pages || '16' }}
+
+      - name: Validate generated data
+        run: npm run validate:generated
+
+      - name: Commit build library
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/builds-library.json data/spell-map.json
+          if git diff --staged --quiet; then
+            echo "Build kütüphanesi değişmedi."
+            exit 0
+          fi
+          git commit -m "chore(data): sync community build library and weapon skill map"
+          git push

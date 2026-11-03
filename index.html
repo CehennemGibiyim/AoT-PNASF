@@ -87,7 +87,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/main.css">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles/maps.css">
+  <link rel="stylesheet" href="styles/guides.css">
+  <link rel="stylesheet" href="styles/tools.css">
+  <!-- Leaflet: Haritalar sekmesi (tek sayfa içinde) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   
   
   
@@ -173,16 +180,16 @@
       <button data-tab="tab-ai-build" class="tab-btn px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-gray-400 hover:text-white transition-colors flex-1 md:flex-none text-center hover:bg-albion-800/50">
         <i class="fa-solid fa-robot mr-1.5"></i> <span data-i18n="nav-aiBuild">AI Rehber</span>
       </button>
-      <!-- Bağlantılı alt sayfalar (artık kopuk değil) -->
-      <a href="pages/maps.html" target="_blank" rel="noopener" class="px-4 py-3 text-sm font-semibold text-gray-400 hover:text-albion-accent transition-colors flex-1 md:flex-none text-center hover:bg-albion-800/50 flex items-center justify-center">
+      <!-- Haritalar / Rehberler / Araçlar: aynı sayfada sekme olarak açılır -->
+      <button data-tab="tab-maps" class="tab-btn px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-gray-400 hover:text-white transition-colors flex-1 md:flex-none text-center hover:bg-albion-800/50">
         <i class="fa-solid fa-map mr-1.5"></i> <span data-i18n="nav-maps">Haritalar</span>
-      </a>
-      <a href="pages/guides.html" target="_blank" rel="noopener" class="px-4 py-3 text-sm font-semibold text-gray-400 hover:text-albion-accent transition-colors flex-1 md:flex-none text-center hover:bg-albion-800/50 flex items-center justify-center">
+      </button>
+      <button data-tab="tab-guides" class="tab-btn px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-gray-400 hover:text-white transition-colors flex-1 md:flex-none text-center hover:bg-albion-800/50">
         <i class="fa-solid fa-book-open mr-1.5"></i> <span data-i18n="nav-guides">Rehberler</span>
-      </a>
-      <a href="pages/tools.html" target="_blank" rel="noopener" class="px-4 py-3 text-sm font-semibold text-gray-400 hover:text-albion-accent transition-colors flex-1 md:flex-none text-center hover:bg-albion-800/50 flex items-center justify-center">
+      </button>
+      <button data-tab="tab-tools" class="tab-btn px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-gray-400 hover:text-white transition-colors flex-1 md:flex-none text-center hover:bg-albion-800/50">
         <i class="fa-solid fa-screwdriver-wrench mr-1.5"></i> <span data-i18n="nav-tools">Araçlar</span>
-      </a>
+      </button>
     </nav>
   </header>
 
@@ -337,6 +344,9 @@
           <button id="btnAiMaker" class="flex-1 md:flex-none px-6 py-2 bg-transparent text-gray-400 hover:text-white font-bold rounded transition-colors flex items-center justify-center">
             <i class="fa-solid fa-screwdriver-wrench mr-2"></i> Build Oluşturucu
           </button>
+          <button id="btnAiLibrary" class="flex-1 md:flex-none px-6 py-2 bg-transparent text-gray-400 hover:text-white font-bold rounded transition-colors flex items-center justify-center">
+            <i class="fa-solid fa-layer-group mr-2"></i> Build Kütüphanesi
+          </button>
         </div>
 
         <div class="flex-1 overflow-y-auto custom-scroll pr-2 relative">
@@ -419,6 +429,11 @@
             <div id="buildMakerApp" class="w-full"></div>
           </div>
 
+          <!-- View 4: Build Kütüphanesi (topluluk verisi, otomatik senkron) -->
+          <div id="aiViewLibrary" class="hidden max-w-6xl mx-auto w-full">
+            <div id="buildLibraryApp" class="w-full"></div>
+          </div>
+
           <!-- Shared AI Loading & Result Containers -->
           <div id="aiBuildLoading" class="hidden flex-col items-center justify-center py-12">
             <div class="relative flex items-center justify-center w-24 h-24 bg-black/40 rounded-full border border-albion-accent shadow-[0_0_20px_rgba(212,175,55,0.4)] mb-6">
@@ -433,6 +448,376 @@
         </div>
       </div>
     </section>
+
+
+<!-- ═══ HARİTALAR (eski pages/maps.html) ═══ -->
+<section id="tab-maps" class="tab-content hidden h-full flex-col animate-fade-in">
+  <div class="legacy-view">
+<!-- SAYFA BAŞLIĞI -->
+<div class="maps-page-header">
+  <div class="maps-page-header-inner">
+    <div class="page-badge"><span class="ai-dot"></span><span data-tr="Dünya Haritası &amp; Zone Rehberi" data-en="World Map &amp; Zone Guide">Dünya Haritası &amp; Zone Rehberi</span></div>
+    <h1 data-tr="Harita &amp; Zonlar" data-en="Maps &amp; Zones">Harita &amp; Zonlar</h1>
+    <p data-tr="Zone tipleri, crafting bonusları, Avalon yolları — tam rehber" data-en="Zone types, crafting bonuses, Avalon roads — complete guide">Zone tipleri, crafting bonusları, Avalon yolları — tam rehber</p>
+  </div>
+</div>
+
+<!-- VIEW SEKME ÇUBUĞU -->
+<div class="maps-view-bar">
+  <div class="maps-view-bar-inner">
+    <button class="map-view-tab active" data-view="zones" onclick="switchView('zones')">
+      🗺️ <span data-tr="Bölgeler & Bonuslar" data-en="Zones & Bonuses">Bölgeler &amp; Bonuslar</span>
+    </button>
+    <button class="map-view-tab" data-view="avalon" onclick="switchView('avalon')">
+      🟣 <span data-tr="Roads of Avalon" data-en="Roads of Avalon">Roads of Avalon</span>
+    </button>
+    <button class="map-view-tab" data-view="map" onclick="switchView('map')">
+      🔗 <span data-tr="Bağlantı Haritası (BFS)" data-en="Connection Map (BFS)">Bağlantı Haritası (BFS)</span>
+    </button>
+    <div class="mvb-search-wrap">
+      <span class="mf-icon">🔍</span>
+      <input type="text" id="mapSearch" class="mf-input" placeholder="Zone ara..." oninput="onMapSearch(this.value)" autocomplete="off"/>
+      <div class="mkt-search-dd" id="mapSearchDd"></div>
+    </div>
+    <div class="mvb-count"><span id="zoneCount">—</span> <span data-tr="zone" data-en="zones">zone</span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- GÖRÜNÜM 1: BÖLGELER & BONUSLAR (KARTLAR) -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="view-zones" class="view-container" style="display:block">
+  <!-- Zone Filtresi -->
+  <div class="maps-filter-bar">
+    <div class="maps-filter-bar-inner">
+      <button class="map-filter-btn active" onclick="filterZones('all',this)" data-tr="Tümü" data-en="All">Tümü</button>
+      <button class="map-filter-btn zone-btn-blue" onclick="filterZones('SAFEAREA',this)">🔵 Blue Zone</button>
+      <button class="map-filter-btn zone-btn-yellow" onclick="filterZones('YELLOW',this)">🟡 Yellow Zone</button>
+      <button class="map-filter-btn zone-btn-red" onclick="filterZones('RED',this)">🔴 Red Zone</button>
+      <button class="map-filter-btn zone-btn-black" onclick="filterZones('BLACK',this)">⚫ Black Zone</button>
+      <button class="map-filter-btn zone-btn-road" onclick="filterZones('ROAD',this)">🟣 Road of Avalon</button>
+      <button class="map-filter-btn zone-btn-mist" onclick="filterZones('MIST',this)">🌫️ Mist Zone</button>
+    </div>
+  </div>
+
+  <div class="zones-content">
+    <div id="bonus-section"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- GÖRÜNÜM 2: ROADS OF AVALON -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="view-avalon" class="view-container" style="display:none">
+  <div class="zones-content" id="avalon-section"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- GÖRÜNÜM 3: CANVAS HARITA + BFS ROTA -->
+<!-- ═══════════════════════════════════════════════ -->
+<div id="view-map" class="view-container maps-layout" style="display:none">
+  <!-- SOL: ROTA BULUCU -->
+  <div class="maps-sidebar">
+    <div class="msb-header">
+      <span class="msb-title" data-tr="Rota Bulucu" data-en="Pathfinder">Rota Bulucu</span>
+      <span class="msb-count" id="mapSideCount">BFS</span>
+    </div>
+
+    <!-- Zone Filtreleri (canvas için) -->
+    <div class="msb-filters">
+      <button class="map-filter-btn active" onclick="filterZones('all',this)" data-tr="Tümü" data-en="All">Tümü</button>
+      <button class="map-filter-btn" onclick="filterZones('SAFEAREA',this)">🔵</button>
+      <button class="map-filter-btn" onclick="filterZones('YELLOW',this)">🟡</button>
+      <button class="map-filter-btn" onclick="filterZones('RED',this)">🔴</button>
+      <button class="map-filter-btn" onclick="filterZones('BLACK',this)">⚫</button>
+      <button class="map-filter-btn" onclick="filterZones('ROAD',this)">🟣</button>
+    </div>
+
+    <!-- Rota Girdileri -->
+    <div class="route-section">
+      <div class="route-input-wrap">
+        <span class="route-lbl" data-tr="Başlangıç:" data-en="Start:">Başlangıç:</span>
+        <input type="text" id="routeFrom" class="route-inp" readonly onclick="openZonePicker('from')" placeholder="Zone seç..."/>
+      </div>
+      <button class="route-swap" onclick="swapRoute()">⇅</button>
+      <div class="route-input-wrap">
+        <span class="route-lbl" data-tr="Hedef:" data-en="Target:">Hedef:</span>
+        <input type="text" id="routeTo" class="route-inp" readonly onclick="openZonePicker('to')" placeholder="Zone seç..."/>
+      </div>
+      <div class="route-action-btns">
+        <button class="btn-calc" onclick="calcRoute()" data-tr="Rota Bul" data-en="Find Route">Rota Bul</button>
+        <button class="btn-clear" onclick="clearRoute()" data-tr="Temizle" data-en="Clear">Temizle</button>
+      </div>
+      <div id="routeResult" class="route-result" style="display:none">
+        <div class="route-stats" id="routeStats"></div>
+        <div class="route-steps" id="routeSteps"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ORTA: CANVAS -->
+  <div class="maps-canvas-wrap">
+    <div class="canvas-controls">
+      <button onclick="zoomIn()" title="Yakınlaştır">+</button>
+      <button onclick="zoomOut()" title="Uzaklaştır">−</button>
+      <button onclick="resetView()" title="Sıfırla">⊞</button>
+    </div>
+    <div id="mapCanvas" style="width:100%; height:100%; border-radius: 8px; z-index: 10;"></div>
+    <div class="canvas-hint">🖱️ Sürükle &amp; Yakınlaştır · 🔗 Bağlantılar <a href="https://github.com/ao-data/ao-bin-dumps" target="_blank" rel="noopener" style="color:#c9a84c">ao-bin-dumps</a> grid geometrisinden türetilmiştir · <a href="https://albiononline2d.com/en/map" target="_blank" rel="noopener" style="color:#c9a84c">albiononline2d raster harita ↗</a></div>
+  </div>
+
+  <!-- SAĞ: DETAY PANELİ -->
+  <div class="maps-detail-panel">
+    <div class="detail-box">
+      <div id="detailEmpty" class="detail-empty">
+        <div class="de-icon">🗺️</div>
+        <p data-tr="Haritadan bir zone seçin" data-en="Select a zone from the map">Haritadan bir zone seçin</p>
+      </div>
+      <div id="detailContent" style="display:none"></div>
+    </div>
+  </div>
+</div>
+  </div>
+</section>
+
+
+<!-- ═══ REHBERLER (eski pages/guides.html) ═══ -->
+<section id="tab-guides" class="tab-content hidden h-full flex-col animate-fade-in">
+  <div class="legacy-view">
+<!-- BAŞLIK -->
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div class="page-badge"><span class="ai-dot"></span><span data-tr="Gemini AI Destekli Rehberler" data-en="Gemini AI Powered Guides">Gemini AI Destekli Rehberler</span></div>
+      <h1 data-tr="Rehberler & Stratejiler" data-en="Guides & Strategies">Rehberler & Stratejiler</h1>
+      <p data-tr="Başlangıç rehberinden ileri stratejilere — AI destekli, Türkçe, güncel" data-en="From beginner guides to advanced strategies — AI powered, multilingual, up-to-date">Başlangıç rehberinden ileri stratejilere — AI destekli, Türkçe, güncel</p>
+    </div>
+  </div>
+
+  <div class="guides-layout">
+
+    <!-- SOL PANEL: KATEGORİLER -->
+    <aside class="guides-sidebar">
+      <div class="sidebar-search-wrap">
+        <span class="ss-icon">🔍</span>
+        <input type="text" id="guideSearch" class="sidebar-search"
+          data-ph-tr="Rehber ara..." data-ph-en="Search guides..."
+          placeholder="Rehber ara..." oninput="filterGuides(this.value)"/>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-title" data-tr="📚 Kategoriler" data-en="📚 Categories">📚 Kategoriler</div>
+        <div class="sidebar-cats" id="sidebarCats">
+          <div class="scat active" data-cat="all" onclick="selectCat('all',this)">
+            <span class="scat-icon">🌟</span><span data-tr="Tüm Rehberler" data-en="All Guides">Tüm Rehberler</span>
+          </div>
+          <div class="scat" data-cat="beginner" onclick="selectCat('beginner',this)">
+            <span class="scat-icon">🎯</span><span data-tr="Başlangıç" data-en="Beginner">Başlangıç</span>
+          </div>
+          <div class="scat" data-cat="build" onclick="selectCat('build',this)">
+            <span class="scat-icon">🛡️</span><span data-tr="Build Rehberleri" data-en="Build Guides">Build Rehberleri</span>
+          </div>
+          <div class="scat" data-cat="economy" onclick="selectCat('economy',this)">
+            <span class="scat-icon">💹</span><span data-tr="Ekonomi" data-en="Economy">Ekonomi</span>
+          </div>
+          <div class="scat" data-cat="zone" onclick="selectCat('zone',this)">
+            <span class="scat-icon">🗺️</span><span data-tr="Bölge Rehberleri" data-en="Zone Guides">Bölge Rehberleri</span>
+          </div>
+          <div class="scat" data-cat="pvp" onclick="selectCat('pvp',this)">
+            <span class="scat-icon">⚔️</span><span data-tr="PvP Stratejileri" data-en="PvP Strategies">PvP Stratejileri</span>
+          </div>
+          <div class="scat" data-cat="pve" onclick="selectCat('pve',this)">
+            <span class="scat-icon">🐉</span><span data-tr="PvE & Fame" data-en="PvE & Fame">PvE & Fame</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-title" data-tr="🤖 AI Rehber Oluştur" data-en="🤖 Generate AI Guide">🤖 AI Rehber Oluştur</div>
+        <div class="ai-gen-box">
+          <textarea id="aiGenPrompt" class="ai-gen-input" rows="3"
+            data-ph-tr="Hangi konuda rehber istiyorsun? (örn: T6 deri zırh crafting kârı, Solo corrupted dungeon build, Black Market flip stratejisi...)"
+            data-ph-en="What guide do you need? (e.g. T6 leather armor crafting profit, Solo corrupted dungeon build, Black Market flip strategy...)"
+            placeholder="Hangi konuda rehber istiyorsun?"></textarea>
+          <div class="ai-gen-opts">
+            <select id="aiGenLang" class="ai-gen-select">
+              <option value="tr">🇹🇷 Türkçe</option>
+              <option value="en">🇬🇧 English</option>
+              <option value="ru">🇷🇺 Русский</option>
+            </select>
+            <select id="aiGenLevel" class="ai-gen-select">
+              <option value="beginner" data-tr="Başlangıç" data-en="Beginner">Başlangıç</option>
+              <option value="mid" data-tr="Orta" data-en="Mid">Orta</option>
+              <option value="advanced" data-tr="İleri" data-en="Advanced">İleri</option>
+            </select>
+          </div>
+          <button class="ai-gen-btn" onclick="generateGuide()">
+            <span class="ai-dot"></span>
+            <span data-tr="AI Rehber Oluştur" data-en="Generate AI Guide">AI Rehber Oluştur</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-title" data-tr="🔥 Popüler Konular" data-en="🔥 Popular Topics">🔥 Popüler Konular</div>
+        <div class="popular-topics">
+          <span class="topic-tag" onclick="quickGuide('T8 Gathering rotasyonu')">T8 Gathering</span>
+          <span class="topic-tag" onclick="quickGuide('Black Market flip stratejisi')">BM Flip</span>
+          <span class="topic-tag" onclick="quickGuide('Brecilien başlangıç rehberi')">Brecilien</span>
+          <span class="topic-tag" onclick="quickGuide('Solo Corrupted Dungeon build')">Solo CD</span>
+          <span class="topic-tag" onclick="quickGuide('T6 Claymore PvP build')">Claymore</span>
+          <span class="topic-tag" onclick="quickGuide('Destiny Board optimizasyonu')">Destiny Board</span>
+          <span class="topic-tag" onclick="quickGuide('ZvZ Healer build')">ZvZ Healer</span>
+          <span class="topic-tag" onclick="quickGuide('Silver kazanma yolları başlangıç')">Silver Farm</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- SAĞ PANEL: İÇERİK -->
+    <div class="guides-content">
+
+      <!-- REHBER KARTLARİ -->
+      <div id="guideCards" class="guide-cards-grid">
+        <!-- JS doldurur -->
+      </div>
+
+      <!-- REHBER DETAY / AI İÇERİK -->
+      <div id="guideDetail" class="guide-detail" style="display:none">
+        <div class="gd-header">
+          <button class="gd-back" onclick="closeDetail()" data-tr="← Geri" data-en="← Back">← Geri</button>
+          <div class="gd-actions">
+            <button class="gd-action-btn" onclick="copyGuide()" data-tr="📋 Kopyala" data-en="📋 Copy">📋 Kopyala</button>
+            <button class="gd-action-btn" onclick="regenerateGuide()" data-tr="🔄 Yeniden Üret" data-en="🔄 Regenerate">🔄 Yeniden Üret</button>
+          </div>
+        </div>
+        <div id="guideDetailContent" class="gd-content"></div>
+        <div id="guideVideoSection" class="guide-video-section" style="display:none">
+          <h3 data-tr="🎬 İlgili Videolar" data-en="🎬 Related Videos">🎬 İlgili Videolar</h3>
+          <div id="guideVideos" class="guide-videos-grid"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- AI SORU-CEVAP CHAT (sabit alt panel) -->
+  <div class="ai-chat-panel" id="aiChatPanel">
+    <div class="ai-chat-header" onclick="toggleChat()">
+      <div class="ai-chat-title">
+        <span class="ai-dot"></span>
+        <span data-tr="Gemini AI — Albion Soruları" data-en="Gemini AI — Albion Questions">Gemini AI — Albion Soruları</span>
+      </div>
+      <span class="ai-chat-toggle" id="chatToggleIcon">▲</span>
+    </div>
+    <div class="ai-chat-body" id="aiChatBody">
+      <div class="ai-chat-messages" id="aiChatMessages">
+        <div class="ai-msg ai-msg-bot">
+          <div class="ai-msg-avatar">AI</div>
+          <div class="ai-msg-text" data-tr="Merhaba! Albion Online hakkında her şeyi sorabilirsin. Build, ekonomi, bölge, strateji — Gemini ile Türkçe yanıt alırsın." data-en="Hello! Ask me anything about Albion Online. Build, economy, zones, strategy — I'll answer in your language.">
+            Merhaba! Albion Online hakkında her şeyi sorabilirsin. Build, ekonomi, bölge, strateji — Gemini ile Türkçe yanıt alırsın.
+          </div>
+        </div>
+      </div>
+      <div class="ai-chat-input-row">
+        <input type="text" id="aiChatInput" class="ai-chat-input"
+          data-ph-tr="Albion hakkında bir şey sor... (örn: T6 yay ile nasıl para kazanırım?)"
+          data-ph-en="Ask about Albion... (e.g. How to make silver with T6 bow?)"
+          placeholder="Albion hakkında bir şey sor..."
+          onkeydown="if(event.key==='Enter')sendChatMsg()"/>
+        <button class="ai-chat-send" onclick="sendChatMsg()">
+          <span data-tr="Gönder" data-en="Send">Gönder</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  </div>
+</section>
+
+
+<!-- ═══ ARAÇLAR (eski pages/tools.html) ═══ -->
+<section id="tab-tools" class="tab-content hidden h-full flex-col animate-fade-in">
+  <div class="legacy-view">
+<div class="tools-hero">
+    <h1 class="tools-h1" data-tr="Araçlar" data-en="Tools">Araçlar</h1>
+    <p class="tools-sub" data-tr="Grup kompozisyonu, PvP killboard istatistikleri ve PvE rehberleri — hepsi tek yerde." data-en="Party composition, PvP killboard statistics and PvE guides — all in one place.">Grup kompozisyonu, PvP killboard istatistikleri ve PvE rehberleri — hepsi tek yerde.</p>
+  </div>
+
+  <div class="tools-tabs" role="tablist">
+    <button class="tools-tab active" data-tool-tab="party" aria-selected="true">🛡️ <span data-tr="Party Builder" data-en="Party Builder">Party Builder</span></button>
+    <button class="tools-tab" data-tool-tab="killboard" aria-selected="false">📊 <span data-tr="Killboard Analizi" data-en="Killboard Analysis">Killboard Analizi</span></button>
+    <button class="tools-tab" data-tool-tab="pve" aria-selected="false">🐉 <span data-tr="Avalon & HCE" data-en="Avalon & HCE">Avalon &amp; HCE</span></button>
+  </div>
+
+  <!-- ═══ PARTY BUILDER ═══ -->
+  <section id="tool-party" class="tool-panel active">
+    <div class="tp-controls">
+      <div class="tp-btn-group" id="partyFormats"></div>
+      <label class="tp-slider-label">
+        <span data-tr="Parti boyutu" data-en="Party size">Parti boyutu</span>
+        <input type="range" id="partySize" min="5" max="20" value="7" />
+        <span id="partySizeVal" class="tp-size-val">7</span>
+      </label>
+    </div>
+    <p class="tp-format-desc" id="partyFormatDesc"></p>
+    <div class="tp-roles" id="partyRoles"></div>
+    <div class="tp-two-col">
+      <div class="tp-box">
+        <h3>⚡ <span data-tr="Kritik Sinerjiler" data-en="Key Synergies">Kritik Sinerjiler</span></h3>
+        <div id="partySynergies"></div>
+      </div>
+      <div class="tp-box">
+        <h3>🍗 <span data-tr="Yemek & İksir" data-en="Food & Potions">Yemek &amp; İksir</span></h3>
+        <div id="partyConsumables"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ KILLBOARD ANALİZİ ═══ -->
+  <section id="tool-killboard" class="tool-panel">
+    <div class="tp-controls">
+      <div class="tp-btn-group" id="kbServers">
+        <button class="tp-btn active" data-kb-server="eu">EU</button>
+        <button class="tp-btn" data-kb-server="us">US</button>
+        <button class="tp-btn" data-kb-server="asia">ASIA</button>
+      </div>
+      <div class="tp-btn-group" id="kbWindows">
+        <button class="tp-btn" data-kb-window="3">3 saat</button>
+        <button class="tp-btn active" data-kb-window="6">6 saat</button>
+        <button class="tp-btn" data-kb-window="12">12 saat</button>
+        <button class="tp-btn" data-kb-window="0">Tümü</button>
+      </div>
+      <button class="tp-btn" id="kbRefresh" title="Veriyi yeniden çek" aria-label="Veriyi yeniden çek">⟳ Yenile</button>
+    </div>
+    <div class="kb-stats" id="kbStats"></div>
+    <div class="kb-charts">
+      <div class="tp-box">
+        <h3>🕐 <span id="kbTitleHourly" data-tr="Saatlik Kill Dağılımı" data-en="Hourly Kill Distribution">Saatlik Kill Dağılımı</span></h3>
+        <div class="kb-chart-wrap"><canvas id="kbChartHourly"></canvas></div>
+      </div>
+      <div class="tp-box">
+        <h3>⚡ <span id="kbTitleIP" data-tr="Saatlik Ortalama IP (Killer vs Victim)" data-en="Hourly Avg IP (Killer vs Victim)">Saatlik Ortalama IP (Killer vs Victim)</span></h3>
+        <div class="kb-chart-wrap"><canvas id="kbChartIP"></canvas></div>
+      </div>
+      <div class="tp-box">
+        <h3>⚔️ <span data-tr="En Çok Kullanılan Silahlar" data-en="Most Used Weapons">En Çok Kullanılan Silahlar</span></h3>
+        <div class="kb-chart-wrap"><canvas id="kbChartWeapons"></canvas></div>
+      </div>
+    </div>
+    <p class="kb-note" data-tr="Veri Albion resmi gameinfo API'sinden canlı çekilir (son ~350 olay); erişim başarısız olursa bot'un son feed'i (data/pvp-feed.json) kullanılır. Yoğun sunucularda bu olaylar birkaç dakikaya sığdığı için grafik dakikalık, sakin dönemlerde saatlik çözünürlükte gösterilir." data-en="Data is fetched live from the official Albion gameinfo API (last ~350 events); if unreachable, the bot's latest feed (data/pvp-feed.json) is used. On busy servers these events span only a few minutes, so the chart shows per-minute resolution; during quiet periods it shows hourly resolution.">Veri Albion resmi gameinfo API'sinden canlı çekilir (son ~350 olay); erişim başarısız olursa bot'un son feed'i (data/pvp-feed.json) kullanılır. Yoğun sunucularda bu olaylar birkaç dakikaya sığdığı için grafik dakikalık, sakin dönemlerde saatlik çözünürlükte gösterilir.</p>
+  </section>
+
+  <!-- ═══ AVALON & HCE ═══ -->
+  <section id="tool-pve" class="tool-panel">
+    <div class="tp-controls">
+      <div class="tp-btn-group" id="pveSubTabs">
+        <button class="tp-btn active" data-pve-tab="avalon">🏰 <span data-tr="Avalon Dungeon" data-en="Avalon Dungeon">Avalon Dungeon</span></button>
+        <button class="tp-btn" data-pve-tab="hce">🗺️ <span data-tr="Hardcore Expedition" data-en="Hardcore Expedition">Hardcore Expedition</span></button>
+      </div>
+    </div>
+    <div id="pveAvalon"></div>
+    <div id="pveHce" style="display:none"></div>
+  </section>
+  </div>
+</section>
 
   </main>
 
@@ -455,10 +840,21 @@
   <script type="module" src="js/arbitrage.ts"></script>
   <script type="module" src="js/ai-build.ts"></script>
   <script type="module" src="js/build-maker.ts"></script>
+  <script type="module" src="js/build-library.ts"></script>
+  <script type="module" src="js/meta-craft.ts"></script>
   <script type="module" src="js/smart-scanner.ts"></script>
   <script type="module" src="js/silver-calculator.ts"></script>
   <script type="module" src="js/live-stats-bar.ts"></script>
   <script type="module" src="js/quick-search.ts"></script>
+
+  <!-- Haritalar / Rehberler / Araçlar: veri ve modüller (tek sayfa) -->
+  <script src="data/world-zones.js"></script>
+  <script src="data/world-data.js"></script>
+  <script src="data/zone-bonuses.js"></script>
+  <script src="data/tools-data.js"></script>
+  <script type="module" src="lib/maps.ts"></script>
+  <script type="module" src="lib/guides.ts"></script>
+  <script type="module" src="lib/tools.ts"></script>
   <script>
     function switchDashTab(tab) {
       const panels = {

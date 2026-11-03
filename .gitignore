@@ -46,3 +46,6 @@ coverage/
 *.bak
 *.orig
 *~.nib
+
+# Yerel geliştirme notları/test betikleri
+.logs/

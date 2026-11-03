@@ -1,8 +1,8 @@
 // AoT-PNASF Service Worker
 // GitHub Pages için önbellekleme sistemi
 
-const CACHE_NAME = 'aot-pnasf-v3';
-const CACHE_VERSION = 'v3';
+const CACHE_NAME = 'aot-pnasf-v4';
+const CACHE_VERSION = 'v4';
 
 // Önbelleğe alınacak kaynaklar (derlenmiş betikler hash'li olduğu için
 // çalışma zamanında, istek sırasında önbelleğe alınır).
@@ -11,13 +11,11 @@ const CACHE_VERSION = 'v3';
 const STATIC_CACHE = [
   './',
   './index.html',
-  './crafting.html',
-  './market.html',
   './styles.css',
   './styles/main.css',
-  './styles/crafting.css',
-  './styles/market.css',
-  './styles/settings.css',
+  './styles/maps.css',
+  './styles/guides.css',
+  './styles/tools.css',
   './data/items-data.js',
   './data/world-data.js',
   './locales/tr-official.json',

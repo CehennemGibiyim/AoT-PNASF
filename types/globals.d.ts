@@ -18,6 +18,8 @@ declare global {
   var WORLD_DATA: any;
   var ZONE_BONUSES: any;
   var AOT_DATA: any;
+  var RECIPES: any;
+  var _applyLang: any;
 
   // --- CDN kütüphaneleri ---
   var Chart: any;

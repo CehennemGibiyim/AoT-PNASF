@@ -155,6 +155,9 @@ function initCraftingModule() {
       <button id="tabBtnJournal" class="flex-1 md:flex-none px-6 py-2 bg-transparent text-gray-400 hover:text-white font-bold rounded transition-colors flex items-center justify-center">
         <i class="fa-solid fa-book-open mr-2"></i> <span>${window.t('crafting-journalTab', 'Journal Kârı')}</span>
       </button>
+      <button id="tabBtnMeta" class="flex-1 md:flex-none px-6 py-2 bg-transparent text-gray-400 hover:text-white font-bold rounded transition-colors flex items-center justify-center">
+        <i class="fa-solid fa-flask-vial mr-2"></i> <span>${window.t('crafting-metaCraft', 'Meta Craft')}</span>
+      </button>
     </div>
     <div id="craftingContentArea" class="flex-1 flex flex-col h-full relative"></div>
   `;
@@ -163,10 +166,11 @@ function initCraftingModule() {
   const btnOutlands = document.getElementById('tabBtnOutlands');
   const btnCalc = document.getElementById('tabBtnCalc');
   const btnJournal = document.getElementById('tabBtnJournal');
+  const btnMeta = document.getElementById('tabBtnMeta');
   const contentArea = document.getElementById('craftingContentArea');
 
   function resetTabs() {
-    [btnRoyal, btnOutlands, btnCalc, btnJournal].forEach(btn => {
+    [btnRoyal, btnOutlands, btnCalc, btnJournal, btnMeta].forEach(btn => {
       btn.className = "flex-1 md:flex-none px-6 py-2 bg-transparent text-gray-400 hover:text-white font-bold rounded transition-colors flex items-center justify-center";
     });
   }
@@ -1075,6 +1079,20 @@ function initCraftingModule() {
   btnOutlands.addEventListener('click', () => { resetTabs(); activateTab(btnOutlands); renderOutlandsPlanner(); });
   btnCalc.addEventListener('click', () => { resetTabs(); activateTab(btnCalc); renderCalc(); });
   btnJournal.addEventListener('click', () => { resetTabs(); activateTab(btnJournal); renderJournalCalc(); });
+
+  // Meta Craft: killboard ekipman istatistiklerinden üretim önerileri
+  btnMeta.addEventListener('click', () => {
+    resetTabs();
+    activateTab(btnMeta);
+    contentArea.innerHTML = `<div id="metaCraftMount" class="w-full animate-fade-in"></div>`;
+    const mount = document.getElementById('metaCraftMount');
+    const meta = (window as any).AOTMetaCraft;
+    if (mount && meta && typeof meta.mount === 'function') {
+      void meta.mount(mount);
+    } else if (mount) {
+      mount.innerHTML = `<div class="text-gray-400 text-sm">Meta craft modülü yüklenemedi.</div>`;
+    }
+  });
 
   renderRoyalMap();
 }

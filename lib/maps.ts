@@ -1121,4 +1121,17 @@ Object.defineProperty(window, 'getStaticZones', {
   set: (value) => { getStaticZones_windowOverride = value; },
   configurable: true, enumerable: true });
 
+// Tek sayfa (SPA) içinde harita sekmesi açıldığında Leaflet boyutunu tazele.
+// Gizli konteynerde başlatılan harita 0×0 ölçer; sekme görünür olunca düzeltilir.
+window.addEventListener('aot:tab-shown', (ev: any) => {
+  if (ev?.detail !== 'tab-maps') return;
+  setTimeout(() => {
+    if (!leafletMap) return;
+    try {
+      leafletMap.invalidateSize();
+      applyMapLod();
+    } catch (_) {}
+  }, 80);
+});
+
 export {};
