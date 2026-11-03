@@ -1060,8 +1060,9 @@ function loadArbitrageModule() {
                             </span>
                             <select id="flipperInterval" class="bg-albion-900 border border-gray-600 rounded-lg p-2.5 text-white focus:border-albion-accent outline-none text-sm font-bold">
                                 <option value="60000">Her 1 dakika</option>
-                                <option value="120000" selected>Her 2 dakika</option>
-                                <option value="300000">Her 5 dakika</option>
+                                <option value="120000">Her 2 dakika</option>
+                                <option value="300000" selected>Her 5 dakika</option>
+                                <option value="600000">Her 10 dakika</option>
                             </select>
                             <select id="flipperTier" class="bg-albion-900 border border-gray-600 rounded-lg p-2.5 text-white focus:border-albion-accent outline-none text-sm font-bold">
                                 <option value="ALL" selected>Tüm Tierlar</option><option value="4">Tier 4</option><option value="5">Tier 5</option><option value="6">Tier 6</option><option value="7">Tier 7</option><option value="8">Tier 8</option>
@@ -2044,8 +2045,94 @@ function loadArbitrageModule() {
         `).join('');
     };
 
+    // AODP istek kotası: IP başına pencere sınırı olabilir (429 + ratelimit-reset başlığı).
+    let flipQuotaUntil = 0;
+    let flipRetryTimer: any = null;
+    const FLIP_CACHE_KEY = 'aot_flipper_cache_v1';
+
+    const flipFetchPrices = async (items: string[]) => {
+        const domain = (window as any).getAlbionApiDomain ? (window as any).getAlbionApiDomain() : 'europe.albion-online-data.com';
+
+        // URL uzunluğuna göre grupla (AODP tek istekte çok ID kabul eder)
+        const batches: string[][] = [];
+        let cur: string[] = [];
+        let len = 0;
+        items.forEach(id => {
+            const add = id.length + 1;
+            if (cur.length && len + add > 3000) { batches.push(cur); cur = []; len = 0; }
+            cur.push(id); len += add;
+        });
+        if (cur.length) batches.push(cur);
+
+        const all: any[] = [];
+        let done = 0;
+        let quotaHit = false;
+
+        for (let i = 0; i < batches.length; i++) {
+            const url = `https://${domain}/api/v2/stats/prices/${batches[i].join(',')}.json`;
+            let res: Response;
+            try {
+                res = await fetch(url);
+            } catch (err) {
+                flipLog('UYARI', `Ağ hatası — kalan ${batches.length - i} istek atlandı.`, 'text-orange-400');
+                break;
+            }
+
+            if (res.status === 429) {
+                const reset = parseInt(res.headers.get('ratelimit-reset') || '0', 10);
+                flipQuotaUntil = reset > 0 ? reset * 1000 : Date.now() + 5 * 60 * 1000;
+                quotaHit = true;
+                const when = new Date(flipQuotaUntil).toLocaleTimeString('tr-TR');
+                flipLog('KOTA', `AODP istek kotası doldu — ${when} sonrası yenilenecek. ${done}/${batches.length} istek tamamlandı, kısmi veri gösteriliyor.`, 'text-orange-400');
+                break;
+            }
+
+            if (!res.ok) {
+                flipLog('UYARI', `İstek ${res.status} döndü — kalan istekler atlandı.`, 'text-orange-400');
+                break;
+            }
+
+            const json = await res.json().catch(() => []);
+            if (Array.isArray(json)) all.push(...json);
+            done++;
+
+            if (i < batches.length - 1) await new Promise(r => setTimeout(r, 250));
+        }
+
+        return { data: all, requests: done, total: batches.length, quotaHit };
+    };
+
+    const saveFlipCache = () => {
+        try {
+            localStorage.setItem(FLIP_CACHE_KEY, JSON.stringify({
+                at: Date.now(), scanned: flipState.scanned, flips: flipState.flips.slice(0, 50)
+            }));
+        } catch (_) { /* kota/özel mod engeli */ }
+    };
+
+    const loadFlipCache = () => {
+        try {
+            const raw = localStorage.getItem(FLIP_CACHE_KEY);
+            if (!raw) return false;
+            const c = JSON.parse(raw);
+            if (!c || !Array.isArray(c.flips) || !c.flips.length) return false;
+            flipState.flips = c.flips;
+            flipState.scanned = c.scanned || 0;
+            renderFlipTable();
+            renderFlipStats();
+            const ageM = Math.max(0, Math.round((Date.now() - c.at) / 60000));
+            flipLog('ÖNBELLEK', `Son tarama ${ageM} dk önce (${c.flips.length} fırsat) — canlı tarama için "Şimdi Tara".`, 'text-cyan-400');
+            return true;
+        } catch (_) { return false; }
+    };
+
     const runFlipScan = async () => {
         if (flipState.busy) return;
+        if (Date.now() < flipQuotaUntil) {
+            const when = new Date(flipQuotaUntil).toLocaleTimeString('tr-TR');
+            flipLog('KOTA', `Kota ${when} sonrası yenilenecek — bu tarama atlandı.`, 'text-orange-400');
+            return;
+        }
         flipState.busy = true;
         const loading = document.getElementById('flipperLoading');
         if (loading) loading.classList.remove('hidden');
@@ -2068,8 +2155,8 @@ function loadArbitrageModule() {
             });
 
             const itemsToFetch = getItemsToFetch(baseItems, tier, enchant);
-            const chunkCount = Math.ceil(itemsToFetch.length / 100);
-            const data = await fetchPricesInChunks(itemsToFetch, '');
+            const scan = await flipFetchPrices(itemsToFetch);
+            const data = scan.data;
 
             const grouped: any = {};
             const validCities = ["Lymhurst", "Bridgewatch", "Fort Sterling", "Martlock", "Thetford", "Caerleon", "Black Market"];
@@ -2109,15 +2196,26 @@ function loadArbitrageModule() {
             flipState.scanned = itemsToFetch.length;
             renderFlipTable();
             renderFlipStats();
+            const partial = scan.requests < scan.total;
+            if (!partial) saveFlipCache();
 
             const secs = ((Date.now() - t0) / 1000).toFixed(1);
+            const reqStr = `${scan.requests}/${scan.total} istek`;
             if (flips.length) {
                 const ages = flips.map(f => f.recency).filter(a => a < 100000);
                 const fresh = ages.length ? Math.min(...ages) : 999999;
                 const avg = ages.length ? Math.round(ages.reduce((s, a) => s + a, 0) / ages.length) : 999999;
-                flipLog('TARAMA', `${itemsToFetch.length.toLocaleString('tr-TR')} eşya sorgulandı (${chunkCount} istek, ${secs} sn) → ${flips.length} flip fırsatı · en taze ${flipAgeStr(fresh)} · ort. ${flipAgeStr(avg)}`, 'text-blue-400');
+                flipLog('TARAMA', `${itemsToFetch.length.toLocaleString('tr-TR')} eşya sorgulandı (${reqStr}, ${secs} sn) → ${flips.length} flip fırsatı · en taze ${flipAgeStr(fresh)} · ort. ${flipAgeStr(avg)}${partial ? ' · KISMİ' : ''}`, 'text-blue-400');
             } else {
-                flipLog('TARAMA', `${itemsToFetch.length.toLocaleString('tr-TR')} eşya sorgulandı (${chunkCount} istek, ${secs} sn) — uygun flip fırsatı bulunamadı.`, 'text-blue-400');
+                flipLog('TARAMA', `${itemsToFetch.length.toLocaleString('tr-TR')} eşya sorgulandı (${reqStr}, ${secs} sn) — uygun flip fırsatı bulunamadı${partial ? ' (kısmi veri, tekrar deneyin)' : ''}.`, 'text-blue-400');
+            }
+
+            // Kota nedeniyle yarıda kaldıysa: yenilenme anında tek otomatik tekrar
+            if (scan.quotaHit) {
+                if (flipRetryTimer) clearTimeout(flipRetryTimer);
+                const wait = Math.max(5000, flipQuotaUntil - Date.now() + 2000);
+                flipLog('KOTA', `Yenilenme anında tekrar denenecek (~${Math.round(wait / 60000)} dk).`, 'text-orange-400');
+                flipRetryTimer = setTimeout(() => { if (flipState.running) runFlipScan(); }, Math.min(wait, 6 * 60 * 1000));
             }
         } catch (e: any) {
             flipLog('HATA', `Pazar verisi alınamadı: ${e && e.message ? e.message : e}`, 'text-red-400');
@@ -2167,12 +2265,17 @@ function loadArbitrageModule() {
         if (box) box.innerHTML = '<div class="text-gray-600">// Kayıt temizlendi.</div>';
     });
 
-    // Flipper sekmesi ilk açıldığında tek turluk otomatik tarama
+    // Flipper sekmesi ilk açıldığında: önce son kaydedilmiş tarama, sonra canlı tarama
     document.getElementById('btnTabArbFlip').addEventListener('click', () => {
-        if (flipState.scanned === 0 && !flipState.busy) {
-            flipLog('KAYIT', 'Flipper sekmesi açıldı — ilk tarama başlatılıyor.', 'text-cyan-400');
-            runFlipScan();
+        if (flipState.scanned !== 0 || flipState.busy) return;
+        const hadCache = loadFlipCache();
+        if (Date.now() < flipQuotaUntil) {
+            const when = new Date(flipQuotaUntil).toLocaleTimeString('tr-TR');
+            flipLog('KOTA', `Kota ${when} sonrası yenilenecek — canlı tarama beklemede.`, 'text-orange-400');
+            return;
         }
+        flipLog('KAYIT', hadCache ? 'Flipper sekmesi açıldı — canlı tarama başlatılıyor.' : 'Flipper sekmesi açıldı — ilk tarama başlatılıyor.', 'text-cyan-400');
+        runFlipScan();
     });
 
     // === KATEGORİ TABANLI UNIVERSAL ARAMA ===
