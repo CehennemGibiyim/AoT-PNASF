@@ -19,7 +19,9 @@ class AlbionImageCache {
     }
 
     getItemUrl(itemId, quality = 1, size = 128) {
-        return `${this.baseUrl}/${encodeURIComponent(itemId)}.png?quality=${quality}&size=${size}`;
+        // Taban kimliğiyle çağrılırsa (MAIN_AXE) render servisi 404 verir;
+        // tam kimliğe çevir (T8_MAIN_AXE).
+        return `${this.baseUrl}/${encodeURIComponent(aoItemId(itemId))}.png?quality=${quality}&size=${size}`;
     }
 
     getSpellUrl(spellId) {
@@ -66,7 +68,66 @@ class AlbionImageCache {
     }
 }
 
+/**
+ * Taban eşya kimliğini render servisinin beklediği tam kimliğe çevirir.
+ * MAIN_AXE + tier 6 + enchant 2 → T6_MAIN_AXE@2. Zaten tam kimlikse dokunmaz.
+ */
+function aoItemId(itemId: any, tier?: number, ench?: number): string {
+    const raw = String(itemId == null ? '' : itemId);
+    if (/^T\d+_/.test(raw)) return raw;
+    const t = tier && tier >= 3 && tier <= 8 ? Math.round(tier) : 8;
+    const e = ench ? `@${ench}` : '';
+    return `T${t}_${raw}${e}`;
+}
+
+/**
+ * Görsel adayları: ilk sırada tercih edilen tier, sonra T8→T3 yedeği.
+ * Relik eşyalar yalnızca T7/T8'de bulunduğu için tek tier yeterli değil.
+ */
+function aoItemUrls(itemId: any, tier?: number, ench?: number, size = 64): string[] {
+    const raw = String(itemId == null ? '' : itemId);
+    const enchantInId = Number((raw.match(/@(\d+)$/) || [])[1] || 0);
+    const e = ench || enchantInId;
+    const clean = raw.replace(/^T\d+_/, '').replace(/@\d+$/, '');
+    const preferred = tier && tier >= 3 && tier <= 8 ? Math.round(tier) : 0;
+    const tiers = [preferred, 8, 7, 6, 5, 4, 3].filter((t, i, arr) => t >= 3 && t <= 8 && arr.indexOf(t) === i);
+    const suffix = e ? `@${e}` : '';
+    return tiers.map((t) => `https://render.albiononline.com/v1/item/T${t}_${encodeURIComponent(clean)}${suffix}.png?quality=1&size=${size}`);
+}
+
+/** <img ...> için hazır öznitelik: src + data-alts yedek zinciri. */
+function aoItemImg(itemId: any, tier?: number, ench?: number, size = 64): string {
+    const urls = aoItemUrls(itemId, tier, ench, size);
+    return `src="${urls[0]}" data-alts="${urls.slice(1).join('|')}"`;
+}
+
+/** İlk tier 404 verirse sıradaki tier'i dener; hepsi biterse ikonu gizler. */
+function aoInstallItemFallback() {
+    const w = window as any;
+    if (w.__aoItemFallback) return;
+    w.__aoItemFallback = true;
+    document.addEventListener('error', (event) => {
+        const img = event.target as HTMLImageElement;
+        if (!img || img.tagName !== 'IMG' || !img.dataset || !img.dataset.alts) return;
+        const alts = img.dataset.alts.split('|').filter(Boolean);
+        const next = alts.shift();
+        img.dataset.alts = alts.join('|');
+        if (next) {
+            img.src = next;
+        } else {
+            const placeholder = w.albionImageCache?.getPlaceholderUrl?.();
+            if (placeholder) img.src = placeholder;
+            else { img.style.visibility = 'hidden'; img.style.opacity = '0'; }
+        }
+    }, true);
+}
+
+aoInstallItemFallback();
+
 window.albionImageCache = new AlbionImageCache();
+window.aoItemId = aoItemId;
+window.aoItemUrls = aoItemUrls;
+window.aoItemImg = aoItemImg;
 
 window.getItemImage = (itemId, quality = 1, size = 128) =>
     window.albionImageCache.getImage(itemId, quality, size, 'item');
@@ -84,6 +145,9 @@ window.createItemImage = async (itemId, options: any = {}) => {
 // --- Modül dönüşümü: üst düzey semboller window üzerinden paylaşılır ---
 declare global {
   var AlbionImageCache: any;
+  var aoItemId: (itemId: any, tier?: number, ench?: number) => string;
+  var aoItemUrls: (itemId: any, tier?: number, ench?: number, size?: number) => string[];
+  var aoItemImg: (itemId: any, tier?: number, ench?: number, size?: number) => string;
 }
 
 let AlbionImageCache_windowOverride: any;

@@ -94,13 +94,21 @@ function blItemName(base: string): string {
   return hit ? (hit.tr || hit.en || base) : base;
 }
 
-function blIcon(item: LibItem | null, size = 64): string {
+/**
+ * Eşya görseli öznitelikleri (src + data-alts). Veride hem tam kimlik (id)
+ * hem de taban kimliği (base) var; taban kimliğiyle URL kurulunca render
+ * servisi 404 döndüğü için tier + enchant ile tam kimlik kullanılıyor.
+ */
+function blIconAttrs(item: LibItem | null, size = 64): string {
   if (!item) return '';
-  const cache = (window as any).albionImageCache;
-  if (cache && typeof cache.getItemUrl === 'function') {
-    try { return cache.getItemUrl(item.base, 1, size); } catch (_) {}
-  }
-  return `https://render.albiononline.com/v1/item/${encodeURIComponent(item.id)}.png?count=1&quality=1`;
+  const w = window as any;
+  const id = item.id || item.base;
+  if (typeof w.aoItemImg === 'function') return w.aoItemImg(id, item.tier, item.ench || 0, size);
+  const cache = w.albionImageCache;
+  const url = cache && typeof cache.getItemUrl === 'function'
+    ? cache.getItemUrl(id, 1, size)
+    : `https://render.albiononline.com/v1/item/${encodeURIComponent(id)}.png?quality=1&size=${size}`;
+  return `src="${url}"`;
 }
 
 function blSpellIcon(spell: string): string {
@@ -178,7 +186,7 @@ function blGearRow(build: LibBuild): string {
     if (!item) return '';
     const tier = item.tier ? `T${item.tier}${item.ench ? '.' + item.ench : ''}` : '';
     return `<div class="bl-gear-item" title="${blEsc(blItemName(item.base))} ${tier}">
-      <img src="${blIcon(item)}" alt="${blEsc(blItemName(item.base))}" loading="lazy" onerror="this.style.visibility='hidden'">
+      <img ${blIconAttrs(item)} alt="${blEsc(blItemName(item.base))}" loading="lazy" decoding="async">
       <span>${tier}</span>
     </div>`;
   }).join('');

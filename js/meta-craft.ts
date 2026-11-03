@@ -73,24 +73,11 @@ function mcIconUrls(base: string, tier?: number): string[] {
 }
 
 function mcIconAttrs(base: string, tier?: number): string {
+  // Ortak yardımcı (js/image-cache.ts) hem URL zincirini hem hata yedeğini kurar.
+  const w = window as any;
+  if (typeof w.aoItemImg === 'function') return w.aoItemImg(base, tier, 0, 64);
   const urls = mcIconUrls(base, tier);
   return `src="${urls[0]}" data-alts="${urls.slice(1).join('|')}"`;
-}
-
-/** İlk tier 404 verirse sıradaki tier'i dener; hepsi biterse ikonu gizler. */
-function mcInstallIconFallback() {
-  const w = window as any;
-  if (w.__mcIconFallback) return;
-  w.__mcIconFallback = true;
-  document.addEventListener('error', (event) => {
-    const img = event.target as HTMLImageElement;
-    if (!img || img.tagName !== 'IMG' || !img.dataset || !img.dataset.alts) return;
-    const alts = img.dataset.alts.split('|').filter(Boolean);
-    const next = alts.shift();
-    img.dataset.alts = alts.join('|');
-    if (next) img.src = next;
-    else { img.style.visibility = 'hidden'; img.style.opacity = '0'; }
-  }, true);
 }
 
 function mcServer(): MetaServer | null {
@@ -191,7 +178,6 @@ function mcCraftList(): string {
 function mcRender() {
   const app = document.getElementById('metaCraftApp');
   if (!app || !mcData) return;
-  mcInstallIconFallback();
   const server = mcServer();
   const slot = mcSlot();
   const stamp = mcData.fetchedAt ? new Date(mcData.fetchedAt).toLocaleString('tr-TR') : '—';
