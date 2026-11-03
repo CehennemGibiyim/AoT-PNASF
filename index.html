@@ -334,6 +334,9 @@
           <button id="btnAiGroup" class="flex-1 md:flex-none px-6 py-2 bg-transparent text-gray-400 hover:text-white font-bold rounded transition-colors flex items-center justify-center">
             <i class="fa-solid fa-users mr-2"></i> <span data-i18n="aiBuild-groupTab">Grup Setleri (Content Meta)</span>
           </button>
+          <button id="btnAiMaker" class="flex-1 md:flex-none px-6 py-2 bg-transparent text-gray-400 hover:text-white font-bold rounded transition-colors flex items-center justify-center">
+            <i class="fa-solid fa-screwdriver-wrench mr-2"></i> Build Oluşturucu
+          </button>
         </div>
 
         <div class="flex-1 overflow-y-auto custom-scroll pr-2 relative">
@@ -411,6 +414,11 @@
             </div>
           </div>
 
+          <!-- View 3: Manuel Build Oluşturucu -->
+          <div id="aiViewMaker" class="hidden">
+            <div id="buildMakerApp" class="w-full"></div>
+          </div>
+
           <!-- Shared AI Loading & Result Containers -->
           <div id="aiBuildLoading" class="hidden flex-col items-center justify-center py-12">
             <div class="relative flex items-center justify-center w-24 h-24 bg-black/40 rounded-full border border-albion-accent shadow-[0_0_20px_rgba(212,175,55,0.4)] mb-6">
@@ -446,6 +454,7 @@
   <script type="module" src="js/loot.ts"></script>
   <script type="module" src="js/arbitrage.ts"></script>
   <script type="module" src="js/ai-build.ts"></script>
+  <script type="module" src="js/build-maker.ts"></script>
   <script type="module" src="js/smart-scanner.ts"></script>
   <script type="module" src="js/silver-calculator.ts"></script>
   <script type="module" src="js/live-stats-bar.ts"></script>

@@ -39,6 +39,8 @@ let edgeLayer = null;
 let routeLayer = null;
 let highlightLayer = null;
 let markerById = new Map();
+let labelsLayer = null;
+let labelEntries: { el: HTMLElement; zone: any; base: boolean }[] = [];
 
 let getLang = () => localStorage.getItem('aot-lang') || 'tr';
 
@@ -375,9 +377,13 @@ function initLeafletMap() {
 
   leafletMap = L.map('mapCanvas', {
     crs: L.CRS.Simple,
-    minZoom: -2,
-    maxZoom: 4,
+    minZoom: -1,
+    maxZoom: 6,
     zoomSnap: 0.25,
+    zoomDelta: 0.5,
+    wheelPxPerZoomLevel: 90,
+    zoomAnimation: true,
+    markerZoomAnimation: true,
     attributionControl: false,
     zoomControl: false
   });
@@ -394,9 +400,13 @@ function initLeafletMap() {
 
   edgeLayer = L.layerGroup().addTo(leafletMap);
   routeLayer = L.layerGroup().addTo(leafletMap);
+  labelsLayer = L.layerGroup().addTo(leafletMap);
   markerById = new Map();
+  labelEntries = [];
   renderMapEdges();
   renderMapMarkers();
+  applyMapLod();
+  leafletMap.on('zoomend', applyMapLod);
 }
 
 function renderMapEdges() {
@@ -425,27 +435,53 @@ function renderMapMarkers() {
     const col = getZoneColor(z);
     const isCity = z.type === 'CITY';
     const isCross = typeof z.id === 'string' && z.id.endsWith('Cross');
+    const baseRadius = isCity ? 7 : isCross ? 5.5 : 3.5;
     const marker = L.circleMarker([z.wy, z.wx], {
-      radius: isCity ? 7 : isCross ? 5.5 : 3.5,
+      radius: baseRadius,
       color: '#0a0d14',
       weight: 1,
       fillColor: col.bg,
       fillOpacity: 0.92
     }).addTo(leafletMap);
+    (marker as any)._baseRadius = baseRadius;
     marker.bindTooltip(`${z.name}${z.tier ? ' · T' + z.tier : ''}${z.biome ? ' · ' + z.biome : ''}`, { direction: 'top', offset: [0, -6] });
     marker.on('click', () => selectZone(z.id));
     markerById.set(z.id, marker);
 
-    if (isCity || isCross) {
-      L.marker([z.wy, z.wx], {
-        interactive: false,
-        icon: L.divIcon({
-          className: '',
-          html: `<div style="transform:translate(-50%,${isCity ? '10px' : '8px'});white-space:nowrap;font:600 10px Rajdhani,sans-serif;color:#e8eaf0;text-shadow:0 1px 3px #000;pointer-events:none">${z.name}</div>`,
-          iconSize: [0, 0]
-        })
-      }).addTo(leafletMap);
-    }
+    // Tüm zone'ler için etiket: yakınlaştıkça görünür olur (LOD)
+    const wrap = document.createElement('div');
+    wrap.style.cssText = `transform:translate(-50%,${isCity ? '12px' : '9px'});white-space:nowrap;font:600 10px Rajdhani,sans-serif;color:#e8eaf0;text-shadow:0 1px 3px #000;pointer-events:none;display:none`;
+    wrap.textContent = z.name;
+    const labelMarker = L.marker([z.wy, z.wx], {
+      interactive: false,
+      icon: L.divIcon({ className: '', html: wrap, iconSize: [0, 0] })
+    }).addTo(labelsLayer);
+    (labelMarker as any)._bmLabel = wrap;
+    labelEntries.push({ el: wrap, zone: z, base: isCity || isCross });
+  });
+  applyMapLod();
+}
+
+// Zoom seviyesine göre detay: uzakta yalnız şehirler, orta zoom'da tüm zone
+// adları, yakın zoom'da tier + kaynak bilgisi.
+function applyMapLod() {
+  if (!leafletMap) return;
+  const z = leafletMap.getZoom();
+  const scale = z >= 2 ? 1.6 : z >= 1 ? 1.25 : 1;
+  markerById.forEach((m: any) => {
+    if (m && m._baseRadius && m.setRadius) m.setRadius(m._baseRadius * scale);
+  });
+  labelEntries.forEach((entry) => {
+    const show = entry.base || z >= 1.25;
+    entry.el.style.display = show ? '' : 'none';
+    if (!show) return;
+    const detailed = z >= 2.75;
+    const res = entry.zone.resource ? ` · ${String(entry.zone.resource).slice(0, 4)}` : '';
+    entry.el.textContent = detailed
+      ? `${entry.zone.name}${entry.zone.tier ? ' · T' + entry.zone.tier : ''}${res}`
+      : entry.zone.name;
+    entry.el.style.fontSize = detailed ? '11px' : '10px';
+    entry.el.style.opacity = entry.base ? '1' : '0.85';
   });
 }
 
