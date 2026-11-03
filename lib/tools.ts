@@ -147,7 +147,16 @@
   let kbLoaded = false;
   let kbEvents: any[] = [];
   let kbSource = 'live'; // live | feed
+  let kbFetchedAt = '';
+  let kbWeaponSide: 'killer' | 'victim' = 'killer';
   const kbCharts: Record<string, any> = {};
+
+  // Tek sayfa mimarisinde uygulama kökte çalışır; eski `../data/...` yolu 404
+  // veriyordu. Üç olası kökü sırayla dener, ilk çalışanı kullanır.
+  const FEED_PATHS = ['data/pvp-feed.json', '../data/pvp-feed.json', './data/pvp-feed.json'];
+  // gameinfo API tarayıcıya Access-Control-Allow-Origin göndermediğinde her
+  // sunucu değişiminde 7 istek boşa gitmesin diye bir kez kilitlenir.
+  let liveBlocked = false;
 
   async function fetchJson(url: string, ms = 12000): Promise<any> {
     const ctrl = new AbortController();
@@ -159,68 +168,129 @@
     } finally { clearTimeout(timer); }
   }
 
+  async function fetchFirstJson(paths: string[], ms = 9000): Promise<{ json: any; path: string } | null> {
+    for (const p of paths) {
+      try {
+        const sep = p.includes('?') ? '&' : '?';
+        return { json: await fetchJson(`${p}${sep}t=${Date.now()}`, ms), path: p };
+      } catch (_) { /* sıradaki yol */ }
+    }
+    return null;
+  }
+
+  interface EventSet { events: any[]; source: 'live' | 'feed'; fetchedAt: string; }
+
+  function toEvent(e: any): any {
+    return {
+      ts: new Date(e.t ?? e.timestamp),
+      killerIP: Math.round(e.k ?? e.killerIP ?? 0),
+      victimIP: Math.round(e.v ?? e.victimIP ?? 0),
+      weapon: e.w ?? e.weapon ?? '',
+      victimWeapon: e.wv ?? e.victimWeapon ?? e.equipment?.MainHand?.type ?? '',
+      fame: Number(e.f ?? e.totalFame ?? 0) || 0,
+      partySize: Number(e.p ?? e.partySize ?? 1) || 1,
+      killer: e.n ?? e.killer ?? '?',
+      victim: e.nv ?? e.victim ?? '?'
+    };
+  }
+
+  /** Canlı API → yoksa bot feed'i (3 sunucu, ~240 olay) */
+  async function loadEventSet(server: string): Promise<EventSet> {
+    let events: any[] = [];
+
+    if (!liveBlocked) {
+      try {
+        const host = GI_HOSTS[server];
+        const offsets = [0, 51, 102, 153, 204, 255, 306]; // 7 sayfa ≈ 357 olay
+        const pages = await Promise.all(offsets.map((o) =>
+          fetchJson(`https://${host}/api/gameinfo/events?limit=51&offset=${o}`, 9000).catch(() => null)
+        ));
+        const seen = new Set<string>();
+        pages.forEach((raw) => {
+          if (!Array.isArray(raw)) return;
+          raw.forEach((e: any) => {
+            const id = String(e.EventId || '');
+            if (id && seen.has(id)) return;
+            if (id) seen.add(id);
+            const ts = new Date(e.TimeStamp);
+            if (isNaN(ts.getTime())) return;
+            events.push(toEvent({
+              timestamp: e.TimeStamp,
+              killerIP: e.Killer?.AverageItemPower || 0,
+              victimIP: e.Victim?.AverageItemPower || 0,
+              weapon: e.Killer?.Equipment?.MainHand?.Type || '',
+              victimWeapon: e.Victim?.Equipment?.MainHand?.Type || '',
+              fame: e.TotalVictimKillFame || 0,
+              partySize: (e.GroupMembers?.length || 0) + 1,
+              killer: e.Killer?.Name || '?',
+              victim: e.Victim?.Name || '?'
+            }));
+          });
+        });
+        if (!events.length) liveBlocked = true;
+      } catch (_) {
+        liveBlocked = true; // CORS/ağ engeli → bir daha denenmez
+      }
+    }
+
+    let source: 'live' | 'feed' = 'live';
+    let fetchedAt = new Date().toISOString();
+
+    if (!events.length) {
+      const hit = await fetchFirstJson(FEED_PATHS);
+      const feed = hit?.json;
+      fetchedAt = feed?.fetchedAt || '';
+      const srv = feed?.servers?.[server];
+      if (srv) {
+        if (Array.isArray(srv.analysis) && srv.analysis.length) {
+          // Sıkı dizi biçimi: [ts, killerIP, victimIP, killerW, victimW, fame, party, killer, victim]
+          events = srv.analysis.map((a: any) => Array.isArray(a)
+            ? toEvent({ t: a[0], k: a[1], v: a[2], w: a[3], wv: a[4], f: a[5], p: a[6], n: a[7], nv: a[8] })
+            : toEvent(a)
+          ).filter((e: any) => !isNaN(e.ts.getTime()));
+        } else {
+          // Eski feed biçimi: recentKills + topKills
+          const kills = [...(srv.recentKills || []), ...(srv.topKills || [])];
+          const seenK = new Set<string>();
+          events = kills.filter((k: any) => {
+            if (!k?.id || seenK.has(k.id)) return false;
+            seenK.add(k.id);
+            return true;
+          }).map(toEvent).filter((e: any) => !isNaN(e.ts.getTime()));
+        }
+      }
+      source = 'feed';
+    }
+
+    events.sort((a, b) => b.ts.getTime() - a.ts.getTime());
+    return { events, source, fetchedAt };
+  }
+
   async function loadKillboard(force = false) {
     const statsBox = $('#kbStats');
     kbLoaded = true;
     if (statsBox && !kbEvents.length) statsBox.innerHTML = '<div class="kb-empty">…</div>';
+    const srcLine = $('#kbSourceLine');
+    if (srcLine) srcLine.textContent = getLang() === 'tr' ? 'Veri çekiliyor…' : 'Fetching data…';
 
-    // 1) Canlı gameinfo API — çok sayfalı çekim (API limiti: limit≤51, offset≤1000)
-    let events: any[] = [];
-    let source = 'live';
-    try {
-      const host = GI_HOSTS[kbServer];
-      const offsets = [0, 51, 102, 153, 204, 255, 306]; // 7 sayfa ≈ 357 olay
-      const pages = await Promise.all(offsets.map((o) =>
-        fetchJson(`https://${host}/api/gameinfo/events?limit=51&offset=${o}`).catch(() => null)
-      ));
-      const seen = new Set<string>();
-      pages.forEach((raw) => {
-        if (!Array.isArray(raw)) return;
-        raw.forEach((e: any) => {
-          const id = String(e.EventId || '');
-          if (id && seen.has(id)) return;
-          if (id) seen.add(id);
-          const ts = new Date(e.TimeStamp);
-          if (isNaN(ts.getTime())) return;
-          events.push({
-            ts,
-            killerIP: Math.round(e.Killer?.AverageItemPower || 0),
-            victimIP: Math.round(e.Victim?.AverageItemPower || 0),
-            weapon: e.Killer?.Equipment?.MainHand?.Type || '',
-            fame: Number(e.TotalVictimKillFame) || 0,
-            partySize: (e.GroupMembers?.length || 0) + 1
-          });
-        });
-      });
-      events.sort((a, b) => b.ts.getTime() - a.ts.getTime());
-    } catch (_) { /* canlı erişim yok → feed'e düş */ }
-
-    // 2) Bot feed yedeği
-    if (!events.length) {
-      try {
-        const feed = await fetchJson(`../data/pvp-feed.json?t=${Date.now()}`);
-        const srv = feed?.servers?.[kbServer];
-        const kills = [...(srv?.recentKills || []), ...(srv?.topKills || [])];
-        const seen = new Set<string>();
-        events = kills.filter((k: any) => {
-          if (!k?.id || seen.has(k.id)) return false;
-          seen.add(k.id);
-          return true;
-        }).map((k: any) => ({
-          ts: new Date(k.timestamp),
-          killerIP: k.killerIP || 0,
-          victimIP: k.victimIP || 0,
-          weapon: k.equipment?.MainHand?.type || '', // feed'de victim ekipmanı
-          fame: k.totalFame || 0,
-          partySize: k.partySize || 1
-        })).filter((e: any) => !isNaN(e.ts.getTime()));
-        source = 'feed';
-      } catch (_) { /* feed de yok */ }
-    }
-
-    kbEvents = events;
-    kbSource = source;
+    const set = await loadEventSet(kbServer);
+    kbEvents = set.events;
+    kbSource = set.source;
+    kbFetchedAt = set.fetchedAt;
     renderKillboard(force);
+  }
+
+  function renderSourceLine(el: HTMLElement | null, count: number) {
+    if (!el) return;
+    const tr = getLang() === 'tr';
+    const stamp = kbFetchedAt ? new Date(kbFetchedAt) : null;
+    const when = stamp && !isNaN(stamp.getTime())
+      ? stamp.toLocaleString(tr ? 'tr-TR' : 'en-US', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' })
+      : '—';
+    const badge = kbSource === 'live'
+      ? (tr ? 'canlı API' : 'live API')
+      : (tr ? 'bot feed\'i' : 'bot feed');
+    el.innerHTML = `<span class="kb-source-badge ${kbSource}">${badge}</span> ${count} ${tr ? 'olay' : 'events'} · ${tr ? 'güncelleme' : 'updated'} ${when}`;
   }
 
   function renderKillboard(_force = false) {
@@ -228,14 +298,16 @@
     if (!statsBox) return;
 
     if (!kbEvents.length) {
+      renderSourceLine($('#kbSourceLine'), 0);
       statsBox.innerHTML = `<div class="kb-empty">${
         getLang() === 'tr'
-          ? 'Bu sunucu için veri bulunamadı. Farklı bir sunucu deneyin veya birkaç dakika sonra tekrar deneyin.'
-          : 'No data found for this server. Try another server or check back in a few minutes.'
+          ? 'Bu sunucu için veri bulunamadı. Canlı API tarayıcıdan engellenmiş olabilir; bot feed\'i birkaç saatte bir yenilenir. Farklı bir sunucu deneyin veya ⟳ Yenile ile tekrar deneyin.'
+          : 'No data for this server. The live API may be blocked in the browser; the bot feed refreshes every few hours. Try another server or press ⟳ Refresh.'
       }</div>`;
       Object.keys(kbCharts).forEach((k) => { try { kbCharts[k].destroy(); } catch (_) {} });
       return;
     }
+    renderSourceLine($('#kbSourceLine'), kbEvents.length);
 
     // ── Uyarlanabilir bucket: yoğun sunucuda dakikalık, sakin dönemde saatlik ──
     const now = Date.now();
@@ -268,7 +340,8 @@
     const avgDiff = avgK - avgV;
     const solo = evts.filter((e) => e.partySize <= 1).length;
     const weaponCount: Record<string, number> = {};
-    evts.forEach((e) => { if (e.weapon) weaponCount[e.weapon] = (weaponCount[e.weapon] || 0) + 1; });
+    const weaponKey = kbWeaponSide === 'killer' ? 'weapon' : 'victimWeapon';
+    evts.forEach((e) => { const w = e[weaponKey]; if (w) weaponCount[w] = (weaponCount[w] || 0) + 1; });
     const topWeapon = Object.entries(weaponCount).sort((a, b) => b[1] - a[1])[0];
     const tr = getLang() === 'tr';
 
@@ -277,7 +350,7 @@
       { v: String(avgK), l: tr ? 'Ort. Killer IP' : 'Avg Killer IP' },
       { v: String(avgV), l: tr ? 'Ort. Victim IP' : 'Avg Victim IP' },
       { v: (avgDiff > 0 ? '+' : '') + avgDiff, l: tr ? 'Ort. IP Farkı' : 'Avg IP Diff' },
-      { v: topWeapon ? topWeapon[0].split('_').pop() : '—', l: tr ? 'En Çok Silah' : 'Top Weapon' },
+      { v: topWeapon ? topWeapon[0].split('_').pop() : '—', l: (tr ? 'En Çok Silah · ' : 'Top Weapon · ') + (kbWeaponSide === 'killer' ? (tr ? 'öldüren' : 'killer') : (tr ? 'ölen' : 'victim')) },
       { v: `${Math.round(solo / total * 100)}%`, l: tr ? 'Solo Kill Oranı' : 'Solo Kill Rate' }
     ].map((s) => `<div class="kb-stat"><div class="kb-stat-val">${s.v}</div><div class="kb-stat-label">${s.l}</div></div>`).join('');
 
@@ -308,9 +381,8 @@
     const topWeapons = Object.entries(weaponCount).sort((a, b) => b[1] - a[1]).slice(0, 10);
     drawChart('kbChartWeapons', 'bar', topWeapons.map(([w]) => w.split('_').pop() || w), [
       {
-        label: kbSource === 'live'
-          ? (tr ? 'Killer silahı (canlı)' : 'Killer weapon (live)')
-          : (tr ? 'Ölen tarafın silahı (bot feed\'i)' : "Victim weapon (bot feed)"),
+        label: (kbWeaponSide === 'killer' ? (tr ? 'Öldüren silahı' : 'Killer weapon') : (tr ? 'Ölen silahı' : 'Victim weapon'))
+          + (kbSource === 'live' ? (tr ? ' (canlı)' : ' (live)') : (tr ? ' (bot feed\'i)' : ' (bot feed)')),
         data: topWeapons.map(([, c]) => c),
         backgroundColor: 'rgba(96,145,224,0.6)', borderColor: '#6091e0', borderWidth: 1
       }
@@ -358,7 +430,108 @@
       kbWindow = Number(b.dataset.kbWindow || 6);
       renderKillboard();
     }));
-    $('#kbRefresh')?.addEventListener('click', () => loadKillboard(true));
+    $$('#kbWeaponSide .tp-btn').forEach((b) => b.addEventListener('click', () => {
+      $$('#kbWeaponSide .tp-btn').forEach((x) => x.classList.toggle('active', x === b));
+      kbWeaponSide = (b.dataset.kbSide as 'killer' | 'victim') || 'killer';
+      if (kbLoaded) renderKillboard();
+    }));
+    $('#kbRefresh')?.addEventListener('click', () => { liveBlocked = false; loadKillboard(true); });
+  }
+
+  // ────────────────────────────────────────────────────────────
+  // ANA SAYFA KILLBOARD PANELİ
+  // (Eski sürümde killboard-1.com iframe'i vardı; site X-Frame-Options:
+  //  SAMEORIGIN + 403 döndüğü için panel boş kalıyordu. Artık aynı veri
+  //  hattıyla yerleşik özet çiziliyor.)
+  // ────────────────────────────────────────────────────────────
+  let dashServer = 'eu';
+  let dashCache: { key: string; set: EventSet; at: number } | null = null;
+  let dashBusy = false;
+
+  function shortWeapon(id: string): string {
+    if (!id) return '—';
+    return String(id).replace(/^T\d+_/, '').replace(/@\d+$/, '').split('_').pop() || id;
+  }
+
+  async function mountDashKillboard(force = false) {
+    const statsBox = document.getElementById('dashKbStats');
+    if (!statsBox) return;
+    const tr = getLang() === 'tr';
+    const srcLine = document.getElementById('dashKbSource');
+    const feedBox = document.getElementById('dashKbFeed');
+
+    const stale = !dashCache || dashCache.key !== dashServer || Date.now() - dashCache.at > 5 * 60 * 1000;
+    if (force || stale) {
+      if (dashBusy) return;
+      dashBusy = true;
+      if (srcLine) srcLine.textContent = tr ? 'Veri çekiliyor…' : 'Fetching data…';
+      try {
+        const set = await loadEventSet(dashServer);
+        dashCache = { key: dashServer, set, at: Date.now() };
+      } finally { dashBusy = false; }
+    }
+    const set = dashCache?.set;
+    if (!set) return;
+
+    kbSource = set.source;
+    kbFetchedAt = set.fetchedAt;
+    const evts = set.events;
+    renderSourceLine(srcLine, evts.length);
+
+    if (!evts.length) {
+      statsBox.innerHTML = `<div class="kb-empty">${tr ? 'Bu sunucu için veri yok. ⟳ yenilemeyi deneyin.' : 'No data for this server. Try a refresh.'}</div>`;
+      if (feedBox) feedBox.innerHTML = '';
+      return;
+    }
+
+    const total = evts.length;
+    const avgK = Math.round(evts.reduce((s, e) => s + e.killerIP, 0) / total);
+    const avgV = Math.round(evts.reduce((s, e) => s + e.victimIP, 0) / total);
+    const diff = avgK - avgV;
+    const solo = evts.filter((e) => e.partySize <= 1).length;
+    statsBox.innerHTML = [
+      { v: String(total), l: tr ? 'Kill (örneklem)' : 'Kills (sample)' },
+      { v: String(avgK), l: tr ? 'Ort. Öldüren IP' : 'Avg Killer IP' },
+      { v: String(avgV), l: tr ? 'Ort. Ölen IP' : 'Avg Victim IP' },
+      { v: (diff > 0 ? '+' : '') + diff, l: tr ? 'IP Farkı' : 'IP Diff' },
+      { v: `${Math.round(solo / total * 100)}%`, l: tr ? 'Solo oranı' : 'Solo rate' }
+    ].map((s) => `<div class="kb-stat"><div class="kb-stat-val">${s.v}</div><div class="kb-stat-label">${s.l}</div></div>`).join('');
+
+    if (feedBox) {
+      feedBox.innerHTML = evts.slice(0, 12).map((e) => {
+        const time = e.ts.toLocaleTimeString(tr ? 'tr-TR' : 'en-US', { hour: '2-digit', minute: '2-digit' });
+        return `<div class="dash-kb-row">
+          <span class="dash-kb-time">${time}</span>
+          <span class="dash-kb-names"><b>${e.killer}</b> <span class="dash-kb-arrow">→</span> ${e.victim}</span>
+          <span class="dash-kb-ip">${e.killerIP} vs ${e.victimIP}</span>
+          <span class="dash-kb-w">${shortWeapon(e.weapon)}</span>
+        </div>`;
+      }).join('');
+    }
+
+    const weaponCount: Record<string, number> = {};
+    evts.forEach((e) => { const w = e.weapon || e.victimWeapon; if (w) weaponCount[w] = (weaponCount[w] || 0) + 1; });
+    const top = Object.entries(weaponCount).sort((a, b) => b[1] - a[1]).slice(0, 8);
+    drawChart('dashKbChart', 'bar', top.map(([w]) => shortWeapon(w)), [
+      {
+        label: tr ? 'Öldüren silahı' : 'Killer weapon',
+        data: top.map(([, c]) => c),
+        backgroundColor: 'rgba(201,168,76,0.65)', borderColor: '#c9a84c', borderWidth: 1
+      }
+    ], true);
+  }
+
+  function initDashKillboard() {
+    const group = document.getElementById('dashKbServers');
+    if (!group) return;
+    group.querySelectorAll<HTMLElement>('[data-dash-kb]').forEach((b) => {
+      b.addEventListener('click', () => {
+        group.querySelectorAll<HTMLElement>('[data-dash-kb]').forEach((x) => x.classList.toggle('active', x === b));
+        dashServer = b.dataset.dashKb || 'eu';
+        mountDashKillboard(true);
+      });
+    });
+    (window as any).mountDashKillboard = mountDashKillboard;
   }
 
   // ────────────────────────────────────────────────────────────
@@ -463,6 +636,7 @@
     initTabs();
     initPartyBuilder();
     initKillboard();
+    initDashKillboard();
     initPve();
   }
 
@@ -475,6 +649,7 @@
     renderAvalon();
     renderHce();
     if (kbLoaded) renderKillboard();
+    if (dashCache && !document.getElementById('dashPanelKillboard')?.classList.contains('hidden')) mountDashKillboard();
   });
 })();
 

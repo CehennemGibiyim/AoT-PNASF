@@ -305,15 +305,34 @@
            </div>
         </div>
 
-        <!-- ── PANEL 2: Killboard Iframe ── -->
-        <div id="dashPanelKillboard" class="hidden w-full min-h-0 pb-4" style="min-height:700px">
-          <div class="w-full h-full rounded-2xl overflow-hidden border border-gray-700 shadow-xl" style="min-height:700px">
-            <iframe id="killboardIframe"
-              src=""
-              style="width:100%;height:100%;min-height:700px;border:none;background:#0d1117;display:block"
-              loading="lazy"
-              title="Killboard">
-            </iframe>
+        <!-- ── PANEL 2: Killboard Analizi (yerleşik) ── -->
+        <div id="dashPanelKillboard" class="hidden w-full pb-4">
+          <div class="w-full bg-albion-800 border border-gray-700 rounded-2xl shadow-lg p-5">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+              <h3 class="font-bold text-white flex items-center text-sm md:text-base">
+                <i class="fa-solid fa-skull-crossbones text-albion-accent mr-2"></i> Killboard Analizi
+              </h3>
+              <div class="flex items-center gap-2 flex-wrap">
+                <div class="tp-btn-group" id="dashKbServers">
+                  <button class="tp-btn active" data-dash-kb="eu">EU</button>
+                  <button class="tp-btn" data-dash-kb="us">US</button>
+                  <button class="tp-btn" data-dash-kb="asia">ASIA</button>
+                </div>
+                <button class="tp-btn" id="dashKbOpen" title="Araçlar sekmesinde ayrıntılı analiz">Ayrıntılı analiz →</button>
+              </div>
+            </div>
+            <div class="kb-source" id="dashKbSource">…</div>
+            <div class="kb-stats" id="dashKbStats"></div>
+            <div class="dash-kb-grid">
+              <div>
+                <h4 class="dash-kb-title">🩸 Son kill'ler</h4>
+                <div class="dash-kb-feed" id="dashKbFeed">…</div>
+              </div>
+              <div>
+                <h4 class="dash-kb-title">⚔️ Silah dağılımı</h4>
+                <div class="kb-chart-wrap"><canvas id="dashKbChart"></canvas></div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -787,6 +806,7 @@
       </div>
       <button class="tp-btn" id="kbRefresh" title="Veriyi yeniden çek" aria-label="Veriyi yeniden çek">⟳ Yenile</button>
     </div>
+    <div class="kb-source" id="kbSourceLine">…</div>
     <div class="kb-stats" id="kbStats"></div>
     <div class="kb-charts">
       <div class="tp-box">
@@ -799,10 +819,14 @@
       </div>
       <div class="tp-box">
         <h3>⚔️ <span data-tr="En Çok Kullanılan Silahlar" data-en="Most Used Weapons">En Çok Kullanılan Silahlar</span></h3>
+        <div class="tp-btn-group kb-side-toggle" id="kbWeaponSide">
+          <button class="tp-btn active" data-kb-side="killer" data-tr="Öldüren" data-en="Killer">Öldüren</button>
+          <button class="tp-btn" data-kb-side="victim" data-tr="Ölen" data-en="Victim">Ölen</button>
+        </div>
         <div class="kb-chart-wrap"><canvas id="kbChartWeapons"></canvas></div>
       </div>
     </div>
-    <p class="kb-note" data-tr="Veri Albion resmi gameinfo API'sinden canlı çekilir (son ~350 olay); erişim başarısız olursa bot'un son feed'i (data/pvp-feed.json) kullanılır. Yoğun sunucularda bu olaylar birkaç dakikaya sığdığı için grafik dakikalık, sakin dönemlerde saatlik çözünürlükte gösterilir." data-en="Data is fetched live from the official Albion gameinfo API (last ~350 events); if unreachable, the bot's latest feed (data/pvp-feed.json) is used. On busy servers these events span only a few minutes, so the chart shows per-minute resolution; during quiet periods it shows hourly resolution.">Veri Albion resmi gameinfo API'sinden canlı çekilir (son ~350 olay); erişim başarısız olursa bot'un son feed'i (data/pvp-feed.json) kullanılır. Yoğun sunucularda bu olaylar birkaç dakikaya sığdığı için grafik dakikalık, sakin dönemlerde saatlik çözünürlükte gösterilir.</p>
+    <p class="kb-note" data-tr="Veri önce tarayıcıdan canlı gameinfo API'sinden denenir; sunucu CORS başlığı göndermediği için genellikle bot feed'i (data/pvp-feed.json) kullanılır. Bot her 5 dakikada bir 3 sunucudan ~200'er kill yazar; grafikler bu örneklemden üretilir, 3/6/12 saat filtreleri örneklemin kapsadığı aralığa göre daralır." data-en="The browser first tries the live gameinfo API; because the server sends no CORS header the bot feed (data/pvp-feed.json) is normally used. The bot writes ~200 kills per server for all three servers every 5 minutes; charts are built from that sample and the 3/6/12h filters shrink to the range the sample covers.">Veri önce tarayıcıdan canlı gameinfo API'sinden denenir; sunucu CORS başlığı göndermediği için genellikle bot feed'i (data/pvp-feed.json) kullanılır. Bot her 5 dakikada bir 3 sunucudan ~200'er kill yazar; grafikler bu örneklemden üretilir, 3/6/12 saat filtreleri örneklemin kapsadığı aralığa göre daralır.</p>
   </section>
 
   <!-- ═══ AVALON & HCE ═══ -->
@@ -877,23 +901,12 @@
       if(panels[tab]) panels[tab].classList.remove('hidden');
       if(btns[tab]) btns[tab].className = activeClass;
 
-      if (tab === 'killboard') {
-         const iframe = document.getElementById('killboardIframe');
-         if (!iframe.src || iframe.src === window.location.href || iframe.getAttribute('data-loaded') !== '1') {
-           iframe.src = 'https://killboard-1.com/eu';
-           iframe.setAttribute('data-loaded', '1');
-           const cont = document.getElementById('dashPanelKillboard');
-           iframe.style.height = Math.max(700, window.innerHeight - 300) + 'px';
-           cont.style.minHeight = iframe.style.height;
-         }
-      }
+      if (tab === 'killboard') window.mountDashKillboard?.();
     }
 
-    window.addEventListener('resize', () => {
-      const el = document.getElementById('killboardIframe');
-      if (el && el.getAttribute('data-loaded') === '1') {
-        el.style.height = Math.max(700, window.innerHeight - 300) + 'px';
-      }
+    document.getElementById('dashKbOpen')?.addEventListener('click', () => {
+      document.querySelector('[data-tab="tab-tools"]')?.click();
+      document.querySelector('.tools-tab[data-tool-tab="killboard"]')?.click();
     });
   </script>
 

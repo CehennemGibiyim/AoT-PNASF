@@ -192,6 +192,27 @@ async function fetchServer(key, hostname) {
         victim: finalizeSide(victimSide),
         killer: finalizeSide(killerSide),
       };
+
+      // Tarayıcı analizi (killboard grafikleri) için sıkı dizi. gameinfo API'si
+      // CORS başlığı göndermediği için sayfa veriyi canlı çekemiyor; bu dizi
+      // 3 sunucuda da gerçek hacimli veri sağlar. Alan sırası (boyut için dizi):
+      // [ts, killerIP, victimIP, killerWeapon, victimWeapon, fame, partySize, killer, victim]
+      d.analysis = events
+        .filter(e => e.TimeStamp)
+        .sort((a, b) => new Date(b.TimeStamp) - new Date(a.TimeStamp))
+        .slice(0, 150)
+        .map(e => ([
+          Date.parse(e.TimeStamp),
+          Math.round(e.Killer?.AverageItemPower || 0),
+          Math.round(e.Victim?.AverageItemPower || 0),
+          e.Killer?.Equipment?.MainHand?.Type || '',
+          e.Victim?.Equipment?.MainHand?.Type || '',
+          Number(e.TotalVictimKillFame) || 0,
+          (e.GroupMembers?.length || 0) + 1,
+          e.Killer?.Name || '?',
+          e.Victim?.Name || '?',
+        ]))
+        .filter(a => Number.isFinite(a[0]));
       console.log(`  ✓ Kill: ${events.length} olay (${d.recentKills.length} özet kayıt, meta hazır)`);
     } else {
       console.log(`  ✗ Kill: boş yanıt`);
