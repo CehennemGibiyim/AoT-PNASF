@@ -401,12 +401,82 @@ function initLeafletMap() {
   edgeLayer = L.layerGroup().addTo(leafletMap);
   routeLayer = L.layerGroup().addTo(leafletMap);
   labelsLayer = L.layerGroup().addTo(leafletMap);
+  hoverLayer = L.layerGroup().addTo(leafletMap);
   markerById = new Map();
   labelEntries = [];
   renderMapEdges();
   renderMapMarkers();
   applyMapLod();
-  leafletMap.on('zoomend', applyMapLod);
+  buildMapHud();
+  leafletMap.on('zoomend', () => { applyMapLod(); updateZoomReadout(); });
+}
+
+// ─── HARİTA ÜST KONTROLLERİ (albiononline2d benzeri) ─────────────────
+// Katman anahtarları, lejant, zoom göstergesi ve tam ekran.
+let mapEdgeEnabled = true;
+let mapLabelsEnabled = true;
+let hoverLayer: any = null;
+
+function buildMapHud() {
+  const wrap = document.querySelector('#view-map .maps-canvas-wrap') as HTMLElement | null;
+  if (!wrap) return;
+  if (!wrap.querySelector('.map-hud')) {
+    const hud = document.createElement('div');
+    hud.className = 'map-hud';
+    hud.innerHTML = `
+      <div class="map-hud-row">
+        <button class="map-hud-btn active" data-map-act="edges" title="Zone bağlantılarını göster/gizle"><i class="fa-solid fa-link"></i> Bağlantılar</button>
+        <button class="map-hud-btn active" data-map-act="labels" title="Zone adlarını göster/gizle"><i class="fa-solid fa-tag"></i> Etiketler</button>
+        <button class="map-hud-btn" data-map-act="full" title="Tam ekran"><i class="fa-solid fa-expand"></i></button>
+        <span class="map-hud-zoom" id="mapZoomLevel">z 0</span>
+      </div>
+      <div class="map-legend">
+        ${Object.keys(ZONE_COLORS).filter((k) => k !== 'DEFAULT' && k !== 'BRECILIEN').map((key) => {
+          const c: any = (ZONE_COLORS as any)[key];
+          return `<span class="map-legend-item"><i style="background:${c.bg}"></i>${c.label}</span>`;
+        }).join('')}
+        <span class="map-legend-item"><i class="lg-city"></i>Şehir / Geçiş</span>
+        <span class="map-legend-note">Yakınlaştır: uzakta şehirler → orta zoom'da tüm zone adları → yakın zoom'da tier + kaynak</span>
+      </div>`;
+    wrap.appendChild(hud);
+
+    hud.addEventListener('click', (event) => {
+      const act = (event.target as HTMLElement).closest('[data-map-act]')?.getAttribute('data-map-act');
+      if (!act || !leafletMap) return;
+      const btn = hud.querySelector(`[data-map-act="${act}"]`) as HTMLElement | null;
+      if (act === 'edges') {
+        mapEdgeEnabled = !mapEdgeEnabled;
+        btn?.classList.toggle('active', mapEdgeEnabled);
+        if (mapEdgeEnabled) edgeLayer?.addTo(leafletMap); else leafletMap.removeLayer(edgeLayer);
+      } else if (act === 'labels') {
+        mapLabelsEnabled = !mapLabelsEnabled;
+        btn?.classList.toggle('active', mapLabelsEnabled);
+        if (mapLabelsEnabled) labelsLayer?.addTo(leafletMap); else leafletMap.removeLayer(labelsLayer);
+      } else if (act === 'full') {
+        if (document.fullscreenElement) document.exitFullscreen?.();
+        else wrap.requestFullscreen?.().then(() => setTimeout(() => leafletMap?.invalidateSize(), 120)).catch(() => {});
+      }
+    });
+  }
+  updateZoomReadout();
+}
+
+function updateZoomReadout() {
+  const el = document.getElementById('mapZoomLevel');
+  if (el && leafletMap) el.textContent = `z ${Number(leafletMap.getZoom()).toFixed(1)}`;
+}
+
+/** Bir zone'un komşu bağlantılarını vurgular (hover). */
+function highlightConnections(zoneId: string) {
+  if (!hoverLayer || !mapEdgeEnabled) return;
+  hoverLayer.clearLayers();
+  const z = zones.find((x: any) => x.id === zoneId);
+  if (!z || z.wx === undefined) return;
+  (z.exits || []).forEach((eid: string) => {
+    const n = zones.find((x: any) => x.id === eid);
+    if (!n || n.wx === undefined) return;
+    L.polyline([[z.wy, z.wx], [n.wy, n.wx]], { color: '#fbbf24', weight: 2.2, opacity: 0.9 }).addTo(hoverLayer);
+  });
 }
 
 function renderMapEdges() {
@@ -446,6 +516,8 @@ function renderMapMarkers() {
     (marker as any)._baseRadius = baseRadius;
     marker.bindTooltip(`${z.name}${z.tier ? ' · T' + z.tier : ''}${z.biome ? ' · ' + z.biome : ''}`, { direction: 'top', offset: [0, -6] });
     marker.on('click', () => selectZone(z.id));
+    marker.on('mouseover', () => highlightConnections(z.id));
+    marker.on('mouseout', () => { if (hoverLayer) hoverLayer.clearLayers(); });
     markerById.set(z.id, marker);
 
     // Tüm zone'ler için etiket: yakınlaştıkça görünür olur (LOD)
@@ -1130,6 +1202,7 @@ window.addEventListener('aot:tab-shown', (ev: any) => {
     try {
       leafletMap.invalidateSize();
       applyMapLod();
+      buildMapHud();
     } catch (_) {}
   }, 80);
 });
