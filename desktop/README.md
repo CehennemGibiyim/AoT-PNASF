@@ -57,7 +57,21 @@ npm run build:win      # NSIS + MSI                          (Windows)
   (`capabilities/default.json` içinde sadece `core:default`).
 - Icons: `src-tauri/icons/*` (aynı betik üretir).
 
-## Windows kurulum paketleri
+## Windows kurulum paketleri ve `windows/` klasörü
+
+Paketler tek yerde toplanır: **`desktop/windows/kurulum/`** (setup.exe,
+portable.exe, MSI + `SHA256SUMS.txt` + `SURUM.txt` + `KURULUM-OKU.txt`).
+Klasörün içeriği commit edilmez, yapı ve toplama mantığı commit edilir.
+
+```bash
+# Windows'ta hepsini derle + topla + zip'le
+npm run windows:installer
+
+# yalnızca üretilmiş paketleri topla (her platformda)
+npm run windows:collect
+```
+
+Ayrıntı: [`desktop/windows/README.md`](windows/README.md)
 
 Linux/macOS üzerinde Windows kurulum dosyası üretmek ek araçlar ister
 (Electron için `wine`, Tauri için çapraz Rust hedefi + WebView2). Bu yüzden
@@ -66,11 +80,13 @@ depoda hazır bir CI iş akışı var:
 `.github/workflows/desktop-build.yml`
 
 - `workflow_dispatch` ile elle veya `v*` etiketiyle tetiklenir.
-- `windows-latest` üzerinde iki iş paralel çalışır:
+- `windows-latest` üzerinde iki derleme işi paralel çalışır:
   - **Electron**: `npm ci` → `npm run build` → `electron-builder --win nsis portable`
   - **Tauri**: Rust stable + `cargo` önbelleği → `tauri build --bundles nsis,msi`
-- Çıktılar `aot-pnasf-electron-windows` ve `aot-pnasf-tauri-windows`
-  artifact'ları olarak yüklenir.
+- Ardından `topla` işi iki çıktıyı indirip `collect-windows.mjs` ile tek
+  klasörde birleştirir ve **`AoT-PNASF-Windows-Kurulum`** artifact'ı olarak
+  yükler (paketler + `SHA256SUMS.txt` + `SURUM.txt` + zip).
+
 
 Yerelde Windows'ta üretmek için yukarıdaki `pack:win` / `build:win`
 komutları yeterlidir (Visual Studio Build Tools + Rust gerekir).

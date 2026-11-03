@@ -61,3 +61,6 @@ desktop/tauri/node_modules/
 # Masaüstü ikonları depoda tutulur (yukarıdaki "build/" kuralının istisnası)
 !desktop/electron/build/
 !desktop/electron/build/**
+desktop/windows/kurulum/*
+!desktop/windows/kurulum/.gitkeep
+desktop/windows/*.zip

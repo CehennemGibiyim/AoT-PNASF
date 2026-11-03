@@ -41,11 +41,11 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: aot-pnasf-electron-windows
+          name: ham-electron
           path: |
             desktop/electron/release/*.exe
           if-no-files-found: error
-          retention-days: 30
+          retention-days: 7
 
   tauri:
     name: Tauri (NSIS + MSI)
@@ -82,9 +82,53 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: aot-pnasf-tauri-windows
+          name: ham-tauri
           path: |
             desktop/tauri/src-tauri/target/release/bundle/nsis/*.exe
             desktop/tauri/src-tauri/target/release/bundle/msi/*.msi
+          if-no-files-found: error
+          retention-days: 7
+
+  # İki kabuğun paketlerini tek klasörde birleştirir: setup/portable/MSI +
+  # SHA256SUMS.txt + SURUM.txt + KURULUM-OKU.txt, sonra zip.
+  topla:
+    name: Kurulum klasörünü topla
+    needs: [electron, tauri]
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: ham-electron
+          path: girdi/electron
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: ham-tauri
+          path: girdi/tauri
+
+      - name: Paketleri kurulum klasöründe topla
+        run: node desktop/scripts/collect-windows.mjs --electron girdi/electron --tauri girdi/tauri
+
+      - name: Zip
+        working-directory: desktop/windows
+        run: |
+          SURUM=$(node -p "require('../../package.json').version")
+          powershell -NoProfile -Command "Compress-Archive -Path 'kurulum/*' -DestinationPath 'AoT-PNASF-Windows-$SURUM.zip' -Force"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AoT-PNASF-Windows-Kurulum
+          path: |
+            desktop/windows/kurulum/**
+            desktop/windows/*.zip
           if-no-files-found: error
           retention-days: 30

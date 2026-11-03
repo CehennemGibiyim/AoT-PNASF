@@ -1,0 +1,43 @@
+AoT PNASF — Windows Kurulum Paketleri
+=====================================
+
+Bu klasördeki dosyalar:
+
+  *-setup.exe       Kurulum sihirbazı (NSIS). Yönetici izni gerekmez,
+                    kurulum dizinini seçebilirsiniz. Masaüstü ve başlat
+                    menüsü kısayolu oluşturur.
+  *-portable.exe    Kurulumsuz tek dosya. USB'den bile çalışır, sisteme
+                    hiçbir şey yazmaz.
+  *.msi             MSI paketi (Tauri). Grup ilkesi / sessiz kurulum için:
+                    msiexec /i "AoT-PNASF-1.0.0-x64.msi" /qn
+  SHA256SUMS.txt    Paketlerin SHA-256 özetleri.
+  SURUM.txt         Sürüm, commit ve derleme tarihi.
+
+Kurulum
+-------
+1. *-setup.exe dosyasına çift tıklayın.
+2. SmartScreen "Windows korumalı bilgisayarınızı korudu" derse:
+   "Ek bilgi" → "Yine de çalıştır". Paketler kod imzalı değildir.
+3. Kurulumdan sonra "AoT PNASF" masaüstü kısayolundan açın.
+
+Doğrulama
+---------
+  certutil -hashfile "AoT-PNASF-1.0.0-x64-setup.exe" SHA256
+
+Çıkan özeti SHA256SUMS.txt içindeki satırla karşılaştırın.
+
+Kaldırma
+--------
+Ayarlar → Uygulamalar → AoT PNASF → Kaldır.
+(Portable sürüm kurulmadığı için kaldırma gerekmez, dosyayı silmek yeterli.)
+
+İnternet
+--------
+Uygulama çevrimdışı açılır. Eşya ikonları, bölge haritaları ve canlı
+feed'ler internet gerektirir; bağlantı yoksa bu görseller boş kalır.
+
+Notlar
+------
+* Otomatik güncelleme yoktur; yeni sürüm için yeni paketi indirin.
+* Windows 10 1809+ / Windows 11 gerekir. Tauri sürümü sistemdeki
+  Microsoft Edge WebView2 kullanır (Windows 10/11'de hazır gelir).
