@@ -1,0 +1,90 @@
+name: Desktop Installers (Windows)
+
+# Windows kurulum paketleri bu depoda Linux üzerinde üretilemez:
+#  - Electron NSIS/portable için wine + electron-builder gerekir,
+#  - Tauri MSI/NSIS için Rust + Windows WebView2 araç zinciri gerekir.
+# Bu iş akışı ikisini de windows-latest üzerinde derleyip artifact olarak verir.
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  electron:
+    name: Electron (NSIS + portable)
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Web sürümünü derle
+        run: |
+          npm ci
+          npm run build
+
+      - name: Electron bağımlılıkları
+        working-directory: desktop/electron
+        run: npm ci
+
+      - name: Windows paketlerini üret
+        working-directory: desktop/electron
+        run: npm run pack:win
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aot-pnasf-electron-windows
+          path: |
+            desktop/electron/release/*.exe
+          if-no-files-found: error
+          retention-days: 30
+
+  tauri:
+    name: Tauri (NSIS + MSI)
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: swatinem/rust-cache@v2
+        with:
+          workspaces: desktop/tauri/src-tauri
+
+      - name: Web sürümünü derle
+        run: |
+          npm ci
+          npm run build
+
+      - name: Tauri CLI
+        working-directory: desktop/tauri
+        run: npm ci
+
+      - name: Windows paketlerini üret
+        working-directory: desktop/tauri
+        run: npm run build:win
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: aot-pnasf-tauri-windows
+          path: |
+            desktop/tauri/src-tauri/target/release/bundle/nsis/*.exe
+            desktop/tauri/src-tauri/target/release/bundle/msi/*.msi
+          if-no-files-found: error
+          retention-days: 30

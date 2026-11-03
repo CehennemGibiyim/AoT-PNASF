@@ -1,0 +1,61 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "AoT PNASF",
+  "version": "1.0.0",
+  "identifier": "com.aotpnasf.desktop",
+  "build": {
+    "frontendDist": "../../../dist",
+    "devUrl": "http://localhost:5173",
+    "beforeDevCommand": "npm --prefix ../.. run dev",
+    "beforeBuildCommand": "npm --prefix ../.. run build"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "AoT PNASF",
+        "width": 1440,
+        "height": 900,
+        "minWidth": 1024,
+        "minHeight": 700,
+        "resizable": true,
+        "fullscreen": false,
+        "center": true,
+        "backgroundColor": "#0a0a0a"
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": [
+      "nsis",
+      "msi"
+    ],
+    "publisher": "CehennemGibiyim",
+    "copyright": "AoT PNASF · CehennemGibiyim",
+    "category": "Game",
+    "shortDescription": "Albion Online harita, craft ve killboard araçları",
+    "longDescription": "AoT PNASF: Albion Online için gerçek bölge haritaları, craft/meta önerileri, build kütüphanesi ve killboard analizi. Web sürümünün çevrimdışı masaüstü kabuğu.",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.ico"
+    ],
+    "windows": {
+      "webviewInstallMode": {
+        "type": "downloadBootstrapper"
+      },
+      "nsis": {
+        "installMode": "currentUser",
+        "displayLanguageSelector": true,
+        "languages": [
+          "Turkish",
+          "English"
+        ]
+      }
+    }
+  }
+}

@@ -11,7 +11,12 @@
   <link rel="shortcut icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%230a0d14'/%3E%3Ccircle cx='32' cy='32' r='24' fill='none' stroke='%23d4af37' stroke-width='3'/%3E%3Cpath d='M32 16 L38 28 L32 28 L38 44 L26 32 L32 32 L26 16 Z' fill='%23d4af37'/%3E%3C/svg%3E">
   <script>
     // Service Worker Kaydı
-    if ('serviceWorker' in navigator) {
+    // Masaüstü kabuğunda (Electron/Tauri) SW kapalı: uygulama zaten yerel
+    // dosyalardan servis ediliyor, önbellek eski sürümü tutabiliyor.
+    const aotIsDesktopShell = Boolean(window.aotDesktop)
+      || /Tauri/i.test(navigator.userAgent || '')
+      || !/^https?:$/.test(location.protocol);
+    if ('serviceWorker' in navigator && !aotIsDesktopShell) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('serviceworker.js')
           .then((registration) => {

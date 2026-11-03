@@ -1,0 +1,16 @@
+{
+  "name": "aot-pnasf-tauri",
+  "private": true,
+  "version": "1.0.0",
+  "description": "AoT PNASF — Albion Online araçları (Tauri v2 masaüstü kabuğu)",
+  "license": "MIT",
+  "scripts": {
+    "dev": "tauri dev",
+    "build": "tauri build",
+    "build:win": "tauri build --bundles nsis,msi",
+    "icons": "python3 ../scripts/make-icons.py"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.1.0"
+  }
+}

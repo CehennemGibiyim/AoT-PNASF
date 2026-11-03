@@ -1,0 +1,83 @@
+{
+  "name": "aot-pnasf-electron",
+  "productName": "AoT PNASF",
+  "version": "1.0.0",
+  "description": "AoT PNASF — Albion Online araçları (Electron masaüstü kabuğu)",
+  "private": true,
+  "main": "main.cjs",
+  "author": "CehennemGibiyim",
+  "license": "MIT",
+  "scripts": {
+    "prepare:app": "node scripts/prepare.cjs",
+    "start": "npm run prepare:app && electron .",
+    "start:dev": "set AOT_DEV=1 && npm run prepare:app && electron .",
+    "pack:win": "npm run prepare:app && electron-builder --win nsis portable --x64 --publish never",
+    "pack:win:dir": "npm run prepare:app && electron-builder --win dir --x64 --publish never",
+    "pack:linux": "npm run prepare:app && electron-builder --linux AppImage --x64",
+    "pack:mac": "npm run prepare:app && electron-builder --mac dmg --x64"
+  },
+  "devDependencies": {
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.aotpnasf.desktop",
+    "productName": "AoT PNASF",
+    "copyright": "AoT PNASF · CehennemGibiyim",
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.cjs",
+      "preload.cjs",
+      "serve.cjs",
+      "app/**/*"
+    ],
+    "asar": true,
+    "compression": "maximum",
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "AoT PNASF",
+      "artifactName": "AoT-PNASF-${version}-${arch}-setup.${ext}"
+    },
+    "portable": {
+      "artifactName": "AoT-PNASF-${version}-${arch}-portable.${ext}"
+    },
+    "linux": {
+      "target": [
+        "AppImage"
+      ],
+      "icon": "build/icons",
+      "category": "Game"
+    },
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "icon": "build/icon.icns",
+      "category": "public.app-category.games"
+    }
+  }
+}

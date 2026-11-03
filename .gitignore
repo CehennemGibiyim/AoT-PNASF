@@ -49,3 +49,15 @@ coverage/
 
 # Yerel geliştirme notları/test betikleri
 .logs/
+
+# Masaüstü paketleme çıktıları
+desktop/electron/app/
+desktop/electron/release/
+desktop/tauri/src-tauri/target/
+desktop/tauri/src-tauri/gen/
+desktop/electron/node_modules/
+desktop/tauri/node_modules/
+
+# Masaüstü ikonları depoda tutulur (yukarıdaki "build/" kuralının istisnası)
+!desktop/electron/build/
+!desktop/electron/build/**
