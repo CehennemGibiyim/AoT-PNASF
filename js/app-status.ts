@@ -86,8 +86,10 @@ async function yenidenDene(): Promise<void> {
 
 function durumGuncelle(): void {
   const cevrimici = navigator.onLine;
-  rozetGoster(!cevrimici);
-  metinAyarla(cevrimici ? 'Bağlantı geri geldi. Veriler en kısa sürede yenilenir.' : CEVRIMDISI_METIN);
+  // Çevrimdışıyken gösterilir; çevrimiçi olup rozet görünürse (bağlantı geri
+  // geldi) kullanıcıya tazeleme seçeneği sunulur.
+  metinAyarla(cevrimici ? 'Bağlantı geri geldi — verileri tazelemek için "Yeniden dene"ye tıklayın.' : CEVRIMDISI_METIN);
+  if (!cevrimici) rozetGoster(true);
 }
 
 function baslat(): void {
@@ -96,10 +98,12 @@ function baslat(): void {
   } else {
     document.addEventListener('DOMContentLoaded', durumGuncelle, { once: true });
   }
+  // Bağlantı geri geldiğinde sayfayı kendiliğinden yenilemiyoruz: kullanıcı
+  // formda veya bir hesaplamada olabilir. Bunun yerine rozet "Yenile"
+  // seçeneği sunar; tazeleme kullanıcı isteğiyle yapılır.
   window.addEventListener('online', () => {
-    metinAyarla('Bağlantı geri geldi — sayfa yenileniyor…');
+    metinAyarla('Bağlantı geri geldi — verileri tazelemek için "Yeniden dene"ye tıklayın.');
     window.dispatchEvent(new CustomEvent('app_network_restored'));
-    setTimeout(() => location.reload(), 600);
   });
   window.addEventListener('offline', durumGuncelle);
 }

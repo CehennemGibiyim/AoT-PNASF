@@ -816,6 +816,7 @@
     <button class="tools-tab active" data-tool-tab="party" aria-selected="true">🛡️ <span data-tr="Party Builder" data-en="Party Builder">Party Builder</span></button>
     <button class="tools-tab" data-tool-tab="killboard" aria-selected="false">📊 <span data-tr="Killboard Analizi" data-en="Killboard Analysis">Killboard Analizi</span></button>
     <button class="tools-tab" data-tool-tab="pve" aria-selected="false">🐉 <span data-tr="Avalon & HCE" data-en="Avalon & HCE">Avalon &amp; HCE</span></button>
+    <button class="tools-tab" data-tool-tab="watch" aria-selected="false">⭐ <span data-tr="Fiyat Takibi" data-en="Price Watchlist">Fiyat Takibi</span></button>
   </div>
 
   <!-- ═══ PARTY BUILDER ═══ -->
@@ -892,6 +893,27 @@
     <div id="pveAvalon"></div>
     <div id="pveHce" style="display:none"></div>
   </section>
+
+  <!-- ═══ FİYAT TAKİBİ ═══ -->
+  <section id="tool-watch" class="tool-panel">
+    <div class="tp-controls" style="flex-wrap:wrap;gap:8px">
+      <div style="position:relative;flex:1;min-width:240px">
+        <input id="watchSearch" type="search" autocomplete="off" aria-label="Takip listesine eşya ekle" aria-describedby="watchMeta"
+          placeholder="Eşya ara (örn. kılıç, pelerin, iksir)"
+          class="w-full bg-albion-800 border border-gray-500 rounded p-2.5 text-white focus:ring-2 focus:ring-albion-accent outline-none placeholder-gray-500">
+        <div id="watchSuggest" role="listbox" aria-label="Eşya önerileri"
+          style="display:none;position:absolute;top:100%;left:0;right:0;z-index:30;margin-top:4px;max-height:260px;overflow:auto;background:#141414;border:1px solid #333;border-radius:8px;box-shadow:0 12px 28px rgba(0,0,0,0.5)"></div>
+      </div>
+      <button type="button" id="watchRefresh"
+        class="bg-albion-accent hover:bg-albion-accent_hover text-black font-bold px-4 py-2 rounded-lg text-sm transition-colors">⟳ Fiyatları yenile</button>
+    </div>
+    <p id="watchMeta" class="tp-format-desc" role="status" aria-live="polite">Takip listesi hazırlanıyor…</p>
+    <div id="watchTable" style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden"></div>
+    <p style="font-size:10.5px;color:var(--text-muted);margin-top:8px">
+      Fiyatlar albion-online-data.com üzerinden tüm şehirler için alınır; kalite 1, alış/satış uç değerleri gösterilir.
+      Hedef fiyat girerseniz satış fiyatı hedefin altına düştüğünde satır işaretlenir.
+    </p>
+  </section>
   </div>
 </section>
 
@@ -905,6 +927,7 @@
   <script type="module" src="js/settings-panel.ts"></script>
   <script type="module" src="js/app-status.ts"></script>
   <script type="module" src="js/update-check.ts"></script>
+  <script type="module" src="js/watchlist.ts"></script>
   <script type="module" src="js/item-locales.ts"></script>
   <script type="module" src="js/market-network.ts"></script>
   <script type="module" src="js/main.ts"></script>
