@@ -1,6 +1,8 @@
 // AoT-PNASF — Settings Panel (GitHub repo'dan uyarlandı)
 // Yan çekmecer (drawer) formatında ayarlar paneli
 
+import { APP_VERSION, BUILD_COMMIT, BUILD_DATE, BUILD_SOURCE, getPlatformBilgisi, surumOzeti } from './app-info';
+
 // ─── TEMALAR ─────────────────────────────────────────────
 let SP_THEMES = {
   'obsidian-gold': { name: 'Obsidian Gold', icon: '⚜', bg: '#0a0a0a', nav: '#141414', accent: '#d4af37', border: '#262626', text: '#f5f5f5', muted: '#a3a3a3', ai: '#00d4aa' },
@@ -221,10 +223,6 @@ function buildSettingsPanel() {
         </div>
       </div>
 
-      <!-- Önbellek -->
-      <div class="sp-section">
-        <div style="display:none"></div>
-      </div>
 
       <!-- Önbellek -->
       <div class="sp-section">
@@ -232,6 +230,19 @@ function buildSettingsPanel() {
         <div style="display:flex;align-items:center;justify-content:space-between;">
           <div style="font-size:11px;color:var(--text-muted)" id="spCacheInfo">Yükleniyor...</div>
           <button class="sp-btn-danger" onclick="clearSpCache()"><i class="fa-solid fa-trash mr-1"></i> Temizle</button>
+        </div>
+      </div>
+
+      <!-- Hakkında -->
+      <div class="sp-section">
+        <div class="sp-label">ℹ <span class="sp-acc">Hakkında</span></div>
+        <div style="font-size:11px;color:var(--text-muted);line-height:1.9">
+          <div style="display:flex;justify-content:space-between;gap:10px;"><span>Sürüm</span><strong id="spVersion" style="color:var(--text-main)">—</strong></div>
+          <div style="display:flex;justify-content:space-between;gap:10px;"><span>Derleme</span><strong id="spCommit" style="color:var(--text-main);font-family:ui-monospace,monospace">—</strong></div>
+          <div style="display:flex;justify-content:space-between;gap:10px;"><span>Tarih</span><strong id="spBuildDate" style="color:var(--text-main)">—</strong></div>
+          <div style="display:flex;justify-content:space-between;gap:10px;"><span>Ortam</span><strong id="spPlatform" style="color:var(--text-main)">—</strong></div>
+          <div id="spPlatformDetail" style="font-size:10px;color:#666;margin-top:2px"></div>
+          <button type="button" id="spCopyVersion" class="sp-btn-secondary" style="margin-top:8px;width:100%;padding:6px;font-size:11px;">Sürüm bilgisini kopyala</button>
         </div>
       </div>
 
@@ -256,6 +267,9 @@ function buildSettingsPanel() {
     });
   }
 
+  // Sürüm bilgisi (derleme anında gömülü) — hata bildiriminde kullanılabilir
+  doldurSurumBilgisi();
+
   // Önizlemeyi güncelle
   updateSpPreview(currentTheme);
   // Cache bilgisini yükle
@@ -276,6 +290,32 @@ function closeSettingsPanel() {
   const overlay = document.getElementById('spOverlay');
   if (drawer) drawer.classList.remove('open');
   if (overlay) overlay.style.display = 'none';
+}
+
+// ─── SÜRÜM BİLGİSİ ───────────────────────────────────────
+function doldurSurumBilgisi() {
+  const yaz = (id: string, metin: string) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = metin;
+  };
+  const platform = getPlatformBilgisi();
+  yaz('spVersion', `v${APP_VERSION}${BUILD_SOURCE === 'ci' ? '' : ' · yerel derleme'}`);
+  yaz('spCommit', BUILD_COMMIT);
+  yaz('spBuildDate', BUILD_DATE);
+  yaz('spPlatform', platform.etiket);
+  yaz('spPlatformDetail', platform.ayrinti);
+
+  const btn = document.getElementById('spCopyVersion') as HTMLButtonElement | null;
+  btn?.addEventListener('click', async () => {
+    const metin = surumOzeti();
+    try {
+      await navigator.clipboard.writeText(metin);
+      btn.textContent = 'Kopyalandı ✓';
+      setTimeout(() => { btn.textContent = 'Sürüm bilgisini kopyala'; }, 1600);
+    } catch {
+      btn.textContent = metin;
+    }
+  });
 }
 
 // ─── TEMA SEÇ ────────────────────────────────────────────

@@ -91,6 +91,16 @@ depoda hazır bir CI iş akışı var:
 Yerelde Windows'ta üretmek için yukarıdaki `pack:win` / `build:win`
 komutları yeterlidir (Visual Studio Build Tools + Rust gerekir).
 
+## Sürüm, güncelleme ve imzalama
+
+- Kurulu sürüm arayüzde görünür: **Ayarlar → Hakkında** (sürüm, commit,
+  derleme tarihi, ortam). Değerler derleme anında gömülür
+  (`vite.config.mts` → `define`, okuma `js/app-info.ts`).
+- Yeni sürüm bildirimi: `js/update-check.ts` GitHub Releases'i kontrol eder ve
+  yeni sürüm varsa indirme bağlantısı gösterir.
+- Kod imzalama ve sessiz (otomatik) güncellemeye geçiş adımları:
+  [`SIGNING.md`](SIGNING.md).
+
 ## Bilinen sınırlar
 
 - Masaüstü kabuğu çevrimdışı çalışır ama bazı veriler canlı gelir: eşya
@@ -99,4 +109,5 @@ komutları yeterlidir (Visual Studio Build Tools + Rust gerekir).
 - Kurulum paketleri imzasız üretilir; SmartScreen uyarısı çıkar. Dağıtımdan
   önce kod imzalama sertifikası eklenmesi önerilir (`win.certificateSubjectName`
   / Tauri `certificateThumbprint`).
-- Otomatik güncelleme (auto-update) yapılandırılmadı.
+- Sessiz otomatik güncelleme yapılandırılmadı (imzasız paketlerde bilinçli
+  tercih); bildirim + indirme bağlantısı var. Ayrıntı: `SIGNING.md`.

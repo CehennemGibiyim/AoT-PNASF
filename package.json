@@ -10,7 +10,7 @@
     "validate": "node scripts/validate-project.cjs",
     "validate:generated": "node scripts/validate-project.cjs --generated",
     "quality": "node scripts/check-quality.cjs",
-    "test:desktop": "node desktop/scripts/test-serve.cjs",
+    "test:desktop": "node desktop/scripts/test-serve.cjs && node desktop/scripts/test-collect.cjs",
     "windows:installer": "powershell -NoProfile -ExecutionPolicy Bypass -File desktop/scripts/build-windows.ps1",
     "windows:collect": "node desktop/scripts/collect-windows.mjs",
     "split-locales": "node scripts/split-locales.cjs",
@@ -23,7 +23,8 @@
     "desktop:electron:win": "npm --prefix desktop/electron run pack:win",
     "desktop:tauri": "npm --prefix desktop/tauri run dev",
     "desktop:tauri:win": "npm --prefix desktop/tauri run build:win",
-    "ai-scan": "node scripts/ai-scanner.js"
+    "ai-scan": "node scripts/ai-scanner.js",
+    "build:debug": "vite build --minify false"
   },
   "repository": {
     "type": "git",

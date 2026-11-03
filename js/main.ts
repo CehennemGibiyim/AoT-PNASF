@@ -398,6 +398,10 @@ let navMenu = document.getElementById('navMenu');
 mobileMenuBtn?.addEventListener('click', () => {
   navMenu.classList.toggle('hidden');
   navMenu.classList.toggle('flex');
+  // Ekran okuyucular menünün açık/kapalı durumunu duysun.
+  const acik = !navMenu.classList.contains('hidden');
+  mobileMenuBtn.setAttribute('aria-expanded', String(acik));
+  mobileMenuBtn.setAttribute('aria-label', acik ? 'Menüyü kapat' : 'Menüyü aç');
 });
 
 document.getElementById('brandLogo')?.addEventListener('click', () => {

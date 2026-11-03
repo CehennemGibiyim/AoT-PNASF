@@ -10,10 +10,16 @@ function read(relativePath) {
   return fs.existsSync(fullPath) ? fs.readFileSync(fullPath, 'utf8') : '';
 }
 
+// Üretilen/kopyalanan dizinler taranmaz: dist derleme çıktısı, Electron
+// kabuğunun dist kopyası (desktop/electron/app) ve masaüstü çıktıları.
+const ATLANAN_DIZINLER = new Set(['node_modules', 'dist', 'release', 'target', 'kurulum']);
+
 function htmlFiles(directory = ROOT) {
   if (!fs.existsSync(directory)) return [];
+  const goreli = path.relative(ROOT, directory).replace(/\\/g, '/');
+  if (goreli === 'desktop/electron/app') return [];
   return fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
-    if (entry.name === 'node_modules' || entry.name.startsWith('.git')) return [];
+    if (entry.name.startsWith('.git') || ATLANAN_DIZINLER.has(entry.name)) return [];
     const fullPath = path.join(directory, entry.name);
     if (entry.isDirectory()) return htmlFiles(fullPath);
     return entry.isFile() && entry.name.endsWith('.html') ? [fullPath] : [];

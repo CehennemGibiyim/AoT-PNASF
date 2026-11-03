@@ -36,8 +36,16 @@ Ayarlar → Uygulamalar → AoT PNASF → Kaldır.
 Uygulama çevrimdışı açılır. Eşya ikonları, bölge haritaları ve canlı
 feed'ler internet gerektirir; bağlantı yoksa bu görseller boş kalır.
 
+Güncellemeler
+-------------
+Uygulama açılışta GitHub'daki sürümleri kontrol eder; yeni sürüm varsa sol
+altta "Yeni sürüm hazır" bildirimi ve İndir bağlantısı görünür. Kurulum
+kullanıcıya aittir (sessiz otomatik kurulum, paketler kod imzalanana kadar
+bilinçli olarak kapalıdır). Kurulu sürümü Ayarlar → Hakkında bölümünde
+görebilirsiniz.
+
 Notlar
 ------
-* Otomatik güncelleme yoktur; yeni sürüm için yeni paketi indirin.
+* Yeni sürüm çıkınca yeni paketi indirip kurun; ayarlarınız korunur.
 * Windows 10 1809+ / Windows 11 gerekir. Tauri sürümü sistemdeki
   Microsoft Edge WebView2 kullanır (Windows 10/11'de hazır gelir).

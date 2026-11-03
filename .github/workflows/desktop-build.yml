@@ -3,13 +3,17 @@ name: Desktop Installers (Windows)
 # Windows kurulum paketleri bu depoda Linux üzerinde üretilemez:
 #  - Electron NSIS/portable için wine + electron-builder gerekir,
 #  - Tauri MSI/NSIS için Rust + Windows WebView2 araç zinciri gerekir.
-# Bu iş akışı ikisini de windows-latest üzerinde derleyip artifact olarak verir.
+# Bu iş akışı ikisini de windows-latest üzerinde derleyip tek bir kurulum
+# klasöründe toplar; v* etiketiyle tetiklenirse GitHub Release de oluşturur.
 
 on:
   workflow_dispatch:
   push:
     tags:
       - 'v*'
+
+permissions:
+  contents: write
 
 jobs:
   electron:
@@ -37,6 +41,11 @@ jobs:
 
       - name: Windows paketlerini üret
         working-directory: desktop/electron
+        # Kod imzalama: CSC_LINK (base64 pfx) + CSC_KEY_PASSWORD tanımlıysa
+        # electron-builder otomatik imzalar; boşsa imzasız üretir.
+        env:
+          CSC_LINK: ${{ secrets.WINDOWS_CERT_PFX_BASE64 }}
+          CSC_KEY_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
         run: npm run pack:win
 
       - uses: actions/upload-artifact@v4
@@ -53,6 +62,8 @@ jobs:
     defaults:
       run:
         shell: bash
+    env:
+      WINDOWS_CERT_THUMBPRINT: ${{ secrets.WINDOWS_CERT_THUMBPRINT }}
     steps:
       - uses: actions/checkout@v4
 
@@ -76,7 +87,19 @@ jobs:
         working-directory: desktop/tauri
         run: npm ci
 
-      - name: Windows paketlerini üret
+      - name: İmza yapılandırması (sertifika varsa)
+        if: env.WINDOWS_CERT_THUMBPRINT != ''
+        working-directory: desktop/tauri
+        run: |
+          node -e "require('fs').writeFileSync('sign.conf.json', JSON.stringify({bundle:{windows:{certificateThumbprint:process.env.WINDOWS_CERT_THUMBPRINT,digestAlgorithm:'sha256',timestampUrl:'http://timestamp.digicert.com'}}}))"
+
+      - name: Windows paketlerini üret (imzalı)
+        if: env.WINDOWS_CERT_THUMBPRINT != ''
+        working-directory: desktop/tauri
+        run: npm run build:win -- --config sign.conf.json
+
+      - name: Windows paketlerini üret (imzasız)
+        if: env.WINDOWS_CERT_THUMBPRINT == ''
         working-directory: desktop/tauri
         run: npm run build:win
 
@@ -132,3 +155,23 @@ jobs:
             desktop/windows/*.zip
           if-no-files-found: error
           retention-days: 30
+
+  # Yalnızca v* etiketinde: paketleri indirilebilir sürüm sayfasına ekler.
+  yayinla:
+    name: GitHub Release (v* etiketi)
+    needs: topla
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: AoT-PNASF-Windows-Kurulum
+          path: cikti
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          name: AoT PNASF ${{ github.ref_name }}
+          generate_release_notes: true
+          files: |
+            cikti/**
+          fail_on_unmatched_files: true
