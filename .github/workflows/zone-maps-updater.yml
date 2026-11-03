@@ -1,0 +1,41 @@
+name: Zone Map Tiles Sync
+
+on:
+  schedule:
+    # th.gl harita tile'larını içerik hash'iyle yayınlar; hash değişince
+    # görseller 404 olmasın diye haftada bir tazelenir.
+    - cron: '40 3 * * 1'
+  workflow_dispatch:
+
+jobs:
+  sync-zone-maps:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Fetch zone map tiles
+        run: node scripts/zone-maps-fetcher.cjs
+
+      - name: Validate generated data
+        run: npm run validate:generated
+
+      - name: Commit zone map index
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/zone-maps.js
+          if git diff --staged --quiet; then
+            echo "Zone harita indeksi değişmedi."
+            exit 0
+          fi
+          git commit -m "chore(data): refresh zone map tile index"
+          git push

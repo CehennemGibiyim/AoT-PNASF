@@ -490,6 +490,9 @@
     <button class="map-view-tab" data-view="avalon" onclick="switchView('avalon')">
       🟣 <span data-tr="Roads of Avalon" data-en="Roads of Avalon">Roads of Avalon</span>
     </button>
+    <button class="map-view-tab" data-view="atlas" onclick="switchView('atlas')">
+      🌍 <span data-tr="Dünya Atlası" data-en="World Atlas">Dünya Atlası</span>
+    </button>
     <button class="map-view-tab" data-view="map" onclick="switchView('map')">
       🔗 <span data-tr="Bağlantı Haritası (BFS)" data-en="Connection Map (BFS)">Bağlantı Haritası (BFS)</span>
     </button>
@@ -521,6 +524,7 @@
 
   <div class="zones-content">
     <div id="bonus-section"></div>
+    <div id="zone-gallery" class="zone-gallery"></div>
   </div>
 </div>
 
@@ -599,6 +603,49 @@
   </div>
 </section>
 
+
+<!-- GÖRÜNÜM 4: GERÇEK DÜNYA ATLASI -->
+<div id="view-atlas" class="view-container" style="display:none">
+  <div class="atlas-wrap">
+    <div class="atlas-main">
+      <div id="atlasMap" class="atlas-map"></div>
+      <div class="atlas-hint">🖱️ Sürükle &amp; tekerlekle yakınlaştır · her halka bir zone</div>
+    </div>
+    <aside class="atlas-side">
+      <div class="atlas-title">🌍 <span data-tr="Dünya Haritası" data-en="World Map">Dünya Haritası</span></div>
+      <p class="atlas-desc" data-tr="Oyundaki gerçek dünya haritası: 7 kıta, kraliyet adaları ve Outlands. Bölge kartlarına tıklayınca yakınlaştırılabilir gerçek bölge haritası açılır." data-en="The real in-game world map: seven continents, royal islands and the Outlands. Click any zone card to open its zoomable real map.">Oyundaki gerçek dünya haritası: 7 kıta, kraliyet adaları ve Outlands. Bölge kartlarına tıklayınca yakınlaştırılabilir gerçek bölge haritası açılır.</p>
+      <div class="atlas-legend">
+        <span><i style="background:#3b82f6"></i> Blue</span>
+        <span><i style="background:#eab308"></i> Yellow</span>
+        <span><i style="background:#ef4444"></i> Red</span>
+        <span><i style="background:#6b7280"></i> Black</span>
+        <span><i style="background:#8b5cf6"></i> Avalon</span>
+        <span><i style="background:#06b6d4"></i> Mist</span>
+      </div>
+      <a class="atlas-link" href="https://albiononline.th.gl/maps/World" target="_blank" rel="noopener">albiononline.th.gl ↗</a>
+    </aside>
+  </div>
+</div>
+
+<!-- ZONE HARİTA DETAY PENCERESİ -->
+<div id="zoneModal" class="zm-overlay">
+  <div class="zm-panel" role="dialog" aria-modal="true" aria-labelledby="zmTitle">
+    <div class="zm-head">
+      <div class="zm-head-main">
+        <div class="zm-title" id="zmTitle">Zone</div>
+        <div class="zm-badges" id="zmBadges"></div>
+      </div>
+      <button type="button" class="zm-close" data-zm-close aria-label="Kapat">✕</button>
+    </div>
+    <div class="zm-map-wrap">
+      <div id="zmMap" class="zm-map"></div>
+    </div>
+    <div class="zm-body">
+      <div class="zm-bonus" id="zmBonus"></div>
+      <div class="zm-exits" id="zmExits"></div>
+    </div>
+  </div>
+</div>
 
 <!-- ═══ REHBERLER (eski pages/guides.html) ═══ -->
 <section id="tab-guides" class="tab-content hidden h-full flex-col animate-fade-in">
@@ -875,6 +922,7 @@
   <script src="data/world-zones.js"></script>
   <script src="data/world-data.js"></script>
   <script src="data/zone-bonuses.js"></script>
+  <script src="data/zone-maps.js"></script>
   <script src="data/tools-data.js"></script>
   <script type="module" src="lib/maps.ts"></script>
   <script type="module" src="lib/guides.ts"></script>

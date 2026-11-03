@@ -66,11 +66,16 @@ function switchView(view) {
   document.getElementById('view-zones').style.display  = view === 'zones'  ? 'block' : 'none';
   document.getElementById('view-map').style.display    = view === 'map'    ? 'flex'  : 'none';
   document.getElementById('view-avalon').style.display = view === 'avalon' ? 'block' : 'none';
+  const atlasEl = document.getElementById('view-atlas');
+  if (atlasEl) atlasEl.style.display = view === 'atlas' ? 'block' : 'none';
 
   if (view === 'map') {
     if (!leafletMap && window.L) {
       setTimeout(() => initLeafletMap(), 50);
     }
+  }
+  if (view === 'atlas') {
+    setTimeout(() => initAtlasMap(), 50);
   }
 }
 
@@ -108,6 +113,7 @@ function loadZones() {
   filteredZones = [...zones];
   const countEl = document.getElementById('zoneCount');
   if(countEl) countEl.textContent = zones.length.toLocaleString('tr-TR');
+  renderZoneGallery();
 }
 
 // ─── ZONE KARTLARI (Ana Görünüm) ───────────────────────────
@@ -189,6 +195,7 @@ function renderBonusSection() {
         <div class="cc-resources">
           ${(c.resources||[]).map(r => `<span class="cc-res-tag">${r}</span>`).join('')}
         </div>
+        <button class="cc-map-btn" type="button" data-zone-open="${c.name}">🗺️ ${lang === 'tr' ? 'Şehir haritasını aç' : 'Open city map'}</button>
       </div>
     </div>`;
   }).join('');
@@ -219,6 +226,7 @@ function renderBonusSection() {
         <div class="cc-resources">
           ${b.resources.map(r => `<span class="cc-res-tag danger">${r}</span>`).join('')}
         </div>
+        <button class="cc-map-btn" type="button" data-zone-open="${b.name}">🗺️ ${lang === 'tr' ? 'Haritayı aç' : 'Open map'}</button>
       </div>
     </div>`;
   }).join('');
@@ -803,6 +811,7 @@ function filterZones(type, btn) {
   });
   const countEl = document.getElementById('zoneCount');
   if(countEl) countEl.textContent = filteredZones.length.toLocaleString('tr-TR');
+  renderZoneGallery();
 }
 
 // ─── ROTA HESAPLAMA (BFS) ─────────────────────────────────
@@ -930,6 +939,337 @@ function getStaticZones() {
     ...getAvalonZones(),
   ];
 }
+
+// ═══════════════════════════════════════════════════════════
+// GERÇEK ZONE HARİTALARI
+//
+// Kaynak: albiononline.th.gl harita tile servisi (data/zone-maps.js
+// dosyasını scripts/zone-maps-fetcher.cjs üretir). Her zone için gerçek
+// oyun haritası {z}/{y}/{x} tile piramidi olarak çizilir; kartlarda aynı
+// haritanın önizleme görseli kullanılır.
+// ═══════════════════════════════════════════════════════════
+const ZG_RES: Record<string, { tr: string; en: string; icon: string }> = {
+  WOOD: { tr: 'Odun', en: 'Wood', icon: '🪵' },
+  ORE: { tr: 'Cevher', en: 'Ore', icon: '⛏️' },
+  FIBER: { tr: 'Elyaf', en: 'Fiber', icon: '🌾' },
+  HIDE: { tr: 'Deri', en: 'Hide', icon: '🐗' },
+  ROCK: { tr: 'Taş', en: 'Rock', icon: '🪨' },
+};
+
+const ZG_BIOME: Record<string, { tr: string; en: string; icon: string }> = {
+  swamp: { tr: 'Bataklık', en: 'Swamp', icon: '🌿' },
+  forest: { tr: 'Orman', en: 'Forest', icon: '🌲' },
+  mountain: { tr: 'Dağ', en: 'Mountain', icon: '⛰️' },
+  steppe: { tr: 'Step', en: 'Steppe', icon: '🌾' },
+  highland: { tr: 'Yayla', en: 'Highland', icon: '🏔️' },
+  cave: { tr: 'Mağara', en: 'Cave', icon: '🕳️' },
+};
+
+const ZG_TYPES: Record<string, { tr: string; en: string; color: string }> = {
+  SAFEAREA: { tr: 'PvP yok, eşya kaybı yok', en: 'No PvP, no item loss', color: '#3b82f6' },
+  YELLOW: { tr: 'Knockdown: ölünce eşya düşmez, dayanıklılık azalır', en: 'Knockdown: no loot, durability loss', color: '#eab308' },
+  RED: { tr: 'Tam kayıp PvP — ölünce eşyalar yere düşer', en: 'Full loot PvP — items drop on death', color: '#ef4444' },
+  BLACK: { tr: 'Tam kayıp PvP + yüksek fame ve kaynak bonusu', en: 'Full loot PvP + higher fame and resource yield', color: '#9ca3af' },
+  MIST: { tr: 'Mist: kısıtlı süreli, tam kayıp', en: 'Mists: timed instance, full loot', color: '#06b6d4' },
+  ROAD: { tr: 'Avalon yolu: bağlantılar dönemsel değişir, tam kayıp', en: 'Avalon road: shifting links, full loot', color: '#8b5cf6' },
+};
+
+let zgIndex: Map<string, string> | null = null;
+let atlasMap: any = null;
+let zoneModalMap: any = null;
+let zgEscHandlerBound = false;
+
+function zgDb(): any { return (window as any).AO_ZONE_MAPS || null; }
+function zgNorm(v: any): string { return String(v || '').toLowerCase().replace(/[^a-z0-9]/g, ''); }
+function zgEsc(v: any): string {
+  return String(v == null ? '' : v)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+function zgIndexMap(): Map<string, string> {
+  if (zgIndex) return zgIndex;
+  zgIndex = new Map();
+  const db = zgDb();
+  const maps = db && db.maps ? db.maps : {};
+  Object.keys(maps).forEach((key) => {
+    const rec = maps[key];
+    if (!rec || !rec.n) return;
+    const n = zgNorm(rec.n);
+    if (n && !zgIndex!.has(n)) zgIndex!.set(n, key);
+  });
+  return zgIndex;
+}
+
+function zoneMapKey(name: any): string | null {
+  const idx = zgIndexMap();
+  const direct = idx.get(zgNorm(name));
+  if (direct) return direct;
+  const plain = zgNorm(String(name || '').replace(/\([^)]*\)/g, ''));
+  return idx.get(plain) || null;
+}
+
+function zoneMapRec(name: any): any {
+  const db = zgDb();
+  const key = zoneMapKey(name);
+  return db && key ? db.maps[key] : null;
+}
+
+function zonePreviewUrl(name: any): string {
+  const db = zgDb();
+  const key = zoneMapKey(name);
+  if (!db || !key) return '';
+  return `${db.tileBase}/map-tiles/${key}/preview.webp`;
+}
+
+/** th.gl tile şablonu: {z}/{y}/{x} sırası ve içerik hash'i veriden gelir. */
+function zoneTileLayerUrl(key: string, rec: any): string | null {
+  const db = zgDb();
+  if (!db || !rec || !rec.u) return null;
+  return `${db.tileBase}${rec.u}{z}/{y}/{x}.webp`;
+}
+
+/** tile servisi kendi CRS dönüşümünü verir; aynısını Leaflet'e uyguluyoruz. */
+function zgTileCrs(rec: any) {
+  const Lany: any = window.L as any;
+  if (!Lany || !Lany.extend || !Lany.Transformation || !Lany.CRS) return null;
+  const t = rec && Array.isArray(rec.t) ? rec.t : null;
+  if (!t || t.length !== 4) return Lany.CRS.Simple;
+  return Lany.extend({}, Lany.CRS.Simple, {
+    transformation: new Lany.Transformation(t[0], t[1], t[2], t[3]),
+  });
+}
+
+function mountZoneTileMap(el: HTMLElement, key: string, rec: any) {
+  const Lany: any = window.L as any;
+  if (!Lany || !el || !rec) return null;
+  const url = zoneTileLayerUrl(key, rec);
+  if (!url) return null;
+  const crs = zgTileCrs(rec);
+  const bounds = Array.isArray(rec.b)
+    ? Lany.latLngBounds([rec.b[1], rec.b[0]], [rec.b[3], rec.b[2]])
+    : null;
+  const map = Lany.map(el, {
+    crs: crs || Lany.CRS.Simple,
+    minZoom: 0,
+    maxZoom: (rec.mz || 3) + 2,
+    zoomSnap: 0.5,
+    zoomDelta: 0.5,
+    attributionControl: false,
+    zoomControl: true,
+  });
+  Lany.tileLayer(url, {
+    tileSize: rec.s || 512,
+    minNativeZoom: rec.nz || 0,
+    maxNativeZoom: rec.mz || 3,
+    noWrap: true,
+    bounds: bounds || undefined,
+  }).addTo(map);
+  if (bounds) map.fitBounds(bounds);
+  return map;
+}
+
+// ─── Zone galerisi (gerçek harita önizlemeleri) ───────────
+function renderZoneGallery() {
+  const box = document.getElementById('zone-gallery');
+  if (!box) return;
+  const tr = getLang() === 'tr';
+  const list = (filteredZones && filteredZones.length ? filteredZones : zones) || [];
+  if (!list.length) { box.innerHTML = ''; return; }
+
+  const cards = list.map((z: any) => {
+    const name = z.name || z.id;
+    const preview = zonePreviewUrl(name) || zonePreviewUrl(z.id);
+    const col = getZoneColor(z);
+    const res = ZG_RES[String(z.resource || '').toUpperCase()];
+    const biome = ZG_BIOME[String(z.biome || '').toLowerCase()];
+    const tier = Number(z.tier) || 0;
+    const sub = [
+      res ? `${res.icon} ${tr ? res.tr : res.en}${tier ? ` T${tier}` : ''}` : '',
+      biome ? `${biome.icon} ${tr ? biome.tr : biome.en}` : '',
+      z.exits && z.exits.length ? `${z.exits.length} ${tr ? 'çıkış' : 'links'}` : '',
+    ].filter(Boolean).join(' · ');
+    return `<button type="button" class="zg-card" data-zone-open="${zgEsc(name)}" title="${zgEsc(name)}">
+      <span class="zg-thumb${preview ? '' : ' zg-thumb-empty'}">
+        ${preview
+          ? `<img src="${preview}" alt="${zgEsc(name)} ${tr ? 'haritası' : 'map'}" loading="lazy" decoding="async" referrerpolicy="no-referrer">`
+          : '<span class="zg-nomap">🗺️</span>'}
+        <span class="zg-tier" style="color:${col.bg};border-color:${col.bg}66">T${tier || '?'}</span>
+      </span>
+      <span class="zg-body">
+        <span class="zg-name">${zgEsc(name)}</span>
+        <span class="zg-sub">${zgEsc(sub || (tr ? 'Zon verisi' : 'Zone data'))}</span>
+        <span class="zg-type" style="color:${col.bg}">${col.label}</span>
+      </span>
+    </button>`;
+  }).join('');
+
+  box.innerHTML = `
+    <div class="zg-head">
+      <div class="zg-head-title">🗺️ ${tr ? 'Tüm Bölgeler — gerçek oyun haritaları' : 'All zones — real in-game maps'}</div>
+      <div class="zg-head-sub">${list.length} ${tr
+        ? 'bölge · kart yüklenince haritanın önizlemesi, detayda yakınlaştırılabilir gerçek harita'
+        : 'zones · preview on cards, zoomable real map in details'}</div>
+    </div>
+    <div class="zg-grid">${cards}</div>
+    <div class="zg-credit">${tr ? 'Harita görselleri' : 'Map images'}: albiononline.th.gl</div>`;
+}
+
+// ─── Zone detay penceresi ────────────────────────────────
+function zoneBonusRows(z: any): { icon: string; label: string; value: string }[] {
+  const tr = getLang() === 'tr';
+  const col = getZoneColor(z);
+  const typeKey = col === ZONE_COLORS.RED ? 'RED' : col === ZONE_COLORS.YELLOW ? 'YELLOW'
+    : col === ZONE_COLORS.BLACK ? 'BLACK' : col === ZONE_COLORS.MIST ? 'MIST'
+    : col === ZONE_COLORS.ROAD ? 'ROAD' : 'SAFEAREA';
+  const type = ZG_TYPES[typeKey];
+  const res = ZG_RES[String(z.resource || '').toUpperCase()];
+  const biome = ZG_BIOME[String(z.biome || '').toLowerCase()];
+  const tier = Number(z.tier) || 0;
+  const rows: { icon: string; label: string; value: string }[] = [];
+
+  rows.push({ icon: col === ZONE_COLORS.ROAD ? '🟣' : col === ZONE_COLORS.BLACK ? '⚫' : col === ZONE_COLORS.RED ? '🔴' : col === ZONE_COLORS.YELLOW ? '🟡' : '🔵',
+    label: tr ? 'Zone kuralı' : 'Zone rules', value: tr ? type.tr : type.en });
+
+  if (res) {
+    rows.push({ icon: res.icon, label: tr ? 'Kaynak' : 'Resource',
+      value: `${tr ? res.tr : res.en}${tier ? ` T${tier}` : ''} — ${tr ? 'bu bölgede toplanır' : 'gathered here'}` });
+  }
+  if (biome) {
+    rows.push({ icon: biome.icon, label: tr ? 'Biyom' : 'Biome', value: tr ? biome.tr : biome.en });
+  }
+  if (tier) {
+    rows.push({ icon: '📈', label: tr ? 'Tier bandı' : 'Tier band',
+      value: `T${Math.max(1, tier - 1)}–T${Math.min(8, tier + 1)} ${tr ? 'eşya ve kaynak' : 'items and resources'}` });
+  }
+  if (z.exits && z.exits.length) {
+    rows.push({ icon: '🚪', label: tr ? 'Bağlantılar' : 'Connections',
+      value: `${z.exits.length} ${tr ? 'komşu bölge' : 'neighbour zones'}` });
+  }
+  rows.push({ icon: '💰', label: tr ? 'Eşya kaybı' : 'Item loss',
+    value: typeKey === 'SAFEAREA' ? (tr ? 'Yok' : 'None') : typeKey === 'YELLOW' ? (tr ? 'Yok (knockdown)' : 'None (knockdown)') : (tr ? 'Tam kayıp' : 'Full loot') });
+  return rows;
+}
+
+function openZoneMap(name: any) {
+  const overlay = document.getElementById('zoneModal');
+  if (!overlay) return;
+  const tr = getLang() === 'tr';
+  const zone = zones.find((z: any) => z.id === name || z.name === name) || { id: String(name), name: String(name) };
+  const label = zone.name || zone.id;
+  const col = getZoneColor(zone);
+  const tier = Number(zone.tier) || 0;
+
+  const titleEl = document.getElementById('zmTitle');
+  if (titleEl) titleEl.textContent = label;
+  const badgeEl = document.getElementById('zmBadges');
+  if (badgeEl) {
+    const res = ZG_RES[String(zone.resource || '').toUpperCase()];
+    const biome = ZG_BIOME[String(zone.biome || '').toLowerCase()];
+    badgeEl.innerHTML = [
+      `<span class="zm-badge" style="color:${col.bg};border-color:${col.bg}55">${col.label}</span>`,
+      tier ? `<span class="zm-badge">T${tier}</span>` : '',
+      res ? `<span class="zm-badge">${res.icon} ${tr ? res.tr : res.en}</span>` : '',
+      biome ? `<span class="zm-badge">${biome.icon} ${tr ? biome.tr : biome.en}</span>` : '',
+    ].filter(Boolean).join('');
+  }
+
+  const bonusEl = document.getElementById('zmBonus');
+  if (bonusEl) {
+    bonusEl.innerHTML = zoneBonusRows(zone).map((r) => `
+      <div class="zm-row">
+        <span class="zm-row-icon">${r.icon}</span>
+        <span class="zm-row-label">${zgEsc(r.label)}</span>
+        <span class="zm-row-val">${zgEsc(r.value)}</span>
+      </div>`).join('');
+  }
+
+  const exitsEl = document.getElementById('zmExits');
+  if (exitsEl) {
+    const exits: string[] = (zone.exits || []).slice(0, 24);
+    exitsEl.innerHTML = exits.length
+      ? `<div class="zm-exits-title">${tr ? 'Komşu bölgeler' : 'Neighbour zones'}</div><div class="zm-exits-list">${exits
+          .map((e) => `<button type="button" class="zm-exit" data-zone-open="${zgEsc(e)}">${zgEsc(e)}</button>`)
+          .join('')}</div>`
+      : `<div class="zm-exits-title">${tr ? 'Bu bölge için komşu kaydı yok' : 'No neighbour data for this zone'}</div>`;
+  }
+
+  const mapEl = document.getElementById('zmMap');
+  const key = zoneMapKey(label) || zoneMapKey(zone.id);
+  const rec = key ? (zgDb() || {}).maps?.[key] : null;
+  if (zoneModalMap) { try { zoneModalMap.remove(); } catch (_) {} zoneModalMap = null; }
+  if (mapEl) {
+    mapEl.innerHTML = '';
+    if (rec && rec.u && window.L) {
+      overlay.classList.add('open');
+      document.body.classList.add('zm-locked');
+      setTimeout(() => {
+        // Pencere bu arada kapatıldıysa haritayı kurma.
+        if (!overlay.classList.contains('open')) return;
+        zoneModalMap = mountZoneTileMap(mapEl, key as string, rec);
+      }, 60);
+    } else {
+      const prev = zonePreviewUrl(label) || zonePreviewUrl(zone.id);
+      mapEl.innerHTML = prev
+        ? `<img class="zm-fallback" src="${prev}" alt="${zgEsc(label)}" referrerpolicy="no-referrer">`
+        : `<div class="zm-nomap">${tr ? 'Bu bölge için harita görseli bulunamadı.' : 'No map image found for this zone.'}</div>`;
+      overlay.classList.add('open');
+      document.body.classList.add('zm-locked');
+    }
+  }
+  bindZoneModalOnce();
+}
+
+function closeZoneMap() {
+  const overlay = document.getElementById('zoneModal');
+  if (overlay) overlay.classList.remove('open');
+  document.body.classList.remove('zm-locked');
+  if (zoneModalMap) { try { zoneModalMap.remove(); } catch (_) {} zoneModalMap = null; }
+}
+
+function bindZoneModalOnce() {
+  if (zgEscHandlerBound) return;
+  zgEscHandlerBound = true;
+  document.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Escape') closeZoneMap();
+  });
+  const overlay = document.getElementById('zoneModal');
+  overlay?.addEventListener('click', (ev) => {
+    const t = ev.target as HTMLElement;
+    if (t === overlay || t.closest('[data-zm-close]')) closeZoneMap();
+  });
+}
+
+// Galeri ve komşu bölge düğmeleri tek bir delege dinleyici ile açılır.
+document.addEventListener('click', (ev) => {
+  const el = (ev.target as HTMLElement)?.closest?.('[data-zone-open]') as HTMLElement | null;
+  if (!el) return;
+  ev.preventDefault();
+  openZoneMap(el.getAttribute('data-zone-open'));
+});
+
+// ─── Dünya atlası (gerçek dünya haritası tile'ları) ───────
+function initAtlasMap() {
+  const el = document.getElementById('atlasMap');
+  if (!el) return;
+  const db = zgDb();
+  const rec = db && db.maps ? db.maps.world : null;
+  const tr = getLang() === 'tr';
+  if (!rec || !window.L) {
+    el.innerHTML = `<div class="zm-nomap">${tr ? 'Harita kütüphanesi yüklenemedi (data/zone-maps.js).' : 'Map library unavailable (data/zone-maps.js).'}</div>`;
+    return;
+  }
+  if (atlasMap) {
+    try { atlasMap.invalidateSize(); } catch (_) {}
+    return;
+  }
+  atlasMap = mountZoneTileMap(el, 'world', rec);
+}
+
+(window as any).openZoneMap = openZoneMap;
+(window as any).closeZoneMap = closeZoneMap;
+(window as any).initAtlasMap = initAtlasMap;
+(window as any).renderZoneGallery = renderZoneGallery;
 
 // --- Modül dönüşümü: üst düzey semboller window üzerinden paylaşılır ---
 declare global {

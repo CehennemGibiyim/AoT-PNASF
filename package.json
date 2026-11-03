@@ -14,6 +14,7 @@
     "dev": "vite",
     "preview": "vite preview --port 3000 --host 0.0.0.0",
     "update-feed": "node scripts/pvp-fetcher.cjs",
+    "maps:fetch": "node scripts/zone-maps-fetcher.cjs",
     "ai-scan": "node scripts/ai-scanner.js"
   },
   "repository": {

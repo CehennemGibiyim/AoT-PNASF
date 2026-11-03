@@ -44,21 +44,53 @@ function mcEsc(v: any): string {
   return String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-function mcItemName(base: string): string {
-  const items = (window as any).AO_ITEMS;
-  if (Array.isArray(items)) {
-    const hit = items.find((i: any) => i && i.id === base);
-    if (hit) return hit.tr || hit.en || base;
-  }
-  return base.replace(/_/g, ' ');
+/** Tier/enchant önekini atar: T6_2H_AXE@2 → 2H_AXE */
+function mcBaseId(base: string): string {
+  return String(base || '').replace(/^T\d+_/, '').replace(/@\d+$/, '');
 }
 
-function mcIcon(base: string): string {
-  const cache = (window as any).albionImageCache;
-  if (cache && typeof cache.getItemUrl === 'function') {
-    try { return cache.getItemUrl(base, 1, 64); } catch (_) {}
+function mcItemName(base: string): string {
+  const items = (window as any).AO_ITEMS;
+  const clean = mcBaseId(base);
+  if (Array.isArray(items)) {
+    const hit = items.find((i: any) => i && (i.id === base || mcBaseId(i.id) === clean));
+    if (hit) return hit.tr || hit.en || base;
   }
-  return `https://render.albiononline.com/v1/item/T6_${encodeURIComponent(base)}.png?count=1&quality=1`;
+  return clean.replace(/_/g, ' ');
+}
+
+/**
+ * Eşya görseli URL'i. Meta verisinde yalnızca taban kimliği var (2H_AXE),
+ * render servisi ise tam kimlik istiyor (T6_2H_AXE). Bu yüzden eşyanın
+ * ortalama tieriyle başlayıp tutmayan tier'ları sırayla deniyoruz:
+ * eski sürümde doğrudan "2H_AXE" isteniyordu ve tüm ikonlar 404 veriyordu.
+ */
+function mcIconUrls(base: string, tier?: number): string[] {
+  const clean = mcBaseId(base);
+  const preferred = tier && tier >= 3 && tier <= 8 ? Math.round(tier) : 0;
+  const tiers = [preferred, 8, 7, 6, 5, 4, 3].filter((t, i, arr) => t >= 3 && t <= 8 && arr.indexOf(t) === i);
+  return tiers.map((t) => `https://render.albiononline.com/v1/item/T${t}_${encodeURIComponent(clean)}.png?quality=1&size=64`);
+}
+
+function mcIconAttrs(base: string, tier?: number): string {
+  const urls = mcIconUrls(base, tier);
+  return `src="${urls[0]}" data-alts="${urls.slice(1).join('|')}"`;
+}
+
+/** İlk tier 404 verirse sıradaki tier'i dener; hepsi biterse ikonu gizler. */
+function mcInstallIconFallback() {
+  const w = window as any;
+  if (w.__mcIconFallback) return;
+  w.__mcIconFallback = true;
+  document.addEventListener('error', (event) => {
+    const img = event.target as HTMLImageElement;
+    if (!img || img.tagName !== 'IMG' || !img.dataset || !img.dataset.alts) return;
+    const alts = img.dataset.alts.split('|').filter(Boolean);
+    const next = alts.shift();
+    img.dataset.alts = alts.join('|');
+    if (next) img.src = next;
+    else { img.style.visibility = 'hidden'; img.style.opacity = '0'; }
+  }, true);
 }
 
 function mcServer(): MetaServer | null {
@@ -93,7 +125,7 @@ function mcRows(): string {
   return slot.items.slice(0, 15).map((item, index) => `
     <div class="mc-row">
       <span class="mc-rank">${index + 1}</span>
-      <img class="mc-icon" src="${mcIcon(item.base)}" alt="${mcEsc(mcItemName(item.base))}" loading="lazy" onerror="this.style.visibility='hidden'">
+      <img class="mc-icon" ${mcIconAttrs(item.base, item.avgTier)} alt="${mcEsc(mcItemName(item.base))}" loading="lazy">
       <div class="mc-name">
         <div class="mc-title">${mcEsc(mcItemName(item.base))}</div>
         <div class="mc-sub">${mcEsc(item.base)} · ${item.count} kayıt · ort. T${item.avgTier} · kalite ${item.avgQuality}</div>
@@ -146,7 +178,7 @@ function mcCraftList(): string {
     const slotLabel = MC_SLOTS.find((s) => s.key === t.slot)?.label || t.slot;
     return `<div class="mc-craft-row">
       <span class="mc-rank">${index + 1}</span>
-      <img class="mc-icon" src="${mcIcon(t.base)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+      <img class="mc-icon" ${mcIconAttrs(t.base, t.avgTier)} alt="${mcEsc(mcItemName(t.base))}" loading="lazy">
       <div class="mc-name">
         <div class="mc-title">${mcEsc(mcItemName(t.base))}</div>
         <div class="mc-sub">${slotLabel} · ${t.sides} · ort. T${t.avgTier.toFixed(1)}</div>
@@ -159,6 +191,7 @@ function mcCraftList(): string {
 function mcRender() {
   const app = document.getElementById('metaCraftApp');
   if (!app || !mcData) return;
+  mcInstallIconFallback();
   const server = mcServer();
   const slot = mcSlot();
   const stamp = mcData.fetchedAt ? new Date(mcData.fetchedAt).toLocaleString('tr-TR') : '—';

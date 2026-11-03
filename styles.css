@@ -502,3 +502,101 @@ header.bg-albion-800 {
 .map-legend-note { width: 100%; font-size: 10px; color: var(--text-muted); opacity: .75; line-height: 1.4; margin-top: 2px; }
 .maps-canvas-wrap:fullscreen { background: #05070b; padding: 0; }
 .maps-canvas-wrap:fullscreen #mapCanvas { height: 100vh !important; }
+
+/* ═══════════════════════════════════════════════════════════
+   GERÇEK ZONE HARİTALARI — galeri, detay penceresi, dünya atlası
+   ═══════════════════════════════════════════════════════════ */
+.zone-gallery { margin-top: 26px; }
+.zg-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; margin-bottom: 14px; }
+.zg-head-title { font-family: var(--font-display, inherit); font-size: 17px; font-weight: 800; color: var(--text-main); }
+.zg-head-sub { font-size: 12px; color: var(--text-muted); }
+.zg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(196px, 1fr)); gap: 12px; }
+.zg-card {
+  display: flex; flex-direction: column; text-align: left; padding: 0; overflow: hidden;
+  background: var(--bg-800); border: 1px solid var(--bg-700); border-radius: 12px;
+  cursor: pointer; transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+  font-family: inherit;
+}
+.zg-card:hover { transform: translateY(-3px); border-color: rgba(var(--accent-rgb), .55); box-shadow: 0 10px 24px rgba(0,0,0,.45); }
+.zg-thumb { position: relative; display: block; aspect-ratio: 16 / 9; background: #0d1117; overflow: hidden; }
+.zg-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .25s ease; }
+.zg-card:hover .zg-thumb img { transform: scale(1.05); }
+.zg-thumb-empty { display: flex; align-items: center; justify-content: center; }
+.zg-nomap { font-size: 26px; opacity: .35; }
+.zg-tier {
+  position: absolute; top: 7px; left: 7px; font-size: 10.5px; font-weight: 800;
+  padding: 1px 6px; border-radius: 999px; background: rgba(10,12,18,.82); border: 1px solid;
+}
+.zg-body { display: flex; flex-direction: column; gap: 3px; padding: 9px 11px 11px; }
+.zg-name { font-size: 13px; font-weight: 700; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.zg-sub { font-size: 10.5px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.zg-type { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; }
+.zg-credit { margin-top: 12px; font-size: 10.5px; color: var(--text-muted); opacity: .75; }
+
+/* Detay penceresi */
+.zm-overlay {
+  display: none; position: fixed; inset: 0; z-index: 9000;
+  background: rgba(3,5,9,.78); backdrop-filter: blur(4px);
+  align-items: center; justify-content: center; padding: 18px;
+}
+.zm-overlay.open { display: flex; }
+body.zm-locked { overflow: hidden; }
+.zm-panel {
+  width: min(1080px, 96vw); max-height: 92vh; overflow: hidden; display: flex; flex-direction: column;
+  background: var(--bg-800); border: 1px solid var(--bg-700); border-radius: 16px;
+  box-shadow: 0 26px 70px rgba(0,0,0,.6);
+}
+.zm-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; padding: 14px 16px 10px; border-bottom: 1px solid var(--bg-700); }
+.zm-head-main { min-width: 0; }
+.zm-title { font-size: 18px; font-weight: 800; color: var(--text-main); }
+.zm-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
+.zm-badge {
+  font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 999px;
+  border: 1px solid var(--bg-700); color: var(--text-muted); background: rgba(255,255,255,.02);
+}
+.zm-close {
+  flex-shrink: 0; width: 32px; height: 32px; border-radius: 9px; cursor: pointer;
+  background: rgba(255,255,255,.04); border: 1px solid var(--bg-700); color: var(--text-main); font-size: 14px;
+}
+.zm-close:hover { border-color: rgba(var(--accent-rgb), .55); color: var(--gold); }
+.zm-map-wrap { background: #0b0e14; }
+.zm-map { width: 100%; height: min(52vh, 460px); background: #0b0e14; }
+.zm-map .leaflet-container { background: #0b0e14; }
+.zm-fallback { width: 100%; height: 100%; object-fit: contain; display: block; }
+.zm-nomap { display: flex; align-items: center; justify-content: center; height: 100%; min-height: 160px; color: var(--text-muted); font-size: 12.5px; padding: 24px; text-align: center; }
+.zm-body { display: grid; grid-template-columns: 1.1fr 1fr; gap: 14px; padding: 14px 16px 18px; overflow-y: auto; }
+@media (max-width: 760px) { .zm-body { grid-template-columns: 1fr; } }
+.zm-row { display: grid; grid-template-columns: 22px 92px 1fr; gap: 8px; align-items: baseline; padding: 5px 0; border-bottom: 1px dashed rgba(255,255,255,.05); }
+.zm-row:last-child { border-bottom: 0; }
+.zm-row-icon { font-size: 13px; }
+.zm-row-label { font-size: 10.5px; text-transform: uppercase; letter-spacing: .4px; color: var(--text-muted); }
+.zm-row-val { font-size: 12px; color: var(--text-main); }
+.zm-exits-title { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px; }
+.zm-exits-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.zm-exit {
+  font-size: 11.5px; padding: 4px 10px; border-radius: 999px; cursor: pointer;
+  background: rgba(255,255,255,.03); border: 1px solid var(--bg-700); color: var(--text-main); font-family: inherit;
+}
+.zm-exit:hover { border-color: rgba(var(--accent-rgb), .6); color: var(--gold); }
+
+/* Dünya atlası */
+.atlas-wrap { display: grid; grid-template-columns: 1fr 260px; gap: 16px; padding: 16px; }
+@media (max-width: 900px) { .atlas-wrap { grid-template-columns: 1fr; } }
+.atlas-main { position: relative; border-radius: 14px; overflow: hidden; border: 1px solid var(--bg-700); background: #0b0e14; }
+.atlas-map { width: 100%; height: min(74vh, 720px); background: #0b0e14; }
+.atlas-map .leaflet-container { background: #0b0e14; }
+.atlas-hint { position: absolute; left: 10px; bottom: 10px; font-size: 10.5px; color: #cfd6e3; background: rgba(8,10,16,.72); padding: 3px 8px; border-radius: 7px; pointer-events: none; }
+.atlas-side { display: flex; flex-direction: column; gap: 10px; }
+.atlas-title { font-size: 15px; font-weight: 800; color: var(--text-main); }
+.atlas-desc { font-size: 12px; line-height: 1.55; color: var(--text-muted); }
+.atlas-legend { display: flex; flex-wrap: wrap; gap: 8px 12px; font-size: 11px; color: var(--text-muted); }
+.atlas-legend span { display: inline-flex; align-items: center; gap: 5px; }
+.atlas-legend i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.atlas-link { font-size: 11px; color: var(--gold); text-decoration: none; }
+.atlas-link:hover { text-decoration: underline; }
+.cc-map-btn {
+  margin-top: 10px; align-self: flex-start; cursor: pointer; font-family: inherit;
+  font-size: 11.5px; font-weight: 700; padding: 5px 11px; border-radius: 8px;
+  background: rgba(var(--accent-rgb), .1); border: 1px solid rgba(var(--accent-rgb), .35); color: var(--gold);
+}
+.cc-map-btn:hover { background: rgba(var(--accent-rgb), .18); }
