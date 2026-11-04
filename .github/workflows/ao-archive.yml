@@ -29,6 +29,9 @@ jobs:
       - name: Arşivi üret
         run: node scripts/archive-gameinfo.mjs
 
+      - name: Fame geçmişini üret
+        run: node scripts/archive-fame.mjs
+
       - name: Değişiklikleri commit et
         run: |
           if [ -z "$(git status --porcelain data/archive)" ]; then
@@ -38,5 +41,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/archive
-          git commit -m "chore(archive): savaş ve silah meta snapshot'ı [$(date -u +%Y-%m-%d)]"
+          git commit -m "chore(archive): savaş, meta ve fame snapshot'ı [$(date -u +%Y-%m-%d)]"
           git push

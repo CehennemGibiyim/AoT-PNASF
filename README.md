@@ -97,7 +97,8 @@
 ✅ Fame planlayıcı — hedef fame + yaratık fame'i → kill/saat/gün
 ✅ Yaratık veritabanı — 5.479 yaratık (can, hasar, fame, faction), tembel yükleme
 ✅ Yetenek veritabanı — 492 yetenek, Türkçe ad + açıklama, enerji/cooldown/menzil
-✅ Oyuncu & lonca profili — kill/death akışı, günlük fame grafiği
+✅ Oyuncu & lonca profili — kill/death akışı, yerel günlük fame grafiği
+✅ Fame geçmişi — arşivde izlenen oyuncu/lonca için günlük PvE, toplama, üretim ve kill eğrisi
 ✅ Savaş özetleri — son kill akışından konum + 10 dk kümeleri
 ✅ Arşiv savaşları — günlük gameinfo snapshot'ından gerçek savaş kartları, lonca K/D
 ✅ Silah meta — kill örneklerinden kazanma oranı ve ortalama IP
@@ -176,7 +177,7 @@ AoT-PNASF
 ├── 🧪 Atölye                 (tek sayfa sekmesi)
 │   ├── Üretim Kârı · Çiftlik · Fame planlayıcı
 │   ├── Yaratıklar · Yetenekler · Spec
-│   ├── Paylaşım · Oyuncu & Lonca · Savaşlar
+│   ├── Paylaşım · Oyuncu & Lonca (fame geçmişi) · Savaşlar
 │
 └── 🛠️ Araçlar               (tek sayfa sekmesi)
     ├── Party Builder (ZvZ & küçük ölçek kompozisyon + sinerjiler)
@@ -278,8 +279,8 @@ Sunucular: EU + US + Asia (3'ü birden)
 ### 3. Savaş Arşivi (`ao-archive.yml`)
 ```yaml
 Tetiklenme: Her gün 05:17 UTC + elle
-Görev: gameinfo /battles ve /events'ten savaş özeti + silah kazanma oranı üretir
-Çıktı: data/archive/battles.json, data/archive/meta.json
+Görev: gameinfo /battles ve /events'ten savaş özeti + silah kazanma oranı, en aktif oyuncu/loncaların fame geçmişini üretir
+Çıktı: data/archive/battles.json, data/archive/meta.json, data/archive/fame.json
 Not: API yalnızca son günleri tuttuğu için günlük snapshot tarihsel veri oluşturur
 ```
 

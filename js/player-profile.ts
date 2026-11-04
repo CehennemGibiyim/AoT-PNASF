@@ -118,6 +118,7 @@ async function profilCiz(oyuncu: any): Promise<void> {
   const kutu = $('#profilSonuc');
   if (!kutu || !oyuncu?.Id) return;
   const y = oyuncu.LifetimeStatistics || {};
+  const toplama = Object.values((y.Gathering || {}) as Record<string, any>).reduce((t: number, g: any) => t + (Number(g?.Total) || 0), 0);
   const gecmis = gecmisOku()[oyuncu.Id] || [];
   durum('Son kill/death akışı alınıyor…');
 
@@ -149,8 +150,8 @@ async function profilCiz(oyuncu: any): Promise<void> {
       ${kart('Death fame', sayi(oyuncu.DeathFame))}
       ${kart('K/D oranı', (Number(oyuncu.FameRatio) || 0).toFixed(2))}
       ${kart('Ort. item power', sayi(oyuncu.AverageItemPower))}
-      ${kart('PvE fame', sayi(y?.PvE?.Total ?? 0), `Kettle ${sayi(y?.PvE?.Kettle ?? 0)}`)}
-      ${kart('Toplayıcılık', sayi(y?.Gathering?.Total ?? 0), `Zanaat ${sayi(y?.Crafting?.Total ?? 0)}`)}
+      ${kart('PvE fame', sayi(y?.PvE?.Total ?? 0), `Mists ${sayi(y?.PvE?.Mists ?? 0)}`)}
+      ${kart('Toplayıcılık', sayi(toplama), `Zanaat ${sayi(y?.Crafting?.Total ?? 0)}`)}
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
       <div style="border:1px solid rgba(255,255,255,0.08);border-radius:9px;overflow:hidden">
@@ -183,6 +184,9 @@ async function loncaCiz(lonca: any): Promise<void> {
     uyeler = Array.isArray(sonuc) ? sonuc : [];
   } catch { /* üye listesi opsiyonel */ }
 
+  const killFame = Number(lonca.killFame ?? lonca.KillFame) || 0;
+  const deathFame = Number(lonca.DeathFame ?? lonca.deathFame) || 0;
+
   kutu.innerHTML = `
     <div style="margin-bottom:10px">
       <div style="font-size:16px;font-weight:800">${lonca.Name}</div>
@@ -190,9 +194,9 @@ async function loncaCiz(lonca: any): Promise<void> {
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
       ${kart('Üye', sayi(lonca.MemberCount))}
-      ${kart('Kill fame', sayi(lonca.KillFame))}
-      ${kart('Death fame', sayi(lonca.DeathFame))}
-      ${kart('K/D oranı', (Number(lonca.KillFame) / Math.max(1, Number(lonca.DeathFame))).toFixed(2))}
+      ${kart('Kill fame', sayi(killFame))}
+      ${kart('Death fame', sayi(deathFame))}
+      ${kart('K/D oranı', (killFame / Math.max(1, deathFame)).toFixed(2))}
     </div>
     <div style="border:1px solid rgba(255,255,255,0.08);border-radius:9px;overflow:hidden">
       <div style="padding:6px 10px;font-size:10px;text-transform:uppercase;color:var(--text-muted);border-bottom:1px solid rgba(255,255,255,0.1)">Üyeler (kill fame sırasıyla ilk 25)</div>
