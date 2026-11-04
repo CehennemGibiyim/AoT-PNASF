@@ -1,8 +1,23 @@
 {
-  "lastUpdate": "2026-11-04T13:27:36.581Z",
+  "lastUpdate": "2026-11-04T22:59:00.298Z",
   "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
   "opportunities": [
+    {
+      "id": "market_T7_BAG_Thetford_Lymhurst",
+      "type": "flip",
+      "item": "T7_BAG",
+      "itemName": "T7_BAG",
+      "from": "Thetford",
+      "to": "Lymhurst",
+      "buyPrice": 99955,
+      "sellPrice": 104783,
+      "profit": 4441,
+      "profitPercent": "4.4",
+      "timestamp": "2026-11-04T22:59:00.298Z",
+      "source": "albion-online-data.com",
+      "verified": true
+    },
     {
       "id": "market_T6_BAG_Thetford_Lymhurst",
       "type": "flip",
@@ -10,26 +25,11 @@
       "itemName": "T6_BAG",
       "from": "Thetford",
       "to": "Lymhurst",
-      "buyPrice": 37998,
-      "sellPrice": 44513,
-      "profit": 5993,
-      "profitPercent": "15.8",
-      "timestamp": "2026-11-04T13:27:36.581Z",
-      "source": "albion-online-data.com",
-      "verified": true
-    },
-    {
-      "id": "market_T6_CAPE_Thetford_Martlock",
-      "type": "flip",
-      "item": "T6_CAPE",
-      "itemName": "T6_CAPE",
-      "from": "Thetford",
-      "to": "Martlock",
-      "buyPrice": 18999,
-      "sellPrice": 21222,
-      "profit": 2045,
-      "profitPercent": "10.8",
-      "timestamp": "2026-11-04T13:27:36.581Z",
+      "buyPrice": 41990,
+      "sellPrice": 44511,
+      "profit": 2319,
+      "profitPercent": "5.5",
+      "timestamp": "2026-11-04T22:59:00.298Z",
       "source": "albion-online-data.com",
       "verified": true
     }
