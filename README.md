@@ -108,6 +108,14 @@
 ✅ Fiyat alarmı — hedefe düşen eşya için tarayıcı bildirimi
 ```
 
+### 🚧 Sınırlar ve ertelenenler
+```
+⛔ Yapılmayacaklar: radar/cheat araçları, oyun istemcisini değiştirme, overlay,
+   başka oyuncuların loot'unu izleme (ToS ihlali ve hesap riski).
+⏳ Ertelenenler: Discord botu (kurulum bilgisi sonraki plan), hesap sistemi.
+🔜 Sıradaki: Electron paket dinleyicisi (loot/DPS/oturum), oyuncu & lonca fame geçmişi.
+```
+
 ### 📚 Rehberler
 ```
 ✅ 14 hazır rehber kategorisi
