@@ -1,5 +1,5 @@
 {
- "fetchedAt": "2026-11-04T06:09:15.821Z",
+ "fetchedAt": "2026-11-04T14:25:43.607Z",
  "source": "albiononlinegrind.com",
  "weapons": [
   {
@@ -1108,6 +1108,53 @@
    ]
   },
   {
+   "id": "MAIN_RAPIER_MORGANA",
+   "name": "Bloodletter",
+   "builds": 8,
+   "skills": [
+    {
+     "slot": "Q",
+     "id": "QDASH",
+     "count": 8
+    },
+    {
+     "slot": "E",
+     "id": "RAPIERSTAB",
+     "count": 8
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_BLEEDCHANCE",
+     "count": 7
+    },
+    {
+     "slot": "W",
+     "id": "GROUNDDASH",
+     "count": 3
+    },
+    {
+     "slot": "W",
+     "id": "CHAINDASH",
+     "count": 2
+    },
+    {
+     "slot": "W",
+     "id": "THROWINGBLADES",
+     "count": 2
+    },
+    {
+     "slot": "W",
+     "id": "SKILLSHOT_TELEPORT",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_INCREASED_DAMAGE",
+     "count": 1
+    }
+   ]
+  },
+  {
    "id": "2H_SHAPESHIFTER_SET2",
    "name": "Rootbound Staff",
    "builds": 8,
@@ -1212,53 +1259,6 @@
     {
      "slot": "W",
      "id": "SKILLSHOT_FIREBALL",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "MAIN_RAPIER_MORGANA",
-   "name": "Bloodletter",
-   "builds": 7,
-   "skills": [
-    {
-     "slot": "Q",
-     "id": "QDASH",
-     "count": 7
-    },
-    {
-     "slot": "E",
-     "id": "RAPIERSTAB",
-     "count": 7
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_BLEEDCHANCE",
-     "count": 6
-    },
-    {
-     "slot": "W",
-     "id": "GROUNDDASH",
-     "count": 3
-    },
-    {
-     "slot": "W",
-     "id": "CHAINDASH",
-     "count": 2
-    },
-    {
-     "slot": "W",
-     "id": "SKILLSHOT_TELEPORT",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "THROWINGBLADES",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_INCREASED_DAMAGE",
      "count": 1
     }
    ]
@@ -1625,6 +1625,68 @@
     {
      "slot": "W",
      "id": "DEFENSERUN",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "MAIN_NATURESTAFF",
+   "name": "Nature Staff",
+   "builds": 5,
+   "skills": [
+    {
+     "slot": "E",
+     "id": "CIRCLEOFLIFE",
+     "count": 5
+    },
+    {
+     "slot": "Q",
+     "id": "THORNSAREA",
+     "count": 3
+    },
+    {
+     "slot": "W",
+     "id": "BRAMBLESEED",
+     "count": 3
+    },
+    {
+     "slot": "Q",
+     "id": "REJUVMUSHROOM_GRENADE",
+     "count": 2
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_ENERGYCHANCE_NATURESTAFF",
+     "count": 1
+    },
+    {
+     "slot": "W",
+     "id": "CLEANSEHEAL",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_ARMOR_CASTER_NATURESTAFF",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_ENERGYCHANCE_HOLYSTAFF",
+     "count": 1
+    },
+    {
+     "slot": "W",
+     "id": "NATURERESILIENCE",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_HEALPOWERCHANCE",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_ENERGYCHANCE_MACE",
      "count": 1
     }
    ]
@@ -2345,58 +2407,6 @@
     {
      "slot": "W",
      "id": "PULSINGHEAL",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "MAIN_NATURESTAFF",
-   "name": "Nature Staff",
-   "builds": 4,
-   "skills": [
-    {
-     "slot": "E",
-     "id": "CIRCLEOFLIFE",
-     "count": 4
-    },
-    {
-     "slot": "Q",
-     "id": "THORNSAREA",
-     "count": 3
-    },
-    {
-     "slot": "W",
-     "id": "BRAMBLESEED",
-     "count": 3
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_ENERGYCHANCE_NATURESTAFF",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_ENERGYCHANCE_HOLYSTAFF",
-     "count": 1
-    },
-    {
-     "slot": "Q",
-     "id": "REJUVMUSHROOM_GRENADE",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "NATURERESILIENCE",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_HEALPOWERCHANCE",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_ENERGYCHANCE_MACE",
      "count": 1
     }
    ]
@@ -4196,43 +4206,6 @@
    ]
   },
   {
-   "id": "2H_DAGGER_KATAR_AVALON",
-   "name": "Bridled Fury",
-   "builds": 2,
-   "skills": [
-    {
-     "slot": "Q",
-     "id": "ASSASSINSPIRIT",
-     "count": 2
-    },
-    {
-     "slot": "E",
-     "id": "BACK_SLASH",
-     "count": 2
-    },
-    {
-     "slot": "W",
-     "id": "THROWINGBLADES",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_HEALTHCHANCE_MACE",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "GROUNDDASH",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_SPELLPOWER_CHANCE_SPEAR",
-     "count": 1
-    }
-   ]
-  },
-  {
    "id": "2H_KNUCKLES_CRYSTAL",
    "name": "Forcepulse Bracers",
    "builds": 2,
@@ -4745,6 +4718,33 @@
     {
      "slot": "P",
      "id": "PASSIVE_CCDURATION_CHANCE_MACE",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "2H_DAGGER_KATAR_AVALON",
+   "name": "Bridled Fury",
+   "builds": 1,
+   "skills": [
+    {
+     "slot": "Q",
+     "id": "ASSASSINSPIRIT",
+     "count": 1
+    },
+    {
+     "slot": "W",
+     "id": "THROWINGBLADES",
+     "count": 1
+    },
+    {
+     "slot": "E",
+     "id": "BACK_SLASH",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_HEALTHCHANCE_MACE",
      "count": 1
     }
    ]

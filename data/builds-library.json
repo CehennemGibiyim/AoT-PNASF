@@ -1,9 +1,9 @@
 {
- "fetchedAt": "2026-11-04T06:09:15.821Z",
+ "fetchedAt": "2026-11-04T14:25:43.607Z",
  "source": "albiononlinegrind.com",
  "sourceUrl": "https://albiononlinegrind.com/builds",
  "note": "Veriler herkese açık build sayfalarındaki SSR JSONundan (__NEXT_DATA__) çekilir; eşya/yetenek ID'leri doğrulanmıştır.",
- "count": 548,
+ "count": 549,
  "pagesRead": 16,
  "categories": {
   "FAME_FARM_SOLO": 32,
@@ -12,7 +12,7 @@
   "CORRUPTED_DUNGEON": 34,
   "FAME_FARM_GROUP": 38,
   "GANK_SOLO": 14,
-  "SMALL_SCALE": 61,
+  "SMALL_SCALE": 62,
   "CRYSTAL_ARENA": 37,
   "FAME_FARM_GROUP_AVALON": 36,
   "GANK_GROUP": 23,
@@ -18791,6 +18791,98 @@
    "description": ""
   },
   {
+   "id": "00fa2ce1-c66d-4124-8bb8-bf5167c90803",
+   "slug": "bloodletter-zvz-melee-dps-build",
+   "title": "Bloodletter ZvZ Melee DPS Build",
+   "weaponName": "Bloodletter",
+   "category": "ZVZ",
+   "author": "Keno",
+   "tags": [
+    "Group",
+    "PvP"
+   ],
+   "upvotes": 6,
+   "createdAt": "2025-02-18T19:09:34.397487+00:00",
+   "updatedAt": "2026-01-16T19:19:03.565+00:00",
+   "url": "https://albiononlinegrind.com/build/bloodletter-zvz-melee-dps-build",
+   "source": "albiononlinegrind.com",
+   "items": {
+    "weapon": {
+     "id": "T8_MAIN_RAPIER_MORGANA",
+     "base": "MAIN_RAPIER_MORGANA",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "QDASH",
+      "THROWINGBLADES",
+      "RAPIERSTAB",
+      "PASSIVE_BLEEDCHANCE"
+     ]
+    },
+    "offhand": {
+     "id": "T8_OFF_SPIKEDSHIELD_MORGANA",
+     "base": "OFF_SPIKEDSHIELD_MORGANA",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "head": {
+     "id": "T8_HEAD_CLOTH_SET2",
+     "base": "HEAD_CLOTH_SET2",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "ICEBLOCK2",
+      "PASSIVE_INCREASED_DAMAGE"
+     ]
+    },
+    "chest": {
+     "id": "T8_ARMOR_LEATHER_HELL",
+     "base": "ARMOR_LEATHER_HELL",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "LIFESTEALAURA",
+      "PASSIVE_ARMOR_BALANCE"
+     ]
+    },
+    "boots": {
+     "id": "T8_SHOES_PLATE_AVALON",
+     "base": "SHOES_PLATE_AVALON",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "CC_BLOCK",
+      "PASSIVE_MR_AR"
+     ]
+    },
+    "cape": {
+     "id": "T8_CAPEITEM_FW_LYMHURST",
+     "base": "CAPEITEM_FW_LYMHURST",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "food": {
+     "id": "T8_MEAL_STEW_FISH",
+     "base": "MEAL_STEW_FISH",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "potion": {
+     "id": "T7_POTION_REVIVE",
+     "base": "POTION_REVIVE",
+     "tier": 7,
+     "ench": 0,
+     "skills": []
+    }
+   },
+   "alt": {},
+   "alts": {},
+   "description": ""
+  },
+  {
    "id": "2176dc16-6a25-4c44-96ba-cee249e04ac7",
    "slug": "bloodmoonsovil",
    "title": "Bloodmoon",
@@ -20171,6 +20263,108 @@
    },
    "alts": {},
    "description": ""
+  },
+  {
+   "id": "96634848-43e8-4307-b972-2a789a0929c3",
+   "slug": "nature-staff-small-scale-build",
+   "title": "Nature Staff Small Scale Build",
+   "weaponName": "Journeyman's Nature Staff",
+   "category": "SMALL_SCALE",
+   "author": "ummahusla",
+   "tags": [
+    "Group",
+    "PvP"
+   ],
+   "upvotes": 6,
+   "createdAt": "2025-09-23T20:31:10.337374+00:00",
+   "updatedAt": "2025-09-23T20:31:10.282+00:00",
+   "url": "https://albiononlinegrind.com/build/nature-staff-small-scale-build",
+   "source": "albiononlinegrind.com",
+   "items": {
+    "weapon": {
+     "id": "T8_MAIN_NATURESTAFF",
+     "base": "MAIN_NATURESTAFF",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "REJUVMUSHROOM_GRENADE",
+      "CLEANSEHEAL",
+      "CIRCLEOFLIFE",
+      "PASSIVE_ARMOR_CASTER_NATURESTAFF"
+     ]
+    },
+    "offhand": {
+     "id": "T8_OFF_SHIELD",
+     "base": "OFF_SHIELD",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "head": {
+     "id": "T8_HEAD_PLATE_UNDEAD",
+     "base": "HEAD_PLATE_UNDEAD",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "SACRIFICE_HEAL",
+      "PASSIVE_MR_AR"
+     ]
+    },
+    "chest": {
+     "id": "T8_ARMOR_CLOTH_SET2",
+     "base": "ARMOR_CLOTH_SET2",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "LIFESAVIOR",
+      "PASSIVE_INCREASED_DAMAGE"
+     ]
+    },
+    "boots": {
+     "id": "T8_SHOES_CLOTH_SET2",
+     "base": "SHOES_CLOTH_SET2",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "SPRINTEOT",
+      "PASSIVE_INCREASED_DAMAGE"
+     ]
+    },
+    "cape": {
+     "id": "T8_CAPEITEM_FW_LYMHURST",
+     "base": "CAPEITEM_FW_LYMHURST",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "food": {
+     "id": "T8_MEAL_SANDWICH_FISH",
+     "base": "MEAL_SANDWICH_FISH",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "potion": {
+     "id": "T6_POTION_ENERGY",
+     "base": "POTION_ENERGY",
+     "tier": 6,
+     "ench": 0,
+     "skills": []
+    }
+   },
+   "alt": {},
+   "alts": {
+    "potion": [
+     {
+      "id": "T7_POTION_STONESKIN",
+      "base": "POTION_STONESKIN",
+      "tier": 7,
+      "ench": 0,
+      "skills": []
+     }
+    ]
+   },
+   "description": "Inspired by eFeF"
   },
   {
    "id": "349e75bd-6e0d-4517-ac39-369a5657fd1f",
@@ -21629,91 +21823,6 @@
     ]
    },
    "description": "The alternative Helmet should be Harvester's cap but the gathering gears can't be used as armors here and this is the best alternative for it."
-  },
-  {
-   "id": "27f4c3cd-36b6-4939-b847-6da88192f03f",
-   "slug": "bridled-fury-mdps-zvz-build",
-   "title": "Bridled Fury MDPS ZvZ Build",
-   "weaponName": "Bridled Fury",
-   "category": "ZVZ",
-   "author": "XilefX",
-   "tags": [
-    "PvP"
-   ],
-   "upvotes": 5,
-   "createdAt": "2025-03-26T19:39:24.097553+00:00",
-   "updatedAt": "2025-04-07T13:37:06.866+00:00",
-   "url": "https://albiononlinegrind.com/build/bridled-fury-mdps-zvz-build",
-   "source": "albiononlinegrind.com",
-   "items": {
-    "weapon": {
-     "id": "T8_2H_DAGGER_KATAR_AVALON",
-     "base": "2H_DAGGER_KATAR_AVALON",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "ASSASSINSPIRIT",
-      "GROUNDDASH",
-      "BACK_SLASH",
-      "PASSIVE_SPELLPOWER_CHANCE_SPEAR"
-     ]
-    },
-    "offhand": null,
-    "head": {
-     "id": "T8_HEAD_LEATHER_SET3",
-     "base": "HEAD_LEATHER_SET3",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "SUMMONER_CD_REDUCTION",
-      "PASSIVE_ARMOR_BALANCE"
-     ]
-    },
-    "chest": {
-     "id": "T8_ARMOR_CLOTH_SET2",
-     "base": "ARMOR_CLOTH_SET2",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "LIFESAVIOR",
-      "PASSIVE_INCREASED_DAMAGE"
-     ]
-    },
-    "boots": {
-     "id": "T8_SHOES_LEATHER_MORGANA",
-     "base": "SHOES_LEATHER_MORGANA",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "DMG_BLINK",
-      "PASSIVE_ARMOR_BALANCE"
-     ]
-    },
-    "cape": {
-     "id": "T8_CAPEITEM_FW_FORTSTERLING",
-     "base": "CAPEITEM_FW_FORTSTERLING",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "food": {
-     "id": "T8_MEAL_STEW",
-     "base": "MEAL_STEW",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "potion": {
-     "id": "T7_POTION_REVIVE",
-     "base": "POTION_REVIVE",
-     "tier": 7,
-     "ench": 0,
-     "skills": []
-    }
-   },
-   "alt": {},
-   "alts": {},
-   "description": ""
   },
   {
    "id": "553f1c02-abec-4151-bfe8-4b06a7416656",
