@@ -109,6 +109,87 @@ function ciz(kumeler: Kume[], toplam: number): void {
     </p>`;
 }
 
+
+// --- Arşiv (data/archive/*.json, GitHub Actions günlük günceller) ---
+const ARSIV_ANAHTAR: Record<string, string> = { europe: 'eu', americas: 'us', asia: 'asia' };
+
+function zaman(iso: string): string {
+  try {
+    return new Date(iso).toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+  } catch { return iso; }
+}
+
+async function arsivYukle(): Promise<void> {
+  const savasKutu = $('#savasArsiv');
+  const metaKutu = $('#savasMeta');
+  if (!savasKutu && !metaKutu) return;
+  const anahtar = ARSIV_ANAHTAR[localStorage.getItem('aot-server') || 'europe'] || 'eu';
+  let b: any = null;
+  let m: any = null;
+  try { b = await (await fetch('data/archive/battles.json', { cache: 'no-cache' })).json(); } catch { /* yok */ }
+  try { m = await (await fetch('data/archive/meta.json', { cache: 'no-cache' })).json(); } catch { /* yok */ }
+
+  if (savasKutu) {
+    const sunucuVeri = b?.servers?.[anahtar];
+    const liste = (sunucuVeri?.battles || []).slice(0, 8);
+    if (!liste.length) {
+      savasKutu.innerHTML = '';
+    } else {
+      savasKutu.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin:4px 0 8px;flex-wrap:wrap">
+          <strong style="font-size:13px">📚 Arşiv savaşları</strong>
+          <span style="font-size:10px;color:var(--text-muted)">${b.generatedAt ? zaman(b.generatedAt) : ''} · gameinfo /battles · günlük snapshot</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px;margin-bottom:14px">
+          ${liste.map((x: any) => `
+            <div style="border:1px solid rgba(255,255,255,0.08);border-radius:9px;padding:10px;background:rgba(255,255,255,0.02)">
+              <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted)">
+                <span>${zaman(x.t)}</span><span>#${x.id}</span>
+              </div>
+              <div style="display:flex;gap:10px;margin:6px 0;font-size:12px">
+                <span><strong style="color:#ff6b6b">${sayi(x.k)}</strong> kill</span>
+                <span><strong style="color:#00d4aa">${sayi(x.f)}</strong> fame</span>
+                <span style="color:var(--text-muted)">${x.p} oyuncu</span>
+              </div>
+              ${(x.g || []).map((g: any) => `<div style="display:grid;grid-template-columns:1fr 34px 34px 70px;gap:6px;font-size:11px;padding:2px 0">
+                <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${g[0]}${g[1] ? ` <span style="color:var(--text-muted);font-size:9px">[${g[1]}]</span>` : ''}</span>
+                <span style="text-align:right;color:#00d4aa">${g[2]}K</span>
+                <span style="text-align:right;color:#ff6b6b">${g[3]}D</span>
+                <span style="text-align:right;color:var(--text-muted);font-size:10px">${sayi(g[4])}</span>
+              </div>`).join('')}
+              ${(x.pl || []).length ? `<div style="margin-top:5px;font-size:10px;color:var(--text-muted);line-height:1.5">
+                ${x.pl.slice(0, 3).map((p: any) => `${p[0]} ${p[2]}K/${p[3]}D`).join(' · ')}
+              </div>` : ''}
+            </div>`).join('')}
+        </div>`;
+    }
+  }
+
+  if (metaKutu) {
+    const silahlar = (m?.servers?.[anahtar]?.weapons || []).slice(0, 10);
+    if (!silahlar.length) {
+      metaKutu.innerHTML = '';
+    } else {
+      metaKutu.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin:4px 0 8px;flex-wrap:wrap">
+          <strong style="font-size:13px">⚖️ Silah meta — kazanma oranı</strong>
+          <span style="font-size:10px;color:var(--text-muted)">${m.servers?.[anahtar]?.sample || 0} kill örneği · arşiv</span>
+        </div>
+        <div style="border:1px solid rgba(255,255,255,0.08);border-radius:9px;overflow:hidden;margin-bottom:14px">
+          ${silahlar.map((w: any) => {
+            const renk = w.wr >= 55 ? '#00d4aa' : w.wr >= 45 ? '#ffb84d' : '#ff6b6b';
+            return `<div style="display:grid;grid-template-columns:1fr 54px 56px 44px;gap:8px;padding:6px 10px;font-size:11.5px;border-bottom:1px solid rgba(255,255,255,0.05);align-items:center">
+              <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${w.ad}</span>
+              <span style="height:5px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden"><span style="display:block;height:100%;width:${Math.min(100, w.wr)}%;background:${renk}"></span></span>
+              <span style="text-align:right;color:${renk};font-weight:700">${w.wr.toFixed(1)}%</span>
+              <span style="text-align:right;color:var(--text-muted);font-size:10px">${w.k + w.d}</span>
+            </div>`;
+          }).join('')}
+        </div>`;
+    }
+  }
+}
+
 async function yukle(): Promise<void> {
   if (yukleniyor) return;
   yukleniyor = true;
@@ -130,7 +211,8 @@ export function kur(): void {
   if (kuruldu) return;
   if (!$('#savasListe')) return;
   kuruldu = true;
-  $('#savasYenile')?.addEventListener('click', () => { void yukle(); });
+  void arsivYukle();
+  $('#savasYenile')?.addEventListener('click', () => { void yukle(); void arsivYukle(); });
   document.querySelectorAll<HTMLElement>('.atolye-sekme[data-atolye="savaslar"]').forEach((btn) => {
     btn.addEventListener('click', () => { void yukle(); });
   });

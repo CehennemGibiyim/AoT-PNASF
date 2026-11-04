@@ -99,6 +99,8 @@
 ✅ Yetenek veritabanı — 492 yetenek, Türkçe ad + açıklama, enerji/cooldown/menzil
 ✅ Oyuncu & lonca profili — kill/death akışı, günlük fame grafiği
 ✅ Savaş özetleri — son kill akışından konum + 10 dk kümeleri
+✅ Arşiv savaşları — günlük gameinfo snapshot'ından gerçek savaş kartları, lonca K/D
+✅ Silah meta — kill örneklerinden kazanma oranı ve ortalama IP
 ✅ Spec planlayıcı — destiny fame eşikleri, savaşta kaç kill, üretimde fame başına en ucuz eşya
 ✅ Piyasa istatistikleri — tier/şehir bazında medyan, yayılım, tazelik ve güven puanı
 ✅ Loot paylaşımı — canlı fiyatla değerleme, kişi başı pay
@@ -265,13 +267,21 @@ Görev: GameInfo API'den kill feed + battle çeker
 Sunucular: EU + US + Asia (3'ü birden)
 ```
 
-### 3. GitHub Deploy (`deploy.yml`)
+### 3. Savaş Arşivi (`ao-archive.yml`)
+```yaml
+Tetiklenme: Her gün 05:17 UTC + elle
+Görev: gameinfo /battles ve /events'ten savaş özeti + silah kazanma oranı üretir
+Çıktı: data/archive/battles.json, data/archive/meta.json
+Not: API yalnızca son günleri tuttuğu için günlük snapshot tarihsel veri oluşturur
+```
+
+### 4. GitHub Deploy (`deploy.yml`)
 ```yaml
 Tetiklenme: Her push'ta
 Görev: GitHub Pages'e deploy
 ```
 
-### 4. ao-bin-dumps Verisi (elle / `npm run data:gen`)
+### 5. ao-bin-dumps Verisi (elle / `npm run data:gen`)
 ```yaml
 Komut: npm run data:gen
 Görev: items, craftingmodifiers, farmingmodifiers, loot, mobs, spells, localization çeker
