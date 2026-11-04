@@ -117,6 +117,7 @@ async function fiyatCek(): Promise<void> {
     sonGuncelleme = Date.now();
     ciz();
     baslikGuncelle(null);
+    alarmBildir();
   } catch {
     baslikGuncelle(dil() === 'tr'
       ? 'Fiyatlar alınamadı. İnternet bağlantınızı kontrol edip yeniden deneyin.'
@@ -139,6 +140,47 @@ function enIyiAlis(satirlar: FiyatSatiri[] | undefined): FiyatSatiri | null {
   return satirlar
     .filter((s) => s.buy_price_max > 0)
     .sort((a, b) => b.buy_price_max - a.buy_price_max)[0] || null;
+}
+
+function hedefteOlanlar(): TakipKaydi[] {
+  return kayitlar.filter((k) => {
+    const s = enIyiSatis(fiyatlar.get(tamKimlik(k)));
+    return Boolean(k.hedef && s && s.sell_price_min <= k.hedef);
+  });
+}
+
+function bildirimDurumu(): string {
+  if (typeof Notification === 'undefined') return 'yok';
+  return Notification.permission;
+}
+
+function bildirimEtiketi(): void {
+  const btn = $('#watchBildirim');
+  if (!btn) return;
+  const durum = bildirimDurumu();
+  btn.textContent = durum === 'granted' ? '🔔 Bildirim açık'
+    : durum === 'denied' ? '🔕 Bildirim engelli'
+    : durum === 'yok' ? '🔕 Bildirim desteklenmiyor'
+    : '🔔 Bildirim aç';
+  btn.setAttribute('aria-pressed', durum === 'granted' ? 'true' : 'false');
+  btn.style.borderColor = durum === 'granted' ? 'rgba(0,212,170,0.6)' : '#3a3a3a';
+  btn.style.color = durum === 'granted' ? '#00d4aa' : '#ccc';
+}
+
+/** Hedef fiyata düşen eşya varsa masaüstü/bildirim merkezi bildirimi gönderir. */
+function alarmBildir(): void {
+  if (bildirimDurumu() !== 'granted') return;
+  const hedefler = hedefteOlanlar();
+  if (!hedefler.length) return;
+  const imza = hedefler.map((k) => `${k.id}:${k.hedef}`).sort().join('|');
+  if (localStorage.getItem('aot-watch-bildirilen') === imza) return;
+  try {
+    localStorage.setItem('aot-watch-bildirilen', imza);
+    new Notification(`🎯 ${hedefler.length} eşya hedef fiyatta`, {
+      body: hedefler.slice(0, 4).map((k) => `${k.ad} ≤ ${k.hedef}`).join(' · '),
+      tag: 'aot-watchlist',
+    });
+  } catch { /* bildirim engellendi */ }
 }
 
 function baslikGuncelle(mesaj: string | null): void {
@@ -348,6 +390,34 @@ function kur(): void {
 
   $('#watchRefresh')?.addEventListener('click', () => { void fiyatCek(); });
 
+  $('#watchBildirim')?.addEventListener('click', async () => {
+    const durum = bildirimDurumu();
+    if (durum === 'yok') {
+      baslikGuncelle('Bu tarayıcı bildirimleri desteklemiyor.');
+      return;
+    }
+    if (durum === 'denied') {
+      baslikGuncelle('Bildirimler tarayıcı ayarlarından engellenmiş; izin verip yeniden deneyin.');
+      return;
+    }
+    if (durum === 'default') {
+      try {
+        const izin = await Notification.requestPermission();
+        if (izin !== 'granted') {
+          baslikGuncelle('Bildirim izni verilmedi.');
+          bildirimEtiketi();
+          return;
+        }
+      } catch {
+        baslikGuncelle('Bildirim izni alınamadı.');
+        return;
+      }
+    }
+    bildirimEtiketi();
+    baslikGuncelle('Hedef fiyata düşen eşya olduğunda bildirim gönderilecek.');
+    alarmBildir();
+  });
+
   document.querySelectorAll<HTMLElement>('.tools-tab[data-tool-tab="watch"]').forEach((btn) => {
     btn.addEventListener('click', () => {
       kur();
@@ -357,6 +427,7 @@ function kur(): void {
     });
   });
 
+  bildirimEtiketi();
   ciz();
   baslikGuncelle(null);
 }

@@ -195,6 +195,9 @@
       <button data-tab="tab-tools" class="tab-btn px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-gray-400 hover:text-white transition-colors flex-1 md:flex-none text-center hover:bg-albion-800/50">
         <i class="fa-solid fa-screwdriver-wrench mr-1.5"></i> <span data-i18n="nav-tools">Araçlar</span>
       </button>
+      <button data-tab="tab-atolye" class="tab-btn px-4 py-3 text-sm font-semibold border-b-2 border-transparent text-gray-400 hover:text-white transition-colors flex-1 md:flex-none text-center hover:bg-albion-800/50">
+        <i class="fa-solid fa-industry mr-1.5"></i> <span>Atölye</span>
+      </button>
     </nav>
   </header>
 
@@ -904,6 +907,8 @@
         <div id="watchSuggest" role="listbox" aria-label="Eşya önerileri"
           style="display:none;position:absolute;top:100%;left:0;right:0;z-index:30;margin-top:4px;max-height:260px;overflow:auto;background:#141414;border:1px solid #333;border-radius:8px;box-shadow:0 12px 28px rgba(0,0,0,0.5)"></div>
       </div>
+      <button type="button" id="watchBildirim" aria-pressed="false"
+        style="background:transparent;border:1px solid #3a3a3a;color:#ccc;border-radius:6px;padding:6px 10px;font-size:11.5px;cursor:pointer">🔔 Bildirim aç</button>
       <button type="button" id="watchRefresh"
         class="bg-albion-accent hover:bg-albion-accent_hover text-black font-bold px-4 py-2 rounded-lg text-sm transition-colors">⟳ Fiyatları yenile</button>
     </div>
@@ -916,6 +921,161 @@
   </section>
   </div>
 </section>
+
+    <section id="tab-atolye" class="tab-content hidden h-full flex-col animate-fade-in">
+      <div class="legacy-view">
+        <div class="tools-hero">
+          <h1 class="tools-h1">Atölye</h1>
+          <p class="tools-sub">Rafine, yemek, iksir ve kasap kârı; çiftlik planlayıcı; fame hedefi; yaratık veritabanı ve oyuncu/lonca profili — hepsi gerçek oyun verisiyle.</p>
+        </div>
+
+        <div class="tools-tabs" role="tablist">
+          <button class="tools-tab atolye-sekme active" data-atolye="uretim" aria-selected="true">🏭 <span>Üretim Kârı</span></button>
+          <button class="tools-tab atolye-sekme" data-atolye="ciftlik" aria-selected="false">🌾 <span>Çiftlik</span></button>
+          <button class="tools-tab atolye-sekme" data-atolye="fame" aria-selected="false">★ <span>Fame</span></button>
+          <button class="tools-tab atolye-sekme" data-atolye="moblar" aria-selected="false">🐉 <span>Yaratıklar</span></button>
+          <button class="tools-tab atolye-sekme" data-atolye="oyuncu" aria-selected="false">👤 <span>Oyuncu &amp; Lonca</span></button>
+          <button class="tools-tab atolye-sekme" data-atolye="savaslar" aria-selected="false">⚔️ <span>Savaşlar</span></button>
+        </div>
+
+        <!-- ÜRETİM -->
+        <section id="atolye-uretim" class="atolye-panel active">
+          <div class="tp-controls" style="flex-wrap:wrap;gap:8px">
+            <div class="tp-btn-group">
+              <button type="button" class="tp-btn active" data-uretim-tip="refine">⛏️ Rafine</button>
+              <button type="button" class="tp-btn" data-uretim-tip="cook">🍲 Yemek</button>
+              <button type="button" class="tp-btn" data-uretim-tip="alchemy">⚗️ İksir</button>
+              <button type="button" class="tp-btn" data-uretim-tip="butcher">🥩 Kasap</button>
+            </div>
+            <label class="tp-slider-label" style="gap:6px">
+              <span>Şehir</span>
+              <select id="uretimSehir" aria-label="Üretim şehri" style="background:#141414;border:1px solid #333;border-radius:6px;padding:5px 7px;color:#fff;font-size:12px"></select>
+            </label>
+            <label class="tp-slider-label" style="gap:6px">
+              <span>Geri dönüş %</span>
+              <input type="number" id="uretimOran" min="0" max="90" step="1" value="18" aria-label="Geri dönüş oranı yüzde"
+                style="width:66px;background:#141414;border:1px solid #333;border-radius:6px;padding:5px 7px;color:#fff;font-size:12px">
+            </label>
+            <label class="tp-slider-label" style="gap:6px">
+              <span>İstasyon ücreti</span>
+              <input type="number" id="uretimUcret" min="0" step="100" value="0" aria-label="İşlem başına istasyon ücreti"
+                style="width:82px;background:#141414;border:1px solid #333;border-radius:6px;padding:5px 7px;color:#fff;font-size:12px">
+            </label>
+            <button type="button" id="uretimYenile" style="background:transparent;border:1px solid #3a3a3a;color:#ccc;border-radius:6px;padding:6px 10px;font-size:11.5px;cursor:pointer">⟳ Fiyatları yenile</button>
+          </div>
+          <div class="tp-controls" style="margin-top:8px">
+            <select id="uretimRecete" aria-label="Reçete seç"
+              style="flex:1;max-width:460px;background:#141414;border:1px solid #333;border-radius:6px;padding:7px 9px;color:#fff;font-size:12.5px"></select>
+          </div>
+          <p id="uretimDurum" class="tp-format-desc" role="status" aria-live="polite"></p>
+          <div id="uretimSonuc"></div>
+        </section>
+
+        <!-- ÇİFTLİK -->
+        <section id="atolye-ciftlik" class="atolye-panel">
+          <div class="tp-controls" style="flex-wrap:wrap;gap:8px">
+            <select id="ciftlikUrun" aria-label="Çiftlik ürünü"
+              style="flex:1;min-width:220px;max-width:400px;background:#141414;border:1px solid #333;border-radius:6px;padding:7px 9px;color:#fff;font-size:12.5px"></select>
+            <label class="tp-slider-label" style="gap:6px">
+              <span>Şehir</span>
+              <select id="ciftlikSehir" aria-label="Çiftlik şehri" style="background:#141414;border:1px solid #333;border-radius:6px;padding:5px 7px;color:#fff;font-size:12px"></select>
+            </label>
+            <label class="tp-slider-label" style="gap:6px">
+              <span>Hasat bonusu %</span>
+              <input type="number" id="ciftlikBonus" min="0" max="200" step="1" value="0" aria-label="Hasat bonusu yüzde"
+                style="width:66px;background:#141414;border:1px solid #333;border-radius:6px;padding:5px 7px;color:#fff;font-size:12px">
+            </label>
+            <label class="tp-slider-label" style="gap:6px">
+              <span>Tohum dönüşü %</span>
+              <input type="number" id="ciftlikDonus" min="0" max="100" step="1" value="0" aria-label="Tohum dönüş yüzdesi"
+                style="width:66px;background:#141414;border:1px solid #333;border-radius:6px;padding:5px 7px;color:#fff;font-size:12px">
+            </label>
+            <button type="button" id="ciftlikYenile" style="background:transparent;border:1px solid #3a3a3a;color:#ccc;border-radius:6px;padding:6px 10px;font-size:11.5px;cursor:pointer">⟳ Fiyatları yenile</button>
+          </div>
+          <p id="ciftlikDurum" class="tp-format-desc" role="status" aria-live="polite"></p>
+          <div id="ciftlikSonuc"></div>
+        </section>
+
+        <!-- FAME -->
+        <section id="atolye-fame" class="atolye-panel">
+          <div class="tp-controls" style="flex-wrap:wrap;gap:8px">
+            <label class="tp-slider-label" style="gap:6px">
+              <span>Hedef fame</span>
+              <input type="number" id="fameHedef" min="0" step="10000" value="1000000" aria-label="Hedef fame"
+                style="width:130px;background:#141414;border:1px solid #333;border-radius:6px;padding:5px 7px;color:#fff;font-size:12px">
+            </label>
+            <div class="tp-btn-group">
+              <button type="button" class="tp-btn" data-fame-preset="50000">50K</button>
+              <button type="button" class="tp-btn" data-fame-preset="250000">250K</button>
+              <button type="button" class="tp-btn" data-fame-preset="1000000">1M</button>
+              <button type="button" class="tp-btn" data-fame-preset="5000000">5M</button>
+              <button type="button" class="tp-btn" data-fame-preset="25000000">25M</button>
+            </div>
+            <label class="tp-slider-label" style="gap:6px">
+              <span>Kill / dk</span>
+              <input type="number" id="fameKill" min="0.1" step="0.5" value="6" aria-label="Dakikada kill sayısı"
+                style="width:60px;background:#141414;border:1px solid #333;border-radius:6px;padding:5px 7px;color:#fff;font-size:12px">
+            </label>
+            <label class="tp-slider-label" style="gap:6px">
+              <span>Günlük saat</span>
+              <input type="number" id="fameSaat" min="0" step="0.5" value="2" aria-label="Günlük oyun saati"
+                style="width:60px;background:#141414;border:1px solid #333;border-radius:6px;padding:5px 7px;color:#fff;font-size:12px">
+            </label>
+          </div>
+          <div class="tp-controls" style="margin-top:8px;flex-wrap:wrap;gap:8px">
+            <div style="position:relative;flex:1;min-width:240px;max-width:420px">
+              <input type="search" id="fameMobArama" autocomplete="off" aria-label="Fame kaynağı yaratık ara" placeholder="Yaratık ara (örn. keeper, morgana)"
+                style="width:100%;background:#141414;border:1px solid #333;border-radius:6px;padding:7px 9px;color:#fff;font-size:12.5px">
+              <div id="fameOneri" role="listbox" aria-label="Yaratık önerileri"
+                style="display:none;position:absolute;top:100%;left:0;right:0;z-index:30;margin-top:4px;max-height:240px;overflow:auto;background:#141414;border:1px solid #333;border-radius:8px;box-shadow:0 12px 28px rgba(0,0,0,0.5)"></div>
+            </div>
+            <label class="tp-slider-label" style="gap:6px">
+              <span>Fame / kill</span>
+              <input type="number" id="fameMobFame" min="0" step="100" value="5000" aria-label="Kill başına fame"
+                style="width:96px;background:#141414;border:1px solid #333;border-radius:6px;padding:5px 7px;color:#fff;font-size:12px">
+            </label>
+          </div>
+          <div id="fameSonuc" style="margin-top:10px"></div>
+        </section>
+
+        <!-- YARATIKLAR -->
+        <section id="atolye-moblar" class="atolye-panel">
+          <div class="tp-controls" style="flex-wrap:wrap;gap:8px">
+            <input type="search" id="mobArama" autocomplete="off" aria-label="Yaratık ara" placeholder="Yaratık ara (örn. fanatic, bear)"
+              style="flex:1;min-width:220px;background:#141414;border:1px solid #333;border-radius:6px;padding:7px 9px;color:#fff;font-size:12.5px">
+            <select id="mobTier" aria-label="Tier filtresi" style="background:#141414;border:1px solid #333;border-radius:6px;padding:6px 8px;color:#fff;font-size:12px"></select>
+            <select id="mobFaction" aria-label="Faction filtresi" style="background:#141414;border:1px solid #333;border-radius:6px;padding:6px 8px;color:#fff;font-size:12px"></select>
+          </div>
+          <p id="mobDurum" class="tp-format-desc" role="status" aria-live="polite"></p>
+          <div id="mobListe" style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden"></div>
+        </section>
+
+        <!-- SAVAŞLAR -->
+        <section id="atolye-savaslar" class="atolye-panel">
+          <div class="tp-controls" style="flex-wrap:wrap;gap:8px">
+            <p class="tp-format-desc" style="flex:1;margin:0">Son kill akışından konum + 10 dk kümelenmiş çatışma özetleri.</p>
+            <button type="button" id="savasYenile" style="background:transparent;border:1px solid #3a3a3a;color:#ccc;border-radius:6px;padding:6px 10px;font-size:11.5px;cursor:pointer">⟳ Yenile</button>
+          </div>
+          <p id="savasDurum" class="tp-format-desc" role="status" aria-live="polite"></p>
+          <div id="savasListe" style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden"></div>
+        </section>
+
+        <!-- OYUNCU & LONCA -->
+        <section id="atolye-oyuncu" class="atolye-panel">
+          <div class="tp-controls" style="flex-wrap:wrap;gap:8px">
+            <div class="tp-btn-group">
+              <button type="button" class="tp-btn active" data-profil-tur="player">👤 Oyuncu</button>
+              <button type="button" class="tp-btn" data-profil-tur="guild">🛡️ Lonca</button>
+            </div>
+            <input type="search" id="profilArama" autocomplete="off" aria-label="Oyuncu veya lonca adı" placeholder="Oyuncu adı yazın…"
+              style="flex:1;min-width:220px;background:#141414;border:1px solid #333;border-radius:6px;padding:7px 9px;color:#fff;font-size:12.5px">
+            <button type="button" id="profilAra" style="background:var(--accent);color:#141006;border:0;border-radius:6px;padding:7px 14px;font:700 12px/1 system-ui;cursor:pointer">Ara</button>
+          </div>
+          <p id="profilDurum" class="tp-format-desc" role="status" aria-live="polite"></p>
+          <div id="profilSonuc"></div>
+        </section>
+      </div>
+    </section>
 
   </main>
 
@@ -954,9 +1114,19 @@
   <script src="data/zone-bonuses.js"></script>
   <script src="data/zone-maps.js"></script>
   <script src="data/tools-data.js"></script>
+  <script src="data/production-data.js"></script>
+  <script src="data/farming-data.js"></script>
+  <!-- data/mobs-data.js tembel yüklenir (Atölye → Yaratıklar/Fame) -->
   <script type="module" src="lib/maps.ts"></script>
   <script type="module" src="lib/guides.ts"></script>
   <script type="module" src="lib/tools.ts"></script>
+  <script type="module" src="js/production.ts"></script>
+  <script type="module" src="js/farming.ts"></script>
+  <script type="module" src="js/fame.ts"></script>
+  <script type="module" src="js/mobs.ts"></script>
+  <script type="module" src="js/player-profile.ts"></script>
+  <script type="module" src="js/battles.ts"></script>
+  <script type="module" src="js/atolye.ts"></script>
   <script>
     function switchDashTab(tab) {
       const panels = {
