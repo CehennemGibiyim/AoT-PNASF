@@ -939,6 +939,7 @@
           <button class="tools-tab atolye-sekme" data-atolye="savaslar" aria-selected="false">⚔️ <span>Savaşlar</span></button>
           <button class="tools-tab atolye-sekme" data-atolye="spec" aria-selected="false">🧮 <span>Spec</span></button>
           <button class="tools-tab atolye-sekme" data-atolye="paylasim" aria-selected="false">💰 <span>Paylaşım</span></button>
+          <button class="tools-tab atolye-sekme" data-atolye="oturum" aria-selected="false">🎧 <span>Oturum</span></button>
         </div>
 
         <!-- ÜRETİM -->
@@ -1107,6 +1108,20 @@
           <div id="specSonuc"></div>
         </section>
 
+        <!-- OTURUM (masaüstü dinleyicisi) -->
+        <section id="atolye-oturum" class="atolye-panel">
+          <div class="tp-controls" style="flex-wrap:wrap;gap:8px">
+            <p class="tp-format-desc" style="flex:1;margin:0">Masaüstü dinleyicisi: yerel alıcıya gönderilen loot, kill, fame ve hasar olaylarını oturum boyunca toplar. Paket çözmez; yalnızca 127.0.0.1 üzerinden olay kabul eder.</p>
+            <button type="button" id="oturumBaslat" style="background:#00d4aa;border:0;color:#06251f;font-weight:700;border-radius:6px;padding:6px 12px;font-size:11.5px;cursor:pointer">▶ Başlat</button>
+            <button type="button" id="oturumBitir" style="background:transparent;border:1px solid #3a3a3a;color:#ccc;border-radius:6px;padding:6px 10px;font-size:11.5px;cursor:pointer">■ Bitir</button>
+            <button type="button" id="oturumTemizle" style="background:transparent;border:1px solid #3a3a3a;color:#ccc;border-radius:6px;padding:6px 10px;font-size:11.5px;cursor:pointer">Temizle</button>
+          </div>
+          <p id="oturumDurum" class="tp-format-desc" role="status" aria-live="polite"></p>
+          <div id="oturumKpi" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin:8px 0 12px"></div>
+          <div id="oturumOlaylar" style="margin-bottom:12px"></div>
+          <div id="oturumAlici"></div>
+        </section>
+
         <!-- OYUNCU & LONCA -->
         <section id="atolye-oyuncu" class="atolye-panel">
           <div class="tp-controls" style="flex-wrap:wrap;gap:8px">
@@ -1179,6 +1194,7 @@
   <script type="module" src="js/spec.ts"></script>
   <script type="module" src="js/loot-split.ts"></script>
   <script type="module" src="js/battles.ts"></script>
+  <script type="module" src="js/session.ts"></script>
   <script type="module" src="js/atolye.ts"></script>
   <script>
     function switchDashTab(tab) {

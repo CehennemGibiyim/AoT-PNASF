@@ -14,7 +14,8 @@
     "pack:win": "npm run prepare:app && electron-builder --win nsis portable --x64 --publish never",
     "pack:win:dir": "npm run prepare:app && electron-builder --win dir --x64 --publish never",
     "pack:linux": "npm run prepare:app && electron-builder --linux AppImage --x64",
-    "pack:mac": "npm run prepare:app && electron-builder --mac dmg --x64"
+    "pack:mac": "npm run prepare:app && electron-builder --mac dmg --x64",
+    "test:session": "node scripts/test-session.cjs"
   },
   "devDependencies": {
     "electron": "^33.4.11",
@@ -32,6 +33,8 @@
       "main.cjs",
       "preload.cjs",
       "serve.cjs",
+      "session.cjs",
+      "ingest.cjs",
       "app/**/*"
     ],
     "asar": true,

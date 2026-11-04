@@ -101,6 +101,36 @@ komutları yeterlidir (Visual Studio Build Tools + Rust gerekir).
 - Kod imzalama ve sessiz (otomatik) güncellemeye geçiş adımları:
   [`SIGNING.md`](SIGNING.md).
 
+## Oturum dinleyicisi (masaüstü)
+
+**Atölye → Oturum** paneli, oyun oturumunuzun loot, kill, fame, ölüm ve hasar
+olaylarını toplar; süre, saatlik fame/gümüş, K/D ve oturum ortalaması DPS
+gösterir. Veri `userData/oturum.json` içinde tutulur, uygulama kapanınca silinmez.
+
+Dinleyici yalnızca **127.0.0.1** üzerinde rastgele bir portta açılır ve her
+istekte oturumluk token ister. Port ve token paneldeki **Kopyala** düğmesiyle
+hazır `curl` komutu olarak alınabilir:
+
+```bash
+curl -X POST http://127.0.0.1:<port>/olay \
+  -H "Authorization: Bearer <token>" -H "Content-Type: application/json" \
+  -d '{"tur":"loot","ad":"T6 Deri","adet":2,"birimDeger":500}'
+```
+
+Olay türleri: `loot` (`ad`, `adet`, `birimDeger`/`deger`), `kill` (`fame`),
+`death`, `fame` (`miktar`, `alan`: pve/pvp/gather/craft), `damage` (`miktar`).
+`/olaylar` uç noktası en fazla 100 olaylık dizi kabul eder; `/baslat`, `/bitir`,
+`/temizle` ve `/durum` diğer uçlardır.
+
+Testler: `cd desktop/electron && npm run test:session`.
+
+### Neden paket çözücü yok?
+
+Albion trafiği şifreli Photon UDP'dir; istemci paketlerini çözmek oyun
+belleğine/anahtarlarına erişmeyi gerektirir ve ToS riski taşır. Bu yüzden
+dinleyici istemciye dokunmaz; olayları yerel yardımcı araçlar veya elle
+gönderim sağlar. Radar/cheat, istemci değiştirme ve overlay kapsam dışıdır.
+
 ## Bilinen sınırlar
 
 - Masaüstü kabuğu çevrimdışı çalışır ama bazı veriler canlı gelir: eşya

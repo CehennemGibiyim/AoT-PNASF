@@ -5,16 +5,23 @@
  * `aot://app/` özel protokolü üzerinden servis edilir. Böylece fetch/XHR,
  * göreli yollar ve CSP web sürümüyle aynı davranır.
  */
-const { app, BrowserWindow, Menu, protocol, net, shell } = require('electron');
+const { app, BrowserWindow, Menu, protocol, net, shell, ipcMain } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs');
 const { pathToFileURL } = require('node:url');
 const { resolveAsset } = require('./serve.cjs');
+const { SessionStore } = require('./session.cjs');
+const { ingestBaslat } = require('./ingest.cjs');
 
 const SCHEME = 'aot';
 const ROOT = path.join(__dirname, 'app');
 const START_URL = `${SCHEME}://app/index.html`;
 const IS_DEV = !app.isPackaged && process.env.AOT_DEV === '1';
+
+/** @type {SessionStore | null} */
+let oturum = null;
+/** @type {{port:number, token:string, kapat:() => Promise<void>} | null} */
+let alici = null;
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -63,6 +70,34 @@ function createWindow() {
   return win;
 }
 
+async function oturumKur() {
+  oturum = new SessionStore(path.join(app.getPath('userData'), 'oturum.json'));
+
+  const yayinla = (ozet) => {
+    for (const win of BrowserWindow.getAllWindows()) {
+      if (!win.isDestroyed()) win.webContents.send('oturum:guncelle', ozet);
+    }
+  };
+  oturum.abone(yayinla);
+
+  ipcMain.handle('oturum:durum', () => oturum.ozet());
+  ipcMain.handle('oturum:baslat', () => oturum.basla());
+  ipcMain.handle('oturum:bitir', () => oturum.bitir());
+  ipcMain.handle('oturum:temizle', () => oturum.temizle());
+  ipcMain.handle('oturum:bilgi', () => ({
+    port: alici ? alici.port : 0,
+    token: alici ? alici.token : '',
+    dosya: oturum.dosya,
+  }));
+
+  try {
+    alici = await ingestBaslat(oturum);
+    console.log(`oturum alıcısı hazır: http://127.0.0.1:${alici.port}`);
+  } catch (hata) {
+    console.error('oturum alıcısı başlatılamadı:', hata);
+  }
+}
+
 function registerProtocol() {
   protocol.handle(SCHEME, async (request) => {
     const asset = resolveAsset(ROOT, request.url);
@@ -88,7 +123,7 @@ if (!app.requestSingleInstanceLock()) {
     }
   });
 
-  app.whenReady().then(() => {
+  app.whenReady().then(async () => {
     if (!fs.existsSync(path.join(ROOT, 'index.html'))) {
       const { dialog } = require('electron');
       dialog.showErrorBox(
@@ -99,6 +134,7 @@ if (!app.requestSingleInstanceLock()) {
       return;
     }
 
+    await oturumKur();
     registerProtocol();
     Menu.setApplicationMenu(
       Menu.buildFromTemplate([
@@ -124,6 +160,10 @@ if (!app.requestSingleInstanceLock()) {
     app.on('activate', () => {
       if (BrowserWindow.getAllWindows().length === 0) createWindow();
     });
+  });
+
+  app.on('before-quit', () => {
+    if (alici) void alici.kapat();
   });
 
   app.on('window-all-closed', () => {
