@@ -99,6 +99,10 @@
 ✅ Yetenek veritabanı — 492 yetenek, Türkçe ad + açıklama, enerji/cooldown/menzil
 ✅ Oyuncu & lonca profili — kill/death akışı, günlük fame grafiği
 ✅ Savaş özetleri — son kill akışından konum + 10 dk kümeleri
+✅ Spec planlayıcı — destiny fame eşikleri, savaşta kaç kill, üretimde fame başına en ucuz eşya
+✅ Piyasa istatistikleri — tier/şehir bazında medyan, yayılım, tazelik ve güven puanı
+✅ Loot paylaşımı — canlı fiyatla değerleme, kişi başı pay
+✅ Ada ekim takvimi — hasat geri sayımı (cihazda saklanır)
 ✅ Fiyat alarmı — hedefe düşen eşya için tarayıcı bildirimi
 ```
 
@@ -161,8 +165,8 @@ AoT-PNASF
 │
 ├── 🧪 Atölye                 (tek sayfa sekmesi)
 │   ├── Üretim Kârı · Çiftlik · Fame planlayıcı
-│   ├── Yaratıklar · Yetenekler
-│   └── Oyuncu & Lonca · Savaşlar
+│   ├── Yaratıklar · Yetenekler · Spec
+│   ├── Paylaşım · Oyuncu & Lonca · Savaşlar
 │
 └── 🛠️ Araçlar               (tek sayfa sekmesi)
     ├── Party Builder (ZvZ & küçük ölçek kompozisyon + sinerjiler)
@@ -238,6 +242,7 @@ npm run data:gen
 # veya ayrı ayrı:
 node scripts/gen-game-data.mjs /tmp/ao --indir   # production, farming, mobs
 node scripts/gen-spells-data.mjs /tmp/ao --indir # spells (TR yerelleştirmeli)
+node scripts/gen-craft-gear.mjs /tmp/ao          # ekipman reçeteleri (spec planlayıcı)
 ```
 
 ---
@@ -294,7 +299,8 @@ AoT-PNASF/
 │   ├── ai-scanner.js                # Gemini AI tarayıcı
 │   ├── pvp-fetcher.cjs              # PvP veri çekici (CommonJS)
 │   ├── gen-game-data.mjs            # Üretim/çiftlik/yaratık verisi üreteci
-│   └── gen-spells-data.mjs          # Yetenek verisi üreteci (TR yerelleştirme)
+│   ├── gen-spells-data.mjs          # Yetenek verisi üreteci (TR yerelleştirme)
+│   └── gen-craft-gear.mjs           # Ekipman reçetesi üreteci (spec planlayıcı)
 │
 └── 📁 Proje Kök Dizini
     ├── 📁 data/                    # Eşya/market/world JSON & JS verileri

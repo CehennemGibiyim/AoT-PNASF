@@ -4,8 +4,9 @@
 // (data/production-data.js ← ao-bin-dumps) okur; canlı market fiyatlarıyla
 // malzeme maliyeti, gelir, kâr, marj ve saatlik kâr hesaplar.
 //
-// Geri dönüş oranı (resource return rate) kullanıcı tarafından ayarlanır:
-// şehir bonusu + uzmanlık şehri eşleşmesi otomatik önerilir, elle değiştirilebilir.
+// Geri dönüş oranı (RRR) oyunun formülüyle hesaplanır: RRR = bonus / (100 + bonus).
+// Bonus puanları: şehir tabanı 18 pp, uzmanlık eşleşmesi +15 pp (rafinede +40 pp),
+// odak +59 pp, günlük bonus +20 pp. Bonus elle de değiştirilebilir.
 
 interface Recete {
   n: string; e: string; t: number; lvl: number;
@@ -44,7 +45,10 @@ const veri = (): { sehirler: Sehir[]; receteler: Record<string, Recete> } =>
 let tip: keyof typeof TIP = 'refine';
 let secili = '';
 let sehir = 'Caerleon';
-let geriDonus = 18;
+let bonus = 18;
+let urlAktif = false;
+let odak = false;
+let gunluk = false;
 let istasyonUcreti = 0;
 let fiyatlar = new Map<string, Fiyat[]>();
 let sonIstek = 0;
@@ -123,18 +127,59 @@ function durum(mesaj: string): void {
   if (el) el.textContent = mesaj;
 }
 
-function otomatikOran(): number {
+function otomatikBonus(): number {
   const recete = veri().receteler[secili];
   const s = veri().sehirler.find((x) => x.ad === sehir);
-  if (!recete || !s) return 0;
+  if (!recete || !s) return 18;
+  let pp = 0;
   if (recete.cat === 'refine') {
     const kategori = kaynakKategorisi(secili);
-    return Math.round((s.rafine + (s.uzmanlik === kategori ? s.uzmanlikOran : 0)) * 100);
+    pp = Math.round((s.rafine + (s.uzmanlik === kategori ? s.uzmanlikOran : 0)) * 100);
+  } else if (recete.cat === 'butcher') {
+    pp = Math.round((s.uretim + s.kasapOran) * 100);
+  } else {
+    pp = Math.round(s.uretim * 100);
   }
-  if (recete.cat === 'butcher') {
-    return Math.round((s.uretim + s.kasapOran) * 100);
-  }
-  return Math.round(s.uretim * 100);
+  if (odak) pp += 59;
+  if (gunluk) pp += 20;
+  return pp;
+}
+
+/** Oyun formülü: RRR = bonus / (100 + bonus). */
+function oranHesapla(): number {
+  return Math.max(0, Math.min(0.9, bonus / (100 + bonus)));
+}
+
+function bonusYaz(): void {
+  const el = $('#uretimOran') as HTMLInputElement | null;
+  if (el) el.value = String(Math.round(bonus));
+}
+
+/** #atolye/uretim?tip=refine&sehir=Lymhurst&recete=...&bonus=58 bağlantısını okur. */
+function urlOku(): void {
+  try {
+    const sorgu = decodeURIComponent(location.hash.replace(/^#/, '')).split('?')[1];
+    if (!sorgu) return;
+    const p = new URLSearchParams(sorgu);
+    const t = p.get('tip');
+    if (t && t in TIP) tip = t as keyof typeof TIP;
+    const s = p.get('sehir');
+    if (s && veri().sehirler.some((x) => x.ad === s)) sehir = s;
+    const r = p.get('recete');
+    if (r && veri().receteler[r]) secili = r;
+    if (p.has('bonus')) bonus = Math.max(0, Math.min(80, Number(p.get('bonus')) || 0));
+    if (p.has('odak')) odak = p.get('odak') === '1';
+    if (p.has('gunluk')) gunluk = p.get('gunluk') === '1';
+    urlAktif = true;
+  } catch (_) { /* yoksay */ }
+}
+
+function urlYaz(): void {
+  if (!secili || !urlAktif) return;
+  try {
+    const p = new URLSearchParams({ tip, sehir, recete: secili, bonus: String(Math.round(bonus)), odak: odak ? '1' : '0', gunluk: gunluk ? '1' : '0' });
+    history.replaceState(null, '', `#atolye/uretim?${p.toString()}`);
+  } catch (_) { /* yoksay */ }
 }
 
 function kontrolKur(): void {
@@ -154,31 +199,47 @@ function kontrolKur(): void {
     sehirSecim.value = sehir;
     sehirSecim.addEventListener('change', () => {
       sehir = sehirSecim.value;
-      geriDonus = otomatikOran();
-      const oran = $('#uretimOran') as HTMLInputElement | null;
-      if (oran) oran.value = String(geriDonus);
+      bonus = otomatikBonus();
+      bonusYaz();
       ciz();
     });
   }
 
   secim.addEventListener('change', () => {
     secili = secim.value;
-    geriDonus = otomatikOran();
-    const oran = $('#uretimOran') as HTMLInputElement | null;
-    if (oran) oran.value = String(geriDonus);
+    bonus = otomatikBonus();
+    bonusYaz();
     ciz();
     void fiyatlariCek();
   });
 
   $('#uretimOran')?.addEventListener('input', (ev) => {
-    geriDonus = Math.max(0, Math.min(90, Number((ev.target as HTMLInputElement).value) || 0));
+    bonus = Math.max(0, Math.min(80, Number((ev.target as HTMLInputElement).value) || 0));
     ciz();
   });
+  for (const [id, anahtar] of [['uretimOdak', 'odak'], ['uretimGunluk', 'gunluk']] as const) {
+    $('#' + id)?.addEventListener('change', (ev) => {
+      if (anahtar === 'odak') odak = (ev.target as HTMLInputElement).checked;
+      else gunluk = (ev.target as HTMLInputElement).checked;
+      bonus = otomatikBonus();
+      bonusYaz();
+      ciz();
+    });
+  }
   $('#uretimUcret')?.addEventListener('input', (ev) => {
     istasyonUcreti = Math.max(0, Number((ev.target as HTMLInputElement).value) || 0);
     ciz();
   });
   $('#uretimYenile')?.addEventListener('click', () => { void fiyatlariCek(); });
+  $('#uretimPaylas')?.addEventListener('click', async () => {
+    urlYaz();
+    try {
+      await navigator.clipboard.writeText(location.href);
+      durum('Bağlantı kopyalandı.');
+    } catch {
+      durum('Bağlantı adres çubuğunda güncellendi; elle kopyalayın.');
+    }
+  });
 
   document.querySelectorAll<HTMLElement>('.atolye-sekme[data-atolye="uretim"]').forEach((btn) => {
     btn.addEventListener('click', () => { kur(); if (!fiyatlar.size) void fiyatlariCek(); });
@@ -197,9 +258,8 @@ function secimDoldur(): void {
   const varsayilan = liste.find(([id, r]) => r.t === 4 && !r.lvl) || liste.find(([, r]) => !r.lvl) || liste[0];
   secili = mevcut ? secili : (varsayilan?.[0] || '');
   if (secili) secim.value = secili;
-  geriDonus = otomatikOran();
-  const oran = $('#uretimOran') as HTMLInputElement | null;
-  if (oran) oran.value = String(geriDonus);
+  bonus = otomatikBonus();
+  bonusYaz();
   ciz();
   if (secili) void fiyatlariCek();
 }
@@ -221,7 +281,7 @@ function ciz(): void {
     return;
   }
 
-  const oran = Math.max(0, Math.min(0.9, geriDonus / 100));
+  const oran = oranHesapla();
   let maliyet = 0;
   const malzemeSatirlari = recete.m.map(([id, adet]) => {
     const enUcuz = enIyiSatis(id);
@@ -247,7 +307,7 @@ function ciz(): void {
 
   kutu.innerHTML = `
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
-      ${kart('Malzeme maliyeti', sayi(toplamMaliyet), `geri dönüş ${yuzde(oran)} · ücret ${sayi(istasyonUcreti)}`)}
+      ${kart('Malzeme maliyeti', sayi(toplamMaliyet), `${bonus} pp → geri dönüş ${yuzde(oran)} · ücret ${sayi(istasyonUcreti)}`)}
       ${kart('Gelir (pazar)', sayi(gelir), satis ? `${satis.city} · ${sayi(satis.sell_price_min)}/adet` : 'fiyat yok')}
       ${kart('Kâr / işlem', sayi(kar), karAninda !== kar ? `anında satışta ${sayi(karAninda)}` : '', kar >= 0 ? 'color:#00d4aa' : 'color:#ff6b6b')}
       ${kart('Kâr / adet', sayi(birimKar), `marj ${yuzde(marj)}`)}
@@ -273,10 +333,12 @@ function ciz(): void {
     <p style="font-size:10.5px;color:var(--text-muted);margin-top:8px;line-height:1.7">
       ${TIP[recete.cat].simge} ${TIP[recete.cat].ad} · ${sehir} · ${recete.o} adet çıktı · ${recete.f} focus ·
       ${recete.s > 0 ? `${sayi(recete.s)} gümüş reçete ücreti · ` : ''}süre ${recete.sec} dk (oyun verisi).
-      Geri dönüş oranı şehir bonusu + uzmanlık eşleşmesinden önerilir; focus ve kalite farkını elle ayarlayabilirsiniz.
+      Geri dönüş oranı oyun formülüyle hesaplanır: <strong>bonus ÷ (100 + bonus)</strong>. Bonus; şehir tabanı,
+      uzmanlık eşleşmesi, odak ve günlük bonus puanlarından oluşur. Kalite farkını bonusu elle düzelterek yansıtabilirsiniz.
       ${recete.cat === 'refine' && KAYNAK_ADI[kaynakKategorisi(secili)] ? `Bu şehirde <strong>${KAYNAK_ADI[kaynakKategorisi(secili)]}</strong> uzmanlığı geçerli.` : ''}
     </p>
   `;
+  urlYaz();
 }
 
 export function kur(): void {
@@ -290,8 +352,16 @@ export function kur(): void {
     sehirSecim.innerHTML = s.sehirler.map((x) => `<option value="${x.ad}">${x.ad}</option>`).join('');
     sehirSecim.value = sehir;
   }
+  urlOku();
+  const o = $('#uretimOdak') as HTMLInputElement | null;
+  if (o) o.checked = odak;
+  const g = $('#uretimGunluk') as HTMLInputElement | null;
+  if (g) g.checked = gunluk;
   secimDoldur();
   kontrolKur();
+  for (const olay of ['pointerdown', 'change'] as const) {
+    $('#atolye-uretim')?.addEventListener(olay, () => { urlAktif = true; }, { once: true });
+  }
 }
 
 if (document.readyState === 'loading') {

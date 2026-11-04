@@ -166,6 +166,78 @@ function secimDoldur(): void {
   ciz();
 }
 
+interface AdaKayit { urun: string; ad: string; adet: number; ekim: number; hasat: number; }
+
+const ADA_KEY = 'aot-ada-takvim';
+
+function adaOku(): AdaKayit[] {
+  try {
+    const ham = localStorage.getItem(ADA_KEY);
+    const dizi = ham ? JSON.parse(ham) : [];
+    return Array.isArray(dizi) ? dizi.filter((x) => x && x.urun && x.hasat) : [];
+  } catch {
+    return [];
+  }
+}
+function adaYaz(liste: AdaKayit[]): void {
+  try { localStorage.setItem(ADA_KEY, JSON.stringify(liste.slice(0, 60))); } catch { /* yoksay */ }
+}
+const kalanMetin = (ms: number): string => {
+  if (ms <= 0) return 'Hasada hazır';
+  const dk = Math.floor(ms / 60000);
+  const sa = Math.floor(dk / 60);
+  return sa > 0 ? `${sa} sa ${dk % 60} dk` : `${dk} dk`;
+};
+
+function adaCiz(): void {
+  const kutu = $('#adaTakvim');
+  if (!kutu) return;
+  const liste = adaOku().sort((a, b) => a.hasat - b.hasat);
+  const simdi = Date.now();
+  const urunSecenek = urunler()
+    .filter((u) => u.sure > 0)
+    .map((u) => `<option value="${u.id}">T${u.t} · ${dil() === 'tr' ? u.n : u.e}</option>`)
+    .join('');
+  kutu.innerHTML = `
+    <div style="border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px;background:rgba(255,255,255,0.02)">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+        <strong style="font-size:13px">🌱 Ada ekim takvimi</strong>
+        <span style="font-size:10px;color:var(--text-muted)">Hasat zamanı cihazında saklanır</span>
+      </div>
+      <div class="tp-controls" style="gap:6px;flex-wrap:wrap">
+        <select id="adaUrun" aria-label="Ekilen ürün" style="flex:1;min-width:180px;background:#141414;border:1px solid #333;border-radius:6px;padding:6px 8px;color:#fff;font-size:12px">${urunSecenek}</select>
+        <input type="number" id="adaAdet" min="1" max="999" value="1" aria-label="Parsel sayısı" style="width:70px;background:#141414;border:1px solid #333;border-radius:6px;padding:6px 8px;color:#fff;font-size:12px">
+        <button type="button" id="adaEkle" style="background:var(--accent);color:#141006;border:0;border-radius:6px;padding:6px 12px;font:700 12px/1 system-ui;cursor:pointer">Ektim</button>
+      </div>
+      ${liste.length ? `<div style="margin-top:10px;border-top:1px solid rgba(255,255,255,0.07)">${liste.map((x) => {
+        const kalan = x.hasat - simdi;
+        const hazir = kalan <= 0;
+        return `<div style="display:grid;grid-template-columns:1fr 70px 120px 74px;gap:8px;padding:7px 2px;font-size:11.5px;border-bottom:1px solid rgba(255,255,255,0.05);align-items:center">
+          <span>${x.ad} <span style="color:var(--text-muted);font-size:10px">×${x.adet}</span></span>
+          <span style="color:var(--text-muted);font-size:10px">${new Date(x.ekim).toLocaleDateString('tr-TR')}</span>
+          <span style="color:${hazir ? '#00d4aa' : '#ccc'};font-weight:${hazir ? '700' : '400'}">${kalanMetin(kalan)}</span>
+          <button type="button" data-ada-sil="${x.ekim}" style="background:transparent;border:1px solid #3a3a3a;color:#aaa;border-radius:5px;padding:4px 6px;font-size:10px;cursor:pointer">Kaldır</button>
+        </div>`;
+      }).join('')}</div>` : '<p style="font-size:11px;color:var(--text-muted);margin:8px 0 0">Henüz kayıt yok. Ürün seçip “Ektim”e bas.</p>'}
+    </div>`;
+  $('#adaEkle')?.addEventListener('click', () => {
+    const id = ($('#adaUrun') as HTMLSelectElement | null)?.value || '';
+    const u = urunler().find((x) => x.id === id);
+    if (!u) return;
+    const adet = Math.max(1, Math.min(999, Number(($('#adaAdet') as HTMLInputElement | null)?.value) || 1));
+    const simdi2 = Date.now();
+    adaYaz([...adaOku(), { urun: u.id, ad: dil() === 'tr' ? u.n : u.e, adet, ekim: simdi2, hasat: simdi2 + u.sure * 1000 }]);
+    adaCiz();
+  });
+  kutu.querySelectorAll<HTMLElement>('[data-ada-sil]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const hedef = Number(btn.dataset.adaSil);
+      adaYaz(adaOku().filter((x) => x.ekim !== hedef));
+      adaCiz();
+    });
+  });
+}
+
 export function kur(): void {
   if (kuruldu) return;
   if (!$('#ciftlikUrun')) return;
@@ -213,6 +285,8 @@ export function kur(): void {
 
   secimDoldur();
   void fiyatlariCek();
+  adaCiz();
+  window.setInterval(adaCiz, 60000);
 }
 
 if (document.readyState === 'loading') {

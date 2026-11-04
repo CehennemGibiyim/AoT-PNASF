@@ -18,7 +18,7 @@
     "preview": "vite preview --port 3000 --host 0.0.0.0",
     "update-feed": "node scripts/pvp-fetcher.cjs",
     "maps:fetch": "node scripts/zone-maps-fetcher.cjs",
-    "data:gen": "node scripts/gen-game-data.mjs /tmp/ao --indir && node scripts/gen-spells-data.mjs /tmp/ao --indir",
+    "data:gen": "node scripts/gen-game-data.mjs /tmp/ao --indir && node scripts/gen-spells-data.mjs /tmp/ao --indir && node scripts/gen-craft-gear.mjs /tmp/ao",
     "desktop:icons": "python3 desktop/scripts/make-icons.py",
     "desktop:electron": "npm --prefix desktop/electron run start",
     "desktop:electron:win": "npm --prefix desktop/electron run pack:win",

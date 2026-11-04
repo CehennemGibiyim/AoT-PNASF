@@ -28,8 +28,9 @@
   // #atolye/uretim gibi bağlantılarla doğrudan panele git
   try {
     const parca = (location.hash || '').replace('#', '').split('/');
-    if (parca[0] === 'atolye' && parca[1]) {
-      const btn = document.querySelector<HTMLElement>(`.atolye-sekme[data-atolye="${parca[1]}"]`);
+    const hedef = (parca[1] || '').split('?')[0];
+    if (parca[0] === 'atolye' && hedef) {
+      const btn = document.querySelector<HTMLElement>(`.atolye-sekme[data-atolye="${hedef}"]`);
       btn?.click();
     }
   } catch (_) { /* yoksay */ }

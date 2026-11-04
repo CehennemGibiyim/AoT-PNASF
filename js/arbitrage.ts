@@ -481,8 +481,7 @@ function loadArbitrageModule() {
     let refineData = [];
     let refineSort = { by: 'profit', dir: 'desc' };
     
-    let statsData = [];
-    let statsFilters = { timeRange: '7d', category: 'ALL', sort: 'sold' };
+    // Piyasa istatistikleri durumu istatistik bölümünde (mStats) tutulur.
     
     // === CRAFT EŞLEŞTİRİCİSİ ===
     const CRAFT_MAPPING = {
@@ -880,70 +879,87 @@ function loadArbitrageModule() {
                     <div class="bg-albion-800 border border-gray-700 rounded-xl p-5 shadow-lg mb-6 flex flex-col shrink-0">
                         <div class="mb-4">
                             <h2 class="text-xl md:text-2xl font-black text-white flex items-center">
-                                <i class="fa-solid fa-chart-line text-purple-500 mr-3"></i> Satış İstatistikleri & Analiz
+                                <i class="fa-solid fa-chart-line text-purple-500 mr-3"></i> Piyasa İstatistikleri
                             </h2>
-                            <p class="text-gray-400 text-xs md:text-sm mt-1">Hangi eşyalar ne kadar satıldı? 1 saat, 1 hafta, 1 aylık analiz ile en çok satılanları keşfet!</p>
+                            <p class="text-gray-400 text-xs md:text-sm mt-1">Seçilen tier için şehir bazında satış ilanı dağılımı: medyan, yayılım, tazelik ve güven puanı. Satış hacmi AODP'de tutulmaz; burada yalnızca ilan fiyatları analiz edilir.</p>
                         </div>
-                        
-                        <!-- Filtreler -->
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
+
+                        <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
                             <div class="flex flex-col">
-                                <label class="text-xs text-gray-400 font-bold mb-1">Zaman Aralığı</label>
-                                <select id="statsTimeRange" class="bg-albion-900 border border-gray-600 rounded-lg p-2.5 text-white focus:border-albion-accent outline-none text-sm">
-                                    <option value="1h">Son 1 Saat</option>
-                                    <option value="24h">Son 24 Saat</option>
-                                    <option value="7d" selected>Son 7 Gün</option>
-                                    <option value="30d">Son 30 Gün</option>
+                                <label class="text-xs text-gray-400 font-bold mb-1">Tier</label>
+                                <select id="statsTier" class="bg-albion-900 border border-gray-600 rounded-lg p-2.5 text-white focus:border-albion-accent outline-none text-sm">
+                                    <option value="4">T4</option>
+                                    <option value="5">T5</option>
+                                    <option value="6" selected>T6</option>
+                                    <option value="7">T7</option>
+                                    <option value="8">T8</option>
+                                </select>
+                            </div>
+                            <div class="flex flex-col">
+                                <label class="text-xs text-gray-400 font-bold mb-1">Şehir</label>
+                                <select id="statsCity" class="bg-albion-900 border border-gray-600 rounded-lg p-2.5 text-white focus:border-albion-accent outline-none text-sm">
+                                    <option value="ALL" selected>Tüm Şehirler</option>
+                                    <option value="Caerleon">Caerleon</option>
+                                    <option value="Bridgewatch">Bridgewatch</option>
+                                    <option value="Martlock">Martlock</option>
+                                    <option value="Thetford">Thetford</option>
+                                    <option value="Fort Sterling">Fort Sterling</option>
+                                    <option value="Lymhurst">Lymhurst</option>
+                                    <option value="Brecilien">Brecilien</option>
                                 </select>
                             </div>
                             <div class="flex flex-col">
                                 <label class="text-xs text-gray-400 font-bold mb-1">Kategori</label>
-                                <select id="statsCategory" class="bg-albion-900 border border-gray-600 rounded-lg p-2.5 text-white focus:border-albion-accent outline-none text-sm">
-                                    <option value="ALL">Tüm Kategoriler</option>
-                                    <option value="Weapons">Silahlar</option>
-                                    <option value="Armor">Zırhlar</option>
-                                    <option value="Gather">Gather Malzemeleri</option>
-                                    <option value="Consumables">Sarf Malzemeleri</option>
+                                <select id="statsCat" class="bg-albion-900 border border-gray-600 rounded-lg p-2.5 text-white focus:border-albion-accent outline-none text-sm">
+                                    <option value="ALL" selected>Tümü</option>
+                                    <option value="gear">Ekipman</option>
+                                    <option value="bag">Çanta</option>
+                                    <option value="potion">İksir</option>
+                                    <option value="food">Yemek</option>
+                                    <option value="raw">Ham Kaynak</option>
+                                    <option value="refined">İşlenmiş</option>
                                 </select>
                             </div>
                             <div class="flex flex-col">
                                 <label class="text-xs text-gray-400 font-bold mb-1">Sıralama</label>
                                 <select id="statsSort" class="bg-albion-900 border border-gray-600 rounded-lg p-2.5 text-white focus:border-albion-accent outline-none text-sm">
-                                    <option value="sold">En Çok Satan</option>
-                                    <option value="revenue">En Yüksek Gelir</option>
-                                    <option value="avgPrice">Ortalama Fiyat</option>
+                                    <option value="guven" selected>Güven (yüksek)</option>
+                                    <option value="medyanAsc">Medyan (düşük)</option>
+                                    <option value="medyanDesc">Medyan (yüksek)</option>
+                                    <option value="yayilim">Yayılım (dar)</option>
+                                    <option value="bayat">Tazelik (eski)</option>
                                 </select>
                             </div>
-                            <button id="btnFetchStats" class="bg-purple-600 hover:bg-purple-500 text-white px-4 py-2.5 rounded-lg font-black transition-colors shadow-md h-[42px] flex items-center justify-center uppercase text-sm tracking-wider">
+                            <button id="btnFetchStats" class="bg-purple-600 hover:bg-purple-500 text-white px-4 py-2.5 rounded-lg font-black transition-colors shadow-md h-[42px] flex items-center justify-center uppercase text-sm tracking-wider self-end">
                                 <i class="fa-solid fa-chart-pie mr-2"></i> Analiz Et
                             </button>
                         </div>
-                        
-                        <!-- Özet Kartları -->
-                        <div id="statsSummaryCards" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4 hidden">
+
+                        <div id="statsSummaryCards" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-1 hidden">
                             <div class="bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/30 rounded-lg p-3">
-                                <div class="text-blue-400 text-[10px] font-bold uppercase">Toplam Satış</div>
-                                <div class="text-white font-black text-xl mt-1" id="statsTotalSold">-</div>
+                                <div class="text-blue-400 text-[10px] font-bold uppercase">İlanı Olan Eşya</div>
+                                <div class="text-white font-black text-xl mt-1" id="statsItemCount">-</div>
                             </div>
                             <div class="bg-gradient-to-br from-green-500/20 to-green-600/10 border border-green-500/30 rounded-lg p-3">
-                                <div class="text-green-400 text-[10px] font-bold uppercase">Toplam Gelir</div>
-                                <div class="text-white font-black text-xl mt-1" id="statsTotalRevenue">-</div>
+                                <div class="text-green-400 text-[10px] font-bold uppercase">Medyan Fiyat</div>
+                                <div class="text-white font-black text-xl mt-1" id="statsMedian">-</div>
                             </div>
                             <div class="bg-gradient-to-br from-purple-500/20 to-purple-600/10 border border-purple-500/30 rounded-lg p-3">
-                                <div class="text-purple-400 text-[10px] font-bold uppercase">En Popüler</div>
-                                <div class="text-white font-bold text-sm mt-1 truncate" id="statsTopItem">-</div>
+                                <div class="text-purple-400 text-[10px] font-bold uppercase">24 Saatten Eski</div>
+                                <div class="text-white font-black text-xl mt-1" id="statsStale">-</div>
                             </div>
                             <div class="bg-gradient-to-br from-orange-500/20 to-orange-600/10 border border-orange-500/30 rounded-lg p-3">
-                                <div class="text-orange-400 text-[10px] font-bold uppercase">Ortalama Fiyat</div>
-                                <div class="text-white font-black text-xl mt-1" id="statsAvgPrice">-</div>
+                                <div class="text-orange-400 text-[10px] font-bold uppercase">Ortalama Güven</div>
+                                <div class="text-white font-black text-xl mt-1" id="statsConfidence">-</div>
                             </div>
                         </div>
+                        <p id="statsDurum" class="text-gray-500 text-[11px] mt-2" role="status" aria-live="polite"></p>
                     </div>
-                    
+
                     <div id="statsLoading" class="hidden flex-1 items-center justify-center">
                         <div class="text-center"><i class="fa-solid fa-spinner fa-spin text-4xl text-purple-500"></i><p class="text-white font-bold mt-3 animate-pulse">İstatistikler analiz ediliyor...</p></div>
                     </div>
-                    
+
                     <div id="statsResultArea" class="hidden flex-1 overflow-y-auto custom-scroll">
                         <div class="overflow-x-auto rounded-xl border border-gray-700">
                             <table class="w-full text-left border-collapse">
@@ -953,8 +969,6 @@ function loadArbitrageModule() {
                         </div>
                     </div>
                 </div>
-
-                <!-- SEKME 6: Craft Hesaplayıcı -->
                 <div id="viewArbCraft" class="arb-view hidden flex-col h-full absolute inset-0">
                     <div class="bg-albion-800 border border-gray-700 rounded-xl p-5 shadow-lg mb-6 flex flex-col shrink-0">
                         <div class="mb-4">
@@ -2805,281 +2819,224 @@ function loadArbitrageModule() {
         }
     });
 
-    // === SEKME 5: SATIŞ İSTATİSTİKLERİ ===
-    const renderStatsTable = () => {
-        const tbody = document.getElementById('statsTableBody');
-        const thead = document.getElementById('statsHeaders');
-        if(!tbody || !thead) return;
+    // === SEKME 5: PİYASA İSTATİSTİKLERİ ===
+    // Not: AODP satış hacmi vermez; bu tablo ilan (sell_price_min) dağılımını,
+    // tazeliği ve şehir kapsamını ölçer. Eski "tahmini satış adedi" kaldırıldı.
+    const mStats = { tier: 6, city: 'ALL', cat: 'ALL', sort: 'guven' };
+    let mStatsData: any[] = [];
 
-        if (statsData.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="7" class="text-center p-8 text-gray-500"><i class="fa-solid fa-ghost text-2xl mb-2 opacity-50"></i><br>Veri bulunamadı.</td></tr>`;
-            return;
+    const M_SEHIRLER = ['Lymhurst', 'Bridgewatch', 'Fort Sterling', 'Martlock', 'Thetford', 'Caerleon', 'Brecilien'];
+    const M_ITEM_MAP = (() => {
+      const harita: Record<string, any> = {};
+      for (const it of (window as any).AO_ITEMS || []) harita[it.id] = it;
+      return harita;
+    })();
+
+    function mAd(base: string): string {
+      const kayit = M_ITEM_MAP[base];
+      return kayit ? (kayit.tr || kayit.en || base) : base.replace(/_/g, ' ');
+    }
+
+    function mKatalog(tier: number): Map<string, { ad: string; kat: string }> {
+      const ids = new Map<string, { ad: string; kat: string }>();
+      for (const g of (window as any).AO_CRAFT_GEAR || []) {
+        for (const [t, e] of g.r) {
+          if (t !== tier) continue;
+          const id = `T${tier}_${g.b}${e ? '@' + e : ''}`;
+          ids.set(id, { ad: mAd(g.b), kat: 'gear' });
         }
+      }
+      for (const it of (window as any).AO_ITEMS || []) {
+        if (!['bag', 'potion', 'food', 'raw', 'refined'].includes(it.cat)) continue;
+        if (!(it.tiers || []).includes(tier)) continue;
+        const id = `T${tier}_${it.id}`;
+        if (!ids.has(id)) ids.set(id, { ad: it.tr || it.en || it.id, kat: it.cat });
+      }
+      return ids;
+    }
 
-        thead.innerHTML = `<tr class="border-b border-gray-700 bg-gray-800/50">
-            <th class="p-3 text-left text-xs font-bold text-gray-400 uppercase cursor-pointer hover:text-white" data-sort="sold"><i class="fa-solid fa-fire mr-1"></i>SATILAN ADET <i class="fa-solid fa-sort ml-1"></i></th>
-            <th class="p-3 text-xs font-bold text-green-400 uppercase cursor-pointer hover:text-white" data-sort="revenue"><i class="fa-solid fa-coins mr-1"></i>TOPLAM GELİR <i class="fa-solid fa-sort ml-1"></i></th>
-            <th class="p-3 text-xs font-bold text-yellow-400 uppercase cursor-pointer hover:text-white" data-sort="avgPrice"><i class="fa-solid fa-chart-line mr-1"></i>ORTALAMA FİYAT <i class="fa-solid fa-sort ml-1"></i></th>
-            <th class="p-3 text-xs font-bold text-purple-400 uppercase">EN DÜŞÜK</th>
-            <th class="p-3 text-xs font-bold text-red-400 uppercase">EN YÜKSEK</th>
-            <th class="p-3 text-xs font-bold text-blue-400 uppercase">TREND</th>
-            <th class="p-3 text-xs font-bold text-cyan-400 uppercase">AI ÖNERİSİ</th>
-        </tr>`;
-
-        // Sıralama uygula
-        const sortKey = statsFilters.sort;
-        statsData.sort((a, b) => {
-            if (sortKey === 'sold') return b.soldCount - a.soldCount;
-            if (sortKey === 'revenue') return b.totalRevenue - a.totalRevenue;
-            if (sortKey === 'avgPrice') return b.avgPrice - a.avgPrice;
-            return 0;
-        });
-
-        tbody.innerHTML = statsData.map((item, index) => {
-            // Trend hesapla
-            let trendHtml = '';
-            if (item.soldCount > 100) {
-                trendHtml = `<span class="text-green-400 font-bold"><i class="fa-solid fa-arrow-trend-up mr-1"></i>YÜKSEK</span>`;
-            } else if (item.soldCount > 50) {
-                trendHtml = `<span class="text-blue-400 font-semibold"><i class="fa-solid fa-arrow-right mr-1"></i>ORTA</span>`;
-            } else {
-                trendHtml = `<span class="text-gray-400"><i class="fa-solid fa-arrow-trend-down mr-1"></i>DÜŞÜK</span>`;
-            }
-            
-            // AI Önerisi oluştur
-            let aiTipHtml = '';
-            const revenuePerUnit = item.totalRevenue / item.soldCount;
-            
-            if (item.soldCount > 100 && item.avgPrice > 5000) {
-                aiTipHtml = `<div class="bg-green-500/10 border border-green-500/30 rounded p-2">
-                    <div class="text-green-400 font-bold text-xs mb-1"><i class="fa-solid fa-fire mr-1"></i>ÇOK SATAN!</div>
-                    <div class="text-gray-300 text-[10px]">Yüksek talep + yüksek fiyat</div>
-                    <div class="text-green-400 text-[9px] mt-1\\">→ Bu eşyayı stokla!</div>
-                </div>`;
-            } else if (item.soldCount > 100 && item.avgPrice <= 5000) {
-                aiTipHtml = `<div class="bg-blue-500/10 border border-blue-500/30 rounded p-2">
-                    <div class="text-blue-400 font-semibold text-xs mb-1"><i class="fa-solid fa-chart-line mr-1\\"></i>HACIM KÂRI</div>
-                    <div class="text-gray-300 text-[10px]">Çok satıyor, düşük fiyat</div>
-                    <div class="text-blue-400 text-[9px] mt-1\\">→ Bulk al, hızlı sat!</div>
-                </div>`;
-            } else if (item.soldCount <= 100 && item.avgPrice > 10000) {
-                aiTipHtml = `<div class="bg-purple-500/10 border border-purple-500/30 rounded p-2">
-                    <div class="text-purple-400 font-semibold text-xs mb-1"><i class="fa-solid fa-gem mr-1\\"></i>PREMIUM</div>
-                    <div class="text-gray-300 text-[10px]">Az satan, yüksek fiyat</div>
-                    <div class="text-purple-400 text-[9px] mt-1\\">→ Lüks pazar fırsatı</div>
-                </div>`;
-            } else if (item.totalRevenue > 500000) {
-                aiTipHtml = `<div class="bg-amber-500/10 border border-amber-500/30 rounded p-2">
-                    <div class="text-amber-400 font-semibold text-xs mb-1"><i class="fa-solid fa-sack-dollar mr-1\\"></i>YÜKSEK GELİR</div>
-                    <div class="text-gray-300 text-[10px]">Toplam gelir yüksek</div>
-                    <div class="text-amber-400 text-[9px] mt-1\\">→ Güvenilir yatırım</div>
-                </div>`;
-            } else {
-                aiTipHtml = `<div class="text-gray-500 text-[10px]"><i class="fa-solid fa-info-circle mr-1\\"></i>Normal performans</div>`;
-            }
-            
-            // Popülerlik rozeti
-            let badge = '';
-            if (index === 0) badge = `<span class="bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 px-1.5 py-0.5 rounded text-[8px] font-black ml-2\\">#1 BEST</span>`;
-            else if (index < 3) badge = `<span class="bg-gray-400/20 text-gray-300 border border-gray-400/30 px-1.5 py-0.5 rounded text-[8px] font-bold ml-2\\">TOP ${index + 1}</span>`;
-            
-            return `<tr class="hover:bg-white/5 transition-colors border-b border-gray-700/50">
-                <td class="p-3 border-r border-gray-800/50">
-                    <div class="flex items-center">
-                        <img src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" class="w-10 h-10 bg-[#0a0d14] rounded border border-gray-700 p-0.5 mr-3"
-                             data-item="${item.itemId}"
-                             data-quality="1"
-                             data-size="64"
-                             onerror="this.src=window.albionImageCache.getPlaceholderUrl()">
-                        <div>
-                            <div class="font-bold text-white text-xs">${item.itemName}${badge}</div>
-                            <div class="text-gray-500 text-[9px]">${item.category}</div>
-                        </div>
-                    </div>
-                </td>
-                <td class="p-3 border-r border-gray-800/50">
-                    <div class="text-blue-400 font-bold text-base">${item.soldCount.toLocaleString()}</div>
-                    <div class="text-gray-500 text-[9px]">adet</div>
-                </td>
-                <td class="p-3 border-r border-gray-800/50">
-                    <div class="text-green-400 font-bold text-sm">${item.totalRevenue.toLocaleString()} 🥈</div>
-                </td>
-                <td class="p-3 border-r border-gray-800/50">
-                    <div class="text-yellow-400 font-bold text-xs">${item.avgPrice.toLocaleString()} 🥈</div>
-                </td>
-                <td class="p-3 border-r border-gray-800/50">
-                    <div class="text-purple-400 font-semibold text-xs">${item.minPrice.toLocaleString()} 🥈</div>
-                </td>
-                <td class="p-3 border-r border-gray-800/50">
-                    <div class="text-red-400 font-semibold text-xs">${item.maxPrice.toLocaleString()} 🥈</div>
-                </td>
-                <td class="p-3 border-r border-gray-800/50">
-                    ${trendHtml}
-                </td>
-                <td class="p-3">
-                    ${aiTipHtml}
-                </td>
-            </tr>`;
-        }).join('');
+    const mYas = (tarih: string): number => {
+      if (!tarih) return 999;
+      const t = new Date(tarih).getTime();
+      return Number.isFinite(t) ? Math.max(0, (Date.now() - t) / 3600000) : 999;
     };
+    const mMedyan = (dizi: number[]): number => {
+      if (!dizi.length) return 0;
+      const s = [...dizi].sort((a, b) => a - b);
+      const o = Math.floor(s.length / 2);
+      return s.length % 2 ? s[o] : (s[o - 1] + s[o]) / 2;
+    };
+    const mGuven = (tazelikSaat: number, sehir: number, min: number, medyan: number, max: number): number => {
+      const tazelik = Math.max(0, Math.min(1, 1 - tazelikSaat / 48));
+      const kapsam = Math.min(1, sehir / 4);
+      const yayilim = medyan > 0 ? Math.max(0, Math.min(1, 1 - (max - min) / max)) : 0;
+      return Math.round((tazelik * 0.45 + kapsam * 0.35 + yayilim * 0.2) * 100);
+    };
+    const mSinif = (kat: string): string => ({
+      gear: 'Ekipman', bag: 'Çanta', potion: 'İksir', food: 'Yemek', raw: 'Ham kaynak', refined: 'İşlenmiş',
+    } as Record<string, string>)[kat] || 'Diğer';
 
-    // Satış İstatistikleri sıralama
-    document.querySelectorAll('#statsHeaders th[data-sort]').forEach(th => {
-        th.addEventListener('click', () => {
-            const sortKey = th.getAttribute('data-sort');
-            if(statsFilters.sort === sortKey) { 
-                // Aynı sütuna tıklandı, yön değiştir
-                // Ama şimdilik sadece azalan destekliyoruz
-            } else { 
-                statsFilters.sort = sortKey;
-            }
-            
-            // Sıralama ikonlarını güncelle
-            document.querySelectorAll('#statsHeaders .fa-sort').forEach(icon => {
-                icon.className = 'fa-solid fa-sort ml-1';
-            });
-            const activeIcon = th.querySelector('.fa-sort');
-            if (activeIcon) {
-                // Varsayılan olarak azalan
-                activeIcon.className = 'fa-solid fa-sort-down ml-1';
-            }
-            
-            // Select'i de güncelle
-            document.getElementById('statsSort').value = sortKey;
-            
-            renderStatsTable();
-        });
-    });
+    const renderStatsTable = () => {
+      const tbody = document.getElementById('statsTableBody');
+      const thead = document.getElementById('statsHeaders');
+      if (!tbody || !thead) return;
+
+      const sirala = (a: any, b: any): number => {
+        if (mStats.sort === 'medyanAsc') return a.median - b.median;
+        if (mStats.sort === 'medyanDesc') return b.median - a.median;
+        if (mStats.sort === 'yayilim') return a.spread - b.spread;
+        if (mStats.sort === 'bayat') return b.stale - a.stale;
+        return b.confidence - a.confidence;
+      };
+      const liste = [...mStatsData].sort(sirala).slice(0, 100);
+
+      thead.innerHTML = `<tr class="border-b border-gray-700 bg-gray-800/50">
+        <th class="p-3 text-left text-xs font-bold text-gray-400 uppercase">Eşya</th>
+        <th class="p-3 text-xs font-bold text-blue-400 uppercase">Şehir</th>
+        <th class="p-3 text-xs font-bold text-purple-400 uppercase">En düşük</th>
+        <th class="p-3 text-xs font-bold text-yellow-400 uppercase">Medyan</th>
+        <th class="p-3 text-xs font-bold text-red-400 uppercase">En yüksek</th>
+        <th class="p-3 text-xs font-bold text-cyan-400 uppercase">Yayılım</th>
+        <th class="p-3 text-xs font-bold text-orange-400 uppercase">Tazelik</th>
+        <th class="p-3 text-xs font-bold text-green-400 uppercase">Güven</th>
+      </tr>`;
+
+      if (!liste.length) {
+        tbody.innerHTML = `<tr><td colspan="8" class="text-center p-8 text-gray-500"><i class="fa-solid fa-ghost text-2xl mb-2 opacity-50"></i><br>Bu tier için ilan bulunamadı.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = liste.map((x) => {
+        const guvenRenk = x.confidence >= 70 ? 'green' : x.confidence >= 40 ? 'yellow' : 'red';
+        const bayat = x.stale > 24
+          ? `<span class="text-red-400 font-bold">${Math.round(x.stale)} sa</span>`
+          : x.stale > 6
+            ? `<span class="text-yellow-400">${Math.round(x.stale)} sa</span>`
+            : `<span class="text-green-400">${Math.round(x.stale)} sa</span>`;
+        const troll = x.troll
+          ? `<span class="ml-2 bg-red-500/15 text-red-400 border border-red-500/30 px-1.5 py-0.5 rounded text-[8px] font-bold">TROLL?</span>`
+          : '';
+        return `<tr class="hover:bg-white/5 transition-colors border-b border-gray-700/50">
+          <td class="p-3">
+            <div class="font-bold text-white text-xs">${x.ad}${troll}</div>
+            <div class="text-gray-500 text-[9px]">${x.id} · ${mSinif(x.kat)}</div>
+          </td>
+          <td class="p-3 text-center text-gray-300 text-xs">${x.cities}</td>
+          <td class="p-3 text-purple-400 font-semibold text-xs">${Math.round(x.min).toLocaleString('tr-TR')}</td>
+          <td class="p-3 text-yellow-400 font-bold text-xs">${Math.round(x.median).toLocaleString('tr-TR')}</td>
+          <td class="p-3 text-red-400 font-semibold text-xs">${Math.round(x.max).toLocaleString('tr-TR')}</td>
+          <td class="p-3 text-cyan-400 text-xs">%${(x.spread * 100).toFixed(1)}</td>
+          <td class="p-3 text-xs">${bayat}</td>
+          <td class="p-3">
+            <div class="flex items-center gap-2">
+              <div class="flex-1 h-1.5 bg-gray-700 rounded overflow-hidden" style="min-width:48px">
+                <div class="h-full bg-${guvenRenk}-500" style="width:${x.confidence}%"></div>
+              </div>
+              <span class="text-${guvenRenk}-400 font-bold text-[10px]">${x.confidence}</span>
+            </div>
+          </td>
+        </tr>`;
+      }).join('');
+    };
 
     const updateStatsSummary = () => {
-        const totalSold = statsData.reduce((sum, item) => sum + item.soldCount, 0);
-        const totalRevenue = statsData.reduce((sum, item) => sum + item.totalRevenue, 0);
-        const avgPrice = statsData.length > 0 ? statsData.reduce((sum, item) => sum + item.avgPrice, 0) / statsData.length : 0;
-        const topItem = statsData.length > 0 ? statsData[0].itemName : '-';
-        
-        document.getElementById('statsTotalSold').textContent = totalSold.toLocaleString();
-        document.getElementById('statsTotalRevenue').textContent = totalRevenue.toLocaleString() + ' 🥈';
-        document.getElementById('statsAvgPrice').textContent = Math.floor(avgPrice).toLocaleString() + ' 🥈';
-        document.getElementById('statsTopItem').textContent = topItem;
+      const set = (id: string, deger: string): void => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = deger;
+      };
+      const medyanlar = mStatsData.map((x) => x.median).filter((x) => x > 0);
+      const bayat = mStatsData.filter((x) => x.stale > 24).length;
+      const guven = mStatsData.length ? mStatsData.reduce((t, x) => t + x.confidence, 0) / mStatsData.length : 0;
+      set('statsItemCount', mStatsData.length.toLocaleString('tr-TR'));
+      set('statsMedian', Math.round(mMedyan(medyanlar)).toLocaleString('tr-TR') + ' 🥈');
+      set('statsStale', mStatsData.length ? `%${Math.round((bayat / mStatsData.length) * 100)}` : '-');
+      set('statsConfidence', Math.round(guven).toString());
     };
 
-    document.getElementById('btnFetchStats').addEventListener('click', async () => {
-        const loading = document.getElementById('statsLoading');
-        const resArea = document.getElementById('statsResultArea');
-        const summaryCards = document.getElementById('statsSummaryCards');
-        
-        resArea.classList.add('hidden');
-        summaryCards.classList.add('hidden');
-        loading.classList.remove('hidden');
-        statsData = [];
-        
-        // Filtreleri güncelle
-        statsFilters.timeRange = document.getElementById('statsTimeRange').value;
-        statsFilters.category = document.getElementById('statsCategory').value;
-        statsFilters.sort = document.getElementById('statsSort').value;
-        
-        try {
-            const domain = window.getAlbionApiDomain ? window.getAlbionApiDomain() : 'europe.albion-online-data.com';
-            
-            // İstatistik API'si (Albion Data Project)
-            // Not: Bu API tarih bazlı satış verisi sağlamaz, bu yüzden prices API kullanacağız
-            const allItems = getAllItemsFlat()
-                .flat()
-                .filter(item => !["QUESTITEM_TOKEN_SIPHONED_ENERGY", "QUESTITEM_TOKEN_AVALON", "QUESTITEM_TOKEN_ROYAL", 
-                         "RUNE", "SOUL", "RELIC", "SHARD_AVALONIAN", "ESSENCE"].includes(item.id))
-                .slice(0, 50) // İlk 50 eşya (API limiti)
-                .map(item => `T6_${item.id}`)
-                .join(',');
-            
-            const locations = encodeURIComponent('Lymhurst,Bridgewatch,Fort Sterling,Martlock,Thetford,Caerleon');
-            const url = `https://${domain}/api/v2/stats/prices/${allItems}.json?locations=${locations}`;
-            
-            const data = await fetchMarketJson(url);
-            
-            if (data && data.length > 0) {
-                // Grupla ve analiz et
-                const grouped: any = {};
-                data.forEach(d => {
-                    if (!grouped[d.item_id]) {
-                        grouped[d.item_id] = { 
-                            prices: [], 
-                            cities: new Set(),
-                            itemId: d.item_id
-                        };
-                    }
-                    if (d.sell_price_min > 0 && getMins(d.sell_price_min_date) <= 240) {
-                        grouped[d.item_id].prices.push(d.sell_price_min);
-                        grouped[d.item_id].cities.add(d.city);
-                    }
-                });
-                
-                // Her eşya için istatistik
-                for (const [itemId, info] of Object.entries<any>(grouped)) {
-                    if (info.prices.length === 0) continue;
-                    
-                    const sorted = info.prices.sort((a, b) => a - b);
-                    const totalRevenue = sorted.reduce((sum, p) => sum + p, 0);
-                    const avgPrice = Math.floor(totalRevenue / sorted.length);
-                    
-                    // Kategori bul
-                    const baseId = itemId.replace('T6_', '');
-                    let category = 'Diğer';
-                    for (const [catName, subCategories] of Object.entries<any>(ARB_CATEGORIES)) {
-                        for (const subCat of Object.values<any>(subCategories)) {
-                            if (subCat.find(i => i.id === baseId)) {
-                                category = catName;
-                                break;
-                            }
-                        }
-                        if (category !== 'Diğer') break;
-                    }
-                    
-                    // Filtre uygula
-                    if (statsFilters.category !== 'ALL') {
-                        const filterMap = {
-                            'Weapons': 'Silahlar',
-                            'Armor': 'Zırhlar',
-                            'Gather': 'Gather',
-                            'Consumables': 'Sarf'
-                        };
-                        if (!category.includes(filterMap[statsFilters.category])) continue;
-                    }
-                    
-                    // Satış adedi tahmini (şehir sayısı * 10 baz alındı)
-                    const estimatedSold = info.cities.size * 10;
-                    
-                    statsData.push({
-                        itemId,
-                        itemName: (() => {
-                            const catData = ARB_CATEGORIES[category];
-                            if (catData) {
-                                for (const subCat of Object.values<any>(catData)) {
-                                    const item = subCat.find(i => i.id === baseId);
-                                    if (item) return item.name;
-                                }
-                            }
-                            return baseId;
-                        })(),
-                        category,
-                        soldCount: estimatedSold,
-                        totalRevenue,
-                        avgPrice,
-                        minPrice: sorted[0],
-                        maxPrice: sorted[sorted.length - 1]
-                    });
-                }
-            }
-            
-            renderStatsTable();
-            updateStatsSummary();
-            resArea.classList.remove('hidden');
-            summaryCards.classList.remove('hidden');
-        } catch (e) {
-            console.error('İstatistik hatası:', e);
-            document.getElementById('statsTableBody').innerHTML = `<tr><td colspan="7" class="text-center p-8 text-red-400">Veri çekilemedi.</td></tr>`;
-        } finally {
-            loading.classList.add('hidden');
+    document.getElementById('statsSort')?.addEventListener('change', (ev) => {
+      mStats.sort = (ev.target as HTMLSelectElement).value;
+      renderStatsTable();
+    });
+
+    document.getElementById('btnFetchStats')?.addEventListener('click', async () => {
+      const loading = document.getElementById('statsLoading');
+      const resArea = document.getElementById('statsResultArea');
+      const summaryCards = document.getElementById('statsSummaryCards');
+      const durumEl = document.getElementById('statsDurum');
+      if (!loading || !resArea || !summaryCards) return;
+
+      resArea.classList.add('hidden');
+      summaryCards.classList.add('hidden');
+      loading.classList.remove('hidden');
+      mStatsData = [];
+      mStats.tier = Number((document.getElementById('statsTier') as HTMLSelectElement)?.value) || 6;
+      mStats.city = (document.getElementById('statsCity') as HTMLSelectElement)?.value || 'ALL';
+      mStats.cat = (document.getElementById('statsCat') as HTMLSelectElement)?.value || 'ALL';
+      mStats.sort = (document.getElementById('statsSort') as HTMLSelectElement)?.value || 'guven';
+
+      try {
+        const domain = (window as any).getAlbionApiDomain ? (window as any).getAlbionApiDomain() : 'europe.albion-online-data.com';
+        const katalog = mKatalog(mStats.tier);
+        const filtreli = [...katalog.entries()].filter(([, v]) => mStats.cat === 'ALL' || v.kat === mStats.cat);
+        const idler = filtreli.map(([id]) => id);
+        const konumlar = mStats.city === 'ALL' ? M_SEHIRLER : [mStats.city];
+        const gruplar = new Map<string, any[]>();
+        let islenen = 0;
+
+        for (let i = 0; i < idler.length; i += 80) {
+          const parca = idler.slice(i, i + 80);
+          const url = `https://${domain}/api/v2/stats/prices/${parca.join(',')}.json`
+            + `?locations=${encodeURIComponent(konumlar.join(','))}&qualities=1`;
+          const veri = await fetchMarketJson(url);
+          for (const s of Array.isArray(veri) ? veri : []) {
+            if (!gruplar.has(s.item_id)) gruplar.set(s.item_id, []);
+            gruplar.get(s.item_id)!.push(s);
+          }
+          islenen += parca.length;
+          if (durumEl) durumEl.textContent = `${islenen}/${idler.length} eşya tarandı…`;
         }
+
+        for (const [id, satirlar] of gruplar) {
+          const gecerli = satirlar.filter((s) => s.sell_price_min > 0);
+          if (!gecerli.length) continue;
+          const fiyatlar = gecerli.map((s) => s.sell_price_min);
+          const min = Math.min(...fiyatlar);
+          const max = Math.max(...fiyatlar);
+          const median = mMedyan(fiyatlar);
+          const sehirSayisi = new Set(gecerli.map((s) => s.city)).size;
+          const enYeni = Math.min(...gecerli.map((s) => mYas(s.sell_price_min_date)));
+          const meta = katalog.get(id) || { ad: mAd(id), kat: 'gear' };
+          mStatsData.push({
+            id,
+            ad: meta.ad,
+            kat: meta.kat,
+            min,
+            median,
+            max,
+            cities: sehirSayisi,
+            stale: enYeni,
+            spread: median > 0 ? (max - min) / median : 0,
+            confidence: mGuven(enYeni, sehirSayisi, min, median, max),
+            troll: median > 0 && min < median * 0.4 && max > median * 0.9,
+          });
+        }
+
+        renderStatsTable();
+        updateStatsSummary();
+        resArea.classList.remove('hidden');
+        summaryCards.classList.remove('hidden');
+        if (durumEl) {
+          durumEl.textContent = `${mStatsData.length} eşya · ${mStats.tier}. tier · ${mStats.city === 'ALL' ? 'tüm şehirler' : mStats.city} · AODP ilan verisi`;
+        }
+      } catch (e) {
+        console.error('İstatistik hatası:', e);
+        const tbody = document.getElementById('statsTableBody');
+        if (tbody) tbody.innerHTML = `<tr><td colspan="8" class="text-center p-8 text-red-400">Veri çekilemedi — AODP bağlantısını kontrol edin.</td></tr>`;
+        resArea.classList.remove('hidden');
+        if (durumEl) durumEl.textContent = 'Veri çekilemedi.';
+      } finally {
+        loading.classList.add('hidden');
+      }
     });
 
     // === SEKME 6: CRAFT HESAPLAYICI ===

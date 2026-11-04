@@ -937,6 +937,8 @@
           <button class="tools-tab atolye-sekme" data-atolye="yetenekler" aria-selected="false">✨ <span>Yetenekler</span></button>
           <button class="tools-tab atolye-sekme" data-atolye="oyuncu" aria-selected="false">👤 <span>Oyuncu &amp; Lonca</span></button>
           <button class="tools-tab atolye-sekme" data-atolye="savaslar" aria-selected="false">⚔️ <span>Savaşlar</span></button>
+          <button class="tools-tab atolye-sekme" data-atolye="spec" aria-selected="false">🧮 <span>Spec</span></button>
+          <button class="tools-tab atolye-sekme" data-atolye="paylasim" aria-selected="false">💰 <span>Paylaşım</span></button>
         </div>
 
         <!-- ÜRETİM -->
@@ -953,9 +955,17 @@
               <select id="uretimSehir" aria-label="Üretim şehri" style="background:#141414;border:1px solid #333;border-radius:6px;padding:5px 7px;color:#fff;font-size:12px"></select>
             </label>
             <label class="tp-slider-label" style="gap:6px">
-              <span>Geri dönüş %</span>
-              <input type="number" id="uretimOran" min="0" max="90" step="1" value="18" aria-label="Geri dönüş oranı yüzde"
+              <span>Üretim bonusu (pp)</span>
+              <input type="number" id="uretimOran" min="0" max="80" step="1" value="18" aria-label="Üretim bonusu puanı"
                 style="width:66px;background:#141414;border:1px solid #333;border-radius:6px;padding:5px 7px;color:#fff;font-size:12px">
+            </label>
+            <label class="tp-slider-label" style="gap:5px;cursor:pointer">
+              <input type="checkbox" id="uretimOdak" style="accent-color:#00d4aa">
+              <span>Odak (+59)</span>
+            </label>
+            <label class="tp-slider-label" style="gap:5px;cursor:pointer">
+              <input type="checkbox" id="uretimGunluk" style="accent-color:#00d4aa">
+              <span>Günlük bonus (+20)</span>
             </label>
             <label class="tp-slider-label" style="gap:6px">
               <span>İstasyon ücreti</span>
@@ -963,6 +973,7 @@
                 style="width:82px;background:#141414;border:1px solid #333;border-radius:6px;padding:5px 7px;color:#fff;font-size:12px">
             </label>
             <button type="button" id="uretimYenile" style="background:transparent;border:1px solid #3a3a3a;color:#ccc;border-radius:6px;padding:6px 10px;font-size:11.5px;cursor:pointer">⟳ Fiyatları yenile</button>
+            <button type="button" id="uretimPaylas" style="background:transparent;border:1px solid #3a3a3a;color:#ccc;border-radius:6px;padding:6px 10px;font-size:11.5px;cursor:pointer">🔗 Bağlantıyı kopyala</button>
           </div>
           <div class="tp-controls" style="margin-top:8px">
             <select id="uretimRecete" aria-label="Reçete seç"
@@ -995,6 +1006,7 @@
           </div>
           <p id="ciftlikDurum" class="tp-format-desc" role="status" aria-live="polite"></p>
           <div id="ciftlikSonuc"></div>
+          <div id="adaTakvim" style="margin-top:14px"></div>
         </section>
 
         <!-- FAME -->
@@ -1078,6 +1090,21 @@
           <div id="savasListe" style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden"></div>
         </section>
 
+        <!-- LOOT PAYLAŞIMI -->
+        <section id="atolye-paylasim" class="atolye-panel">
+          <div id="paylasimApp"></div>
+        </section>
+
+        <!-- SPEC -->
+        <section id="atolye-spec" class="atolye-panel">
+          <div id="specKontroller"></div>
+          <div class="tp-controls" style="margin-top:8px">
+            <button type="button" id="specPaylas" style="background:transparent;border:1px solid #3a3a3a;color:#ccc;border-radius:6px;padding:6px 10px;font-size:11.5px;cursor:pointer">🔗 Bu planın bağlantısını kopyala</button>
+          </div>
+          <p id="specDurum" class="tp-format-desc" role="status" aria-live="polite"></p>
+          <div id="specSonuc"></div>
+        </section>
+
         <!-- OYUNCU & LONCA -->
         <section id="atolye-oyuncu" class="atolye-panel">
           <div class="tp-controls" style="flex-wrap:wrap;gap:8px">
@@ -1134,6 +1161,9 @@
   <script src="data/tools-data.js"></script>
   <script src="data/production-data.js"></script>
   <script src="data/farming-data.js"></script>
+  <script src="data/fame-table.js"></script>
+  <script src="data/craft-fame.js"></script>
+  <script src="data/craft-gear.js"></script>
   <!-- data/mobs-data.js tembel yüklenir (Atölye → Yaratıklar/Fame) -->
   <script type="module" src="lib/maps.ts"></script>
   <script type="module" src="lib/guides.ts"></script>
@@ -1144,6 +1174,8 @@
   <script type="module" src="js/mobs.ts"></script>
   <script type="module" src="js/player-profile.ts"></script>
   <script type="module" src="js/spells.ts"></script>
+  <script type="module" src="js/spec.ts"></script>
+  <script type="module" src="js/loot-split.ts"></script>
   <script type="module" src="js/battles.ts"></script>
   <script type="module" src="js/atolye.ts"></script>
   <script>
