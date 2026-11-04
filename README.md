@@ -88,6 +88,20 @@
 ✅ Resmi Albion Killboard yönlendirmesi
 ```
 
+### 🧪 Atölye & Hesaplayıcılar
+```
+✅ Rafine kârı — cevher → külçe, şehir bonusu + uzmanlık geri dönüş oranı
+✅ Yemek/iksir kârı — 65 yemek + 45 iksir reçetesi, istasyon ücreti, saatlik kâr
+✅ Kasap kârı — 6 hayvan, kasap return rate
+✅ Ada/çiftlik kârı — büyüme süresi, focus, tohum dönüşü, şehir bonusu
+✅ Fame planlayıcı — hedef fame + yaratık fame'i → kill/saat/gün
+✅ Yaratık veritabanı — 5.479 yaratık (can, hasar, fame, faction), tembel yükleme
+✅ Yetenek veritabanı — 492 yetenek, Türkçe ad + açıklama, enerji/cooldown/menzil
+✅ Oyuncu & lonca profili — kill/death akışı, günlük fame grafiği
+✅ Savaş özetleri — son kill akışından konum + 10 dk kümeleri
+✅ Fiyat alarmı — hedefe düşen eşya için tarayıcı bildirimi
+```
+
 ### 📚 Rehberler
 ```
 ✅ 14 hazır rehber kategorisi
@@ -144,6 +158,11 @@ AoT-PNASF
 ├── 📚 Rehberler              (tek sayfa sekmesi)
 │   ├── Sol: Kategori + yerel rehber üretici + popüler konular
 │   └── Sağ: Rehber içeriği + sabit soru-cevap paneli
+│
+├── 🧪 Atölye                 (tek sayfa sekmesi)
+│   ├── Üretim Kârı · Çiftlik · Fame planlayıcı
+│   ├── Yaratıklar · Yetenekler
+│   └── Oyuncu & Lonca · Savaşlar
 │
 └── 🛠️ Araçlar               (tek sayfa sekmesi)
     ├── Party Builder (ZvZ & küçük ölçek kompozisyon + sinerjiler)
@@ -202,11 +221,23 @@ https://render.albiononline.com/v1/item/{ITEM_ID}.png
 https://render.albiononline.com/v1/item/{ITEM_ID}@{enchant}.png
 ```
 
-### ao-bin-dumps (Planlanan)
+### ao-bin-dumps (Atölye verileri)
 ```
-https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/formatted/items.json
-https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/formatted/world.json
-https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/cluster/
+https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/items.json
+https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/craftingmodifiers.json
+https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/farmingmodifiers.json
+https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/loot.json
+https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/mobs.json
+https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/spells.json
+https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master/localization.json
+```
+
+Yeniden üretim (dökümler eksikse `--indir` ile indirir):
+```bash
+npm run data:gen
+# veya ayrı ayrı:
+node scripts/gen-game-data.mjs /tmp/ao --indir   # production, farming, mobs
+node scripts/gen-spells-data.mjs /tmp/ao --indir # spells (TR yerelleştirmeli)
 ```
 
 ---
@@ -235,12 +266,12 @@ Tetiklenme: Her push'ta
 Görev: GitHub Pages'e deploy
 ```
 
-### 4. ao-bin-dumps Senkronizasyonu (Planlanan)
+### 4. ao-bin-dumps Verisi (elle / `npm run data:gen`)
 ```yaml
-Tetiklenme: ao-bin-dumps commit tarihi değişince
-Görev: items.json + world.json çeker, items-data.js üretir
-Çıktı: data/items-data.js otomatik güncellenir
-Bonus: Web sitesinde "Güncelle" butonu — herkes tetikleyebilir
+Komut: npm run data:gen
+Görev: items, craftingmodifiers, farmingmodifiers, loot, mobs, spells, localization çeker
+Çıktı: data/production-data.js, data/farming-data.js, data/mobs-data.js, data/spells-db.js
+Not: Üretilen dosyalar repoya işlenir; site çalışırken ağ isteği yapılmaz
 ```
 
 ---
@@ -261,7 +292,9 @@ AoT-PNASF/
 │
 ├── 📁 scripts/
 │   ├── ai-scanner.js                # Gemini AI tarayıcı
-│   └── pvp-fetcher.cjs              # PvP veri çekici (CommonJS)
+│   ├── pvp-fetcher.cjs              # PvP veri çekici (CommonJS)
+│   ├── gen-game-data.mjs            # Üretim/çiftlik/yaratık verisi üreteci
+│   └── gen-spells-data.mjs          # Yetenek verisi üreteci (TR yerelleştirme)
 │
 └── 📁 Proje Kök Dizini
     ├── 📁 data/                    # Eşya/market/world JSON & JS verileri

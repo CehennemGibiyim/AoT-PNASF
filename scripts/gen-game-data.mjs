@@ -20,6 +20,21 @@ import path from 'node:path';
 
 const kaynak = process.argv[2] || '/tmp/ao';
 const hedef = path.resolve('data');
+const KOK = 'https://raw.githubusercontent.com/ao-data/ao-bin-dumps/master';
+const GEREKLI = ['items', 'craftingmodifiers', 'farmingmodifiers', 'loot', 'mobs'];
+
+// --indir: eksik dökümleri resmî depodan çeker (ao-bin-dumps)
+if (process.argv.includes('--indir')) {
+  fs.mkdirSync(kaynak, { recursive: true });
+  for (const ad of GEREKLI) {
+    const yol = path.join(kaynak, `${ad}.json`);
+    if (fs.existsSync(yol) && fs.statSync(yol).size > 1024) continue;
+    console.log(`↓ ${ad}.json indiriliyor…`);
+    const yanit = await fetch(`${KOK}/${ad}.json`);
+    if (!yanit.ok) throw new Error(`${ad}.json: HTTP ${yanit.status}`);
+    fs.writeFileSync(yol, Buffer.from(await yanit.arrayBuffer()));
+  }
+}
 
 const oku = (ad) => JSON.parse(fs.readFileSync(path.join(kaynak, `${ad}.json`), 'utf8'));
 const dizi = (v) => (Array.isArray(v) ? v : v ? [v] : []);
@@ -37,11 +52,22 @@ const adEn = okuJson('locales/items-en.json');
 
 const tabanKimlik = (tam) => String(tam).replace(/^T\d+_/, '').replace(/_LEVEL\d+$/, '');
 const okunakli = (tam) => tabanKimlik(tam).toLowerCase().replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
-// Tam kimlik ("T8_PLANKS") için resmî yerelleştirme; yoksa okunaklı kimlik.
-const adBul = (tam) => ({
-  tr: adTr[tam] || adEn[tam] || okunakli(tam),
-  en: adEn[tam] || adTr[tam] || okunakli(tam),
-});
+// "_LEVEL1" büyülü sürümler için taban ad + ".1" eki kullanılır; aksi halde
+// ad sözlüğünde bulunmayan sürümler "Planks" gibi çıplak kalıyordu.
+const adBul = (tam) => {
+  const eslesme = String(tam).match(/_LEVEL(\d+)$/);
+  const seviye = eslesme ? Number(eslesme[1]) : 0;
+  const ek = seviye ? ` .${seviye}` : '';
+  // Tier korunmalı: "T4_PLANKS_LEVEL1" → "T4_PLANKS" (T2 ada düşmesin)
+  const tier = String(tam).match(/^T(\d+)_/);
+  const taban = tabanKimlik(tam);
+  const tierliTaban = tier ? `T${tier[1]}_${taban}` : taban;
+  const okunakliTaban = okunakli(tier ? tierliTaban : taban);
+  return {
+    tr: adTr[tam] || (adTr[tierliTaban] ? adTr[tierliTaban] + ek : okunakliTaban + ek),
+    en: adEn[tam] || (adEn[tierliTaban] ? adEn[tierliTaban] + ek : okunakliTaban + ek),
+  };
+};
 
 // ── Eşyalar / reçeteler ─────────────────────────────────────
 const itemsJson = oku('items');
