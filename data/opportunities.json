@@ -1,20 +1,20 @@
 {
-  "lastUpdate": "2026-11-05T04:11:05.487Z",
+  "lastUpdate": "2026-11-05T13:41:33.640Z",
   "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
   "opportunities": [
     {
-      "id": "market_T8_BAG_Bridgewatch_Fort Sterling",
+      "id": "market_T6_CAPE_Martlock_Lymhurst",
       "type": "flip",
-      "item": "T8_BAG",
-      "itemName": "T8_BAG",
-      "from": "Bridgewatch",
-      "to": "Fort Sterling",
-      "buyPrice": 247000,
-      "sellPrice": 250168,
-      "profit": 2914,
-      "profitPercent": "1.2",
-      "timestamp": "2026-11-05T04:11:05.487Z",
+      "item": "T6_CAPE",
+      "itemName": "T6_CAPE",
+      "from": "Martlock",
+      "to": "Lymhurst",
+      "buyPrice": 22993,
+      "sellPrice": 24000,
+      "profit": 926,
+      "profitPercent": "4.0",
+      "timestamp": "2026-11-05T13:41:33.640Z",
       "source": "albion-online-data.com",
       "verified": true
     }
