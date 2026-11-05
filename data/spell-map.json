@@ -1,5 +1,5 @@
 {
- "fetchedAt": "2026-11-04T23:37:46.199Z",
+ "fetchedAt": "2026-11-05T06:37:55.014Z",
  "source": "albiononlinegrind.com",
  "weapons": [
   {
@@ -583,6 +583,63 @@
    ]
   },
   {
+   "id": "2H_SHAPESHIFTER_MORGANA",
+   "name": "Bloodmoon Staff",
+   "builds": 10,
+   "skills": [
+    {
+     "slot": "E",
+     "id": "SHAPESHIFT_WEREWOLF",
+     "count": 10
+    },
+    {
+     "slot": "W",
+     "id": "SHAPE_W_DAMAGE_AOE",
+     "count": 9
+    },
+    {
+     "slot": "Q",
+     "id": "SHAPE_Q_CONE_MELEE",
+     "count": 6
+    },
+    {
+     "slot": "Q",
+     "id": "SHAPE_Q_SKILLSHOT",
+     "count": 4
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_SHAPESHIFT_ATTACK_BUFF",
+     "count": 4
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_SHAPESHIFT_GATHER_CHARGES",
+     "count": 3
+    },
+    {
+     "slot": "W",
+     "id": "SHAPE_W_AREA_PULL",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_SHAPESHIFT_W_CAST_SPEED_BUFF",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_CCDURATION",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_SHAPESHIFT_Q_CAST_DAMAGE_REDUCE",
+     "count": 1
+    }
+   ]
+  },
+  {
    "id": "MAIN_AXE",
    "name": "Battleaxe",
    "builds": 10,
@@ -746,63 +803,6 @@
     {
      "slot": "P",
      "id": "PASSIVE_SLOWPOISON",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "2H_SHAPESHIFTER_MORGANA",
-   "name": "Bloodmoon Staff",
-   "builds": 9,
-   "skills": [
-    {
-     "slot": "E",
-     "id": "SHAPESHIFT_WEREWOLF",
-     "count": 9
-    },
-    {
-     "slot": "W",
-     "id": "SHAPE_W_DAMAGE_AOE",
-     "count": 8
-    },
-    {
-     "slot": "Q",
-     "id": "SHAPE_Q_CONE_MELEE",
-     "count": 5
-    },
-    {
-     "slot": "Q",
-     "id": "SHAPE_Q_SKILLSHOT",
-     "count": 4
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_SHAPESHIFT_ATTACK_BUFF",
-     "count": 4
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_SHAPESHIFT_GATHER_CHARGES",
-     "count": 2
-    },
-    {
-     "slot": "W",
-     "id": "SHAPE_W_AREA_PULL",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_SHAPESHIFT_W_CAST_SPEED_BUFF",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_CCDURATION",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_SHAPESHIFT_Q_CAST_DAMAGE_REDUCE",
      "count": 1
     }
    ]
@@ -2736,53 +2736,6 @@
    ]
   },
   {
-   "id": "MAIN_FROSTSTAFF_AVALON",
-   "name": "Chillhowl",
-   "builds": 4,
-   "skills": [
-    {
-     "slot": "E",
-     "id": "FROZEN_CRYSTAL",
-     "count": 4
-    },
-    {
-     "slot": "Q",
-     "id": "ICESHARD",
-     "count": 2
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_CASTINGSPEED_CHANCE_FROSTSTAFF",
-     "count": 2
-    },
-    {
-     "slot": "Q",
-     "id": "FROST_BITE",
-     "count": 2
-    },
-    {
-     "slot": "W",
-     "id": "FROSTNOVA",
-     "count": 2
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_FROST",
-     "count": 2
-    },
-    {
-     "slot": "W",
-     "id": "ICE_SCULPTURE",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "FROSTBOMB_CASTSLOW",
-     "count": 1
-    }
-   ]
-  },
-  {
    "id": "2H_AXE_AVALON",
    "name": "Realmbreaker",
    "builds": 4,
@@ -3300,6 +3253,53 @@
     {
      "slot": "P",
      "id": "PASSIVE_ENERGYCHANCE_HAMMER",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "MAIN_FROSTSTAFF_AVALON",
+   "name": "Chillhowl",
+   "builds": 3,
+   "skills": [
+    {
+     "slot": "E",
+     "id": "FROZEN_CRYSTAL",
+     "count": 3
+    },
+    {
+     "slot": "Q",
+     "id": "ICESHARD",
+     "count": 2
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_CASTINGSPEED_CHANCE_FROSTSTAFF",
+     "count": 2
+    },
+    {
+     "slot": "W",
+     "id": "ICE_SCULPTURE",
+     "count": 1
+    },
+    {
+     "slot": "Q",
+     "id": "FROST_BITE",
+     "count": 1
+    },
+    {
+     "slot": "W",
+     "id": "FROSTNOVA",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_FROST",
+     "count": 1
+    },
+    {
+     "slot": "W",
+     "id": "FROSTBOMB_CASTSLOW",
      "count": 1
     }
    ]

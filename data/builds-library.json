@@ -1,5 +1,5 @@
 {
- "fetchedAt": "2026-11-04T23:37:46.199Z",
+ "fetchedAt": "2026-11-05T06:37:55.014Z",
  "source": "albiononlinegrind.com",
  "sourceUrl": "https://albiononlinegrind.com/builds",
  "note": "Veriler herkese açık build sayfalarındaki SSR JSONundan (__NEXT_DATA__) çekilir; eşya/yetenek ID'leri doğrulanmıştır.",
@@ -7,12 +7,12 @@
  "pagesRead": 16,
  "categories": {
   "FAME_FARM_SOLO": 32,
-  "MISTS_SOLO": 42,
+  "MISTS_SOLO": 41,
   "OPEN_WORLD": 47,
   "CORRUPTED_DUNGEON": 34,
   "FAME_FARM_GROUP": 38,
   "GANK_SOLO": 14,
-  "SMALL_SCALE": 62,
+  "SMALL_SCALE": 63,
   "CRYSTAL_ARENA": 37,
   "FAME_FARM_GROUP_AVALON": 36,
   "GANK_GROUP": 23,
@@ -13190,126 +13190,100 @@
    "description": ""
   },
   {
-   "id": "5dcbf0d2-9945-4574-bfe4-4040836b6eff",
-   "slug": "chillhowl-mist-build",
-   "title": "Chillhowl Mist Build",
-   "weaponName": "Chillhowl",
-   "category": "MISTS_SOLO",
+   "id": "a2f24fdb-7c25-4324-97e8-4c5c721d4b21",
+   "slug": "bloodmoon-staff-smallscale-dps-build",
+   "title": "Bloodmoon Staff Smallscale DPS Build",
+   "weaponName": "Bloodmoon Staff",
+   "category": "SMALL_SCALE",
    "author": "Arreat Regaro",
    "tags": [
-    "Meta",
+    "Smallscale",
     "PVP"
    ],
    "upvotes": 8,
-   "createdAt": "2024-04-04T10:00:00+00:00",
+   "createdAt": "2024-07-24T10:00:00+00:00",
    "updatedAt": "2024-12-12T13:10:24.568417+00:00",
-   "url": "https://albiononlinegrind.com/build/chillhowl-mist-build",
+   "url": "https://albiononlinegrind.com/build/bloodmoon-staff-smallscale-dps-build",
    "source": "albiononlinegrind.com",
    "items": {
     "weapon": {
-     "id": "T8_MAIN_FROSTSTAFF_AVALON",
-     "base": "MAIN_FROSTSTAFF_AVALON",
+     "id": "T8_2H_SHAPESHIFTER_MORGANA",
+     "base": "2H_SHAPESHIFTER_MORGANA",
      "tier": 8,
      "ench": 0,
      "skills": [
-      "FROST_BITE",
-      "FROSTNOVA",
-      "FROZEN_CRYSTAL",
-      "PASSIVE_FROST"
+      "SHAPE_Q_CONE_MELEE",
+      "SHAPE_W_DAMAGE_AOE",
+      "SHAPESHIFT_WEREWOLF",
+      "PASSIVE_SHAPESHIFT_GATHER_CHARGES"
      ]
     },
-    "offhand": {
-     "id": "T8_OFF_HORN_KEEPER",
-     "base": "OFF_HORN_KEEPER",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
+    "offhand": null,
     "head": {
-     "id": "T8_HEAD_LEATHER_SET2",
-     "base": "HEAD_LEATHER_SET2",
+     "id": "T8_HEAD_LEATHER_MORGANA",
+     "base": "HEAD_LEATHER_MORGANA",
      "tier": 8,
      "ench": 0,
      "skills": [
-      "RETALIATE2",
-      "PASSIVE_ARMOR_BALANCE"
+      "SMELLOFBLOOD",
+      "PASSIVE_BALANCE"
      ]
     },
     "chest": {
-     "id": "T8_ARMOR_CLOTH_MORGANA",
-     "base": "ARMOR_CLOTH_MORGANA",
+     "id": "T8_ARMOR_LEATHER_HELL",
+     "base": "ARMOR_LEATHER_HELL",
      "tier": 8,
      "ench": 0,
      "skills": [
-      "LEVITATE",
-      "PASSIVE_INCREASED_DAMAGE"
+      "LIFESTEALAURA",
+      "PASSIVE_ARMOR_BALANCE"
      ]
     },
     "boots": {
-     "id": "T8_SHOES_PLATE_SET1",
-     "base": "SHOES_PLATE_SET1",
+     "id": "T8_SHOES_CLOTH_SET1",
+     "base": "SHOES_CLOTH_SET1",
      "tier": 8,
      "ench": 0,
      "skills": [
-      "SPRINTHOT",
-      "PASSIVE_MR_AR"
+      "SPRINTEOT",
+      "PASSIVE_INCREASED_DAMAGE"
      ]
     },
     "cape": {
-     "id": "T8_CAPEITEM_FW_LYMHURST",
-     "base": "CAPEITEM_FW_LYMHURST",
+     "id": "T8_CAPEITEM_FW_CAERLEON",
+     "base": "CAPEITEM_FW_CAERLEON",
      "tier": 8,
      "ench": 0,
      "skills": []
     },
     "food": {
-     "id": "T7_MEAL_OMELETTE",
-     "base": "MEAL_OMELETTE",
-     "tier": 7,
+     "id": "T8_MEAL_STEW",
+     "base": "MEAL_STEW",
+     "tier": 8,
      "ench": 0,
      "skills": []
     },
     "potion": {
-     "id": "T6_POTION_HEAL",
-     "base": "POTION_HEAL",
-     "tier": 6,
+     "id": "T7_POTION_STONESKIN",
+     "base": "POTION_STONESKIN",
+     "tier": 7,
      "ench": 0,
      "skills": []
     }
    },
    "alt": {
     "head": {
-     "id": "T8_HEAD_CLOTH_AVALON",
-     "base": "HEAD_CLOTH_AVALON",
+     "id": "T8_HEAD_CLOTH_SET1",
+     "base": "HEAD_CLOTH_SET1",
      "tier": 8,
      "ench": 0,
      "skills": [
-      "AVALON_BEAM",
+      "ENERGYSHIELD2",
       "PASSIVE_INCREASED_DAMAGE"
-     ]
-    },
-    "chest": {
-     "id": "T8_ARMOR_LEATHER_SET3",
-     "base": "ARMOR_LEATHER_SET3",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "AMBUSH",
-      "PASSIVE_ARMOR_BALANCE"
      ]
     }
    },
-   "alts": {
-    "potion": [
-     {
-      "id": "T7_POTION_REVIVE",
-      "base": "POTION_REVIVE",
-      "tier": 7,
-      "ench": 0,
-      "skills": []
-     }
-    ]
-   },
+   "alts": {},
    "description": ""
   },
   {
@@ -16729,6 +16703,112 @@
    "description": "Ready to hurtfatkids?"
   },
   {
+   "id": "17d4f2ee-8666-48bb-999e-03dfc376825b",
+   "slug": "greataxe-best-solo-pve-fame-farming-build",
+   "title": "Greataxe Best Solo Pve Fame farming build",
+   "weaponName": "Greataxe",
+   "category": "FAME_FARM_SOLO",
+   "author": "Vinashaka",
+   "tags": [
+    "Budget",
+    "Fame Farm",
+    "PvE"
+   ],
+   "upvotes": 7,
+   "createdAt": "2025-05-29T12:08:30.311022+00:00",
+   "updatedAt": "2025-05-29T12:09:13.027+00:00",
+   "url": "https://albiononlinegrind.com/build/greataxe-best-solo-pve-fame-farming-build",
+   "source": "albiononlinegrind.com",
+   "items": {
+    "weapon": {
+     "id": "T8_2H_AXE",
+     "base": "2H_AXE",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "RENDINGSPIN",
+      "BLADE_AURA",
+      "AXEWHIRLWIND2",
+      "PASSIVE_HEALTHCHANCE_MACE"
+     ]
+    },
+    "offhand": null,
+    "head": {
+     "id": "T8_HEAD_CLOTH_SET1",
+     "base": "HEAD_CLOTH_SET1",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "ENERGYSHIELD2",
+      "PASSIVE_INCREASED_DAMAGE"
+     ]
+    },
+    "chest": {
+     "id": "T8_ARMOR_LEATHER_HELL",
+     "base": "ARMOR_LEATHER_HELL",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "LIFESTEALAURA",
+      "PASSIVE_ARMOR_BALANCE"
+     ]
+    },
+    "boots": {
+     "id": "T8_SHOES_CLOTH_ROYAL",
+     "base": "SHOES_CLOTH_ROYAL",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "GLASS_MOVESPEED",
+      "PASSIVE_ARMOR_BALANCE"
+     ]
+    },
+    "cape": {
+     "id": "T8_CAPEITEM_FW_THETFORD",
+     "base": "CAPEITEM_FW_THETFORD",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "food": {
+     "id": "T5_MEAL_SOUP",
+     "base": "MEAL_SOUP",
+     "tier": 5,
+     "ench": 0,
+     "skills": []
+    },
+    "potion": {
+     "id": "T8_POTION_COOLDOWN",
+     "base": "POTION_COOLDOWN",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    }
+   },
+   "alt": {},
+   "alts": {
+    "food": [
+     {
+      "id": "T8_MEAL_STEW",
+      "base": "MEAL_STEW",
+      "tier": 8,
+      "ench": 0,
+      "skills": []
+     }
+    ],
+    "potion": [
+     {
+      "id": "T7_POTION_REVIVE",
+      "base": "POTION_REVIVE",
+      "tier": 7,
+      "ench": 0,
+      "skills": []
+     }
+    ]
+   },
+   "description": "Great sustain and aoe"
+  },
+  {
    "id": "141038e3-78ae-4ea2-bcd5-6ee93e115ef6",
    "slug": "healer-for-trio-abyssal-depths",
    "title": "Healer for Trio Abyssal Depths",
@@ -19519,112 +19599,6 @@
    },
    "alts": {},
    "description": ""
-  },
-  {
-   "id": "17d4f2ee-8666-48bb-999e-03dfc376825b",
-   "slug": "greataxe-best-solo-pve-fame-farming-build",
-   "title": "Greataxe Best Solo Pve Fame farming build",
-   "weaponName": "Greataxe",
-   "category": "FAME_FARM_SOLO",
-   "author": "Vinashaka",
-   "tags": [
-    "Budget",
-    "Fame Farm",
-    "PvE"
-   ],
-   "upvotes": 6,
-   "createdAt": "2025-05-29T12:08:30.311022+00:00",
-   "updatedAt": "2025-05-29T12:09:13.027+00:00",
-   "url": "https://albiononlinegrind.com/build/greataxe-best-solo-pve-fame-farming-build",
-   "source": "albiononlinegrind.com",
-   "items": {
-    "weapon": {
-     "id": "T8_2H_AXE",
-     "base": "2H_AXE",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "RENDINGSPIN",
-      "BLADE_AURA",
-      "AXEWHIRLWIND2",
-      "PASSIVE_HEALTHCHANCE_MACE"
-     ]
-    },
-    "offhand": null,
-    "head": {
-     "id": "T8_HEAD_CLOTH_SET1",
-     "base": "HEAD_CLOTH_SET1",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "ENERGYSHIELD2",
-      "PASSIVE_INCREASED_DAMAGE"
-     ]
-    },
-    "chest": {
-     "id": "T8_ARMOR_LEATHER_HELL",
-     "base": "ARMOR_LEATHER_HELL",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "LIFESTEALAURA",
-      "PASSIVE_ARMOR_BALANCE"
-     ]
-    },
-    "boots": {
-     "id": "T8_SHOES_CLOTH_ROYAL",
-     "base": "SHOES_CLOTH_ROYAL",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "GLASS_MOVESPEED",
-      "PASSIVE_ARMOR_BALANCE"
-     ]
-    },
-    "cape": {
-     "id": "T8_CAPEITEM_FW_THETFORD",
-     "base": "CAPEITEM_FW_THETFORD",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "food": {
-     "id": "T5_MEAL_SOUP",
-     "base": "MEAL_SOUP",
-     "tier": 5,
-     "ench": 0,
-     "skills": []
-    },
-    "potion": {
-     "id": "T8_POTION_COOLDOWN",
-     "base": "POTION_COOLDOWN",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    }
-   },
-   "alt": {},
-   "alts": {
-    "food": [
-     {
-      "id": "T8_MEAL_STEW",
-      "base": "MEAL_STEW",
-      "tier": 8,
-      "ench": 0,
-      "skills": []
-     }
-    ],
-    "potion": [
-     {
-      "id": "T7_POTION_REVIVE",
-      "base": "POTION_REVIVE",
-      "tier": 7,
-      "ench": 0,
-      "skills": []
-     }
-    ]
-   },
-   "description": "Great sustain and aoe"
   },
   {
    "id": "5a77d840-a7be-4dcf-82f8-cef00547f320",
