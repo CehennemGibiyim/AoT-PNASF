@@ -1,5 +1,5 @@
 {
- "fetchedAt": "2026-11-06T06:33:19.884Z",
+ "fetchedAt": "2026-11-06T19:19:54.943Z",
  "source": "albiononlinegrind.com",
  "weapons": [
   {
@@ -3436,58 +3436,6 @@
    ]
   },
   {
-   "id": "MAIN_FIRESTAFF_KEEPER",
-   "name": "Wildfire Staff",
-   "builds": 3,
-   "skills": [
-    {
-     "slot": "E",
-     "id": "MAGMASPHERE",
-     "count": 3
-    },
-    {
-     "slot": "Q",
-     "id": "FIRESTAFFBOLT_AOE",
-     "count": 2
-    },
-    {
-     "slot": "Q",
-     "id": "FIRESTAFFBOLT2",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "FIRESTAFFIGNITE2_SPREAD",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_CASTINGSPEED_CHANCE_FIRESTAFF",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "SKILLSHOT_FIREBALL",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_SPELLPOWER_CASTER_FIRESTAFF",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "FIREWALL",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_SPELLPOWER_CASTER_CURSEDSTAFF",
-     "count": 1
-    }
-   ]
-  },
-  {
    "id": "2H_CROSSBOW",
    "name": "Crossbow",
    "builds": 3,
@@ -4233,6 +4181,48 @@
     {
      "slot": "Q",
      "id": "QS_WHIRLWIND2",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "MAIN_FIRESTAFF_KEEPER",
+   "name": "Wildfire Staff",
+   "builds": 2,
+   "skills": [
+    {
+     "slot": "E",
+     "id": "MAGMASPHERE",
+     "count": 2
+    },
+    {
+     "slot": "Q",
+     "id": "FIRESTAFFBOLT2",
+     "count": 1
+    },
+    {
+     "slot": "W",
+     "id": "FIRESTAFFIGNITE2_SPREAD",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_CASTINGSPEED_CHANCE_FIRESTAFF",
+     "count": 1
+    },
+    {
+     "slot": "Q",
+     "id": "FIRESTAFFBOLT_AOE",
+     "count": 1
+    },
+    {
+     "slot": "W",
+     "id": "SKILLSHOT_FIREBALL",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_SPELLPOWER_CASTER_FIRESTAFF",
      "count": 1
     }
    ]
