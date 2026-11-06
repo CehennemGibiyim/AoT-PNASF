@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-11-06T04:08:34.647Z",
+  "lastUpdate": "2026-11-06T13:25:53.800Z",
   "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
   "opportunities": [
@@ -14,7 +14,7 @@
       "sellPrice": 30005,
       "profit": 7373,
       "profitPercent": "33.5",
-      "timestamp": "2026-11-06T04:08:34.647Z",
+      "timestamp": "2026-11-06T13:25:53.800Z",
       "source": "albion-online-data.com",
       "verified": true
     },
@@ -29,7 +29,7 @@
       "sellPrice": 58008,
       "profit": 956,
       "profitPercent": "1.7",
-      "timestamp": "2026-11-06T04:08:34.647Z",
+      "timestamp": "2026-11-06T13:25:53.800Z",
       "source": "albion-online-data.com",
       "verified": true
     }
