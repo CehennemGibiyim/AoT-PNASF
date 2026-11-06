@@ -323,7 +323,7 @@ export async function guncellemeUygula(
     } catch (hata) {
       return { tamam: false, hata: hata instanceof Error ? hata.message : 'Güncelleme başlatılamadı.' };
     } finally {
-      dinle?.();
+      if (typeof dinle === 'function') dinle();
     }
   }
 
