@@ -10,6 +10,7 @@ const os = require('node:os');
 const path = require('node:path');
 
 const TOPLAYICI = path.join(__dirname, 'collect-windows.mjs');
+const SURUM = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'package.json'), 'utf8')).version;
 
 function calistir(args) {
   return spawnSync(process.execPath, [TOPLAYICI, ...args], { encoding: 'utf8' });
@@ -91,7 +92,7 @@ test('SURUM.txt sürüm, commit ve paket listesini yazar', () => {
 
   calistir(['--electron', release, '--tauri', path.join(kok, 'yok'), '--out', out]);
   const metin = fs.readFileSync(path.join(out, 'SURUM.txt'), 'utf8');
-  assert.match(metin, /Sürüm:\s+1\.0\.0/);
+  assert.match(metin, new RegExp(`Sürüm:\\s+${SURUM.replace(/\./g, '\\.')}`));
   assert.match(metin, /Commit:\s+\S+/);
   assert.match(metin, /AoT-PNASF-1\.0\.0-x64-portable\.exe/);
   fs.rmSync(kok, { recursive: true, force: true });

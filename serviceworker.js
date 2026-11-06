@@ -93,6 +93,16 @@ self.addEventListener('fetch', (event) => {
     return;
   }
   
+  // Sürüm bildirimi her zaman ağdan okunur: yeni dağıtım hemen görünsün
+  // (js/update-check.ts bu dosyaya bakarak güncelleme önerir).
+  if (url.pathname.endsWith('/version.json')) {
+    event.respondWith(
+      fetch(event.request, { cache: 'no-store' })
+        .catch(() => caches.match(event.request).then((cached) => cached || Response.error()))
+    );
+    return;
+  }
+
   // HTML sayfaları için Network-First: yeni dağıtımlar hemen görünsün,
   // ağ yoksa önbellekteki kopya kullanılsın
   if (url.pathname.endsWith('.html') || url.pathname.endsWith('/')) {

@@ -12,6 +12,7 @@ const { pathToFileURL } = require('node:url');
 const { resolveAsset } = require('./serve.cjs');
 const { SessionStore } = require('./session.cjs');
 const { ingestBaslat } = require('./ingest.cjs');
+const { guncellemeIndir } = require('./update.cjs');
 
 const SCHEME = 'aot';
 const ROOT = path.join(__dirname, 'app');
@@ -98,6 +99,28 @@ async function oturumKur() {
   }
 }
 
+/**
+ * Güncelleme kurulumunu indirir, SHA-256 ile doğrular ve başlatır.
+ * Renderer yalnızca GitHub varlık adreslerini gönderebilir (update.cjs).
+ */
+function guncellemeKur() {
+  ipcMain.handle('guncelleme:indir', async (olay, istek) => {
+    try {
+      const sonuc = await guncellemeIndir(istek, {
+        ilerleme: (yuzde) => {
+          if (!olay.sender.isDestroyed()) olay.sender.send('guncelleme:ilerleme', yuzde);
+        },
+      });
+      const acmaHatasi = await shell.openPath(sonuc.dosya);
+      if (acmaHatasi) return { tamam: false, hata: acmaHatasi };
+      setTimeout(() => app.quit(), 1500);
+      return { tamam: true, boyut: sonuc.boyut };
+    } catch (hata) {
+      return { tamam: false, hata: hata instanceof Error ? hata.message : 'Güncelleme indirilemedi.' };
+    }
+  });
+}
+
 function registerProtocol() {
   protocol.handle(SCHEME, async (request) => {
     const asset = resolveAsset(ROOT, request.url);
@@ -135,6 +158,7 @@ if (!app.requestSingleInstanceLock()) {
     }
 
     await oturumKur();
+    guncellemeKur();
     registerProtocol();
     Menu.setApplicationMenu(
       Menu.buildFromTemplate([

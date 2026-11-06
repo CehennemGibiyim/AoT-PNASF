@@ -29,3 +29,15 @@ contextBridge.exposeInMainWorld('aotSession', {
     return () => ipcRenderer.removeListener('oturum:guncelle', dinleyici);
   },
 });
+
+// Güncelleme köprüsü: indirme ve SHA-256 doğrulaması ana süreçte yapılır;
+// sayfa yalnızca izinli GitHub adreslerini isteyebilir (update.cjs).
+contextBridge.exposeInMainWorld('aotUpdate', {
+  indir: (istek) => ipcRenderer.invoke('guncelleme:indir', istek),
+  onIlerleme: (cb) => {
+    const dinleyici = (_olay, yuzde) => cb(yuzde);
+    ipcRenderer.on('guncelleme:ilerleme', dinleyici);
+    return () => ipcRenderer.removeListener('guncelleme:ilerleme', dinleyici);
+  },
+});
+

@@ -384,6 +384,24 @@ npm run build   # Vite production build
 # Site: http://localhost:5173
 ```
 
+### Sürüm ve güncelleme denetimi
+
+Sürüm numarası tek kaynaktan gelir: kök `package.json`. Masaüstü kabukları
+(`desktop/electron/package.json`, `desktop/tauri/package.json`,
+`desktop/tauri/src-tauri/tauri.conf.json`) aynı sürümü taşımak zorundadır;
+`npm run validate` farkı hata olarak bildirir.
+
+- **Web:** derleme `dist/version.json` üretir. **Ayarlar → Hakkında**
+  bölümündeki “Güncellemeleri denetle” yayımdaki sürümü okur; yeni sürüm varsa
+  önbellek temizlenip sayfa yeniden yüklenir. Açılışta sağ altta rozet de çıkar.
+- **Masaüstü:** aynı bölüm GitHub Releases'teki en son `v*` sürümünü denetler.
+  “Güncelle” kurulum dosyasını indirir, `SHA256SUMS.txt` ile doğrular ve
+  başlatır; doğrulama başarısızsa hiçbir şey çalıştırılmaz.
+- **Yeni sürüm yayımlama:** kök `package.json` sürümünü yükselt, diğer üç
+  manifestoyu eşitle, `npm test` + `npm run build` çalıştır, `v1.1.0`
+  biçiminde etiket atıp push et. `desktop-build.yml` Windows paketlerini
+  üretip GitHub Release'e ekler.
+
 ### Dil / i18n Sistemi
 
 - Arayüz çevirileri **yerel** bir motordur: `js/i18n.ts` + `locales/ui-i18n.json` (284 anahtar × 14 dil: TR/EN/RU/DE/FR/PL/PT/ES/KR/IT/JA/ZH/ID/AR).

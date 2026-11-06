@@ -2,6 +2,7 @@
 // Yan çekmecer (drawer) formatında ayarlar paneli
 
 import { APP_VERSION, BUILD_COMMIT, BUILD_DATE, BUILD_SOURCE, getPlatformBilgisi, surumOzeti } from './app-info';
+import { guncellemeKontrolEt, guncellemeUygula, type GuncellemeDurumu } from './update-check';
 
 // ─── TEMALAR ─────────────────────────────────────────────
 let SP_THEMES = {
@@ -243,6 +244,16 @@ function buildSettingsPanel() {
           <div style="display:flex;justify-content:space-between;gap:10px;"><span>Ortam</span><strong id="spPlatform" style="color:var(--text-main)">—</strong></div>
           <div id="spPlatformDetail" style="font-size:10px;color:#666;margin-top:2px"></div>
           <button type="button" id="spCopyVersion" class="sp-btn-secondary" style="margin-top:8px;width:100%;padding:6px;font-size:11px;">Sürüm bilgisini kopyala</button>
+
+          <!-- Güncelleme denetimi -->
+          <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--bg-700);">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <button type="button" id="spCheckUpdates" class="sp-btn-secondary" style="flex:1;padding:6px;font-size:11px;">⟳ Güncellemeleri denetle</button>
+              <button type="button" id="spApplyUpdate" class="sp-btn-primary" style="display:none;flex:0 0 auto;padding:6px 12px;font-size:11px;">Güncelle</button>
+            </div>
+            <div id="spUpdateStatus" role="status" aria-live="polite" style="font-size:10px;color:var(--text-muted);margin-top:6px;line-height:1.6;">Güncellemeler denetleniyor…</div>
+            <div id="spUpdateNotes" style="display:none;font-size:10px;color:var(--text-muted);margin-top:6px;max-height:120px;overflow:auto;white-space:pre-wrap;line-height:1.6;"></div>
+          </div>
         </div>
       </div>
 
@@ -269,6 +280,7 @@ function buildSettingsPanel() {
 
   // Sürüm bilgisi (derleme anında gömülü) — hata bildiriminde kullanılabilir
   doldurSurumBilgisi();
+  guncellemeBolumuKur();
 
   // Önizlemeyi güncelle
   updateSpPreview(currentTheme);
@@ -316,6 +328,91 @@ function doldurSurumBilgisi() {
       btn.textContent = metin;
     }
   });
+}
+
+// ─── GÜNCELLEME DENETİMİ ─────────────────────────────────
+function guncellemeBolumuKur() {
+  const denetleBtn = document.getElementById('spCheckUpdates') as HTMLButtonElement | null;
+  const uygulaBtn = document.getElementById('spApplyUpdate') as HTMLButtonElement | null;
+  const durumEl = document.getElementById('spUpdateStatus');
+  const notEl = document.getElementById('spUpdateNotes');
+  if (!denetleBtn || !uygulaBtn || !durumEl || !notEl) return;
+
+  let sonDurum: GuncellemeDurumu | null = null;
+  let mesgul = false;
+
+  const saat = (zaman: number) =>
+    new Date(zaman).toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+
+  const ciz = () => {
+    if (!sonDurum) return;
+    const durum = sonDurum;
+    notEl.textContent = durum.notlar || '';
+    notEl.style.display = durum.notlar ? 'block' : 'none';
+
+    if (durum.durum === 'yeni' && durum.son) {
+      const indirilebilir = Boolean(durum.indirme && durum.dogrulama);
+      durumEl.textContent = indirilebilir
+        ? `Yeni sürüm: v${durum.son} (kurulu v${durum.kurulu}). Kurulum dosyası indirilip SHA-256 ile doğrulanacak.`
+        : `Yeni sürüm: v${durum.son} (kurulu v${durum.kurulu}). Açılan sayfadan indirebilirsiniz.`;
+      uygulaBtn.textContent = indirilebilir ? 'Güncelle' : 'İndir';
+      uygulaBtn.style.display = 'inline-block';
+      return;
+    }
+
+    uygulaBtn.style.display = 'none';
+    if (durum.durum === 'guncel') {
+      durumEl.textContent = `Güncel — v${durum.kurulu} en son sürüm. Son kontrol: ${saat(durum.zaman)}`;
+    } else {
+      durumEl.textContent = durum.mesaj || 'Sürüm bilgisi alınamadı.';
+    }
+  };
+
+  const denetle = async (zorla: boolean) => {
+    if (mesgul) return;
+    mesgul = true;
+    denetleBtn.disabled = true;
+    uygulaBtn.disabled = true;
+    denetleBtn.textContent = '⟳ Denetleniyor…';
+    try {
+      sonDurum = await guncellemeKontrolEt(zorla);
+      ciz();
+    } catch (hata) {
+      sonDurum = null;
+      durumEl.textContent = hata instanceof Error ? hata.message : 'Güncelleme denetlenemedi.';
+      notEl.style.display = 'none';
+      uygulaBtn.style.display = 'none';
+    } finally {
+      mesgul = false;
+      denetleBtn.disabled = false;
+      uygulaBtn.disabled = false;
+      denetleBtn.textContent = '⟳ Güncellemeleri denetle';
+    }
+  };
+
+  denetleBtn.addEventListener('click', () => { void denetle(true); });
+
+  uygulaBtn.addEventListener('click', async () => {
+    if (!sonDurum || sonDurum.durum !== 'yeni') return;
+    const hedef = sonDurum;
+    uygulaBtn.disabled = true;
+    denetleBtn.disabled = true;
+    uygulaBtn.textContent = 'İndiriliyor…';
+    try {
+      const sonuc = await guncellemeUygula(hedef, (metin) => {
+        durumEl.textContent = metin;
+      });
+      if (!sonuc.tamam) durumEl.textContent = sonuc.hata || 'Güncelleme başlatılamadı.';
+    } catch (hata) {
+      durumEl.textContent = hata instanceof Error ? hata.message : 'Güncelleme başlatılamadı.';
+    } finally {
+      uygulaBtn.disabled = false;
+      denetleBtn.disabled = false;
+      uygulaBtn.textContent = 'Güncelle';
+    }
+  });
+
+  void denetle(false);
 }
 
 // ─── TEMA SEÇ ────────────────────────────────────────────

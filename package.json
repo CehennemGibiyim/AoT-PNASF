@@ -1,6 +1,6 @@
 {
   "name": "aot-pnasf",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Albion Online Tools - Powered Nexus & AI Smart Feed",
   "main": "index.html",
   "scripts": {
@@ -10,7 +10,7 @@
     "validate": "node scripts/validate-project.cjs",
     "validate:generated": "node scripts/validate-project.cjs --generated",
     "quality": "node scripts/check-quality.cjs",
-    "test:desktop": "node desktop/scripts/test-serve.cjs && node desktop/scripts/test-collect.cjs",
+    "test:desktop": "node desktop/scripts/test-serve.cjs && node desktop/scripts/test-collect.cjs && node desktop/scripts/test-update.cjs",
     "windows:installer": "powershell -NoProfile -ExecutionPolicy Bypass -File desktop/scripts/build-windows.ps1",
     "windows:collect": "node desktop/scripts/collect-windows.mjs",
     "split-locales": "node scripts/split-locales.cjs",

@@ -204,6 +204,21 @@ function checkItems() {
   return items.length;
 }
 
+// Sürüm tek kaynaktan gelir: kök package.json. Masaüstü paketleri ve Tauri
+// yapılandırması aynı sürümü taşımazsa güncelleme denetimi yanlış çalışır.
+function checkVersions() {
+  const ana = parseJson('package.json');
+  if (!ana || !ana.version) return;
+  const beklenen = String(ana.version);
+  for (const relativePath of ['desktop/electron/package.json', 'desktop/tauri/package.json', 'desktop/tauri/src-tauri/tauri.conf.json']) {
+    const veri = parseJson(relativePath);
+    if (!veri) continue;
+    if (String(veri.version || '') !== beklenen) {
+      failures.push(`${relativePath}: sürüm ${veri.version || 'yok'}, kök package.json ${beklenen} ile aynı olmalı`);
+    }
+  }
+}
+
 function markSyncValidated() {
   if (!generatedMode) return;
   const relativePath = 'data/sync-info.json';
@@ -222,6 +237,7 @@ function main() {
   checkJavaScriptSyntax();
   checkDataQuality();
   checkLocaleShards();
+  checkVersions();
   const itemCount = checkItems();
 
   if (failures.length) {
