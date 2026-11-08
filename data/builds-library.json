@@ -1,5 +1,5 @@
 {
- "fetchedAt": "2026-11-07T21:45:21.670Z",
+ "fetchedAt": "2026-11-08T05:55:15.303Z",
  "source": "albiononlinegrind.com",
  "sourceUrl": "https://albiononlinegrind.com/builds",
  "note": "Veriler herkese açık build sayfalarındaki SSR JSONundan (__NEXT_DATA__) çekilir; eşya/yetenek ID'leri doğrulanmıştır.",
@@ -12,8 +12,8 @@
   "CORRUPTED_DUNGEON": 34,
   "FAME_FARM_GROUP": 39,
   "GANK_SOLO": 13,
-  "SMALL_SCALE": 68,
   "CRYSTAL_ARENA": 37,
+  "SMALL_SCALE": 68,
   "FAME_FARM_GROUP_AVALON": 37,
   "GANK_GROUP": 23,
   "ZVZ": 52,
@@ -2137,6 +2137,101 @@
    "description": ""
   },
   {
+   "id": "b1830a49-4521-4073-8460-2dd6ebfdc3c4",
+   "slug": "bloodmoon-dps-arena",
+   "title": "Bloodmoon Staff (DPS) Crystal Arena Build",
+   "weaponName": "Bloodmoon Staff",
+   "category": "CRYSTAL_ARENA",
+   "author": "Nihalz",
+   "tags": [
+    "PvP"
+   ],
+   "upvotes": 32,
+   "createdAt": "2024-12-24T12:16:05.176623+00:00",
+   "updatedAt": "2024-12-24T12:42:47.304+00:00",
+   "url": "https://albiononlinegrind.com/build/bloodmoon-dps-arena",
+   "source": "albiononlinegrind.com",
+   "items": {
+    "weapon": {
+     "id": "T8_2H_SHAPESHIFTER_MORGANA",
+     "base": "2H_SHAPESHIFTER_MORGANA",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "SHAPE_Q_CONE_MELEE",
+      "SHAPE_W_AREA_PULL",
+      "SHAPESHIFT_WEREWOLF",
+      "PASSIVE_SHAPESHIFT_W_CAST_SPEED_BUFF"
+     ]
+    },
+    "offhand": null,
+    "head": {
+     "id": "T8_HEAD_LEATHER_MORGANA",
+     "base": "HEAD_LEATHER_MORGANA",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "SMELLOFBLOOD",
+      "PASSIVE_MR_AR"
+     ]
+    },
+    "chest": {
+     "id": "T8_ARMOR_PLATE_SET1",
+     "base": "ARMOR_PLATE_SET1",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "ENRAGE",
+      "PASSIVE_MR_AR"
+     ]
+    },
+    "boots": {
+     "id": "T8_SHOES_LEATHER_AVALON",
+     "base": "SHOES_LEATHER_AVALON",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "BLINDSPOT",
+      "PASSIVE_ARMOR_BALANCE"
+     ]
+    },
+    "cape": {
+     "id": "T8_CAPEITEM_FW_CAERLEON",
+     "base": "CAPEITEM_FW_CAERLEON",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "food": {
+     "id": "T8_MEAL_STEW_FISH",
+     "base": "MEAL_STEW_FISH",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "potion": {
+     "id": "T7_POTION_STONESKIN",
+     "base": "POTION_STONESKIN",
+     "tier": 7,
+     "ench": 0,
+     "skills": []
+    }
+   },
+   "alt": {},
+   "alts": {
+    "food": [
+     {
+      "id": "T8_MEAL_STEW",
+      "base": "MEAL_STEW",
+      "tier": 8,
+      "ench": 0,
+      "skills": []
+     }
+    ]
+   },
+   "description": "Your main role with this setup is to dive into the opposing team's backline and target their healer and ranged DPS. While you're durable and have lifesteal, it's crucial to retreat to your healer when needed.\n\nThis build shines in duo or trio setups, where coordination is easier, but it's less effective in premade 5v5 teams. In those situations, a well-coordinated enemy team can easily counter you."
+  },
+  {
    "id": "9757d9a6-0852-4d92-8e09-ca4cd5e690ca",
    "slug": "carving-sword-smallscale-build",
    "title": "Carving Sword Small Scale DPS Build",
@@ -2252,101 +2347,6 @@
    },
    "alts": {},
    "description": ""
-  },
-  {
-   "id": "b1830a49-4521-4073-8460-2dd6ebfdc3c4",
-   "slug": "bloodmoon-dps-arena",
-   "title": "Bloodmoon Staff (DPS) Crystal Arena Build",
-   "weaponName": "Bloodmoon Staff",
-   "category": "CRYSTAL_ARENA",
-   "author": "Nihalz",
-   "tags": [
-    "PvP"
-   ],
-   "upvotes": 31,
-   "createdAt": "2024-12-24T12:16:05.176623+00:00",
-   "updatedAt": "2024-12-24T12:42:47.304+00:00",
-   "url": "https://albiononlinegrind.com/build/bloodmoon-dps-arena",
-   "source": "albiononlinegrind.com",
-   "items": {
-    "weapon": {
-     "id": "T8_2H_SHAPESHIFTER_MORGANA",
-     "base": "2H_SHAPESHIFTER_MORGANA",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "SHAPE_Q_CONE_MELEE",
-      "SHAPE_W_AREA_PULL",
-      "SHAPESHIFT_WEREWOLF",
-      "PASSIVE_SHAPESHIFT_W_CAST_SPEED_BUFF"
-     ]
-    },
-    "offhand": null,
-    "head": {
-     "id": "T8_HEAD_LEATHER_MORGANA",
-     "base": "HEAD_LEATHER_MORGANA",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "SMELLOFBLOOD",
-      "PASSIVE_MR_AR"
-     ]
-    },
-    "chest": {
-     "id": "T8_ARMOR_PLATE_SET1",
-     "base": "ARMOR_PLATE_SET1",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "ENRAGE",
-      "PASSIVE_MR_AR"
-     ]
-    },
-    "boots": {
-     "id": "T8_SHOES_LEATHER_AVALON",
-     "base": "SHOES_LEATHER_AVALON",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "BLINDSPOT",
-      "PASSIVE_ARMOR_BALANCE"
-     ]
-    },
-    "cape": {
-     "id": "T8_CAPEITEM_FW_CAERLEON",
-     "base": "CAPEITEM_FW_CAERLEON",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "food": {
-     "id": "T8_MEAL_STEW_FISH",
-     "base": "MEAL_STEW_FISH",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "potion": {
-     "id": "T7_POTION_STONESKIN",
-     "base": "POTION_STONESKIN",
-     "tier": 7,
-     "ench": 0,
-     "skills": []
-    }
-   },
-   "alt": {},
-   "alts": {
-    "food": [
-     {
-      "id": "T8_MEAL_STEW",
-      "base": "MEAL_STEW",
-      "tier": 8,
-      "ench": 0,
-      "skills": []
-     }
-    ]
-   },
-   "description": "Your main role with this setup is to dive into the opposing team's backline and target their healer and ranged DPS. While you're durable and have lifesteal, it's crucial to retreat to your healer when needed.\n\nThis build shines in duo or trio setups, where coordination is easier, but it's less effective in premade 5v5 teams. In those situations, a well-coordinated enemy team can easily counter you."
   },
   {
    "id": "98e77da0-88cd-4846-8f79-649f29c4ed6b",
