@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-11-09T03:37:53.195Z",
+  "lastUpdate": "2026-11-09T14:40:16.643Z",
   "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
   "opportunities": [
@@ -10,11 +10,11 @@
       "itemName": "T6_POTION_HEAL",
       "from": "Martlock",
       "to": "Lymhurst",
-      "buyPrice": 7065,
-      "sellPrice": 7701,
-      "profit": 585,
+      "buyPrice": 7068,
+      "sellPrice": 7706,
+      "profit": 586,
       "profitPercent": "8.3",
-      "timestamp": "2026-11-09T03:37:53.195Z",
+      "timestamp": "2026-11-09T14:40:16.643Z",
       "source": "albion-online-data.com",
       "verified": true
     }
