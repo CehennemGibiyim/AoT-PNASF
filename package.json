@@ -6,7 +6,7 @@
   "scripts": {
     "build": "vite build",
     "typecheck": "tsc --noEmit",
-    "test": "npm run typecheck && npm run validate && npm run quality && npm run test:desktop",
+    "test": "npm run typecheck && npm run validate && npm run quality && npm run test:desktop && node scripts/test-release-notes.cjs",
     "validate": "node scripts/validate-project.cjs",
     "validate:generated": "node scripts/validate-project.cjs --generated",
     "quality": "node scripts/check-quality.cjs",

@@ -1,0 +1,31 @@
+{
+  "1.0.0": {
+    "ozet": "AoT PNASF'in ilk yayını: web araçları ve Windows masaüstü paketleri.",
+    "yenilikler": [
+      "Web sürümü GitHub Pages üzerinde yayımlandı.",
+      "Electron ve Tauri masaüstü kabukları eklendi.",
+      "Windows için NSIS kurulum, portable çalıştırılabilir dosya ve MSI paketleri üretildi."
+    ],
+    "duzeltmeler": []
+  },
+  "1.1.0": {
+    "ozet": "Yardım/Hakkında bölümünden güncelleme denetimi ve sürüm takibi eklendi.",
+    "yenilikler": [
+      "Hakkında bölümüne \"Güncellemeleri denetle\" düğmesi, durum satırı ve sürüm notları alanı eklendi.",
+      "Web: yayımdaki version.json okunarak yeni sürüm algılanıyor; güncelleme önbelleği temizleyip sayfayı yeniliyor.",
+      "Masaüstü: GitHub sürümleri okunuyor, kurulum dosyası indirilip SHA-256 özeti doğrulandıktan sonra başlatılıyor.",
+      "Açılışta yeni sürüm bildiren rozet eklendi; istenirse yok sayılabiliyor.",
+      "Sürüm numarası tüm paketlerde tek kaynaktan denetleniyor."
+    ],
+    "duzeltmeler": []
+  },
+  "1.1.1": {
+    "ozet": "Masaüstü paket adları güncelleyiciyle uyumlu hale getirildi.",
+    "yenilikler": [],
+    "duzeltmeler": [
+      "Tauri paketlerindeki boşluklar dosya adlarında tireye çevriliyor; SHA256SUMS.txt ve zip içeriği yayımdaki adlarla birebir eşleşiyor.",
+      "Güncelleyici, indiricinin kabul etmeyeceği dosya adlarını artık seçmiyor.",
+      "Paket toplama sırasında aynı ada sahip iki dosya varsa sessizce üzerine yazmak yerine hata veriyor."
+    ]
+  }
+}
