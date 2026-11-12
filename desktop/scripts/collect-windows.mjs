@@ -47,6 +47,21 @@ function parseArgs(argv) {
 
 const KURULUM_DESENI = /\.(exe|msi)$/i;
 
+// Dosya adları boşluksuz ve yalnızca güvenli karakterlerle toplanır:
+// güncelleyici (desktop/electron/update.cjs) bu kuralı zorunlu tutar ve
+// GitHub yükleme sırasında boşlukları noktaya çevirir. Böylece sürüm
+// varlıklarının adı, SHA256SUMS.txt ve zip içeriği birebir aynı olur.
+const GUVENLI_AD = /^[A-Za-z0-9._-]{1,120}$/;
+
+function guvenliAd(ad) {
+  if (GUVENLI_AD.test(ad)) return ad;
+  return String(ad)
+    .replace(/[^A-Za-z0-9._-]+/g, '-')
+    .replace(/-{2,}/g, '-')
+    .replace(/^[-.]+/, '')
+    .slice(0, 120);
+}
+
 function listDir(dir) {
   try {
     return fs.readdirSync(dir, { withFileTypes: true });
@@ -121,13 +136,19 @@ function main() {
 
   const satirlar = [];
   const kopyalanan = [];
+  const kullanilan = new Set();
   for (const { file, kaynak } of bulunan) {
-    const hedef = path.join(opts.out, path.basename(file));
+    const hedefAd = guvenliAd(path.basename(file));
+    if (kullanilan.has(hedefAd)) {
+      throw new Error(`Aynı ada sahip iki paket: ${hedefAd}`);
+    }
+    kullanilan.add(hedefAd);
+    const hedef = path.join(opts.out, hedefAd);
     fs.copyFileSync(file, hedef);
     const boyut = fs.statSync(hedef).size;
     const hash = sha256(hedef);
-    satirlar.push(`${hash}  ${path.basename(hedef)}`);
-    kopyalanan.push({ ad: path.basename(hedef), kaynak, boyut, hash });
+    satirlar.push(`${hash}  ${hedefAd}`);
+    kopyalanan.push({ ad: hedefAd, kaynak, boyut, hash });
   }
 
   const rehber = path.join(repoRoot, 'desktop', 'windows', 'KURULUM-OKU.txt');

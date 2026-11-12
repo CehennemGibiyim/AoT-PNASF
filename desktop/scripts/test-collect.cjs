@@ -43,15 +43,38 @@ test('Electron setup/portable ve Tauri nsis/msi paketlerini toplar', () => {
   assert.equal(r.status, 0, r.stderr);
 
   const dosyalar = fs.readdirSync(out).sort();
-  assert.deepEqual(dosyalar, [
-    'AoT PNASF_1.0.0_x64-setup.exe',
-    'AoT PNASF_1.0.0_x64_en-US.msi',
-    'AoT-PNASF-1.0.0-x64-portable.exe',
-    'AoT-PNASF-1.0.0-x64-setup.exe',
-    'KURULUM-OKU.txt',
-    'SHA256SUMS.txt',
-    'SURUM.txt',
-  ]);
+  assert.deepEqual(
+    dosyalar,
+    [
+      'AoT-PNASF_1.0.0_x64-setup.exe',
+      'AoT-PNASF_1.0.0_x64_en-US.msi',
+      'AoT-PNASF-1.0.0-x64-portable.exe',
+      'AoT-PNASF-1.0.0-x64-setup.exe',
+      'KURULUM-OKU.txt',
+      'SHA256SUMS.txt',
+      'SURUM.txt',
+    ].sort(),
+  );
+  fs.rmSync(kok, { recursive: true, force: true });
+});
+
+test('boşluklu Tauri adları güvenli ada çevrilir, SHA256SUMS aynı adı yazar', () => {
+  const kok = mkTmp();
+  const bundle = path.join(kok, 'bundle');
+  const out = path.join(kok, 'out');
+  const ham = path.join(bundle, 'nsis', 'AoT PNASF_1.0.0_x64-setup.exe');
+  dosya(ham, 777);
+
+  const r = calistir(['--electron', path.join(kok, 'yok'), '--tauri', bundle, '--out', out]);
+  assert.equal(r.status, 0, r.stderr);
+
+  const adlar = fs.readdirSync(out).filter((f) => /\.exe$/.test(f));
+  assert.deepEqual(adlar, ['AoT-PNASF_1.0.0_x64-setup.exe']);
+  assert.ok(!adlar.some((ad) => ad.includes(' ')), 'adlarda boşluk kalmamalı');
+  assert.match(adlar[0], /^[A-Za-z0-9._-]{1,120}$/);
+
+  const ozet = fs.readFileSync(path.join(out, 'SHA256SUMS.txt'), 'utf8').trim();
+  assert.equal(ozet, `${crypto.createHash('sha256').update(fs.readFileSync(ham)).digest('hex')}  AoT-PNASF_1.0.0_x64-setup.exe`);
   fs.rmSync(kok, { recursive: true, force: true });
 });
 

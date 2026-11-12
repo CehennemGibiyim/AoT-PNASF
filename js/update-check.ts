@@ -126,6 +126,12 @@ async function surumDosyasiOku(): Promise<{ surum: string; sayfa?: string; notla
   }
 }
 
+// İndirici (desktop/electron/update.cjs) yalnızca düz dosya adlarını kabul
+// eder; boşluk/özel karakter içeren varlık seçilirse indirme reddedilir.
+function dosyaAdiGuvenliMi(ad: string): boolean {
+  return /^[A-Za-z0-9._-]{1,120}$/.test(ad);
+}
+
 function platformaUygunVarlik(ad: string): number {
   const dosya = ad.toLowerCase();
   const platform = typeof navigator !== 'undefined' ? navigator.platform.toLowerCase() : '';
@@ -166,11 +172,14 @@ async function githubSurumuOku(): Promise<
 
     const varliklar = Array.isArray(veri.assets) ? veri.assets : [];
     const uygun = varliklar
-      .map((varlik) => ({
-        ad: typeof varlik?.name === 'string' ? varlik.name : '',
-        adres: guvenliAdres(varlik?.browser_download_url),
-        puan: platformaUygunVarlik(typeof varlik?.name === 'string' ? varlik.name : ''),
-      }))
+      .map((varlik) => {
+        const ad = typeof varlik?.name === 'string' ? varlik.name : '';
+        return {
+          ad,
+          adres: guvenliAdres(varlik?.browser_download_url),
+          puan: dosyaAdiGuvenliMi(ad) ? platformaUygunVarlik(ad) : 0,
+        };
+      })
       .filter((varlik) => varlik.ad && varlik.adres && varlik.puan > 0)
       .sort((a, b) => b.puan - a.puan);
 
