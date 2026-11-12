@@ -1,5 +1,5 @@
 {
- "fetchedAt": "2026-11-11T14:11:15.847Z",
+ "fetchedAt": "2026-11-12T00:36:42.778Z",
  "source": "albiononlinegrind.com",
  "weapons": [
   {
@@ -3114,6 +3114,48 @@
    ]
   },
   {
+   "id": "2H_KNUCKLES_SET2",
+   "name": "Battle Bracers",
+   "builds": 3,
+   "skills": [
+    {
+     "slot": "E",
+     "id": "DIVEPUNCH_RISE",
+     "count": 3
+    },
+    {
+     "slot": "Q",
+     "id": "DASHKICK",
+     "count": 2
+    },
+    {
+     "slot": "W",
+     "id": "BACKHAND_KNOCKBACK",
+     "count": 2
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_KNUCKLE_COMBOBREAKER",
+     "count": 2
+    },
+    {
+     "slot": "Q",
+     "id": "CROSSSTEP_ROUNDHOUSE",
+     "count": 1
+    },
+    {
+     "slot": "W",
+     "id": "TRIPLE_KICK",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_KNUCKLE_BRAWLER_SPEED",
+     "count": 1
+    }
+   ]
+  },
+  {
    "id": "2H_DOUBLEBLADEDSTAFF_CRYSTAL",
    "name": "Phantom Twinblade",
    "builds": 3,
@@ -3880,48 +3922,6 @@
     {
      "slot": "P",
      "id": "PASSIVE_SPELLPOWER_CASTER_CURSEDSTAFF",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "2H_KNUCKLES_SET2",
-   "name": "Battle Bracers",
-   "builds": 2,
-   "skills": [
-    {
-     "slot": "E",
-     "id": "DIVEPUNCH_RISE",
-     "count": 2
-    },
-    {
-     "slot": "Q",
-     "id": "DASHKICK",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "BACKHAND_KNOCKBACK",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_KNUCKLE_COMBOBREAKER",
-     "count": 1
-    },
-    {
-     "slot": "Q",
-     "id": "CROSSSTEP_ROUNDHOUSE",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "TRIPLE_KICK",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_KNUCKLE_BRAWLER_SPEED",
      "count": 1
     }
    ]
