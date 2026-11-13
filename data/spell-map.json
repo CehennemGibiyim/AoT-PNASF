@@ -1,5 +1,5 @@
 {
- "fetchedAt": "2026-11-12T23:33:22.440Z",
+ "fetchedAt": "2026-11-13T06:33:56.617Z",
  "source": "albiononlinegrind.com",
  "weapons": [
   {
@@ -427,58 +427,6 @@
    ]
   },
   {
-   "id": "MAIN_AXE",
-   "name": "Battleaxe",
-   "builds": 11,
-   "skills": [
-    {
-     "slot": "E",
-     "id": "AXETHROW",
-     "count": 11
-    },
-    {
-     "slot": "Q",
-     "id": "RENDINGCOMBO",
-     "count": 10
-    },
-    {
-     "slot": "W",
-     "id": "AXEBOOST",
-     "count": 9
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_BLEEDCHANCE",
-     "count": 7
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_HEALTHCHANCE_MACE",
-     "count": 2
-    },
-    {
-     "slot": "W",
-     "id": "AXESMASH",
-     "count": 2
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_INCREASED_DAMAGE",
-     "count": 1
-    },
-    {
-     "slot": "Q",
-     "id": "RENDINGSPIN",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_HEALTHCHANCE_AXE",
-     "count": 1
-    }
-   ]
-  },
-  {
    "id": "2H_DUALAXE_KEEPER",
    "name": "Bear Paws",
    "builds": 11,
@@ -672,6 +620,48 @@
     {
      "slot": "P",
      "id": "PASSIVE_SHAPESHIFT_Q_CAST_DAMAGE_REDUCE",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "MAIN_AXE",
+   "name": "Battleaxe",
+   "builds": 10,
+   "skills": [
+    {
+     "slot": "Q",
+     "id": "RENDINGCOMBO",
+     "count": 10
+    },
+    {
+     "slot": "E",
+     "id": "AXETHROW",
+     "count": 10
+    },
+    {
+     "slot": "W",
+     "id": "AXEBOOST",
+     "count": 8
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_BLEEDCHANCE",
+     "count": 7
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_HEALTHCHANCE_MACE",
+     "count": 2
+    },
+    {
+     "slot": "W",
+     "id": "AXESMASH",
+     "count": 2
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_INCREASED_DAMAGE",
      "count": 1
     }
    ]
@@ -1338,6 +1328,63 @@
    ]
   },
   {
+   "id": "MAIN_MACE",
+   "name": "Mace",
+   "builds": 7,
+   "skills": [
+    {
+     "slot": "E",
+     "id": "MACELEAP",
+     "count": 7
+    },
+    {
+     "slot": "Q",
+     "id": "SACRED_GROUND",
+     "count": 4
+    },
+    {
+     "slot": "W",
+     "id": "PBAOE_PULL",
+     "count": 3
+    },
+    {
+     "slot": "Q",
+     "id": "THREATENINGSMASH",
+     "count": 3
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_STUNCHANCE",
+     "count": 3
+    },
+    {
+     "slot": "W",
+     "id": "CHARGE_ROOT",
+     "count": 2
+    },
+    {
+     "slot": "W",
+     "id": "GROUNDSHAKER",
+     "count": 2
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_ENERGYCHANCE_MACE",
+     "count": 2
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_ENERGYCHANCE_HOLYSTAFF",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_STUNCHANCE_QUARTERSTAFF",
+     "count": 1
+    }
+   ]
+  },
+  {
    "id": "2H_DUALCROSSBOW_HELL",
    "name": "Boltcasters",
    "builds": 6,
@@ -1672,58 +1719,6 @@
     {
      "slot": "W",
      "id": "AXESMASH",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "MAIN_MACE",
-   "name": "Mace",
-   "builds": 6,
-   "skills": [
-    {
-     "slot": "E",
-     "id": "MACELEAP",
-     "count": 6
-    },
-    {
-     "slot": "Q",
-     "id": "SACRED_GROUND",
-     "count": 4
-    },
-    {
-     "slot": "W",
-     "id": "PBAOE_PULL",
-     "count": 3
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_STUNCHANCE",
-     "count": 3
-    },
-    {
-     "slot": "Q",
-     "id": "THREATENINGSMASH",
-     "count": 2
-    },
-    {
-     "slot": "W",
-     "id": "GROUNDSHAKER",
-     "count": 2
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_ENERGYCHANCE_MACE",
-     "count": 2
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_ENERGYCHANCE_HOLYSTAFF",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "CHARGE_ROOT",
      "count": 1
     }
    ]
@@ -2110,48 +2105,6 @@
    ]
   },
   {
-   "id": "2H_POLEHAMMER",
-   "name": "Polehammer ",
-   "builds": 5,
-   "skills": [
-    {
-     "slot": "E",
-     "id": "GROUNDBREAKER2",
-     "count": 5
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_ENERGYCHANCE_HAMMER",
-     "count": 4
-    },
-    {
-     "slot": "Q",
-     "id": "IRONBREAKER",
-     "count": 3
-    },
-    {
-     "slot": "W",
-     "id": "CHARGESLOWAE",
-     "count": 3
-    },
-    {
-     "slot": "W",
-     "id": "GEYSER",
-     "count": 2
-    },
-    {
-     "slot": "Q",
-     "id": "HAMMER_SHOVE",
-     "count": 2
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_HEALTHCHANCE_HAMMER",
-     "count": 1
-    }
-   ]
-  },
-  {
    "id": "2H_FROSTSTAFF_CRYSTAL",
    "name": "Arctic Staff",
    "builds": 5,
@@ -2330,6 +2283,48 @@
     {
      "slot": "P",
      "id": "PASSIVE_ENERGYCHANCE_MACE",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "2H_SHAPESHIFTER_SET1",
+   "name": "Prowling Staff",
+   "builds": 4,
+   "skills": [
+    {
+     "slot": "Q",
+     "id": "SHAPE_Q_CONE_MELEE",
+     "count": 4
+    },
+    {
+     "slot": "E",
+     "id": "SHAPESHIFT_PANTHER",
+     "count": 4
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_SHAPESHIFT_ATTACK_BUFF",
+     "count": 3
+    },
+    {
+     "slot": "W",
+     "id": "SHAPE_W_POLYMORPH",
+     "count": 2
+    },
+    {
+     "slot": "W",
+     "id": "SHAPE_W_DAMAGE_AOE",
+     "count": 1
+    },
+    {
+     "slot": "W",
+     "id": "SHAPE_W_TETHERBEAM",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_SHAPESHIFT_GATHER_CHARGES",
      "count": 1
     }
    ]
@@ -2718,6 +2713,43 @@
    ]
   },
   {
+   "id": "2H_POLEHAMMER",
+   "name": "Polehammer ",
+   "builds": 4,
+   "skills": [
+    {
+     "slot": "E",
+     "id": "GROUNDBREAKER2",
+     "count": 4
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_ENERGYCHANCE_HAMMER",
+     "count": 4
+    },
+    {
+     "slot": "Q",
+     "id": "IRONBREAKER",
+     "count": 3
+    },
+    {
+     "slot": "W",
+     "id": "CHARGESLOWAE",
+     "count": 2
+    },
+    {
+     "slot": "W",
+     "id": "GEYSER",
+     "count": 2
+    },
+    {
+     "slot": "Q",
+     "id": "HAMMER_SHOVE",
+     "count": 1
+    }
+   ]
+  },
+  {
    "id": "2H_BOW_HELL",
    "name": "Wailing Bow",
    "builds": 4,
@@ -3089,48 +3121,6 @@
     {
      "slot": "P",
      "id": "PASSIVE_SPELLPOWER_CASTER_CURSEDSTAFF",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "2H_SHAPESHIFTER_SET1",
-   "name": "Prowling Staff",
-   "builds": 3,
-   "skills": [
-    {
-     "slot": "Q",
-     "id": "SHAPE_Q_CONE_MELEE",
-     "count": 3
-    },
-    {
-     "slot": "E",
-     "id": "SHAPESHIFT_PANTHER",
-     "count": 3
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_SHAPESHIFT_ATTACK_BUFF",
-     "count": 2
-    },
-    {
-     "slot": "W",
-     "id": "SHAPE_W_DAMAGE_AOE",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "SHAPE_W_TETHERBEAM",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "SHAPE_W_POLYMORPH",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_SHAPESHIFT_GATHER_CHARGES",
      "count": 1
     }
    ]
@@ -3813,38 +3803,6 @@
     {
      "slot": "P",
      "id": "PASSIVE_SLOWPOISON",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "MAIN_ROCKMACE_KEEPER",
-   "name": "Bedrock Mace",
-   "builds": 3,
-   "skills": [
-    {
-     "slot": "Q",
-     "id": "SACRED_GROUND",
-     "count": 3
-    },
-    {
-     "slot": "E",
-     "id": "PRIMALSLAM",
-     "count": 3
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_ENERGYCHANCE_MACE",
-     "count": 3
-    },
-    {
-     "slot": "W",
-     "id": "GUARDRUNE",
-     "count": 2
-    },
-    {
-     "slot": "W",
-     "id": "CHARGE_ROOT",
      "count": 1
     }
    ]
@@ -4639,6 +4597,38 @@
     {
      "slot": "P",
      "id": "PASSIVE_HEROICSTACK",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "MAIN_ROCKMACE_KEEPER",
+   "name": "Bedrock Mace",
+   "builds": 2,
+   "skills": [
+    {
+     "slot": "Q",
+     "id": "SACRED_GROUND",
+     "count": 2
+    },
+    {
+     "slot": "E",
+     "id": "PRIMALSLAM",
+     "count": 2
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_ENERGYCHANCE_MACE",
+     "count": 2
+    },
+    {
+     "slot": "W",
+     "id": "CHARGE_ROOT",
+     "count": 1
+    },
+    {
+     "slot": "W",
+     "id": "GUARDRUNE",
      "count": 1
     }
    ]
