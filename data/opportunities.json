@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-11-13T22:59:49.732Z",
+  "lastUpdate": "2026-11-14T03:59:57.763Z",
   "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
   "opportunities": [
@@ -10,11 +10,11 @@
       "itemName": "T6_MOUNT_HORSE",
       "from": "Caerleon",
       "to": "Thetford",
-      "buyPrice": 172790,
-      "sellPrice": 177359,
-      "profit": 4203,
-      "profitPercent": "2.4",
-      "timestamp": "2026-11-13T22:59:49.732Z",
+      "buyPrice": 171105,
+      "sellPrice": 177358,
+      "profit": 5752,
+      "profitPercent": "3.4",
+      "timestamp": "2026-11-14T03:59:57.762Z",
       "source": "albion-online-data.com",
       "verified": true
     }
