@@ -1,25 +1,25 @@
 {
- "fetchedAt": "2026-11-13T19:36:43.665Z",
+ "fetchedAt": "2026-11-14T06:12:35.484Z",
  "source": "albiononlinegrind.com",
  "sourceUrl": "https://albiononlinegrind.com/builds",
  "note": "Veriler herkese açık build sayfalarındaki SSR JSONundan (__NEXT_DATA__) çekilir; eşya/yetenek ID'leri doğrulanmıştır.",
- "count": 556,
+ "count": 557,
  "pagesRead": 16,
  "categories": {
-  "FAME_FARM_SOLO": 30,
+  "FAME_FARM_SOLO": 32,
   "MISTS_SOLO": 44,
-  "OPEN_WORLD": 47,
+  "OPEN_WORLD": 46,
   "CORRUPTED_DUNGEON": 33,
-  "FAME_FARM_GROUP": 41,
-  "GANK_SOLO": 13,
-  "CRYSTAL_ARENA": 37,
-  "SMALL_SCALE": 67,
+  "FAME_FARM_GROUP": 40,
+  "GANK_SOLO": 14,
+  "CRYSTAL_ARENA": 39,
+  "SMALL_SCALE": 64,
   "FAME_FARM_GROUP_AVALON": 37,
   "GANK_GROUP": 23,
-  "ZVZ": 54,
-  "HELLGATE_2V2": 14,
+  "ZVZ": 53,
+  "HELLGATE_2V2": 13,
   "MISTS_DUO": 4,
-  "TRACKING_SOLO": 4,
+  "TRACKING_SOLO": 5,
   "ABYSSAL_DEPTHS_2V2": 13,
   "TRACKING_GROUP": 9,
   "ABYSSAL_DEPTHS_3V3": 20,
@@ -27,7 +27,7 @@
   "GANK_DUO": 5,
   "WORLD_BOSS": 5,
   "HCE": 8,
-  "HELLGATE_5V5": 19,
+  "HELLGATE_5V5": 21,
   "BOMB_SQUAD": 10,
   "ANCIENT_LANDS": 1,
   "CRYSTAL_ARENA_1V1": 7,
@@ -2706,6 +2706,119 @@
    "description": "PT/BR: O Blazing Staff / Fulgurante não tem segredo! Use o Robe Real antes do Tank agrar os MOBS, use a habilidade das sandálias \"F\" e depois use o \"E\", o \"Q\" e o \"W\" para cancelar algumas habilidades dos mobs.\nUse o capuz de Assassino para resetar suas habilidades!\n\nEN: Blazing Staff / Blazing Staff has no secret! Use the Royal Robe before the Tank hits the MOBS, use the sandals ability \"F\" and then use \"E\", \"Q\" and \"W\" to cancel some mobs' abilities.\nUse the Assassin's Hood to reset your abilities!"
   },
   {
+   "id": "22248922-54d7-4195-8361-5c8b9a01cac6",
+   "slug": "bloodletter-mist-build",
+   "title": "Bloodletter Mist Build",
+   "weaponName": "Bloodletter",
+   "category": "MISTS_SOLO",
+   "author": "Arreat Regaro",
+   "tags": [
+    "Meta",
+    "PVP"
+   ],
+   "upvotes": 28,
+   "createdAt": "2024-04-04T10:00:00+00:00",
+   "updatedAt": "2024-12-12T13:10:24.568417+00:00",
+   "url": "https://albiononlinegrind.com/build/bloodletter-mist-build",
+   "source": "albiononlinegrind.com",
+   "items": {
+    "weapon": {
+     "id": "T8_MAIN_RAPIER_MORGANA",
+     "base": "MAIN_RAPIER_MORGANA",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "QDASH",
+      "SKILLSHOT_TELEPORT",
+      "RAPIERSTAB",
+      "PASSIVE_BLEEDCHANCE"
+     ]
+    },
+    "offhand": {
+     "id": "T8_OFF_HORN_KEEPER",
+     "base": "OFF_HORN_KEEPER",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "head": {
+     "id": "T8_HEAD_CLOTH_MORGANA",
+     "base": "HEAD_CLOTH_MORGANA",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "INNER_CORRUPTION",
+      "PASSIVE_INCREASED_DAMAGE"
+     ]
+    },
+    "chest": {
+     "id": "T8_ARMOR_LEATHER_MORGANA",
+     "base": "ARMOR_LEATHER_MORGANA",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "STORMSHIELD",
+      "PASSIVE_ARMOR_BALANCE"
+     ]
+    },
+    "boots": {
+     "id": "T8_SHOES_CLOTH_SET2",
+     "base": "SHOES_CLOTH_SET2",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "SPRINTEOT",
+      "PASSIVE_INCREASED_DAMAGE"
+     ]
+    },
+    "cape": {
+     "id": "T8_CAPEITEM_AVALON",
+     "base": "CAPEITEM_AVALON",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "food": {
+     "id": "T8_MEAL_STEW_FISH",
+     "base": "MEAL_STEW_FISH",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "potion": {
+     "id": "T6_POTION_HEAL",
+     "base": "POTION_HEAL",
+     "tier": 6,
+     "ench": 0,
+     "skills": []
+    }
+   },
+   "alt": {
+    "head": {
+     "id": "T8_HEAD_LEATHER_SET1",
+     "base": "HEAD_LEATHER_SET1",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "HOWL",
+      "PASSIVE_ARMOR_BALANCE"
+     ]
+    }
+   },
+   "alts": {
+    "potion": [
+     {
+      "id": "T7_POTION_REVIVE",
+      "base": "POTION_REVIVE",
+      "tier": 7,
+      "ench": 0,
+      "skills": []
+     }
+    ]
+   },
+   "description": ""
+  },
+  {
    "id": "79005d26-a19f-44e1-b850-78d76ef07381",
    "slug": "deathgivers-group-gank-build",
    "title": "Deathgivers Group Gank Build",
@@ -3041,119 +3154,6 @@
       "skills": []
      }
     ],
-    "potion": [
-     {
-      "id": "T7_POTION_REVIVE",
-      "base": "POTION_REVIVE",
-      "tier": 7,
-      "ench": 0,
-      "skills": []
-     }
-    ]
-   },
-   "description": ""
-  },
-  {
-   "id": "22248922-54d7-4195-8361-5c8b9a01cac6",
-   "slug": "bloodletter-mist-build",
-   "title": "Bloodletter Mist Build",
-   "weaponName": "Bloodletter",
-   "category": "MISTS_SOLO",
-   "author": "Arreat Regaro",
-   "tags": [
-    "Meta",
-    "PVP"
-   ],
-   "upvotes": 27,
-   "createdAt": "2024-04-04T10:00:00+00:00",
-   "updatedAt": "2024-12-12T13:10:24.568417+00:00",
-   "url": "https://albiononlinegrind.com/build/bloodletter-mist-build",
-   "source": "albiononlinegrind.com",
-   "items": {
-    "weapon": {
-     "id": "T8_MAIN_RAPIER_MORGANA",
-     "base": "MAIN_RAPIER_MORGANA",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "QDASH",
-      "SKILLSHOT_TELEPORT",
-      "RAPIERSTAB",
-      "PASSIVE_BLEEDCHANCE"
-     ]
-    },
-    "offhand": {
-     "id": "T8_OFF_HORN_KEEPER",
-     "base": "OFF_HORN_KEEPER",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "head": {
-     "id": "T8_HEAD_CLOTH_MORGANA",
-     "base": "HEAD_CLOTH_MORGANA",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "INNER_CORRUPTION",
-      "PASSIVE_INCREASED_DAMAGE"
-     ]
-    },
-    "chest": {
-     "id": "T8_ARMOR_LEATHER_MORGANA",
-     "base": "ARMOR_LEATHER_MORGANA",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "STORMSHIELD",
-      "PASSIVE_ARMOR_BALANCE"
-     ]
-    },
-    "boots": {
-     "id": "T8_SHOES_CLOTH_SET2",
-     "base": "SHOES_CLOTH_SET2",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "SPRINTEOT",
-      "PASSIVE_INCREASED_DAMAGE"
-     ]
-    },
-    "cape": {
-     "id": "T8_CAPEITEM_AVALON",
-     "base": "CAPEITEM_AVALON",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "food": {
-     "id": "T8_MEAL_STEW_FISH",
-     "base": "MEAL_STEW_FISH",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "potion": {
-     "id": "T6_POTION_HEAL",
-     "base": "POTION_HEAL",
-     "tier": 6,
-     "ench": 0,
-     "skills": []
-    }
-   },
-   "alt": {
-    "head": {
-     "id": "T8_HEAD_LEATHER_SET1",
-     "base": "HEAD_LEATHER_SET1",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "HOWL",
-      "PASSIVE_ARMOR_BALANCE"
-     ]
-    }
-   },
-   "alts": {
     "potion": [
      {
       "id": "T7_POTION_REVIVE",
@@ -10225,6 +10225,129 @@
    "description": "My favourite tank build for Arena. It works best when queuing in a group, but it's also great for protecting your team and giving your healer some breathing room."
   },
   {
+   "id": "e4605795-d1dc-4aa9-981a-1d4bbd1d2169",
+   "slug": "hallowfall-zvz-healer-build",
+   "title": "Hallowfall ZvZ Healer Build",
+   "weaponName": "Hallowfall ",
+   "category": "ZVZ",
+   "author": "Arreat Regaro",
+   "tags": [
+    "ZvZ",
+    "PVP"
+   ],
+   "upvotes": 11,
+   "createdAt": "2024-06-08T10:00:00+00:00",
+   "updatedAt": "2024-12-12T13:10:24.568417+00:00",
+   "url": "https://albiononlinegrind.com/build/hallowfall-zvz-healer-build",
+   "source": "albiononlinegrind.com",
+   "items": {
+    "weapon": {
+     "id": "T8_MAIN_HOLYSTAFF_AVALON",
+     "base": "MAIN_HOLYSTAFF_AVALON",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "HOLYFLASH",
+      "HOLYORB",
+      "DIVINE_JUMP",
+      "PASSIVE_HEALPOWERCHANCE"
+     ]
+    },
+    "offhand": {
+     "id": "T8_OFF_HORN_KEEPER",
+     "base": "OFF_HORN_KEEPER",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "head": {
+     "id": "T8_HEAD_PLATE_SET2",
+     "base": "HEAD_PLATE_SET2",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "DISRUPTIONIMMUNITY",
+      "PASSIVE_MR_AR"
+     ]
+    },
+    "chest": {
+     "id": "T8_ARMOR_CLOTH_FEY",
+     "base": "ARMOR_CLOTH_FEY",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "WILD_MAGIC",
+      "PASSIVE_ARMOR_INCREASED_DAMAGE"
+     ]
+    },
+    "boots": {
+     "id": "T8_SHOES_LEATHER_SET1",
+     "base": "SHOES_LEATHER_SET1",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "CLEANSE_DASH",
+      "PASSIVE_CD_REDUCTION"
+     ]
+    },
+    "cape": {
+     "id": "T8_CAPEITEM_FW_LYMHURST",
+     "base": "CAPEITEM_FW_LYMHURST",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "food": {
+     "id": "T7_MEAL_OMELETTE_AVALON",
+     "base": "MEAL_OMELETTE_AVALON",
+     "tier": 7,
+     "ench": 0,
+     "skills": []
+    },
+    "potion": {
+     "id": "T7_POTION_STONESKIN",
+     "base": "POTION_STONESKIN",
+     "tier": 7,
+     "ench": 0,
+     "skills": []
+    }
+   },
+   "alt": {
+    "head": {
+     "id": "T8_HEAD_LEATHER_SET1",
+     "base": "HEAD_LEATHER_SET1",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "SELF_CLEANSE",
+      "PASSIVE_BALANCE"
+     ]
+    },
+    "chest": {
+     "id": "T8_ARMOR_CLOTH_AVALON",
+     "base": "ARMOR_CLOTH_AVALON",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "CASTBUBBLE",
+      "PASSIVE_ARMOR_INCREASED_DAMAGE"
+     ]
+    },
+    "boots": {
+     "id": "T8_SHOES_LEATHER_MORGANA",
+     "base": "SHOES_LEATHER_MORGANA",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "DMG_BLINK",
+      "PASSIVE_BALANCE"
+     ]
+    }
+   },
+   "alts": {},
+   "description": ""
+  },
+  {
    "id": "ad96803f-2550-4f2a-9205-e7c53a5be62d",
    "slug": "infernal-scythe-smallscale-dps-build",
    "title": "Infernal Scythe Smallscale DPS Build",
@@ -15017,123 +15140,6 @@
    "description": ""
   },
   {
-   "id": "9a6fd2f8-446a-4d1f-a644-28e86ca24550",
-   "slug": "fists-of-avalon-smallscale-build",
-   "title": "Fists of Avalon Small Scale DPS Build",
-   "weaponName": "Fists of Avalon",
-   "category": "SMALL_SCALE",
-   "author": "Arreat Regaro",
-   "tags": [
-    "Small Scale",
-    "PVP"
-   ],
-   "upvotes": 8,
-   "createdAt": "2024-05-28T10:00:00+00:00",
-   "updatedAt": "2024-12-12T13:10:24.568417+00:00",
-   "url": "https://albiononlinegrind.com/build/fists-of-avalon-smallscale-build",
-   "source": "albiononlinegrind.com",
-   "items": {
-    "weapon": {
-     "id": "T8_2H_KNUCKLES_AVALON",
-     "base": "2H_KNUCKLES_AVALON",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "DASHKICK",
-      "BACKHAND_KNOCKBACK",
-      "TRIPLECOMBO_DIVEKICK",
-      "PASSIVE_KNUCKLE_COMBOBREAKER"
-     ]
-    },
-    "offhand": null,
-    "head": {
-     "id": "T8_HEAD_LEATHER_SET3",
-     "base": "HEAD_LEATHER_SET3",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "SUMMONER_CD_REDUCTION",
-      "PASSIVE_CD_REDUCTION"
-     ]
-    },
-    "chest": {
-     "id": "T8_ARMOR_LEATHER_HELL",
-     "base": "ARMOR_LEATHER_HELL",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "LIFESTEALAURA",
-      "PASSIVE_ARMOR_BALANCE"
-     ]
-    },
-    "boots": {
-     "id": "T8_SHOES_CLOTH_ROYAL",
-     "base": "SHOES_CLOTH_ROYAL",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "GLASS_MOVESPEED",
-      "PASSIVE_INCREASED_DAMAGE"
-     ]
-    },
-    "cape": {
-     "id": "T8_CAPEITEM_FW_MARTLOCK",
-     "base": "CAPEITEM_FW_MARTLOCK",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "food": {
-     "id": "T8_MEAL_STEW",
-     "base": "MEAL_STEW",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "potion": {
-     "id": "T7_POTION_STONESKIN",
-     "base": "POTION_STONESKIN",
-     "tier": 7,
-     "ench": 0,
-     "skills": []
-    }
-   },
-   "alt": {
-    "head": {
-     "id": "T8_HEAD_LEATHER_UNDEAD",
-     "base": "HEAD_LEATHER_UNDEAD",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "ARMOR_CD_RESET",
-      "PASSIVE_BALANCE"
-     ]
-    },
-    "chest": {
-     "id": "T8_ARMOR_LEATHER_AVALON",
-     "base": "ARMOR_LEATHER_AVALON",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "DYNAMIC_DEFENSE",
-      "PASSIVE_ARMOR_BALANCE"
-     ]
-    },
-    "boots": {
-     "id": "T8_SHOES_LEATHER_MORGANA",
-     "base": "SHOES_LEATHER_MORGANA",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "DMG_BLINK",
-      "PASSIVE_BALANCE"
-     ]
-    }
-   },
-   "alts": {},
-   "description": ""
-  },
-  {
    "id": "fba12feb-9cd2-4109-b89a-07edc0f1c9c1",
    "slug": "frost-mist-build",
    "title": "Frost Staff Mist Build",
@@ -15691,6 +15697,98 @@
     "food": {
      "id": "T7_MEAL_OMELETTE_FISH",
      "base": "MEAL_OMELETTE_FISH",
+     "tier": 7,
+     "ench": 0,
+     "skills": []
+    },
+    "potion": {
+     "id": "T7_POTION_STONESKIN",
+     "base": "POTION_STONESKIN",
+     "tier": 7,
+     "ench": 0,
+     "skills": []
+    }
+   },
+   "alt": {},
+   "alts": {},
+   "description": ""
+  },
+  {
+   "id": "c7485bbf-c50c-45dc-a074-4ba3036376dd",
+   "slug": "lifecurse-staff-support-zvz-build",
+   "title": "Lifecurse Staff Support ZvZ Build",
+   "weaponName": "Lifecurse Staff",
+   "category": "ZVZ",
+   "author": "Keno",
+   "tags": [
+    "Group",
+    "PvP"
+   ],
+   "upvotes": 8,
+   "createdAt": "2025-02-18T17:15:47.506586+00:00",
+   "updatedAt": "2025-02-19T19:29:21.84+00:00",
+   "url": "https://albiononlinegrind.com/build/lifecurse-staff-support-zvz-build",
+   "source": "albiononlinegrind.com",
+   "items": {
+    "weapon": {
+     "id": "T8_MAIN_CURSEDSTAFF_UNDEAD",
+     "base": "MAIN_CURSEDSTAFF_UNDEAD",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "CURSED_SPLAT",
+      "ARMORPIERCER",
+      "ENFEEBLEBLADES",
+      "PASSIVE_ENERGYCHANCE_MACE"
+     ]
+    },
+    "offhand": {
+     "id": "T8_OFF_TOTEM_KEEPER",
+     "base": "OFF_TOTEM_KEEPER",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "head": {
+     "id": "T8_HEAD_LEATHER_SET3",
+     "base": "HEAD_LEATHER_SET3",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "SUMMONER_CD_REDUCTION",
+      "PASSIVE_CD_REDUCTION"
+     ]
+    },
+    "chest": {
+     "id": "T8_ARMOR_PLATE_HELL",
+     "base": "ARMOR_PLATE_HELL",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "REFLECTAREA",
+      "PASSIVE_MR_AR"
+     ]
+    },
+    "boots": {
+     "id": "T8_SHOES_LEATHER_SET1",
+     "base": "SHOES_LEATHER_SET1",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "CLEANSE_DASH",
+      "PASSIVE_CD_REDUCTION"
+     ]
+    },
+    "cape": {
+     "id": "T8_CAPEITEM_FW_LYMHURST",
+     "base": "CAPEITEM_FW_LYMHURST",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "food": {
+     "id": "T7_MEAL_OMELETTE_AVALON",
+     "base": "MEAL_OMELETTE_AVALON",
      "tier": 7,
      "ench": 0,
      "skills": []
@@ -20551,6 +20649,108 @@
    "description": ""
   },
   {
+   "id": "f7e724ac-2ce0-49c0-9bae-b1a72205f551",
+   "slug": "explosive-killer",
+   "title": "Explosive Killer",
+   "weaponName": "Twin Slayers",
+   "category": "CRYSTAL_ARENA",
+   "author": "ZarkakraZ",
+   "tags": [],
+   "upvotes": 6,
+   "createdAt": "2026-01-21T16:09:36.743303+00:00",
+   "updatedAt": "2026-01-21T16:09:38.614+00:00",
+   "url": "https://albiononlinegrind.com/build/explosive-killer",
+   "source": "albiononlinegrind.com",
+   "items": {
+    "weapon": {
+     "id": "T8_2H_DAGGERPAIR_CRYSTAL",
+     "base": "2H_DAGGERPAIR_CRYSTAL",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "QDASH",
+      "SKILLSHOT_TELEPORT",
+      "CRYSTAL_DAGGER_BLADE_RING",
+      "PASSIVE_ARMOR_INCREASED_DAMAGE"
+     ]
+    },
+    "offhand": null,
+    "head": {
+     "id": "T8_HEAD_PLATE_ROYAL",
+     "base": "HEAD_PLATE_ROYAL",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "ARTILLERY_COMMAND",
+      "PASSIVE_CASTINGSPEED_CHANCE_FIRESTAFF"
+     ]
+    },
+    "chest": {
+     "id": "T8_ARMOR_PLATE_SET1",
+     "base": "ARMOR_PLATE_SET1",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "ENRAGE",
+      "PASSIVE_ARMOR_CASTER_ARCANESTAFF"
+     ]
+    },
+    "boots": {
+     "id": "T8_SHOES_CLOTH_ROYAL",
+     "base": "SHOES_CLOTH_ROYAL",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "SPRINTEOT",
+      "PASSIVE_ARMOR_INCREASED_DAMAGE"
+     ]
+    },
+    "cape": {
+     "id": "T8_CAPEITEM_AVALON",
+     "base": "CAPEITEM_AVALON",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "food": {
+     "id": "T8_MEAL_STEW",
+     "base": "MEAL_STEW",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "potion": {
+     "id": "T6_POTION_ENERGY",
+     "base": "POTION_ENERGY",
+     "tier": 6,
+     "ench": 0,
+     "skills": []
+    }
+   },
+   "alt": {},
+   "alts": {
+    "food": [
+     {
+      "id": "T8_MEAL_STEW_FISH",
+      "base": "MEAL_STEW_FISH",
+      "tier": 8,
+      "ench": 0,
+      "skills": []
+     }
+    ],
+    "potion": [
+     {
+      "id": "T7_POTION_STONESKIN",
+      "base": "POTION_STONESKIN",
+      "tier": 7,
+      "ench": 0,
+      "skills": []
+     }
+    ]
+   },
+   "description": ""
+  },
+  {
    "id": "5a77d840-a7be-4dcf-82f8-cef00547f320",
    "slug": "hallowfall-crystal-arena",
    "title": "Hallowfall Crystal Arena",
@@ -20654,108 +20854,6 @@
      "skills": [
       "DMG_BLINK",
       "PASSIVE_ARMOR_BALANCE"
-     ]
-    }
-   },
-   "alts": {},
-   "description": ""
-  },
-  {
-   "id": "c51b9838-75fb-4dd0-8b5c-d835db0b6fdf",
-   "slug": "hallowfall-staff-small-scale-build",
-   "title": "Hallowfall Staff Small Scale Build",
-   "weaponName": "Hallowfall",
-   "category": "SMALL_SCALE",
-   "author": "Maruruk",
-   "tags": [
-    "PvP"
-   ],
-   "upvotes": 6,
-   "createdAt": "2025-02-01T01:46:07.286523+00:00",
-   "updatedAt": "2025-02-01T08:21:06.308+00:00",
-   "url": "https://albiononlinegrind.com/build/hallowfall-staff-small-scale-build",
-   "source": "albiononlinegrind.com",
-   "items": {
-    "weapon": {
-     "id": "T8_MAIN_HOLYSTAFF_AVALON",
-     "base": "MAIN_HOLYSTAFF_AVALON",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "HOLYFLASH",
-      "HOLYORB",
-      "DIVINE_JUMP",
-      "PASSIVE_HEALPOWERCHANCE"
-     ]
-    },
-    "offhand": {
-     "id": "T8_OFF_HORN_KEEPER",
-     "base": "OFF_HORN_KEEPER",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "head": {
-     "id": "T8_HEAD_LEATHER_SET3",
-     "base": "HEAD_LEATHER_SET3",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "SELF_CLEANSE",
-      "PASSIVE_ARMOR_BALANCE"
-     ]
-    },
-    "chest": {
-     "id": "T8_ARMOR_CLOTH_AVALON",
-     "base": "ARMOR_CLOTH_AVALON",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "CASTBUBBLE",
-      "PASSIVE_INCREASED_DAMAGE"
-     ]
-    },
-    "boots": {
-     "id": "T8_SHOES_LEATHER_MORGANA",
-     "base": "SHOES_LEATHER_MORGANA",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "DMG_BLINK",
-      "PASSIVE_CD_REDUCTION"
-     ]
-    },
-    "cape": {
-     "id": "T8_CAPEITEM_FW_LYMHURST",
-     "base": "CAPEITEM_FW_LYMHURST",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "food": {
-     "id": "T7_MEAL_OMELETTE_AVALON",
-     "base": "MEAL_OMELETTE_AVALON",
-     "tier": 7,
-     "ench": 0,
-     "skills": []
-    },
-    "potion": {
-     "id": "T7_POTION_STONESKIN",
-     "base": "POTION_STONESKIN",
-     "tier": 7,
-     "ench": 0,
-     "skills": []
-    }
-   },
-   "alt": {
-    "boots": {
-     "id": "T8_SHOES_LEATHER_SET1",
-     "base": "SHOES_LEATHER_SET1",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "CLEANSE_DASH",
-      "PASSIVE_CD_REDUCTION"
      ]
     }
    },
@@ -21869,6 +21967,98 @@
    "description": ""
   },
   {
+   "id": "aac4fb4c-5f02-4491-af0c-23deacc3a1ba",
+   "slug": "1h-cursed-cheap-tracking-solo",
+   "title": "1H Cursed (Cheap) - Tracking Solo",
+   "weaponName": "Cursed Staff",
+   "category": "TRACKING_SOLO",
+   "author": "Kakoin",
+   "tags": [
+    "PvE",
+    "Solo"
+   ],
+   "upvotes": 5,
+   "createdAt": "2025-07-24T08:49:29.341922+00:00",
+   "updatedAt": "2025-12-05T08:23:53.49+00:00",
+   "url": "https://albiononlinegrind.com/build/1h-cursed-cheap-tracking-solo",
+   "source": "albiononlinegrind.com",
+   "items": {
+    "weapon": {
+     "id": "T8_MAIN_CURSEDSTAFF",
+     "base": "MAIN_CURSEDSTAFF",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "CURSED_SPLAT",
+      "CURSEDHANDS_STACKUP",
+      "DEATHCURSE2",
+      "PASSIVE_CURSE"
+     ]
+    },
+    "offhand": {
+     "id": "T8_OFF_TORCH",
+     "base": "OFF_TORCH",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "head": {
+     "id": "T8_HEAD_CLOTH_SET2",
+     "base": "HEAD_CLOTH_SET2",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "DELAYED_TELEPORT",
+      "PASSIVE_INCREASED_DAMAGE"
+     ]
+    },
+    "chest": {
+     "id": "T8_ARMOR_CLOTH_MORGANA",
+     "base": "ARMOR_CLOTH_MORGANA",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "LEVITATE",
+      "PASSIVE_INCREASED_DAMAGE"
+     ]
+    },
+    "boots": {
+     "id": "T8_SHOES_PLATE_SET1",
+     "base": "SHOES_PLATE_SET1",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "SPRINTHOT",
+      "PASSIVE_MR_AR"
+     ]
+    },
+    "cape": {
+     "id": "T8_CAPE",
+     "base": "CAPE",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "food": {
+     "id": "T8_MEAL_STEW",
+     "base": "MEAL_STEW",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "potion": {
+     "id": "T8_POTION_CLEANSE",
+     "base": "POTION_CLEANSE",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    }
+   },
+   "alt": {},
+   "alts": {},
+   "description": "FOR HELMET : Get Any Cloth Helmet for Agression (3.5%dmg), then get the new spell 'Energizing Shield' (not available yet, so i go for emergency teleport).\n\nFast and easy way for solo tracking. You won’t have any mana or health issues.\n\nTier 5.1 is enough to clear Tier 8.\n\nUse Minor Workboots for extra safety if needed.\n\nYou don't realy need cape, but you can go for thetfort for faster clear or undead for safety."
+  },
+  {
    "id": "8250275f-67af-4993-9de4-9ceeddbd4c20",
    "slug": "arctic-staff-solo-fame-farm-build",
    "title": "Arctic Staff Solo Fame Farm Build",
@@ -22714,6 +22904,125 @@
    "description": "A Bear Paws build for Corrupted Dungeons, fighting at range and dealing damage gradually."
   },
   {
+   "id": "cd54adbf-c0db-4f76-b61c-1e2e13d11caf",
+   "slug": "demonfang-fame-farm-solo-build",
+   "title": "Demonfang Fame Farm Solo Build",
+   "weaponName": "Demonfang",
+   "category": "FAME_FARM_SOLO",
+   "author": "Yruke",
+   "tags": [
+    "PvE"
+   ],
+   "upvotes": 5,
+   "createdAt": "2025-05-07T23:30:56.810557+00:00",
+   "updatedAt": "2025-05-07T23:30:56.585+00:00",
+   "url": "https://albiononlinegrind.com/build/demonfang-fame-farm-solo-build",
+   "source": "albiononlinegrind.com",
+   "items": {
+    "weapon": {
+     "id": "T8_MAIN_DAGGER_HELL",
+     "base": "MAIN_DAGGER_HELL",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "QDASH",
+      "THROWINGBLADES",
+      "BLOOD_BLADE",
+      "PASSIVE_BLEEDCHANCE"
+     ]
+    },
+    "offhand": {
+     "id": "T8_OFF_LAMP_UNDEAD",
+     "base": "OFF_LAMP_UNDEAD",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "head": {
+     "id": "T8_HEAD_LEATHER_SET3",
+     "base": "HEAD_LEATHER_SET3",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "SUMMONER_CD_REDUCTION",
+      "PASSIVE_ARMOR_BALANCE"
+     ]
+    },
+    "chest": {
+     "id": "T8_ARMOR_LEATHER_MORGANA",
+     "base": "ARMOR_LEATHER_MORGANA",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "STORMSHIELD",
+      "PASSIVE_ARMOR_BALANCE"
+     ]
+    },
+    "boots": {
+     "id": "T8_SHOES_CLOTH_ROYAL",
+     "base": "SHOES_CLOTH_ROYAL",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "GLASS_MOVESPEED",
+      "PASSIVE_INCREASED_DAMAGE"
+     ]
+    },
+    "cape": {
+     "id": "T8_CAPEITEM_AVALON",
+     "base": "CAPEITEM_AVALON",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "food": {
+     "id": "T8_MEAL_STEW",
+     "base": "MEAL_STEW",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "potion": {
+     "id": "T8_POTION_COOLDOWN",
+     "base": "POTION_COOLDOWN",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    }
+   },
+   "alt": {
+    "boots": {
+     "id": "T8_SHOES_CLOTH_SET1",
+     "base": "SHOES_CLOTH_SET1",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "CHANNELED_RUN",
+      "PASSIVE_INCREASED_DAMAGE"
+     ]
+    },
+    "offhand": {
+     "id": "T8_OFF_TORCH",
+     "base": "OFF_TORCH",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    }
+   },
+   "alts": {
+    "food": [
+     {
+      "id": "T7_MEAL_ROAST",
+      "base": "MEAL_ROAST",
+      "tier": 7,
+      "ench": 0,
+      "skills": []
+     }
+    ]
+   },
+   "description": "Primarily designed for **solo fame farming**, but can also be used in **group PvE** if you have high enough specs and solid dodging skills."
+  },
+  {
    "id": "6eaa9f27-c2a1-4099-9b06-2c403815d4b6",
    "slug": "druidic-staff-build-for-solo-fame-farming",
    "title": "Druidic staff build for solo fame farming",
@@ -22944,90 +23253,116 @@
    "description": "Jump the healer. Ive got like an 80% win rate with this build outside of getting 3rd partied"
   },
   {
-   "id": "edcfb6c2-fd9e-4588-a02e-b1f24a0e5a78",
-   "slug": "earthrune-staff-engage-tank-zvz-build",
-   "title": "Earthrune Staff Engage Tank ZvZ Build",
-   "weaponName": "Earthrune Staff",
-   "category": "ZVZ",
-   "author": "Keno",
+   "id": "80006ba7-4c55-4731-85bc-51804c1acdc3",
+   "slug": "flamewalker-staff-sol-gank-build",
+   "title": "Flamewalker staff sol gank build",
+   "weaponName": "Flamewalker Staff",
+   "category": "GANK_SOLO",
+   "author": "GankerGuy",
    "tags": [
-    "Group",
-    "PvP"
+    "Advanced",
+    "PvP",
+    "Solo"
    ],
    "upvotes": 5,
-   "createdAt": "2025-02-18T15:59:44.619216+00:00",
-   "updatedAt": "2025-08-21T15:49:17.561+00:00",
-   "url": "https://albiononlinegrind.com/build/earthrune-staff-engage-tank-zvz-build",
+   "createdAt": "2025-09-15T16:17:49.415342+00:00",
+   "updatedAt": "2025-09-25T18:56:54.851+00:00",
+   "url": "https://albiononlinegrind.com/build/flamewalker-staff-sol-gank-build",
    "source": "albiononlinegrind.com",
    "items": {
     "weapon": {
-     "id": "T8_2H_SHAPESHIFTER_KEEPER",
-     "base": "2H_SHAPESHIFTER_KEEPER",
+     "id": "T8_MAIN_FIRESTAFF_CRYSTAL",
+     "base": "MAIN_FIRESTAFF_CRYSTAL",
      "tier": 8,
      "ench": 0,
      "skills": [
-      "SHAPE_Q_CONE_MELEE",
-      "SHAPE_W_AREA_PULL",
-      "SHAPESHIFT_ROCK_ELEMENTAL",
-      "PASSIVE_SHAPESHIFT_ATTACK_BUFF"
+      "SEARING_FLAME",
+      "FIRESTAFFIGNITE2_SPREAD",
+      "FLAMEDASH",
+      "PASSIVE_SPELLPOWER_CASTER_CURSEDSTAFF"
      ]
     },
-    "offhand": null,
+    "offhand": {
+     "id": "T8_OFF_LAMP_UNDEAD",
+     "base": "OFF_LAMP_UNDEAD",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
     "head": {
-     "id": "T8_HEAD_CLOTH_SET2",
-     "base": "HEAD_CLOTH_SET2",
+     "id": "T8_HEAD_CLOTH_AVALON",
+     "base": "HEAD_CLOTH_AVALON",
      "tier": 8,
      "ench": 0,
      "skills": [
-      "ICEBLOCK2",
-      "PASSIVE_CASTSPEED"
+      "AVALON_BEAM",
+      "PASSIVE_INCREASED_DAMAGE"
      ]
     },
     "chest": {
-     "id": "T8_ARMOR_PLATE_KEEPER",
-     "base": "ARMOR_PLATE_KEEPER",
+     "id": "T8_ARMOR_CLOTH_FEY",
+     "base": "ARMOR_CLOTH_FEY",
      "tier": 8,
      "ench": 0,
      "skills": [
-      "FORCESHIELD",
-      "PASSIVE_MR_AR"
+      "WILD_MAGIC",
+      "PASSIVE_INCREASED_DAMAGE"
      ]
     },
     "boots": {
-     "id": "T8_SHOES_LEATHER_SET2",
-     "base": "SHOES_LEATHER_SET2",
+     "id": "T8_SHOES_CLOTH_ROYAL",
+     "base": "SHOES_CLOTH_ROYAL",
      "tier": 8,
      "ench": 0,
      "skills": [
-      "OVERSPRINT",
-      "PASSIVE_CD_REDUCTION"
+      "GLASS_MOVESPEED",
+      "PASSIVE_INCREASED_DAMAGE"
      ]
     },
     "cape": {
-     "id": "T8_CAPEITEM_FW_MARTLOCK",
-     "base": "CAPEITEM_FW_MARTLOCK",
+     "id": "T8_CAPEITEM_AVALON",
+     "base": "CAPEITEM_AVALON",
      "tier": 8,
      "ench": 0,
      "skills": []
     },
     "food": {
-     "id": "T8_MEAL_SANDWICH_AVALON",
-     "base": "MEAL_SANDWICH_AVALON",
+     "id": "T8_MEAL_STEW",
+     "base": "MEAL_STEW",
      "tier": 8,
      "ench": 0,
      "skills": []
     },
     "potion": {
-     "id": "T7_POTION_REVIVE",
-     "base": "POTION_REVIVE",
-     "tier": 7,
+     "id": "T6_POTION_ENERGY",
+     "base": "POTION_ENERGY",
+     "tier": 6,
      "ench": 0,
      "skills": []
     }
    },
    "alt": {},
-   "alts": {},
-   "description": ""
+   "alts": {
+    "food": [
+     {
+      "id": "T8_MEAL_STEW_FISH",
+      "base": "MEAL_STEW_FISH",
+      "tier": 8,
+      "ench": 0,
+      "skills": []
+     }
+    ],
+    "potion": [
+     {
+      "id": "T8_POTION_BERSERK",
+      "base": "POTION_BERSERK",
+      "tier": 8,
+      "ench": 0,
+      "skills": []
+     }
+    ]
+   },
+   "description": "Feel free to use any cape you want. If you aren't having a lot of silver use it low tier but it isn't so efficyent as the t8.4/.3 if you have the silver to buy one set try to gank faction transporters in yellow zones. the moun and faction should be elite terrorbird and bridgewatch (best mount w) the combo is w(if mounted) f,w on yourself d rr qqq e. after the combo your enemy will be dismounted even if useing t8 ox. (its one of SwoleBenji's favourite weapon/build)"
   },
   {
    "id": "09faab36-fd0d-4a8d-955d-7be5447f59fb",
@@ -24881,6 +25216,101 @@
    "description": ""
   },
   {
+   "id": "c7dde36a-1d76-4b7d-800c-34cf973f9220",
+   "slug": "1h-cursed-staff-pve",
+   "title": "1H Cursed Staff PVE",
+   "weaponName": "Cursed Staff",
+   "category": "FAME_FARM_SOLO",
+   "author": "Yaaz",
+   "tags": [
+    "Beginner",
+    "Advanced",
+    "Fame Farm",
+    "PvE",
+    "Solo"
+   ],
+   "upvotes": 4,
+   "createdAt": "2025-07-08T17:24:56.935493+00:00",
+   "updatedAt": "2025-07-08T17:24:50.852+00:00",
+   "url": "https://albiononlinegrind.com/build/1h-cursed-staff-pve",
+   "source": "albiononlinegrind.com",
+   "items": {
+    "weapon": {
+     "id": "T8_MAIN_CURSEDSTAFF",
+     "base": "MAIN_CURSEDSTAFF",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "CURSED_SPLAT",
+      "ARMORPIERCER",
+      "DEATHCURSE2",
+      "PASSIVE_CURSE"
+     ]
+    },
+    "offhand": {
+     "id": "T8_OFF_DEMONSKULL_HELL",
+     "base": "OFF_DEMONSKULL_HELL",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "head": {
+     "id": "T8_HEAD_PLATE_SET3",
+     "base": "HEAD_PLATE_SET3",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "STONESKIN",
+      "PASSIVE_MR_AR"
+     ]
+    },
+    "chest": {
+     "id": "T8_ARMOR_LEATHER_SET1",
+     "base": "ARMOR_LEATHER_SET1",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "BLOODLUST",
+      "PASSIVE_ARMOR_BALANCE"
+     ]
+    },
+    "boots": {
+     "id": "T8_SHOES_PLATE_SET1",
+     "base": "SHOES_PLATE_SET1",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "SPRINTHOT",
+      "PASSIVE_MR_AR"
+     ]
+    },
+    "cape": {
+     "id": "T8_CAPEITEM_FW_MARTLOCK",
+     "base": "CAPEITEM_FW_MARTLOCK",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "food": {
+     "id": "T8_MEAL_STEW",
+     "base": "MEAL_STEW",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "potion": {
+     "id": "T7_POTION_REVIVE",
+     "base": "POTION_REVIVE",
+     "tier": 7,
+     "ench": 0,
+     "skills": []
+    }
+   },
+   "alt": {},
+   "alts": {},
+   "description": ""
+  },
+  {
    "id": "8b4266b3-e9a5-4388-b470-4fd99cdd630c",
    "slug": "1h-mace-caller",
    "title": "1h mace caller",
@@ -25985,133 +26415,6 @@
    "description": ""
   },
   {
-   "id": "243ddaaa-ea58-43d8-98fe-799a47f8b33d",
-   "slug": "claymore-duo-hellgate-mists-dps-build",
-   "title": "Claymore Duo (Hellgate/Mists) DPS Build",
-   "weaponName": "Claymore",
-   "category": "HELLGATE_2V2",
-   "author": "MsFloof",
-   "tags": [
-    "Advanced",
-    "PvP"
-   ],
-   "upvotes": 4,
-   "createdAt": "2025-02-20T20:12:18.599145+00:00",
-   "updatedAt": "2025-02-20T20:17:24.585+00:00",
-   "url": "https://albiononlinegrind.com/build/claymore-duo-hellgate-mists-dps-build",
-   "source": "albiononlinegrind.com",
-   "items": {
-    "weapon": {
-     "id": "T8_2H_CLAYMORE",
-     "base": "2H_CLAYMORE",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "HEROICSTRIKE2",
-      "INTERRUPT2",
-      "CLAYMORECHARGE",
-      "PASSIVE_HEROICSTACK"
-     ]
-    },
-    "offhand": null,
-    "head": {
-     "id": "T8_HEAD_PLATE_AVALON",
-     "base": "HEAD_PLATE_AVALON",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "PURIFYING_SMOKE",
-      "PASSIVE_MR_AR"
-     ]
-    },
-    "chest": {
-     "id": "T8_ARMOR_CLOTH_SET3",
-     "base": "ARMOR_CLOTH_SET3",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "PURGINGSHIELD2",
-      "PASSIVE_INCREASED_DAMAGE"
-     ]
-    },
-    "boots": {
-     "id": "T8_SHOES_CLOTH_MORGANA",
-     "base": "SHOES_CLOTH_MORGANA",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "DEMONWALK",
-      "PASSIVE_INCREASED_DAMAGE"
-     ]
-    },
-    "cape": {
-     "id": "T8_CAPEITEM_FW_LYMHURST",
-     "base": "CAPEITEM_FW_LYMHURST",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "food": {
-     "id": "T8_MEAL_STEW",
-     "base": "MEAL_STEW",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "potion": {
-     "id": "T8_POTION_COOLDOWN",
-     "base": "POTION_COOLDOWN",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    }
-   },
-   "alt": {
-    "head": {
-     "id": "T8_HEAD_LEATHER_SET1",
-     "base": "HEAD_LEATHER_SET1",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "HOWL",
-      "PASSIVE_INCREASED_DAMAGE"
-     ]
-    },
-    "chest": {
-     "id": "T8_ARMOR_CLOTH_HELL",
-     "base": "ARMOR_CLOTH_HELL",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "FEAR_AURA",
-      "PASSIVE_INCREASED_DAMAGE"
-     ]
-    },
-    "boots": {
-     "id": "T8_SHOES_LEATHER_SET1",
-     "base": "SHOES_LEATHER_SET1",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "CLEANSE_DASH",
-      "PASSIVE_ARMOR_BALANCE"
-     ]
-    }
-   },
-   "alts": {
-    "potion": [
-     {
-      "id": "T7_POTION_STONESKIN",
-      "base": "POTION_STONESKIN",
-      "tier": 7,
-      "ench": 0,
-      "skills": []
-     }
-    ]
-   },
-   "description": "The alternative gear should be mixed-matched depending on what you want, not used as one set. "
-  },
-  {
    "id": "2444e026-222d-47f1-ba0a-cb708b036e24",
    "slug": "corrupted-lifetouch",
    "title": "Corrupted Lifetouch",
@@ -26510,112 +26813,6 @@
     ]
    },
    "description": ""
-  },
-  {
-   "id": "c9f90acf-dc13-4af6-8221-c8fef42dce55",
-   "slug": "depths-3v3",
-   "title": "Depths 3v3",
-   "weaponName": "Bow",
-   "category": "ABYSSAL_DEPTHS_3V3",
-   "author": "Japhyyy",
-   "tags": [
-    "PvP"
-   ],
-   "upvotes": 4,
-   "createdAt": "2025-10-27T10:38:34.031669+00:00",
-   "updatedAt": "2025-10-27T10:38:32.633+00:00",
-   "url": "https://albiononlinegrind.com/build/depths-3v3",
-   "source": "albiononlinegrind.com",
-   "items": {
-    "weapon": {
-     "id": "T8_2H_BOW",
-     "base": "2H_BOW",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "MULTISHOT2",
-      "GROUNDARROW",
-      "SPEEDARCHER_KITE",
-      "PASSIVE_ARMOR_PIERCE_STACK"
-     ]
-    },
-    "offhand": null,
-    "head": {
-     "id": "T8_HEAD_PLATE_SET1",
-     "base": "HEAD_PLATE_SET1",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "BLOCK",
-      "PASSIVE_MR_AR"
-     ]
-    },
-    "chest": {
-     "id": "T8_ARMOR_CLOTH_FEY",
-     "base": "ARMOR_CLOTH_FEY",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "WILD_MAGIC",
-      "PASSIVE_ARMOR_INCREASED_DAMAGE"
-     ]
-    },
-    "boots": {
-     "id": "T8_SHOES_CLOTH_AVALON",
-     "base": "SHOES_CLOTH_AVALON",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "HOVER_SPRINT",
-      "PASSIVE_ARMOR_INCREASED_DAMAGE"
-     ]
-    },
-    "cape": {
-     "id": "T8_CAPEITEM_FW_THETFORD",
-     "base": "CAPEITEM_FW_THETFORD",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "food": {
-     "id": "T8_MEAL_STEW",
-     "base": "MEAL_STEW",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "potion": {
-     "id": "T7_POTION_REVIVE",
-     "base": "POTION_REVIVE",
-     "tier": 7,
-     "ench": 0,
-     "skills": []
-    }
-   },
-   "alt": {
-    "head": {
-     "id": "T8_HEAD_PLATE_AVALON",
-     "base": "HEAD_PLATE_AVALON",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "PURIFYING_SMOKE",
-      "PASSIVE_MR_AR"
-     ]
-    }
-   },
-   "alts": {
-    "potion": [
-     {
-      "id": "T8_POTION_TORNADO",
-      "base": "POTION_TORNADO",
-      "tier": 8,
-      "ench": 0,
-      "skills": []
-     }
-    ]
-   },
-   "description": "best in trio, holy heal, pole hammer comp"
   },
   {
    "id": "362e8eda-bee4-470f-bad3-316311ecd417",
@@ -27476,113 +27673,6 @@
    "description": "Use **Tornado Potion** against **One Shot** setups."
   },
   {
-   "id": "11f8c02c-e0ad-48d7-adb3-805ec1740c81",
-   "slug": "greataxe-bruiser-avalon-roads-7v7-build",
-   "title": "Greataxe Bruiser Avalon Roads 7v7 Build",
-   "weaponName": "Greataxe",
-   "category": "SMALL_SCALE",
-   "author": "Henriqu",
-   "tags": [
-    "PvP",
-    "Group"
-   ],
-   "upvotes": 4,
-   "createdAt": "2025-10-10T13:11:46.986972+00:00",
-   "updatedAt": "2025-10-10T13:11:46.8+00:00",
-   "url": "https://albiononlinegrind.com/build/greataxe-bruiser-avalon-roads-7v7-build",
-   "source": "albiononlinegrind.com",
-   "items": {
-    "weapon": {
-     "id": "T8_2H_AXE",
-     "base": "2H_AXE",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "RENDINGCOMBO",
-      "BLADE_AURA",
-      "AXEWHIRLWIND2",
-      "PASSIVE_BLEEDCHANCE"
-     ]
-    },
-    "offhand": null,
-    "head": {
-     "id": "T8_HEAD_LEATHER_SET3",
-     "base": "HEAD_LEATHER_SET3",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "SUMMONER_CD_REDUCTION",
-      "PASSIVE_ARMOR_BALANCE"
-     ]
-    },
-    "chest": {
-     "id": "T8_ARMOR_LEATHER_MORGANA",
-     "base": "ARMOR_LEATHER_MORGANA",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "STORMSHIELD",
-      "PASSIVE_ARMOR_BALANCE"
-     ]
-    },
-    "boots": {
-     "id": "T8_SHOES_LEATHER_MORGANA",
-     "base": "SHOES_LEATHER_MORGANA",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "DMG_BLINK",
-      "PASSIVE_ARMOR_BALANCE"
-     ]
-    },
-    "cape": {
-     "id": "T8_CAPEITEM_SMUGGLER",
-     "base": "CAPEITEM_SMUGGLER",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "food": {
-     "id": "T8_MEAL_STEW",
-     "base": "MEAL_STEW",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "potion": {
-     "id": "T7_POTION_REVIVE",
-     "base": "POTION_REVIVE",
-     "tier": 7,
-     "ench": 0,
-     "skills": []
-    }
-   },
-   "alt": {
-    "head": {
-     "id": "T8_HEAD_PLATE_SET1",
-     "base": "HEAD_PLATE_SET1",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "BLOCK",
-      "PASSIVE_MR_AR"
-     ]
-    }
-   },
-   "alts": {
-    "potion": [
-     {
-      "id": "T7_POTION_STONESKIN",
-      "base": "POTION_STONESKIN",
-      "tier": 7,
-      "ench": 0,
-      "skills": []
-     }
-    ]
-   },
-   "description": ""
-  },
-  {
    "id": "3b6f9ea8-235f-4968-8d2b-f581ee4ef28e",
    "slug": "grovekeeper-zvz-tank-build",
    "title": "Grovekeeper ZvZ Defensive Tank Build",
@@ -28282,6 +28372,97 @@
    "description": ""
   },
   {
+   "id": "2347de87-d944-456e-9e32-1b3c112da88c",
+   "slug": "heron-depths",
+   "title": "Heron Depths",
+   "weaponName": "Heron Spear",
+   "category": "ABYSSAL_DEPTHS_3V3",
+   "author": "Bence801",
+   "tags": [
+    "PvP"
+   ],
+   "upvotes": 4,
+   "createdAt": "2025-08-18T00:19:41.034175+00:00",
+   "updatedAt": "2025-08-18T00:19:39.529+00:00",
+   "url": "https://albiononlinegrind.com/build/heron-depths",
+   "source": "albiononlinegrind.com",
+   "items": {
+    "weapon": {
+     "id": "T8_MAIN_SPEAR_KEEPER",
+     "base": "MAIN_SPEAR_KEEPER",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "SPEAR_LUNGE",
+      "FORESTOFSPEARS",
+      "SPEARTHROW",
+      "PASSIVE_HEALTHCHANCE_MACE"
+     ]
+    },
+    "offhand": {
+     "id": "T8_OFF_JESTERCANE_HELL",
+     "base": "OFF_JESTERCANE_HELL",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "head": {
+     "id": "T8_HEAD_PLATE_SET3",
+     "base": "HEAD_PLATE_SET3",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "EMERGENCY_SHIELD",
+      "PASSIVE_MR_AR"
+     ]
+    },
+    "chest": {
+     "id": "T8_ARMOR_LEATHER_SET1",
+     "base": "ARMOR_LEATHER_SET1",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "BLOODLUST",
+      "PASSIVE_ARMOR_BALANCE"
+     ]
+    },
+    "boots": {
+     "id": "T8_SHOES_CLOTH_AVALON",
+     "base": "SHOES_CLOTH_AVALON",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "HOVER_SPRINT",
+      "PASSIVE_INCREASED_DAMAGE"
+     ]
+    },
+    "cape": {
+     "id": "T8_CAPEITEM_FW_LYMHURST",
+     "base": "CAPEITEM_FW_LYMHURST",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "food": {
+     "id": "T8_MEAL_STEW",
+     "base": "MEAL_STEW",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "potion": {
+     "id": "T7_POTION_REVIVE",
+     "base": "POTION_REVIVE",
+     "tier": 7,
+     "ench": 0,
+     "skills": []
+    }
+   },
+   "alt": {},
+   "alts": {},
+   "description": ""
+  },
+  {
    "id": "8b074b5b-ae37-4dd8-86f7-fe708fd3f2b6",
    "slug": "incubus-mace-duo-gank-build",
    "title": "Incubus Mace Duo Gank Build",
@@ -28658,6 +28839,126 @@
    "description": ""
   },
   {
+   "id": "02499c97-9457-4721-b903-d6b9171d6300",
+   "slug": "mace-solo-pve-fame-farm",
+   "title": "Mace Solo Pve Fame Farm",
+   "weaponName": "Mace",
+   "category": "FAME_FARM_SOLO",
+   "author": "Kiko",
+   "tags": [
+    "Beginner",
+    "PvE",
+    "Solo"
+   ],
+   "upvotes": 4,
+   "createdAt": "2025-06-24T07:49:57.683947+00:00",
+   "updatedAt": "2025-06-24T08:15:10.028+00:00",
+   "url": "https://albiononlinegrind.com/build/mace-solo-pve-fame-farm",
+   "source": "albiononlinegrind.com",
+   "items": {
+    "weapon": {
+     "id": "T8_MAIN_MACE",
+     "base": "MAIN_MACE",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "THREATENINGSMASH",
+      "GROUNDSHAKER",
+      "MACELEAP",
+      "PASSIVE_ENERGYCHANCE_MACE"
+     ]
+    },
+    "offhand": {
+     "id": "T8_OFF_HORN_KEEPER",
+     "base": "OFF_HORN_KEEPER",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "head": {
+     "id": "T8_HEAD_CLOTH_SET3",
+     "base": "HEAD_CLOTH_SET3",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "HELMET_FIREBREATH",
+      "PASSIVE_INCREASED_DAMAGE"
+     ]
+    },
+    "chest": {
+     "id": "T8_ARMOR_LEATHER_MORGANA",
+     "base": "ARMOR_LEATHER_MORGANA",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "STORMSHIELD",
+      "PASSIVE_ARMOR_BALANCE"
+     ]
+    },
+    "boots": {
+     "id": "T8_SHOES_LEATHER_SET1",
+     "base": "SHOES_LEATHER_SET1",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "SPRINT_CD_REDUCTION",
+      "PASSIVE_ARMOR_BALANCE"
+     ]
+    },
+    "cape": {
+     "id": "T8_CAPEITEM_AVALON",
+     "base": "CAPEITEM_AVALON",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "food": {
+     "id": "T7_MEAL_OMELETTE",
+     "base": "MEAL_OMELETTE",
+     "tier": 7,
+     "ench": 0,
+     "skills": []
+    },
+    "potion": {
+     "id": "T8_POTION_COOLDOWN",
+     "base": "POTION_COOLDOWN",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    }
+   },
+   "alt": {
+    "offhand": {
+     "id": "T8_OFF_DEMONSKULL_HELL",
+     "base": "OFF_DEMONSKULL_HELL",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    }
+   },
+   "alts": {
+    "food": [
+     {
+      "id": "T5_MEAL_SOUP",
+      "base": "MEAL_SOUP",
+      "tier": 5,
+      "ench": 0,
+      "skills": []
+     }
+    ],
+    "potion": [
+     {
+      "id": "T6_POTION_HEAL",
+      "base": "POTION_HEAL",
+      "tier": 6,
+      "ench": 0,
+      "skills": []
+     }
+    ]
+   },
+   "description": "PvE Farm:\n\nQ -> W -> R -> E -> D -> F -> Repeat, Do AutoAtacks between"
+  },
+  {
    "id": "1aa742e9-090d-41ab-b898-4b1793cf9a80",
    "slug": "permafrost-prism-fame-farm-avalon-group-build",
    "title": "Permafrost Prism Fame Farm Avalon Group Build",
@@ -28850,92 +29151,6 @@
      ]
     }
    },
-   "alts": {},
-   "description": ""
-  },
-  {
-   "id": "c9567292-7dfb-48ae-90e5-99f2792043eb",
-   "slug": "realmbreaker-zvz-melee-dps-build",
-   "title": "Realmbreaker ZvZ Melee DPS Build",
-   "weaponName": "Realmbreaker",
-   "category": "ZVZ",
-   "author": "Keno",
-   "tags": [
-    "Group",
-    "PvP"
-   ],
-   "upvotes": 4,
-   "createdAt": "2025-02-18T19:02:34.014479+00:00",
-   "updatedAt": "2026-02-10T15:56:54.235+00:00",
-   "url": "https://albiononlinegrind.com/build/realmbreaker-zvz-melee-dps-build",
-   "source": "albiononlinegrind.com",
-   "items": {
-    "weapon": {
-     "id": "T8_2H_AXE_AVALON",
-     "base": "2H_AXE_AVALON",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "RENDINGSPIN",
-      "AXE_CHARGE",
-      "LETHAL_CLEAVER",
-      "PASSIVE_HEALTHCHANCE_MACE"
-     ]
-    },
-    "offhand": null,
-    "head": {
-     "id": "T8_HEAD_PLATE_SET2",
-     "base": "HEAD_PLATE_SET2",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "DISRUPTIONIMMUNITY",
-      "PASSIVE_MR_AR"
-     ]
-    },
-    "chest": {
-     "id": "T8_ARMOR_PLATE_HELL",
-     "base": "ARMOR_PLATE_HELL",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "REFLECTAREA",
-      "PASSIVE_MR_AR"
-     ]
-    },
-    "boots": {
-     "id": "T8_SHOES_PLATE_AVALON",
-     "base": "SHOES_PLATE_AVALON",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "CC_BLOCK",
-      "PASSIVE_MR_AR"
-     ]
-    },
-    "cape": {
-     "id": "T8_CAPEITEM_FW_MARTLOCK",
-     "base": "CAPEITEM_FW_MARTLOCK",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "food": {
-     "id": "T8_MEAL_STEW_FISH",
-     "base": "MEAL_STEW_FISH",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "potion": {
-     "id": "T7_POTION_REVIVE",
-     "base": "POTION_REVIVE",
-     "tier": 7,
-     "ench": 0,
-     "skills": []
-    }
-   },
-   "alt": {},
    "alts": {},
    "description": ""
   },
@@ -29218,6 +29433,133 @@
    },
    "alt": {},
    "alts": {},
+   "description": ""
+  },
+  {
+   "id": "92e772cc-7e80-44d0-8b46-bb2d9bb2db0c",
+   "slug": "spiked-gauntlets-fame-farm-group-build",
+   "title": "Spiked Gauntlets Fame Farm Group Build",
+   "weaponName": "Spiked Gauntlets",
+   "category": "FAME_FARM_GROUP",
+   "author": "Asgam",
+   "tags": [
+    "PvE",
+    "Group"
+   ],
+   "upvotes": 4,
+   "createdAt": "2025-05-11T21:14:36.405737+00:00",
+   "updatedAt": "2025-05-11T21:14:35.223+00:00",
+   "url": "https://albiononlinegrind.com/build/spiked-gauntlets-fame-farm-group-build",
+   "source": "albiononlinegrind.com",
+   "items": {
+    "weapon": {
+     "id": "T8_2H_KNUCKLES_SET3",
+     "base": "2H_KNUCKLES_SET3",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "DASHKICK",
+      "TRIPLE_KICK",
+      "IMPULSE_PUNCH",
+      "PASSIVE_KNUCKLE_RAGE"
+     ]
+    },
+    "offhand": null,
+    "head": {
+     "id": "T8_HEAD_LEATHER_SET3",
+     "base": "HEAD_LEATHER_SET3",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "SUMMONER_CD_REDUCTION",
+      "PASSIVE_CD_REDUCTION"
+     ]
+    },
+    "chest": {
+     "id": "T8_ARMOR_LEATHER_ROYAL",
+     "base": "ARMOR_LEATHER_ROYAL",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "ROYAL_BANNER",
+      "PASSIVE_CD_REDUCTION"
+     ]
+    },
+    "boots": {
+     "id": "T8_SHOES_LEATHER_MORGANA",
+     "base": "SHOES_LEATHER_MORGANA",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "DMG_BLINK",
+      "PASSIVE_CD_REDUCTION"
+     ]
+    },
+    "cape": {
+     "id": "T8_CAPEITEM_FW_LYMHURST",
+     "base": "CAPEITEM_FW_LYMHURST",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "food": {
+     "id": "T7_MEAL_OMELETTE",
+     "base": "MEAL_OMELETTE",
+     "tier": 7,
+     "ench": 0,
+     "skills": []
+    },
+    "potion": {
+     "id": "T7_POTION_CLEANSE2",
+     "base": "POTION_CLEANSE2",
+     "tier": 7,
+     "ench": 0,
+     "skills": []
+    }
+   },
+   "alt": {
+    "head": {
+     "id": "T8_HEAD_LEATHER_UNDEAD",
+     "base": "HEAD_LEATHER_UNDEAD",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "ARMOR_CD_RESET",
+      "PASSIVE_CD_REDUCTION"
+     ]
+    },
+    "chest": {
+     "id": "T8_ARMOR_LEATHER_AVALON",
+     "base": "ARMOR_LEATHER_AVALON",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "DYNAMIC_DEFENSE",
+      "PASSIVE_ARMOR_BALANCE"
+     ]
+    },
+    "boots": {
+     "id": "T8_SHOES_LEATHER_SET1",
+     "base": "SHOES_LEATHER_SET1",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "CLEANSE_DASH",
+      "PASSIVE_ARMOR_BALANCE"
+     ]
+    }
+   },
+   "alts": {
+    "food": [
+     {
+      "id": "T8_MEAL_STEW",
+      "base": "MEAL_STEW",
+      "tier": 8,
+      "ench": 0,
+      "skills": []
+     }
+    ]
+   },
    "description": ""
   },
   {
@@ -29904,6 +30246,91 @@
    "alt": {},
    "alts": {},
    "description": "Witchwork Bomf for Personal USAGE"
+  },
+  {
+   "id": "03c75432-2cd5-4676-9657-8e356dc65bdf",
+   "slug": "carrioncaller-5v5-hellgate-build",
+   "title": " Carrioncaller (FTB) Hellgate Build",
+   "weaponName": "Carrioncaller",
+   "category": "HELLGATE_5V5",
+   "author": "Marhexx",
+   "tags": [
+    "PvP"
+   ],
+   "upvotes": 3,
+   "createdAt": "2025-03-22T00:18:12.932558+00:00",
+   "updatedAt": "2025-03-23T07:39:05.504+00:00",
+   "url": "https://albiononlinegrind.com/build/carrioncaller-5v5-hellgate-build",
+   "source": "albiononlinegrind.com",
+   "items": {
+    "weapon": {
+     "id": "T8_2H_HALBERD_MORGANA",
+     "base": "2H_HALBERD_MORGANA",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "RENDINGCOMBO",
+      "AXESMASH",
+      "SHOCKWAVE",
+      "PASSIVE_BLEEDCHANCE"
+     ]
+    },
+    "offhand": null,
+    "head": {
+     "id": "T8_HEAD_LEATHER_MORGANA",
+     "base": "HEAD_LEATHER_MORGANA",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "SMELLOFBLOOD",
+      "PASSIVE_ARMOR_BALANCE"
+     ]
+    },
+    "chest": {
+     "id": "T8_ARMOR_PLATE_ROYAL",
+     "base": "ARMOR_PLATE_ROYAL",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "MANADRAIN",
+      "PASSIVE_MR_AR"
+     ]
+    },
+    "boots": {
+     "id": "T8_SHOES_LEATHER_MORGANA",
+     "base": "SHOES_LEATHER_MORGANA",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "DMG_BLINK",
+      "PASSIVE_ARMOR_BALANCE"
+     ]
+    },
+    "cape": {
+     "id": "T8_CAPEITEM_FW_THETFORD",
+     "base": "CAPEITEM_FW_THETFORD",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "food": {
+     "id": "T8_MEAL_STEW_FISH",
+     "base": "MEAL_STEW_FISH",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "potion": {
+     "id": "T7_POTION_STONESKIN",
+     "base": "POTION_STONESKIN",
+     "tier": 7,
+     "ench": 0,
+     "skills": []
+    }
+   },
+   "alt": {},
+   "alts": {},
+   "description": ""
   },
   {
    "id": "1e4dd97e-0718-4be9-ac2c-63d4f6e06089",
@@ -37109,126 +37536,6 @@
    "description": ""
   },
   {
-   "id": "02499c97-9457-4721-b903-d6b9171d6300",
-   "slug": "mace-solo-pve-fame-farm",
-   "title": "Mace Solo Pve Fame Farm",
-   "weaponName": "Mace",
-   "category": "FAME_FARM_SOLO",
-   "author": "Kiko",
-   "tags": [
-    "Beginner",
-    "PvE",
-    "Solo"
-   ],
-   "upvotes": 3,
-   "createdAt": "2025-06-24T07:49:57.683947+00:00",
-   "updatedAt": "2025-06-24T08:15:10.028+00:00",
-   "url": "https://albiononlinegrind.com/build/mace-solo-pve-fame-farm",
-   "source": "albiononlinegrind.com",
-   "items": {
-    "weapon": {
-     "id": "T8_MAIN_MACE",
-     "base": "MAIN_MACE",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "THREATENINGSMASH",
-      "GROUNDSHAKER",
-      "MACELEAP",
-      "PASSIVE_ENERGYCHANCE_MACE"
-     ]
-    },
-    "offhand": {
-     "id": "T8_OFF_HORN_KEEPER",
-     "base": "OFF_HORN_KEEPER",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "head": {
-     "id": "T8_HEAD_CLOTH_SET3",
-     "base": "HEAD_CLOTH_SET3",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "HELMET_FIREBREATH",
-      "PASSIVE_INCREASED_DAMAGE"
-     ]
-    },
-    "chest": {
-     "id": "T8_ARMOR_LEATHER_MORGANA",
-     "base": "ARMOR_LEATHER_MORGANA",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "STORMSHIELD",
-      "PASSIVE_ARMOR_BALANCE"
-     ]
-    },
-    "boots": {
-     "id": "T8_SHOES_LEATHER_SET1",
-     "base": "SHOES_LEATHER_SET1",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "SPRINT_CD_REDUCTION",
-      "PASSIVE_ARMOR_BALANCE"
-     ]
-    },
-    "cape": {
-     "id": "T8_CAPEITEM_AVALON",
-     "base": "CAPEITEM_AVALON",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "food": {
-     "id": "T7_MEAL_OMELETTE",
-     "base": "MEAL_OMELETTE",
-     "tier": 7,
-     "ench": 0,
-     "skills": []
-    },
-    "potion": {
-     "id": "T8_POTION_COOLDOWN",
-     "base": "POTION_COOLDOWN",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    }
-   },
-   "alt": {
-    "offhand": {
-     "id": "T8_OFF_DEMONSKULL_HELL",
-     "base": "OFF_DEMONSKULL_HELL",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    }
-   },
-   "alts": {
-    "food": [
-     {
-      "id": "T5_MEAL_SOUP",
-      "base": "MEAL_SOUP",
-      "tier": 5,
-      "ench": 0,
-      "skills": []
-     }
-    ],
-    "potion": [
-     {
-      "id": "T6_POTION_HEAL",
-      "base": "POTION_HEAL",
-      "tier": 6,
-      "ench": 0,
-      "skills": []
-     }
-    ]
-   },
-   "description": "PvE Farm:\n\nQ -> W -> R -> E -> D -> F -> Repeat, Do AutoAtacks between"
-  },
-  {
    "id": "8efb6107-ced4-42c9-ab7c-0ac90c16aa51",
    "slug": "omb-caller",
    "title": "ÑOMB caller",
@@ -38566,130 +38873,88 @@
    "description": ""
   },
   {
-   "id": "92e772cc-7e80-44d0-8b46-bb2d9bb2db0c",
-   "slug": "spiked-gauntlets-fame-farm-group-build",
-   "title": "Spiked Gauntlets Fame Farm Group Build",
-   "weaponName": "Spiked Gauntlets",
-   "category": "FAME_FARM_GROUP",
-   "author": "Asgam",
+   "id": "03bc9d5f-971a-4539-a0e1-5f99367e6d78",
+   "slug": "spirithunter-oneshot-hellgate-build",
+   "title": "Spirithunter (Oneshot) Hellgate Build",
+   "weaponName": "Spirithunter",
+   "category": "HELLGATE_5V5",
+   "author": "Marhexx",
    "tags": [
-    "PvE",
-    "Group"
+    "PvP"
    ],
    "upvotes": 3,
-   "createdAt": "2025-05-11T21:14:36.405737+00:00",
-   "updatedAt": "2025-05-11T21:14:35.223+00:00",
-   "url": "https://albiononlinegrind.com/build/spiked-gauntlets-fame-farm-group-build",
+   "createdAt": "2025-03-22T17:06:38.139784+00:00",
+   "updatedAt": "2025-03-23T07:31:54.527+00:00",
+   "url": "https://albiononlinegrind.com/build/spirithunter-oneshot-hellgate-build",
    "source": "albiononlinegrind.com",
    "items": {
     "weapon": {
-     "id": "T8_2H_KNUCKLES_SET3",
-     "base": "2H_KNUCKLES_SET3",
+     "id": "T8_2H_HARPOON_HELL",
+     "base": "2H_HARPOON_HELL",
      "tier": 8,
      "ench": 0,
      "skills": [
-      "DASHKICK",
-      "TRIPLE_KICK",
-      "IMPULSE_PUNCH",
-      "PASSIVE_KNUCKLE_RAGE"
+      "SPEAR_LUNGE",
+      "GROUNDSPEAR",
+      "TAINTED_STEEL",
+      "PASSIVE_AASPEEDCHANCE_BOW"
      ]
     },
     "offhand": null,
     "head": {
-     "id": "T8_HEAD_LEATHER_SET3",
-     "base": "HEAD_LEATHER_SET3",
+     "id": "T8_HEAD_CLOTH_KEEPER",
+     "base": "HEAD_CLOTH_KEEPER",
      "tier": 8,
      "ench": 0,
      "skills": [
-      "SUMMONER_CD_REDUCTION",
-      "PASSIVE_CD_REDUCTION"
+      "ENERGYFIELD",
+      "PASSIVE_INCREASED_DAMAGE"
      ]
     },
     "chest": {
-     "id": "T8_ARMOR_LEATHER_ROYAL",
-     "base": "ARMOR_LEATHER_ROYAL",
+     "id": "T8_ARMOR_CLOTH_FEY",
+     "base": "ARMOR_CLOTH_FEY",
      "tier": 8,
      "ench": 0,
      "skills": [
-      "ROYAL_BANNER",
-      "PASSIVE_CD_REDUCTION"
+      "WILD_MAGIC",
+      "PASSIVE_INCREASED_DAMAGE"
      ]
     },
     "boots": {
-     "id": "T8_SHOES_LEATHER_MORGANA",
-     "base": "SHOES_LEATHER_MORGANA",
+     "id": "T8_SHOES_CLOTH_ROYAL",
+     "base": "SHOES_CLOTH_ROYAL",
      "tier": 8,
      "ench": 0,
      "skills": [
-      "DMG_BLINK",
-      "PASSIVE_CD_REDUCTION"
+      "GLASS_MOVESPEED",
+      "PASSIVE_INCREASED_DAMAGE"
      ]
     },
     "cape": {
-     "id": "T8_CAPEITEM_FW_LYMHURST",
-     "base": "CAPEITEM_FW_LYMHURST",
+     "id": "T8_CAPEITEM_FW_FORTSTERLING",
+     "base": "CAPEITEM_FW_FORTSTERLING",
      "tier": 8,
      "ench": 0,
      "skills": []
     },
     "food": {
-     "id": "T7_MEAL_OMELETTE",
-     "base": "MEAL_OMELETTE",
-     "tier": 7,
+     "id": "T8_MEAL_STEW",
+     "base": "MEAL_STEW",
+     "tier": 8,
      "ench": 0,
      "skills": []
     },
     "potion": {
-     "id": "T7_POTION_CLEANSE2",
-     "base": "POTION_CLEANSE2",
-     "tier": 7,
+     "id": "T8_POTION_TORNADO",
+     "base": "POTION_TORNADO",
+     "tier": 8,
      "ench": 0,
      "skills": []
     }
    },
-   "alt": {
-    "head": {
-     "id": "T8_HEAD_LEATHER_UNDEAD",
-     "base": "HEAD_LEATHER_UNDEAD",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "ARMOR_CD_RESET",
-      "PASSIVE_CD_REDUCTION"
-     ]
-    },
-    "chest": {
-     "id": "T8_ARMOR_LEATHER_AVALON",
-     "base": "ARMOR_LEATHER_AVALON",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "DYNAMIC_DEFENSE",
-      "PASSIVE_ARMOR_BALANCE"
-     ]
-    },
-    "boots": {
-     "id": "T8_SHOES_LEATHER_SET1",
-     "base": "SHOES_LEATHER_SET1",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "CLEANSE_DASH",
-      "PASSIVE_ARMOR_BALANCE"
-     ]
-    }
-   },
-   "alts": {
-    "food": [
-     {
-      "id": "T8_MEAL_STEW",
-      "base": "MEAL_STEW",
-      "tier": 8,
-      "ench": 0,
-      "skills": []
-     }
-    ]
-   },
+   "alt": {},
+   "alts": {},
    "description": ""
   },
   {
@@ -44556,93 +44821,6 @@
    "description": ""
   },
   {
-   "id": "747a5fcc-67d0-47ec-9b2b-4774c782a970",
-   "slug": "carving-sword-zvz-support-build",
-   "title": "Carving Sword ZvZ Support Build",
-   "weaponName": "Carving Sword",
-   "category": "ZVZ",
-   "author": "Arreat Regaro",
-   "tags": [
-    "ZvZ",
-    "PVP"
-   ],
-   "upvotes": 2,
-   "createdAt": "2024-06-10T10:00:00+00:00",
-   "updatedAt": "2024-12-12T13:10:24.568417+00:00",
-   "url": "https://albiononlinegrind.com/build/carving-sword-zvz-support-build",
-   "source": "albiononlinegrind.com",
-   "items": {
-    "weapon": {
-     "id": "T8_2H_CLEAVER_HELL",
-     "base": "2H_CLEAVER_HELL",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "CLEAVE",
-      "SPLITTINGSLASH",
-      "CLAYMORESLASH",
-      "PASSIVE_ARMORCHANCE_SWORD"
-     ]
-    },
-    "offhand": null,
-    "head": {
-     "id": "T8_HEAD_PLATE_SET2",
-     "base": "HEAD_PLATE_SET2",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "DISRUPTIONIMMUNITY",
-      "PASSIVE_MR_AR"
-     ]
-    },
-    "chest": {
-     "id": "T8_ARMOR_PLATE_KEEPER",
-     "base": "ARMOR_PLATE_KEEPER",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "FORCESHIELD",
-      "PASSIVE_ARMOR_CCDURATION",
-      "PASSIVE_PLATEARMOR_THREATGENERATION"
-     ]
-    },
-    "boots": {
-     "id": "T8_SHOES_PLATE_UNDEAD",
-     "base": "SHOES_PLATE_UNDEAD",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "BATTLEFRENZY",
-      "PASSIVE_MR_AR"
-     ]
-    },
-    "cape": {
-     "id": "T8_CAPEITEM_FW_MARTLOCK",
-     "base": "CAPEITEM_FW_MARTLOCK",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "food": {
-     "id": "T7_MEAL_OMELETTE_AVALON",
-     "base": "MEAL_OMELETTE_AVALON",
-     "tier": 7,
-     "ench": 0,
-     "skills": []
-    },
-    "potion": {
-     "id": "T7_POTION_REVIVE",
-     "base": "POTION_REVIVE",
-     "tier": 7,
-     "ench": 0,
-     "skills": []
-    }
-   },
-   "alt": {},
-   "alts": {},
-   "description": ""
-  },
-  {
    "id": "33187f8b-4a55-4c93-a7a6-5224644e740b",
    "slug": "cercle-vesperien-dps-build",
    "title": "Cercle vesperien dps build",
@@ -49574,97 +49752,6 @@
    "description": ""
   },
   {
-   "id": "83593e4d-9841-45b0-98bb-11151ab78c37",
-   "slug": "group-dungeon-tank-pve",
-   "title": "Group Dungeon Tank (pve)",
-   "weaponName": "Incubus Mace",
-   "category": "FAME_FARM_GROUP",
-   "author": "turajon",
-   "tags": [
-    "PvE"
-   ],
-   "upvotes": 2,
-   "createdAt": "2025-08-18T00:06:28.566434+00:00",
-   "updatedAt": "2025-08-18T00:06:27.204+00:00",
-   "url": "https://albiononlinegrind.com/build/group-dungeon-tank-pve",
-   "source": "albiononlinegrind.com",
-   "items": {
-    "weapon": {
-     "id": "T8_MAIN_MACE_HELL",
-     "base": "MAIN_MACE_HELL",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "THREATENINGSMASH",
-      "PBAOE_PULL",
-      "SHRINKINGSMASH",
-      "PASSIVE_ENERGYCHANCE_MACE"
-     ]
-    },
-    "offhand": {
-     "id": "T8_OFF_SHIELD_AVALON",
-     "base": "OFF_SHIELD_AVALON",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "head": {
-     "id": "T8_HEAD_PLATE_SET1",
-     "base": "HEAD_PLATE_SET1",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "BLOCK",
-      "PASSIVE_MR_AR"
-     ]
-    },
-    "chest": {
-     "id": "T8_ARMOR_PLATE_SET3",
-     "base": "ARMOR_PLATE_SET3",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "ENFEEBLEAURA",
-      "PASSIVE_MR_AR"
-     ]
-    },
-    "boots": {
-     "id": "T8_SHOES_PLATE_AVALON",
-     "base": "SHOES_PLATE_AVALON",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "SPRINTHOT",
-      "PASSIVE_MR_AR"
-     ]
-    },
-    "cape": {
-     "id": "T8_CAPEITEM_FW_MARTLOCK",
-     "base": "CAPEITEM_FW_MARTLOCK",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "food": {
-     "id": "T8_MEAL_SANDWICH",
-     "base": "MEAL_SANDWICH",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "potion": {
-     "id": "T7_POTION_SLOWFIELD",
-     "base": "POTION_SLOWFIELD",
-     "tier": 7,
-     "ench": 0,
-     "skills": []
-    }
-   },
-   "alt": {},
-   "alts": {},
-   "description": ""
-  },
-  {
    "id": "48304c5b-56d7-48f4-9a8f-5d488be781d6",
    "slug": "group-tracking-tank-incubus",
    "title": "Group Tracking Tank - incubus",
@@ -52907,6 +52994,155 @@
    "description": "Combo: Boots + Jacket + Helmet + W + E \nThe helmet is very important because if you don't activate the helmet you will eat all your own damage if someone has a reflex, you will need someone to protect you, if you don't activate the helmet. "
   },
   {
+   "id": "8b225de4-6cda-47db-b13b-c0e82225905e",
+   "slug": "nature-healer-group-pvp",
+   "title": "nature healer group pvp",
+   "weaponName": "Journeyman's Nature Staff",
+   "category": "CRYSTAL_ARENA",
+   "author": "milkkill74",
+   "tags": [
+    "PvP",
+    "Group"
+   ],
+   "upvotes": 2,
+   "createdAt": "2025-04-29T13:17:02.471331+00:00",
+   "updatedAt": "2025-04-29T13:22:29.496+00:00",
+   "url": "https://albiononlinegrind.com/build/nature-healer-group-pvp",
+   "source": "albiononlinegrind.com",
+   "items": {
+    "weapon": {
+     "id": "T8_MAIN_NATURESTAFF",
+     "base": "MAIN_NATURESTAFF",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "REANIMATE",
+      "NATURERESILIENCE",
+      "CIRCLEOFLIFE",
+      "PASSIVE_HEALPOWERCHANCE"
+     ]
+    },
+    "offhand": {
+     "id": "T8_OFF_SHIELD",
+     "base": "OFF_SHIELD",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "head": {
+     "id": "T8_HEAD_PLATE_UNDEAD",
+     "base": "HEAD_PLATE_UNDEAD",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "SACRIFICE_HEAL",
+      "PASSIVE_MR_AR"
+     ]
+    },
+    "chest": {
+     "id": "T8_ARMOR_CLOTH_SET2",
+     "base": "ARMOR_CLOTH_SET2",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "LIFESAVIOR",
+      "PASSIVE_INCREASED_DAMAGE"
+     ]
+    },
+    "boots": {
+     "id": "T8_SHOES_LEATHER_MORGANA",
+     "base": "SHOES_LEATHER_MORGANA",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "DMG_BLINK",
+      "PASSIVE_ARMOR_BALANCE"
+     ]
+    },
+    "cape": {
+     "id": "T8_CAPEITEM_FW_LYMHURST",
+     "base": "CAPEITEM_FW_LYMHURST",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "food": {
+     "id": "T7_MEAL_OMELETTE",
+     "base": "MEAL_OMELETTE",
+     "tier": 7,
+     "ench": 0,
+     "skills": []
+    },
+    "potion": {
+     "id": "T7_POTION_STONESKIN",
+     "base": "POTION_STONESKIN",
+     "tier": 7,
+     "ench": 0,
+     "skills": []
+    }
+   },
+   "alt": {
+    "head": {
+     "id": "T8_HEAD_PLATE_SET1",
+     "base": "HEAD_PLATE_SET1",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "BLOCK",
+      "PASSIVE_MR_AR"
+     ]
+    },
+    "chest": {
+     "id": "T8_ARMOR_LEATHER_FEY",
+     "base": "ARMOR_LEATHER_FEY",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "MIST_WALKER",
+      "PASSIVE_ARMOR_BALANCE"
+     ]
+    },
+    "boots": {
+     "id": "T8_SHOES_CLOTH_SET2",
+     "base": "SHOES_CLOTH_SET2",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "BLINK",
+      "PASSIVE_ARMOR_INCREASED_DAMAGE"
+     ]
+    },
+    "offhand": {
+     "id": "T8_OFF_HORN_KEEPER",
+     "base": "OFF_HORN_KEEPER",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    }
+   },
+   "alts": {
+    "food": [
+     {
+      "id": "T8_MEAL_SANDWICH_FISH",
+      "base": "MEAL_SANDWICH_FISH",
+      "tier": 8,
+      "ench": 0,
+      "skills": []
+     }
+    ],
+    "potion": [
+     {
+      "id": "T6_POTION_ENERGY",
+      "base": "POTION_ENERGY",
+      "tier": 6,
+      "ench": 0,
+      "skills": []
+     }
+    ]
+   },
+   "description": ""
+  },
+  {
    "id": "b83429db-b7df-443d-863e-c6b05c21e23b",
    "slug": "nature-staff-ftb-hellgate-build",
    "title": "Nature Staff (FTB) Hellgate Build",
@@ -55709,101 +55945,6 @@
      "id": "T8_MEAL_STEW_FISH",
      "base": "MEAL_STEW_FISH",
      "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "potion": {
-     "id": "T7_POTION_STONESKIN",
-     "base": "POTION_STONESKIN",
-     "tier": 7,
-     "ench": 0,
-     "skills": []
-    }
-   },
-   "alt": {},
-   "alts": {},
-   "description": ""
-  },
-  {
-   "id": "8bb59bec-d54e-4932-bbf3-4579bc19da03",
-   "slug": "small-party-heal-3-4p-max",
-   "title": "small party heal (3-4p max)",
-   "weaponName": "Holy Staff",
-   "category": "OPEN_WORLD",
-   "author": "turajon",
-   "tags": [
-    "PvE",
-    "PvP",
-    "Group",
-    "Roaming",
-    "Fame Farm"
-   ],
-   "upvotes": 2,
-   "createdAt": "2025-08-18T11:40:10.449825+00:00",
-   "updatedAt": "2025-08-18T11:40:09.678+00:00",
-   "url": "https://albiononlinegrind.com/build/small-party-heal-3-4p-max",
-   "source": "albiononlinegrind.com",
-   "items": {
-    "weapon": {
-     "id": "T8_MAIN_HOLYSTAFF",
-     "base": "MAIN_HOLYSTAFF",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "GENEROUSHEAL",
-      "HEALINGBEAM",
-      "HOLYDESPERATEPRAYER2",
-      "PASSIVE_HEALPOWERCHANCE"
-     ]
-    },
-    "offhand": {
-     "id": "T8_OFF_HORN_KEEPER",
-     "base": "OFF_HORN_KEEPER",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "head": {
-     "id": "T8_HEAD_CLOTH_ROYAL",
-     "base": "HEAD_CLOTH_ROYAL",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "PERPETUALENERGY",
-      "PASSIVE_INCREASED_DAMAGE"
-     ]
-    },
-    "chest": {
-     "id": "T8_ARMOR_CLOTH_SET2",
-     "base": "ARMOR_CLOTH_SET2",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "LIFESAVIOR",
-      "PASSIVE_INCREASED_DAMAGE"
-     ]
-    },
-    "boots": {
-     "id": "T8_SHOES_CLOTH_SET2",
-     "base": "SHOES_CLOTH_SET2",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "SPRINTEOT",
-      "PASSIVE_INCREASED_DAMAGE"
-     ]
-    },
-    "cape": {
-     "id": "T8_CAPEITEM_FW_MARTLOCK",
-     "base": "CAPEITEM_FW_MARTLOCK",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "food": {
-     "id": "T7_MEAL_OMELETTE",
-     "base": "MEAL_OMELETTE",
-     "tier": 7,
      "ench": 0,
      "skills": []
     },
