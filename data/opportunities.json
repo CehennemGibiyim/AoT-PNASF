@@ -1,20 +1,20 @@
 {
-  "lastUpdate": "2026-11-14T12:41:30.094Z",
+  "lastUpdate": "2026-11-15T03:45:42.070Z",
   "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
   "opportunities": [
     {
-      "id": "market_T6_MOUNT_HORSE_Caerleon_Thetford",
+      "id": "market_T6_POTION_HEAL_Martlock_Lymhurst",
       "type": "flip",
-      "item": "T6_MOUNT_HORSE",
-      "itemName": "T6_MOUNT_HORSE",
-      "from": "Caerleon",
-      "to": "Thetford",
-      "buyPrice": 171105,
-      "sellPrice": 177358,
-      "profit": 5752,
-      "profitPercent": "3.4",
-      "timestamp": "2026-11-14T12:41:30.094Z",
+      "item": "T6_POTION_HEAL",
+      "itemName": "T6_POTION_HEAL",
+      "from": "Martlock",
+      "to": "Lymhurst",
+      "buyPrice": 6986,
+      "sellPrice": 7800,
+      "profit": 748,
+      "profitPercent": "10.7",
+      "timestamp": "2026-11-15T03:45:42.070Z",
       "source": "albion-online-data.com",
       "verified": true
     }
