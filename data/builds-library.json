@@ -1,5 +1,5 @@
 {
- "fetchedAt": "2026-11-15T06:20:40.059Z",
+ "fetchedAt": "2026-11-15T18:47:06.914Z",
  "source": "albiononlinegrind.com",
  "sourceUrl": "https://albiononlinegrind.com/builds",
  "note": "Veriler herkese açık build sayfalarındaki SSR JSONundan (__NEXT_DATA__) çekilir; eşya/yetenek ID'leri doğrulanmıştır.",
@@ -744,7 +744,7 @@
     "Meta",
     "PVP"
    ],
-   "upvotes": 68,
+   "upvotes": 69,
    "createdAt": "2024-04-04T10:00:00+00:00",
    "updatedAt": "2024-12-12T13:10:24.568417+00:00",
    "url": "https://albiononlinegrind.com/build/deathgivers-mist-build",
@@ -2611,7 +2611,7 @@
     "Fame Farm",
     "Group"
    ],
-   "upvotes": 29,
+   "upvotes": 30,
    "createdAt": "2025-05-09T13:43:29.500732+00:00",
    "updatedAt": "2025-05-15T16:44:48.56+00:00",
    "url": "https://albiononlinegrind.com/build/fulgurante-bau-estradas-avalonianas",
@@ -6820,6 +6820,103 @@
    "description": "PT/BR: Use o \"W\", depois \"F\" para cima dos mobs, o \"Q\" para agrar e o \"E\". Feito isso o grupo pode atacar!\nUse seu Elmo se perceber que vai cair!\n\nEN: Use \"W\", then \"F\" to attack mobs, \"Q\" to attack and \"E\". Once this is done, the group can attack!\nUse your Helmet if you feel like you're going to fall!"
   },
   {
+   "id": "36ef8509-cc9e-4cba-94c3-fd79443da53b",
+   "slug": "arco-longo-bau-estradas-avaloninanas",
+   "title": "Longbow Ava Gold Chests",
+   "weaponName": "Longbow",
+   "category": "FAME_FARM_GROUP_AVALON",
+   "author": "TutoriAlbion",
+   "tags": [
+    "PvE",
+    "Fame Farm",
+    "Group"
+   ],
+   "upvotes": 15,
+   "createdAt": "2025-05-15T16:22:44.221058+00:00",
+   "updatedAt": "2025-05-15T16:36:35.985+00:00",
+   "url": "https://albiononlinegrind.com/build/arco-longo-bau-estradas-avaloninanas",
+   "source": "albiononlinegrind.com",
+   "items": {
+    "weapon": {
+     "id": "T8_2H_LONGBOW",
+     "base": "2H_LONGBOW",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "DEADLYSHOT",
+      "BURNINGARROWS",
+      "ARROWRAIN",
+      "PASSIVE_INCREASED_DAMAGE"
+     ]
+    },
+    "offhand": null,
+    "head": {
+     "id": "T8_HEAD_LEATHER_ROYAL",
+     "base": "HEAD_LEATHER_ROYAL",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "GROWING_RAGE",
+      "PASSIVE_ARMOR_BALANCE"
+     ]
+    },
+    "chest": {
+     "id": "T8_ARMOR_LEATHER_ROYAL",
+     "base": "ARMOR_LEATHER_ROYAL",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "ROYAL_BANNER",
+      "PASSIVE_ARMOR_BALANCE"
+     ]
+    },
+    "boots": {
+     "id": "T8_SHOES_CLOTH_ROYAL",
+     "base": "SHOES_CLOTH_ROYAL",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "GLASS_MOVESPEED",
+      "PASSIVE_INCREASED_DAMAGE"
+     ]
+    },
+    "cape": {
+     "id": "T8_CAPEITEM_FW_THETFORD",
+     "base": "CAPEITEM_FW_THETFORD",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "food": {
+     "id": "T8_MEAL_STEW",
+     "base": "MEAL_STEW",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "potion": {
+     "id": "T7_POTION_MOB_RESET",
+     "base": "POTION_MOB_RESET",
+     "tier": 7,
+     "ench": 0,
+     "skills": []
+    }
+   },
+   "alt": {},
+   "alts": {
+    "potion": [
+     {
+      "id": "T8_POTION_CLEANSE",
+      "base": "POTION_CLEANSE",
+      "tier": 8,
+      "ench": 0,
+      "skills": []
+     }
+    ]
+   },
+   "description": "PT/BR: Use a seguinte sequência de habilidades: F, D, W, E\nDepois use o Casaco Real \"R\" e o Q junto de Ataques Básicos!\n\nEN: \nUse the following skill sequence: F, D, W, E\nThen use the Royal Coat \"R\" and Q along with Basic Attacks!"
+  },
+  {
    "id": "39ac4bbc-c848-48d6-bd07-38db209c691d",
    "slug": "longbow-zvz-dps-build",
    "title": "Longbow ZvZ DPS Build",
@@ -6904,103 +7001,6 @@
    "alt": {},
    "alts": {},
    "description": ""
-  },
-  {
-   "id": "36ef8509-cc9e-4cba-94c3-fd79443da53b",
-   "slug": "arco-longo-bau-estradas-avaloninanas",
-   "title": "Longbow Ava Gold Chests",
-   "weaponName": "Longbow",
-   "category": "FAME_FARM_GROUP_AVALON",
-   "author": "TutoriAlbion",
-   "tags": [
-    "PvE",
-    "Fame Farm",
-    "Group"
-   ],
-   "upvotes": 14,
-   "createdAt": "2025-05-15T16:22:44.221058+00:00",
-   "updatedAt": "2025-05-15T16:36:35.985+00:00",
-   "url": "https://albiononlinegrind.com/build/arco-longo-bau-estradas-avaloninanas",
-   "source": "albiononlinegrind.com",
-   "items": {
-    "weapon": {
-     "id": "T8_2H_LONGBOW",
-     "base": "2H_LONGBOW",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "DEADLYSHOT",
-      "BURNINGARROWS",
-      "ARROWRAIN",
-      "PASSIVE_INCREASED_DAMAGE"
-     ]
-    },
-    "offhand": null,
-    "head": {
-     "id": "T8_HEAD_LEATHER_ROYAL",
-     "base": "HEAD_LEATHER_ROYAL",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "GROWING_RAGE",
-      "PASSIVE_ARMOR_BALANCE"
-     ]
-    },
-    "chest": {
-     "id": "T8_ARMOR_LEATHER_ROYAL",
-     "base": "ARMOR_LEATHER_ROYAL",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "ROYAL_BANNER",
-      "PASSIVE_ARMOR_BALANCE"
-     ]
-    },
-    "boots": {
-     "id": "T8_SHOES_CLOTH_ROYAL",
-     "base": "SHOES_CLOTH_ROYAL",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "GLASS_MOVESPEED",
-      "PASSIVE_INCREASED_DAMAGE"
-     ]
-    },
-    "cape": {
-     "id": "T8_CAPEITEM_FW_THETFORD",
-     "base": "CAPEITEM_FW_THETFORD",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "food": {
-     "id": "T8_MEAL_STEW",
-     "base": "MEAL_STEW",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "potion": {
-     "id": "T7_POTION_MOB_RESET",
-     "base": "POTION_MOB_RESET",
-     "tier": 7,
-     "ench": 0,
-     "skills": []
-    }
-   },
-   "alt": {},
-   "alts": {
-    "potion": [
-     {
-      "id": "T8_POTION_CLEANSE",
-      "base": "POTION_CLEANSE",
-      "tier": 8,
-      "ench": 0,
-      "skills": []
-     }
-    ]
-   },
-   "description": "PT/BR: Use a seguinte sequência de habilidades: F, D, W, E\nDepois use o Casaco Real \"R\" e o Q junto de Ataques Básicos!\n\nEN: \nUse the following skill sequence: F, D, W, E\nThen use the Royal Coat \"R\" and Q along with Basic Attacks!"
   },
   {
    "id": "8cd8b597-e76e-44a6-acd7-270184793d4e",
@@ -14095,6 +14095,92 @@
    "description": "Synthetic prelaunch security test, retained by the site owner for inspection."
   },
   {
+   "id": "d10cbb79-4f0e-4e39-8d7b-e8d5929c903e",
+   "slug": "realmbreaker-support-group-fame-farm-build",
+   "title": "Realmbreaker Support Group Fame Farm Build",
+   "weaponName": "Realmbreaker",
+   "category": "FAME_FARM_GROUP",
+   "author": "Ferii",
+   "tags": [
+    "Group",
+    "PVE"
+   ],
+   "upvotes": 9,
+   "createdAt": "2024-07-08T10:00:00+00:00",
+   "updatedAt": "2024-12-12T13:10:24.568417+00:00",
+   "url": "https://albiononlinegrind.com/build/realmbreaker-support-group-fame-farm-build",
+   "source": "albiononlinegrind.com",
+   "items": {
+    "weapon": {
+     "id": "T8_2H_AXE_AVALON",
+     "base": "2H_AXE_AVALON",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "RENDINGCOMBO",
+      "BLADE_AURA",
+      "LETHAL_CLEAVER",
+      "PASSIVE_BLEEDCHANCE"
+     ]
+    },
+    "offhand": null,
+    "head": {
+     "id": "T8_HEAD_LEATHER_SET3",
+     "base": "HEAD_LEATHER_SET3",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "SUMMONER_CD_REDUCTION",
+      "PASSIVE_BALANCE"
+     ]
+    },
+    "chest": {
+     "id": "T8_ARMOR_LEATHER_ROYAL",
+     "base": "ARMOR_LEATHER_ROYAL",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "ROYAL_BANNER",
+      "PASSIVE_ARMOR_BALANCE"
+     ]
+    },
+    "boots": {
+     "id": "T8_SHOES_LEATHER_SET1",
+     "base": "SHOES_LEATHER_SET1",
+     "tier": 8,
+     "ench": 0,
+     "skills": [
+      "SPRINT_CD_REDUCTION",
+      "PASSIVE_BALANCE"
+     ]
+    },
+    "cape": {
+     "id": "T8_CAPEITEM_FW_LYMHURST",
+     "base": "CAPEITEM_FW_LYMHURST",
+     "tier": 8,
+     "ench": 0,
+     "skills": []
+    },
+    "food": {
+     "id": "T6_MEAL_STEW_FISH",
+     "base": "MEAL_STEW_FISH",
+     "tier": 6,
+     "ench": 0,
+     "skills": []
+    },
+    "potion": {
+     "id": "T7_POTION_STONESKIN",
+     "base": "POTION_STONESKIN",
+     "tier": 7,
+     "ench": 0,
+     "skills": []
+    }
+   },
+   "alt": {},
+   "alts": {},
+   "description": ""
+  },
+  {
    "id": "2fd89b05-11cd-4aca-9988-c7f25613cfcb",
    "slug": "shadowcaller-pve-dps-build-for-gold-chests",
    "title": "Shadowcaller PvE DPS Build for Gold Chests",
@@ -15780,92 +15866,6 @@
      "id": "T8_POTION_COOLDOWN",
      "base": "POTION_COOLDOWN",
      "tier": 8,
-     "ench": 0,
-     "skills": []
-    }
-   },
-   "alt": {},
-   "alts": {},
-   "description": ""
-  },
-  {
-   "id": "d10cbb79-4f0e-4e39-8d7b-e8d5929c903e",
-   "slug": "realmbreaker-support-group-fame-farm-build",
-   "title": "Realmbreaker Support Group Fame Farm Build",
-   "weaponName": "Realmbreaker",
-   "category": "FAME_FARM_GROUP",
-   "author": "Ferii",
-   "tags": [
-    "Group",
-    "PVE"
-   ],
-   "upvotes": 8,
-   "createdAt": "2024-07-08T10:00:00+00:00",
-   "updatedAt": "2024-12-12T13:10:24.568417+00:00",
-   "url": "https://albiononlinegrind.com/build/realmbreaker-support-group-fame-farm-build",
-   "source": "albiononlinegrind.com",
-   "items": {
-    "weapon": {
-     "id": "T8_2H_AXE_AVALON",
-     "base": "2H_AXE_AVALON",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "RENDINGCOMBO",
-      "BLADE_AURA",
-      "LETHAL_CLEAVER",
-      "PASSIVE_BLEEDCHANCE"
-     ]
-    },
-    "offhand": null,
-    "head": {
-     "id": "T8_HEAD_LEATHER_SET3",
-     "base": "HEAD_LEATHER_SET3",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "SUMMONER_CD_REDUCTION",
-      "PASSIVE_BALANCE"
-     ]
-    },
-    "chest": {
-     "id": "T8_ARMOR_LEATHER_ROYAL",
-     "base": "ARMOR_LEATHER_ROYAL",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "ROYAL_BANNER",
-      "PASSIVE_ARMOR_BALANCE"
-     ]
-    },
-    "boots": {
-     "id": "T8_SHOES_LEATHER_SET1",
-     "base": "SHOES_LEATHER_SET1",
-     "tier": 8,
-     "ench": 0,
-     "skills": [
-      "SPRINT_CD_REDUCTION",
-      "PASSIVE_BALANCE"
-     ]
-    },
-    "cape": {
-     "id": "T8_CAPEITEM_FW_LYMHURST",
-     "base": "CAPEITEM_FW_LYMHURST",
-     "tier": 8,
-     "ench": 0,
-     "skills": []
-    },
-    "food": {
-     "id": "T6_MEAL_STEW_FISH",
-     "base": "MEAL_STEW_FISH",
-     "tier": 6,
-     "ench": 0,
-     "skills": []
-    },
-    "potion": {
-     "id": "T7_POTION_STONESKIN",
-     "base": "POTION_STONESKIN",
-     "tier": 7,
      "ench": 0,
      "skills": []
     }

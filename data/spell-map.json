@@ -1,5 +1,5 @@
 {
- "fetchedAt": "2026-11-15T06:20:40.059Z",
+ "fetchedAt": "2026-11-15T18:47:06.914Z",
  "source": "albiononlinegrind.com",
  "weapons": [
   {
@@ -4173,6 +4173,48 @@
    ]
   },
   {
+   "id": "2H_AXE_AVALON",
+   "name": "Realmbreaker",
+   "builds": 2,
+   "skills": [
+    {
+     "slot": "E",
+     "id": "LETHAL_CLEAVER",
+     "count": 2
+    },
+    {
+     "slot": "Q",
+     "id": "RENDINGCOMBO",
+     "count": 1
+    },
+    {
+     "slot": "W",
+     "id": "BLADE_AURA",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_BLEEDCHANCE",
+     "count": 1
+    },
+    {
+     "slot": "Q",
+     "id": "RENDINGSPIN",
+     "count": 1
+    },
+    {
+     "slot": "W",
+     "id": "AXESMASH",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_SPELLPOWER_CHANCE_SPEAR",
+     "count": 1
+    }
+   ]
+  },
+  {
    "id": "MAIN_FROSTSTAFF",
    "name": "Frost Staff",
    "builds": 2,
@@ -4279,48 +4321,6 @@
     {
      "slot": "P",
      "id": "PASSIVE_ENERGYCHANCE_MACE",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "2H_AXE_AVALON",
-   "name": "Realmbreaker",
-   "builds": 2,
-   "skills": [
-    {
-     "slot": "E",
-     "id": "LETHAL_CLEAVER",
-     "count": 2
-    },
-    {
-     "slot": "Q",
-     "id": "RENDINGCOMBO",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "BLADE_AURA",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_BLEEDCHANCE",
-     "count": 1
-    },
-    {
-     "slot": "Q",
-     "id": "RENDINGSPIN",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "AXESMASH",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_SPELLPOWER_CHANCE_SPEAR",
      "count": 1
     }
    ]
