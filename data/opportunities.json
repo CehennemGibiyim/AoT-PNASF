@@ -1,8 +1,23 @@
 {
-  "lastUpdate": "2026-11-15T22:15:50.649Z",
+  "lastUpdate": "2026-11-16T03:46:34.436Z",
   "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
   "opportunities": [
+    {
+      "id": "market_T6_MOUNT_HORSE_Caerleon_Martlock",
+      "type": "flip",
+      "item": "T6_MOUNT_HORSE",
+      "itemName": "T6_MOUNT_HORSE",
+      "from": "Caerleon",
+      "to": "Martlock",
+      "buyPrice": 171073,
+      "sellPrice": 176071,
+      "profit": 4598,
+      "profitPercent": "2.7",
+      "timestamp": "2026-11-16T03:46:34.436Z",
+      "source": "albion-online-data.com",
+      "verified": true
+    },
     {
       "id": "market_T6_CAPE_Lymhurst_Martlock",
       "type": "flip",
@@ -14,22 +29,7 @@
       "sellPrice": 19851,
       "profit": 1713,
       "profitPercent": "9.5",
-      "timestamp": "2026-11-15T22:15:50.649Z",
-      "source": "albion-online-data.com",
-      "verified": true
-    },
-    {
-      "id": "market_T6_POTION_HEAL_Martlock_Bridgewatch",
-      "type": "flip",
-      "item": "T6_POTION_HEAL",
-      "itemName": "T6_POTION_HEAL",
-      "from": "Martlock",
-      "to": "Bridgewatch",
-      "buyPrice": 7071,
-      "sellPrice": 8001,
-      "profit": 855,
-      "profitPercent": "12.1",
-      "timestamp": "2026-11-15T22:15:50.649Z",
+      "timestamp": "2026-11-16T03:46:34.436Z",
       "source": "albion-online-data.com",
       "verified": true
     }
