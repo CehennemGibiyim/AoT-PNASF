@@ -1,8 +1,38 @@
 {
-  "lastUpdate": "2026-11-18T00:11:10.404Z",
+  "lastUpdate": "2026-11-18T14:46:33.745Z",
   "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
   "opportunities": [
+    {
+      "id": "market_T6_CAPE_Lymhurst_Caerleon",
+      "type": "flip",
+      "item": "T6_CAPE",
+      "itemName": "T6_CAPE",
+      "from": "Lymhurst",
+      "to": "Caerleon",
+      "buyPrice": 15000,
+      "sellPrice": 18001,
+      "profit": 2760,
+      "profitPercent": "18.4",
+      "timestamp": "2026-11-18T14:46:33.745Z",
+      "source": "albion-online-data.com",
+      "verified": true
+    },
+    {
+      "id": "market_T6_BAG_Bridgewatch_Fort Sterling",
+      "type": "flip",
+      "item": "T6_BAG",
+      "itemName": "T6_BAG",
+      "from": "Bridgewatch",
+      "to": "Fort Sterling",
+      "buyPrice": 38997,
+      "sellPrice": 40410,
+      "profit": 1299,
+      "profitPercent": "3.3",
+      "timestamp": "2026-11-18T14:46:33.745Z",
+      "source": "albion-online-data.com",
+      "verified": true
+    },
     {
       "id": "market_T6_POTION_HEAL_Martlock_Bridgewatch",
       "type": "flip",
@@ -10,11 +40,11 @@
       "itemName": "T6_POTION_HEAL",
       "from": "Martlock",
       "to": "Bridgewatch",
-      "buyPrice": 7077,
+      "buyPrice": 7078,
       "sellPrice": 8017,
-      "profit": 864,
+      "profit": 863,
       "profitPercent": "12.2",
-      "timestamp": "2026-11-18T00:11:10.404Z",
+      "timestamp": "2026-11-18T14:46:33.745Z",
       "source": "albion-online-data.com",
       "verified": true
     }
