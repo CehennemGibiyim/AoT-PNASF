@@ -1,26 +1,26 @@
 {
- "fetchedAt": "2026-11-18T07:18:47.302Z",
+ "fetchedAt": "2026-11-18T20:26:48.365Z",
  "source": "albiononlinegrind.com",
  "weapons": [
   {
    "id": "MAIN_HOLYSTAFF_AVALON",
    "name": "Hallowfall",
-   "builds": 18,
+   "builds": 17,
    "skills": [
     {
      "slot": "E",
      "id": "DIVINE_JUMP",
-     "count": 17
+     "count": 16
     },
     {
      "slot": "P",
      "id": "PASSIVE_HEALPOWERCHANCE",
-     "count": 14
+     "count": 13
     },
     {
      "slot": "Q",
      "id": "HOLYFLASH",
-     "count": 13
+     "count": 12
     },
     {
      "slot": "W",
@@ -30,7 +30,7 @@
     {
      "slot": "W",
      "id": "HOLYORB",
-     "count": 7
+     "count": 6
     },
     {
      "slot": "Q",
@@ -1041,53 +1041,6 @@
    ]
   },
   {
-   "id": "MAIN_DAGGER",
-   "name": "Dagger",
-   "builds": 8,
-   "skills": [
-    {
-     "slot": "E",
-     "id": "BLOODTHIRSTYBLADE",
-     "count": 8
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_BLEEDCHANCE",
-     "count": 7
-    },
-    {
-     "slot": "Q",
-     "id": "QDASH",
-     "count": 7
-    },
-    {
-     "slot": "W",
-     "id": "SKILLSHOT_TELEPORT",
-     "count": 6
-    },
-    {
-     "slot": "Q",
-     "id": "IRONBREAKER",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "THROWINGBLADES",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "CHAINDASH",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_AASPEEDCHANCE_SPEAR",
-     "count": 1
-    }
-   ]
-  },
-  {
    "id": "2H_FIRE_RINGPAIR_AVALON",
    "name": "Dawnsong",
    "builds": 8,
@@ -1271,6 +1224,53 @@
     {
      "slot": "Q",
      "id": "SUNDERARMOR2",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "MAIN_DAGGER",
+   "name": "Dagger",
+   "builds": 7,
+   "skills": [
+    {
+     "slot": "E",
+     "id": "BLOODTHIRSTYBLADE",
+     "count": 7
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_BLEEDCHANCE",
+     "count": 6
+    },
+    {
+     "slot": "Q",
+     "id": "QDASH",
+     "count": 6
+    },
+    {
+     "slot": "W",
+     "id": "SKILLSHOT_TELEPORT",
+     "count": 5
+    },
+    {
+     "slot": "Q",
+     "id": "IRONBREAKER",
+     "count": 1
+    },
+    {
+     "slot": "W",
+     "id": "THROWINGBLADES",
+     "count": 1
+    },
+    {
+     "slot": "W",
+     "id": "CHAINDASH",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_AASPEEDCHANCE_SPEAR",
      "count": 1
     }
    ]
@@ -1796,6 +1796,110 @@
    ]
   },
   {
+   "id": "2H_HOLYSTAFF_UNDEAD",
+   "name": "Redemption Staff",
+   "builds": 6,
+   "skills": [
+    {
+     "slot": "Q",
+     "id": "HOLYFLASH",
+     "count": 6
+    },
+    {
+     "slot": "E",
+     "id": "CELESTIAL_SPHERE",
+     "count": 5
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_HEALPOWERCHANCE",
+     "count": 5
+    },
+    {
+     "slot": "W",
+     "id": "HEALINGBEAM",
+     "count": 4
+    },
+    {
+     "slot": "W",
+     "id": "HOLYORB",
+     "count": 2
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_HOLY_ASCENDED",
+     "count": 1
+    },
+    {
+     "slot": "E",
+     "id": "DIVINE_JUMP",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "MAIN_NATURESTAFF",
+   "name": "Nature Staff",
+   "builds": 5,
+   "skills": [
+    {
+     "slot": "E",
+     "id": "CIRCLEOFLIFE",
+     "count": 5
+    },
+    {
+     "slot": "Q",
+     "id": "THORNSAREA",
+     "count": 3
+    },
+    {
+     "slot": "W",
+     "id": "BRAMBLESEED",
+     "count": 3
+    },
+    {
+     "slot": "Q",
+     "id": "REJUVMUSHROOM_GRENADE",
+     "count": 2
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_ENERGYCHANCE_NATURESTAFF",
+     "count": 1
+    },
+    {
+     "slot": "W",
+     "id": "CLEANSEHEAL",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_ARMOR_CASTER_NATURESTAFF",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_ENERGYCHANCE_HOLYSTAFF",
+     "count": 1
+    },
+    {
+     "slot": "W",
+     "id": "NATURERESILIENCE",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_HEALPOWERCHANCE",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_ENERGYCHANCE_MACE",
+     "count": 1
+    }
+   ]
+  },
+  {
    "id": "2H_DAGGERPAIR",
    "name": "Dagger Pair",
    "builds": 5,
@@ -2219,43 +2323,6 @@
    ]
   },
   {
-   "id": "2H_HOLYSTAFF_UNDEAD",
-   "name": "Redemption Staff",
-   "builds": 5,
-   "skills": [
-    {
-     "slot": "Q",
-     "id": "HOLYFLASH",
-     "count": 5
-    },
-    {
-     "slot": "E",
-     "id": "CELESTIAL_SPHERE",
-     "count": 5
-    },
-    {
-     "slot": "W",
-     "id": "HEALINGBEAM",
-     "count": 4
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_HEALPOWERCHANCE",
-     "count": 4
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_HOLY_ASCENDED",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "HOLYORB",
-     "count": 1
-    }
-   ]
-  },
-  {
    "id": "MAIN_HAMMER",
    "name": "Hammer",
    "builds": 5,
@@ -2289,58 +2356,6 @@
      "slot": "P",
      "id": "PASSIVE_CCDURATION_CHANCE_HAMMER",
      "count": 2
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_ENERGYCHANCE_MACE",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "MAIN_NATURESTAFF",
-   "name": "Nature Staff",
-   "builds": 4,
-   "skills": [
-    {
-     "slot": "E",
-     "id": "CIRCLEOFLIFE",
-     "count": 4
-    },
-    {
-     "slot": "Q",
-     "id": "THORNSAREA",
-     "count": 3
-    },
-    {
-     "slot": "W",
-     "id": "BRAMBLESEED",
-     "count": 3
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_ENERGYCHANCE_NATURESTAFF",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_ENERGYCHANCE_HOLYSTAFF",
-     "count": 1
-    },
-    {
-     "slot": "Q",
-     "id": "REJUVMUSHROOM_GRENADE",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "NATURERESILIENCE",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_HEALPOWERCHANCE",
-     "count": 1
     },
     {
      "slot": "P",
@@ -3292,43 +3307,53 @@
    ]
   },
   {
-   "id": "MAIN_FIRESTAFF_KEEPER",
-   "name": "Wildfire Staff",
+   "id": "2H_SKULLORB_HELL",
+   "name": "Cursed Skull",
    "builds": 3,
    "skills": [
     {
      "slot": "E",
-     "id": "MAGMASPHERE",
-     "count": 3
-    },
-    {
-     "slot": "Q",
-     "id": "FIRESTAFFBOLT2",
+     "id": "SKULLCURSE",
      "count": 2
     },
     {
-     "slot": "P",
-     "id": "PASSIVE_CASTINGSPEED_CHANCE_FIRESTAFF",
+     "slot": "Q",
+     "id": "CURSED_SPLAT",
      "count": 2
     },
     {
      "slot": "W",
-     "id": "SKILLSHOT_FIREBALL",
+     "id": "ARMORPIERCER",
      "count": 2
     },
     {
-     "slot": "W",
-     "id": "FIRESTAFFIGNITE2_SPREAD",
+     "slot": "Q",
+     "id": "CURSEDOT",
      "count": 1
     },
     {
-     "slot": "Q",
-     "id": "FIRESTAFFBOLT_AOE",
+     "slot": "W",
+     "id": "CURSEDHANDS_STACKUP",
      "count": 1
     },
     {
      "slot": "P",
-     "id": "PASSIVE_SPELLPOWER_CASTER_FIRESTAFF",
+     "id": "PASSIVE_MOVESPEED_CHANCE_CURSEDSTAFF",
+     "count": 1
+    },
+    {
+     "slot": "E",
+     "id": "DEATHCURSE2",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_ENERGYCHANCE_MACE",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_SPELLPOWER_CASTER_CURSEDSTAFF",
      "count": 1
     }
    ]
@@ -4020,48 +4045,6 @@
    ]
   },
   {
-   "id": "2H_SKULLORB_HELL",
-   "name": "Cursed Skull",
-   "builds": 2,
-   "skills": [
-    {
-     "slot": "E",
-     "id": "SKULLCURSE",
-     "count": 2
-    },
-    {
-     "slot": "Q",
-     "id": "CURSEDOT",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "CURSEDHANDS_STACKUP",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_MOVESPEED_CHANCE_CURSEDSTAFF",
-     "count": 1
-    },
-    {
-     "slot": "Q",
-     "id": "CURSED_SPLAT",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "ARMORPIERCER",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_SPELLPOWER_CASTER_CURSEDSTAFF",
-     "count": 1
-    }
-   ]
-  },
-  {
    "id": "2H_HAMMER_UNDEAD",
    "name": "Tombhammer",
    "builds": 2,
@@ -4131,6 +4114,48 @@
     {
      "slot": "Q",
      "id": "QS_WHIRLWIND2",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "MAIN_FIRESTAFF_KEEPER",
+   "name": "Wildfire Staff",
+   "builds": 2,
+   "skills": [
+    {
+     "slot": "E",
+     "id": "MAGMASPHERE",
+     "count": 2
+    },
+    {
+     "slot": "Q",
+     "id": "FIRESTAFFBOLT2",
+     "count": 1
+    },
+    {
+     "slot": "W",
+     "id": "FIRESTAFFIGNITE2_SPREAD",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_CASTINGSPEED_CHANCE_FIRESTAFF",
+     "count": 1
+    },
+    {
+     "slot": "Q",
+     "id": "FIRESTAFFBOLT_AOE",
+     "count": 1
+    },
+    {
+     "slot": "W",
+     "id": "SKILLSHOT_FIREBALL",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_SPELLPOWER_CASTER_FIRESTAFF",
      "count": 1
     }
    ]
