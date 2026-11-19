@@ -1,20 +1,20 @@
 {
-  "lastUpdate": "2026-11-19T04:59:07.833Z",
+  "lastUpdate": "2026-11-19T14:53:32.559Z",
   "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
   "opportunities": [
     {
-      "id": "market_T6_CAPE_Thetford_Caerleon",
+      "id": "market_T6_CAPE_Thetford_Lymhurst",
       "type": "flip",
       "item": "T6_CAPE",
       "itemName": "T6_CAPE",
       "from": "Thetford",
-      "to": "Caerleon",
+      "to": "Lymhurst",
       "buyPrice": 11954,
-      "sellPrice": 18001,
-      "profit": 5563,
-      "profitPercent": "46.5",
-      "timestamp": "2026-11-19T04:59:07.833Z",
+      "sellPrice": 15053,
+      "profit": 2851,
+      "profitPercent": "23.8",
+      "timestamp": "2026-11-19T14:53:32.559Z",
       "source": "albion-online-data.com",
       "verified": true
     }
