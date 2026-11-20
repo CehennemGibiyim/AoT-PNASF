@@ -1,5 +1,5 @@
 {
- "fetchedAt": "2026-11-19T20:29:37.156Z",
+ "fetchedAt": "2026-11-20T07:05:46.412Z",
  "source": "albiononlinegrind.com",
  "weapons": [
   {
@@ -1578,58 +1578,6 @@
    ]
   },
   {
-   "id": "MAIN_CURSEDSTAFF_CRYSTAL",
-   "name": "Rotcaller Staff",
-   "builds": 6,
-   "skills": [
-    {
-     "slot": "E",
-     "id": "CURSE_SKELETON_BARF_FDHR",
-     "count": 6
-    },
-    {
-     "slot": "W",
-     "id": "ARMORPIERCER",
-     "count": 5
-    },
-    {
-     "slot": "Q",
-     "id": "CURSED_SPLAT",
-     "count": 5
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_SPELLPOWER_CASTER_CURSEDSTAFF",
-     "count": 3
-    },
-    {
-     "slot": "Q",
-     "id": "CURSEDOT",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_MOVESPEED_CHANCE_NATURESTAFF",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_CURSE",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_ENERGYCHANCE_MACE",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "DARKMATTER",
-     "count": 1
-    }
-   ]
-  },
-  {
    "id": "2H_CLAYMORE_AVALON",
    "name": "Kingmaker",
    "builds": 6,
@@ -2266,6 +2214,53 @@
     {
      "slot": "P",
      "id": "PASSIVE_SPELLPOWER_CHANCE_AXE",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "MAIN_CURSEDSTAFF_CRYSTAL",
+   "name": "Rotcaller Staff",
+   "builds": 5,
+   "skills": [
+    {
+     "slot": "W",
+     "id": "ARMORPIERCER",
+     "count": 5
+    },
+    {
+     "slot": "E",
+     "id": "CURSE_SKELETON_BARF_FDHR",
+     "count": 5
+    },
+    {
+     "slot": "Q",
+     "id": "CURSED_SPLAT",
+     "count": 4
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_SPELLPOWER_CASTER_CURSEDSTAFF",
+     "count": 2
+    },
+    {
+     "slot": "Q",
+     "id": "CURSEDOT",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_MOVESPEED_CHANCE_NATURESTAFF",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_CURSE",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_ENERGYCHANCE_MACE",
      "count": 1
     }
    ]
