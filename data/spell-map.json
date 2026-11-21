@@ -1,5 +1,5 @@
 {
- "fetchedAt": "2026-11-20T20:06:08.612Z",
+ "fetchedAt": "2026-11-21T06:58:43.989Z",
  "source": "albiononlinegrind.com",
  "weapons": [
   {
@@ -937,58 +937,6 @@
    ]
   },
   {
-   "id": "2H_CLEAVER_HELL",
-   "name": "Carving Sword",
-   "builds": 8,
-   "skills": [
-    {
-     "slot": "E",
-     "id": "CLAYMORESLASH",
-     "count": 8
-    },
-    {
-     "slot": "Q",
-     "id": "HEROICSTRIKE2",
-     "count": 6
-    },
-    {
-     "slot": "W",
-     "id": "SPLITTINGSLASH",
-     "count": 5
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_BLEEDCHANCE",
-     "count": 5
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_HEROICSTACK",
-     "count": 2
-    },
-    {
-     "slot": "Q",
-     "id": "CLEAVE",
-     "count": 2
-    },
-    {
-     "slot": "W",
-     "id": "SWORD_SPIN",
-     "count": 2
-    },
-    {
-     "slot": "W",
-     "id": "PARRY",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_ARMORCHANCE_SWORD",
-     "count": 1
-    }
-   ]
-  },
-  {
    "id": "MAIN_RAPIER_MORGANA",
    "name": "Bloodletter",
    "builds": 8,
@@ -1224,6 +1172,58 @@
     {
      "slot": "Q",
      "id": "SUNDERARMOR2",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "2H_CLEAVER_HELL",
+   "name": "Carving Sword",
+   "builds": 7,
+   "skills": [
+    {
+     "slot": "E",
+     "id": "CLAYMORESLASH",
+     "count": 7
+    },
+    {
+     "slot": "Q",
+     "id": "HEROICSTRIKE2",
+     "count": 5
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_BLEEDCHANCE",
+     "count": 5
+    },
+    {
+     "slot": "W",
+     "id": "SPLITTINGSLASH",
+     "count": 4
+    },
+    {
+     "slot": "Q",
+     "id": "CLEAVE",
+     "count": 2
+    },
+    {
+     "slot": "W",
+     "id": "SWORD_SPIN",
+     "count": 2
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_HEROICSTACK",
+     "count": 1
+    },
+    {
+     "slot": "W",
+     "id": "PARRY",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_ARMORCHANCE_SWORD",
      "count": 1
     }
    ]
