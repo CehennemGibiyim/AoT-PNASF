@@ -1,20 +1,35 @@
 {
-  "lastUpdate": "2026-11-21T22:34:30.045Z",
+  "lastUpdate": "2026-11-22T22:57:02.318Z",
   "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
   "opportunities": [
     {
-      "id": "market_T8_CAPE_Lymhurst_Thetford",
+      "id": "market_T8_CAPE_Fort Sterling_Thetford",
       "type": "flip",
       "item": "T8_CAPE",
       "itemName": "T8_CAPE",
-      "from": "Lymhurst",
+      "from": "Fort Sterling",
       "to": "Thetford",
-      "buyPrice": 111109,
+      "buyPrice": 102499,
       "sellPrice": 115015,
-      "profit": 3593,
-      "profitPercent": "3.2",
-      "timestamp": "2026-11-21T22:34:30.045Z",
+      "profit": 11514,
+      "profitPercent": "11.2",
+      "timestamp": "2026-11-22T22:57:02.318Z",
+      "source": "albion-online-data.com",
+      "verified": true
+    },
+    {
+      "id": "market_T6_2H_CLAYMORE_Thetford_Fort Sterling",
+      "type": "flip",
+      "item": "T6_2H_CLAYMORE",
+      "itemName": "T6_2H_CLAYMORE",
+      "from": "Thetford",
+      "to": "Fort Sterling",
+      "buyPrice": 67000,
+      "sellPrice": 79043,
+      "profit": 11079,
+      "profitPercent": "16.5",
+      "timestamp": "2026-11-22T22:57:02.318Z",
       "source": "albion-online-data.com",
       "verified": true
     }
