@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-11-22T22:57:02.318Z",
+  "lastUpdate": "2026-11-23T04:41:42.711Z",
   "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
   "opportunities": [
@@ -14,7 +14,7 @@
       "sellPrice": 115015,
       "profit": 11514,
       "profitPercent": "11.2",
-      "timestamp": "2026-11-22T22:57:02.318Z",
+      "timestamp": "2026-11-23T04:41:42.711Z",
       "source": "albion-online-data.com",
       "verified": true
     },
@@ -29,7 +29,22 @@
       "sellPrice": 79043,
       "profit": 11079,
       "profitPercent": "16.5",
-      "timestamp": "2026-11-22T22:57:02.318Z",
+      "timestamp": "2026-11-23T04:41:42.711Z",
+      "source": "albion-online-data.com",
+      "verified": true
+    },
+    {
+      "id": "market_T6_CAPE_Martlock_Fort Sterling",
+      "type": "flip",
+      "item": "T6_CAPE",
+      "itemName": "T6_CAPE",
+      "from": "Martlock",
+      "to": "Fort Sterling",
+      "buyPrice": 13999,
+      "sellPrice": 18153,
+      "profit": 3821,
+      "profitPercent": "27.3",
+      "timestamp": "2026-11-23T04:41:42.711Z",
       "source": "albion-online-data.com",
       "verified": true
     }
