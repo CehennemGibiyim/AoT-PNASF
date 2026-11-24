@@ -1,8 +1,23 @@
 {
-  "lastUpdate": "2026-11-24T03:35:59.191Z",
+  "lastUpdate": "2026-11-24T16:41:29.844Z",
   "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
   "opportunities": [
+    {
+      "id": "market_T8_CAPE_Martlock_Thetford",
+      "type": "flip",
+      "item": "T8_CAPE",
+      "itemName": "T8_CAPE",
+      "from": "Martlock",
+      "to": "Thetford",
+      "buyPrice": 99999,
+      "sellPrice": 115019,
+      "profit": 13818,
+      "profitPercent": "13.8",
+      "timestamp": "2026-11-24T16:41:29.844Z",
+      "source": "albion-online-data.com",
+      "verified": true
+    },
     {
       "id": "market_T6_CAPE_Lymhurst_Fort Sterling",
       "type": "flip",
@@ -10,11 +25,11 @@
       "itemName": "T6_CAPE",
       "from": "Lymhurst",
       "to": "Fort Sterling",
-      "buyPrice": 15198,
+      "buyPrice": 17192,
       "sellPrice": 18162,
-      "profit": 2726,
-      "profitPercent": "17.9",
-      "timestamp": "2026-11-24T03:35:59.191Z",
+      "profit": 892,
+      "profitPercent": "5.2",
+      "timestamp": "2026-11-24T16:41:29.844Z",
       "source": "albion-online-data.com",
       "verified": true
     }
