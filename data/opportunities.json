@@ -1,20 +1,20 @@
 {
-  "lastUpdate": "2026-11-25T01:44:36.869Z",
+  "lastUpdate": "2026-11-25T16:25:57.272Z",
   "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
   "opportunities": [
     {
-      "id": "market_T8_CAPE_Martlock_Thetford",
+      "id": "market_T8_CAPE_Lymhurst_Thetford",
       "type": "flip",
       "item": "T8_CAPE",
       "itemName": "T8_CAPE",
-      "from": "Martlock",
+      "from": "Lymhurst",
       "to": "Thetford",
-      "buyPrice": 114392,
+      "buyPrice": 100000,
       "sellPrice": 115019,
-      "profit": 576,
-      "profitPercent": "0.5",
-      "timestamp": "2026-11-25T01:44:36.869Z",
+      "profit": 13817,
+      "profitPercent": "13.8",
+      "timestamp": "2026-11-25T16:25:57.272Z",
       "source": "albion-online-data.com",
       "verified": true
     }
