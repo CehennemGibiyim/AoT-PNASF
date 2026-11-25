@@ -1,7 +1,69 @@
 {
- "fetchedAt": "2026-11-25T08:23:05.529Z",
+ "fetchedAt": "2026-11-25T21:37:53.024Z",
  "source": "albiononlinegrind.com",
  "weapons": [
+  {
+   "id": "MAIN_HOLYSTAFF_AVALON",
+   "name": "Hallowfall",
+   "builds": 16,
+   "skills": [
+    {
+     "slot": "E",
+     "id": "DIVINE_JUMP",
+     "count": 15
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_HEALPOWERCHANCE",
+     "count": 12
+    },
+    {
+     "slot": "Q",
+     "id": "HOLYFLASH",
+     "count": 11
+    },
+    {
+     "slot": "W",
+     "id": "HEALINGBEAM",
+     "count": 10
+    },
+    {
+     "slot": "W",
+     "id": "HOLYORB",
+     "count": 5
+    },
+    {
+     "slot": "Q",
+     "id": "GENEROUSHEAL",
+     "count": 4
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_HOLY_ASCENDED",
+     "count": 3
+    },
+    {
+     "slot": "Q",
+     "id": "SMITE_AOE",
+     "count": 1
+    },
+    {
+     "slot": "W",
+     "id": "PULSINGHEAL",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_ENERGYCHANCE_MACE",
+     "count": 1
+    },
+    {
+     "slot": "E",
+     "id": "HOLYDESPERATEPRAYER2",
+     "count": 1
+    }
+   ]
+  },
   {
    "id": "MAIN_MACE_HELL",
    "name": "Incubus Mace",
@@ -65,68 +127,6 @@
    ]
   },
   {
-   "id": "MAIN_HOLYSTAFF_AVALON",
-   "name": "Hallowfall",
-   "builds": 15,
-   "skills": [
-    {
-     "slot": "E",
-     "id": "DIVINE_JUMP",
-     "count": 14
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_HEALPOWERCHANCE",
-     "count": 11
-    },
-    {
-     "slot": "Q",
-     "id": "HOLYFLASH",
-     "count": 10
-    },
-    {
-     "slot": "W",
-     "id": "HEALINGBEAM",
-     "count": 9
-    },
-    {
-     "slot": "W",
-     "id": "HOLYORB",
-     "count": 5
-    },
-    {
-     "slot": "Q",
-     "id": "GENEROUSHEAL",
-     "count": 4
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_HOLY_ASCENDED",
-     "count": 3
-    },
-    {
-     "slot": "Q",
-     "id": "SMITE_AOE",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "PULSINGHEAL",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_ENERGYCHANCE_MACE",
-     "count": 1
-    },
-    {
-     "slot": "E",
-     "id": "HOLYDESPERATEPRAYER2",
-     "count": 1
-    }
-   ]
-  },
-  {
    "id": "MAIN_HOLYSTAFF",
    "name": "Holy Staff",
    "builds": 13,
@@ -174,53 +174,6 @@
     {
      "slot": "W",
      "id": "PULSINGHEAL",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "2H_BOW_AVALON",
-   "name": "Mistpiercer",
-   "builds": 13,
-   "skills": [
-    {
-     "slot": "E",
-     "id": "HAWK_SHOT_MULTI1",
-     "count": 13
-    },
-    {
-     "slot": "W",
-     "id": "GROUNDARROW",
-     "count": 11
-    },
-    {
-     "slot": "Q",
-     "id": "DEADLYSHOT",
-     "count": 10
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_ARMOR_PIERCE_STACK",
-     "count": 10
-    },
-    {
-     "slot": "Q",
-     "id": "MULTISHOT2",
-     "count": 3
-    },
-    {
-     "slot": "W",
-     "id": "BURNINGARROWS",
-     "count": 2
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_SLOWPOISON",
-     "count": 2
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_ENERGYCHANCE_BOW",
      "count": 1
     }
    ]
@@ -340,63 +293,6 @@
     {
      "slot": "P",
      "id": "PASSIVE_ENERGYCHANCE_MACE",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "MAIN_AXE",
-   "name": "Battleaxe",
-   "builds": 12,
-   "skills": [
-    {
-     "slot": "E",
-     "id": "AXETHROW",
-     "count": 12
-    },
-    {
-     "slot": "Q",
-     "id": "RENDINGCOMBO",
-     "count": 11
-    },
-    {
-     "slot": "W",
-     "id": "AXEBOOST",
-     "count": 9
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_BLEEDCHANCE",
-     "count": 8
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_HEALTHCHANCE_MACE",
-     "count": 2
-    },
-    {
-     "slot": "W",
-     "id": "AXESMASH",
-     "count": 2
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_INCREASED_DAMAGE",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "INNERBLEEDING",
-     "count": 1
-    },
-    {
-     "slot": "Q",
-     "id": "RENDINGSPIN",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_HEALTHCHANCE_AXE",
      "count": 1
     }
    ]
@@ -583,6 +479,105 @@
     {
      "slot": "P",
      "id": "PASSIVE_ENERGYCHANCE_HOLYSTAFF",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "2H_BOW_AVALON",
+   "name": "Mistpiercer",
+   "builds": 12,
+   "skills": [
+    {
+     "slot": "E",
+     "id": "HAWK_SHOT_MULTI1",
+     "count": 12
+    },
+    {
+     "slot": "Q",
+     "id": "DEADLYSHOT",
+     "count": 10
+    },
+    {
+     "slot": "W",
+     "id": "GROUNDARROW",
+     "count": 10
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_ARMOR_PIERCE_STACK",
+     "count": 10
+    },
+    {
+     "slot": "W",
+     "id": "BURNINGARROWS",
+     "count": 2
+    },
+    {
+     "slot": "Q",
+     "id": "MULTISHOT2",
+     "count": 2
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_ENERGYCHANCE_BOW",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_SLOWPOISON",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "MAIN_AXE",
+   "name": "Battleaxe",
+   "builds": 11,
+   "skills": [
+    {
+     "slot": "E",
+     "id": "AXETHROW",
+     "count": 11
+    },
+    {
+     "slot": "Q",
+     "id": "RENDINGCOMBO",
+     "count": 10
+    },
+    {
+     "slot": "W",
+     "id": "AXEBOOST",
+     "count": 9
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_BLEEDCHANCE",
+     "count": 7
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_HEALTHCHANCE_MACE",
+     "count": 2
+    },
+    {
+     "slot": "W",
+     "id": "AXESMASH",
+     "count": 2
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_INCREASED_DAMAGE",
+     "count": 1
+    },
+    {
+     "slot": "Q",
+     "id": "RENDINGSPIN",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_HEALTHCHANCE_AXE",
      "count": 1
     }
    ]
@@ -823,53 +818,6 @@
    ]
   },
   {
-   "id": "2H_FIRE_RINGPAIR_AVALON",
-   "name": "Dawnsong",
-   "builds": 9,
-   "skills": [
-    {
-     "slot": "E",
-     "id": "FIREPHOENIX",
-     "count": 9
-    },
-    {
-     "slot": "Q",
-     "id": "FIRESTAFFBOLT_AOE",
-     "count": 8
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_SPELLPOWER_CASTER_FIRESTAFF",
-     "count": 5
-    },
-    {
-     "slot": "W",
-     "id": "FIREARTILLERY",
-     "count": 4
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_SPELLPOWER_CASTER_CURSEDSTAFF",
-     "count": 4
-    },
-    {
-     "slot": "W",
-     "id": "FIREWALL",
-     "count": 4
-    },
-    {
-     "slot": "Q",
-     "id": "FIRESTAFFBOLT2",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "SKILLSHOT_FIREBALL",
-     "count": 1
-    }
-   ]
-  },
-  {
    "id": "2H_INFERNOSTAFF_MORGANA",
    "name": "Blazing Staff",
    "builds": 8,
@@ -999,48 +947,48 @@
    ]
   },
   {
-   "id": "MAIN_DAGGER",
-   "name": "Dagger",
+   "id": "2H_FIRE_RINGPAIR_AVALON",
+   "name": "Dawnsong",
    "builds": 8,
    "skills": [
     {
      "slot": "E",
-     "id": "BLOODTHIRSTYBLADE",
+     "id": "FIREPHOENIX",
      "count": 8
     },
     {
-     "slot": "P",
-     "id": "PASSIVE_BLEEDCHANCE",
+     "slot": "Q",
+     "id": "FIRESTAFFBOLT_AOE",
      "count": 7
     },
     {
-     "slot": "Q",
-     "id": "QDASH",
-     "count": 7
+     "slot": "P",
+     "id": "PASSIVE_SPELLPOWER_CASTER_CURSEDSTAFF",
+     "count": 4
     },
     {
      "slot": "W",
-     "id": "SKILLSHOT_TELEPORT",
-     "count": 6
-    },
-    {
-     "slot": "Q",
-     "id": "IRONBREAKER",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "THROWINGBLADES",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "CHAINDASH",
-     "count": 1
+     "id": "FIREWALL",
+     "count": 4
     },
     {
      "slot": "P",
-     "id": "PASSIVE_AASPEEDCHANCE_SPEAR",
+     "id": "PASSIVE_SPELLPOWER_CASTER_FIRESTAFF",
+     "count": 4
+    },
+    {
+     "slot": "W",
+     "id": "FIREARTILLERY",
+     "count": 3
+    },
+    {
+     "slot": "Q",
+     "id": "FIRESTAFFBOLT2",
+     "count": 1
+    },
+    {
+     "slot": "W",
+     "id": "SKILLSHOT_FIREBALL",
      "count": 1
     }
    ]
@@ -1145,6 +1093,53 @@
    ]
   },
   {
+   "id": "2H_KNUCKLES_AVALON",
+   "name": "Fists of Avalon",
+   "builds": 7,
+   "skills": [
+    {
+     "slot": "E",
+     "id": "TRIPLECOMBO_DIVEKICK",
+     "count": 7
+    },
+    {
+     "slot": "W",
+     "id": "KNUCKLECOMBO",
+     "count": 5
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_KNUCKLE_COMBOBREAKER",
+     "count": 5
+    },
+    {
+     "slot": "Q",
+     "id": "DASHKICK",
+     "count": 4
+    },
+    {
+     "slot": "Q",
+     "id": "SHOCKWAVE_PUNCH",
+     "count": 3
+    },
+    {
+     "slot": "W",
+     "id": "BACKHAND_KNOCKBACK",
+     "count": 2
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_KNUCKLE_RAGE",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_INCREASED_DAMAGE",
+     "count": 1
+    }
+   ]
+  },
+  {
    "id": "2H_CLEAVER_HELL",
    "name": "Carving Sword",
    "builds": 7,
@@ -1239,6 +1234,53 @@
     {
      "slot": "P",
      "id": "PASSIVE_INCREASED_DAMAGE",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "MAIN_DAGGER",
+   "name": "Dagger",
+   "builds": 7,
+   "skills": [
+    {
+     "slot": "E",
+     "id": "BLOODTHIRSTYBLADE",
+     "count": 7
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_BLEEDCHANCE",
+     "count": 6
+    },
+    {
+     "slot": "Q",
+     "id": "QDASH",
+     "count": 6
+    },
+    {
+     "slot": "W",
+     "id": "SKILLSHOT_TELEPORT",
+     "count": 5
+    },
+    {
+     "slot": "Q",
+     "id": "IRONBREAKER",
+     "count": 1
+    },
+    {
+     "slot": "W",
+     "id": "THROWINGBLADES",
+     "count": 1
+    },
+    {
+     "slot": "W",
+     "id": "CHAINDASH",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_AASPEEDCHANCE_SPEAR",
      "count": 1
     }
    ]
@@ -1343,53 +1385,6 @@
     {
      "slot": "Q",
      "id": "CLEAVE",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "2H_KNUCKLES_AVALON",
-   "name": "Fists of Avalon",
-   "builds": 6,
-   "skills": [
-    {
-     "slot": "E",
-     "id": "TRIPLECOMBO_DIVEKICK",
-     "count": 6
-    },
-    {
-     "slot": "Q",
-     "id": "DASHKICK",
-     "count": 4
-    },
-    {
-     "slot": "W",
-     "id": "KNUCKLECOMBO",
-     "count": 4
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_KNUCKLE_COMBOBREAKER",
-     "count": 4
-    },
-    {
-     "slot": "W",
-     "id": "BACKHAND_KNOCKBACK",
-     "count": 2
-    },
-    {
-     "slot": "Q",
-     "id": "SHOCKWAVE_PUNCH",
-     "count": 2
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_KNUCKLE_RAGE",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_INCREASED_DAMAGE",
      "count": 1
     }
    ]
@@ -1783,31 +1778,26 @@
     {
      "slot": "E",
      "id": "CELESTIAL_SPHERE",
+     "count": 6
+    },
+    {
+     "slot": "W",
+     "id": "HEALINGBEAM",
      "count": 5
     },
     {
      "slot": "P",
      "id": "PASSIVE_HEALPOWERCHANCE",
-     "count": 5
-    },
-    {
-     "slot": "W",
-     "id": "HEALINGBEAM",
      "count": 4
-    },
-    {
-     "slot": "W",
-     "id": "HOLYORB",
-     "count": 2
     },
     {
      "slot": "P",
      "id": "PASSIVE_HOLY_ASCENDED",
-     "count": 1
+     "count": 2
     },
     {
-     "slot": "E",
-     "id": "DIVINE_JUMP",
+     "slot": "W",
+     "id": "HOLYORB",
      "count": 1
     }
    ]
@@ -2095,6 +2085,48 @@
    ]
   },
   {
+   "id": "MAIN_SPEAR_KEEPER",
+   "name": "Heron Spear",
+   "builds": 5,
+   "skills": [
+    {
+     "slot": "Q",
+     "id": "SPEAR_LUNGE",
+     "count": 5
+    },
+    {
+     "slot": "E",
+     "id": "SPEARTHROW",
+     "count": 5
+    },
+    {
+     "slot": "W",
+     "id": "FORESTOFSPEARS",
+     "count": 4
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_SPELLPOWER_CHANCE_SPEAR",
+     "count": 2
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_SLOWPOISON",
+     "count": 2
+    },
+    {
+     "slot": "W",
+     "id": "GROUNDSPEAR",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_HEALTHCHANCE_MACE",
+     "count": 1
+    }
+   ]
+  },
+  {
    "id": "2H_KNUCKLES_SET3",
    "name": "Spiked Gauntlets",
    "builds": 5,
@@ -2298,6 +2330,63 @@
     {
      "slot": "P",
      "id": "PASSIVE_SPELLPOWER_CASTER_FROSTSTAFF",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "2H_SHAPESHIFTER_SET3",
+   "name": "Primal Staff",
+   "builds": 5,
+   "skills": [
+    {
+     "slot": "E",
+     "id": "SHAPESHIFT_BEAR",
+     "count": 5
+    },
+    {
+     "slot": "W",
+     "id": "SHAPE_W_AREA_PULL",
+     "count": 4
+    },
+    {
+     "slot": "Q",
+     "id": "SHAPE_Q_SKILLSHOT",
+     "count": 2
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_SHAPESHIFT_GATHER_CHARGES",
+     "count": 2
+    },
+    {
+     "slot": "Q",
+     "id": "SHAPE_Q_CONE_MELEE",
+     "count": 2
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_SHAPESHIFT_Q_CAST_DAMAGE_REDUCE",
+     "count": 1
+    },
+    {
+     "slot": "W",
+     "id": "SHAPE_W_DAMAGE_AOE",
+     "count": 1
+    },
+    {
+     "slot": "Q",
+     "id": "SHAPE_Q_DAMAGE_AND_SHIELD",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_SHAPESHIFT_W_CAST_SPEED_BUFF",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_SHAPESHIFT_ATTACK_BUFF",
      "count": 1
     }
    ]
@@ -2602,48 +2691,6 @@
    ]
   },
   {
-   "id": "MAIN_SPEAR_KEEPER",
-   "name": "Heron Spear",
-   "builds": 4,
-   "skills": [
-    {
-     "slot": "Q",
-     "id": "SPEAR_LUNGE",
-     "count": 4
-    },
-    {
-     "slot": "E",
-     "id": "SPEARTHROW",
-     "count": 4
-    },
-    {
-     "slot": "W",
-     "id": "FORESTOFSPEARS",
-     "count": 3
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_SLOWPOISON",
-     "count": 2
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_SPELLPOWER_CHANCE_SPEAR",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "GROUNDSPEAR",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_HEALTHCHANCE_MACE",
-     "count": 1
-    }
-   ]
-  },
-  {
    "id": "MAIN_CURSEDSTAFF_UNDEAD",
    "name": "Lifecurse Staff",
    "builds": 4,
@@ -2748,6 +2795,58 @@
    ]
   },
   {
+   "id": "2H_SKULLORB_HELL",
+   "name": "Cursed Skull",
+   "builds": 4,
+   "skills": [
+    {
+     "slot": "E",
+     "id": "SKULLCURSE",
+     "count": 3
+    },
+    {
+     "slot": "Q",
+     "id": "CURSED_SPLAT",
+     "count": 3
+    },
+    {
+     "slot": "W",
+     "id": "ARMORPIERCER",
+     "count": 3
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_SPELLPOWER_CASTER_CURSEDSTAFF",
+     "count": 2
+    },
+    {
+     "slot": "Q",
+     "id": "CURSEDOT",
+     "count": 1
+    },
+    {
+     "slot": "W",
+     "id": "CURSEDHANDS_STACKUP",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_MOVESPEED_CHANCE_CURSEDSTAFF",
+     "count": 1
+    },
+    {
+     "slot": "E",
+     "id": "DEATHCURSE2",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_ENERGYCHANCE_MACE",
+     "count": 1
+    }
+   ]
+  },
+  {
    "id": "2H_POLEHAMMER",
    "name": "Polehammer ",
    "builds": 4,
@@ -2785,38 +2884,38 @@
    ]
   },
   {
-   "id": "MAIN_DAGGER_HELL",
-   "name": "Demonfang",
+   "id": "MAIN_FROSTSTAFF",
+   "name": "Frost Staff",
    "builds": 4,
    "skills": [
     {
-     "slot": "Q",
-     "id": "QDASH",
+     "slot": "W",
+     "id": "FROSTNOVA",
      "count": 4
     },
     {
      "slot": "E",
-     "id": "BLOOD_BLADE",
+     "id": "FREEZINGWIND",
      "count": 4
     },
     {
+     "slot": "Q",
+     "id": "SHATTER_Q",
+     "count": 3
+    },
+    {
      "slot": "P",
-     "id": "PASSIVE_BLEEDCHANCE",
+     "id": "PASSIVE_FROST",
      "count": 3
     },
     {
-     "slot": "W",
-     "id": "THROWINGBLADES",
-     "count": 3
-    },
-    {
-     "slot": "W",
-     "id": "CHAINDASH",
+     "slot": "Q",
+     "id": "ICESHARD",
      "count": 1
     },
     {
      "slot": "P",
-     "id": "PASSIVE_HEALTHCHANCE_DAGGER",
+     "id": "PASSIVE_CASTINGSPEED_CHANCE_FROSTSTAFF",
      "count": 1
     }
    ]
@@ -2864,58 +2963,6 @@
     {
      "slot": "P",
      "id": "PASSIVE_SPELLPOWER_CHANCE_AXE",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "2H_SHAPESHIFTER_SET3",
-   "name": "Primal Staff",
-   "builds": 4,
-   "skills": [
-    {
-     "slot": "E",
-     "id": "SHAPESHIFT_BEAR",
-     "count": 4
-    },
-    {
-     "slot": "W",
-     "id": "SHAPE_W_AREA_PULL",
-     "count": 3
-    },
-    {
-     "slot": "Q",
-     "id": "SHAPE_Q_SKILLSHOT",
-     "count": 2
-    },
-    {
-     "slot": "Q",
-     "id": "SHAPE_Q_CONE_MELEE",
-     "count": 2
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_SHAPESHIFT_Q_CAST_DAMAGE_REDUCE",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "SHAPE_W_DAMAGE_AOE",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_SHAPESHIFT_GATHER_CHARGES",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_SHAPESHIFT_W_CAST_SPEED_BUFF",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_SHAPESHIFT_ATTACK_BUFF",
      "count": 1
     }
    ]
@@ -3011,6 +3058,38 @@
      "slot": "P",
      "id": "PASSIVE_STUNCHANCE_QUARTERSTAFF",
      "count": 1
+    }
+   ]
+  },
+  {
+   "id": "MAIN_ROCKMACE_KEEPER",
+   "name": "Bedrock Mace",
+   "builds": 4,
+   "skills": [
+    {
+     "slot": "Q",
+     "id": "SACRED_GROUND",
+     "count": 4
+    },
+    {
+     "slot": "E",
+     "id": "PRIMALSLAM",
+     "count": 4
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_ENERGYCHANCE_MACE",
+     "count": 4
+    },
+    {
+     "slot": "W",
+     "id": "GUARDRUNE",
+     "count": 2
+    },
+    {
+     "slot": "W",
+     "id": "CHARGE_ROOT",
+     "count": 2
     }
    ]
   },
@@ -3161,6 +3240,58 @@
    ]
   },
   {
+   "id": "MAIN_MACE_CRYSTAL",
+   "name": "Dreadstorm Monarch",
+   "builds": 4,
+   "skills": [
+    {
+     "slot": "E",
+     "id": "MACE_CRYSTAL_FRAGMENT_STORM",
+     "count": 4
+    },
+    {
+     "slot": "Q",
+     "id": "DEFENSIVESLAM",
+     "count": 2
+    },
+    {
+     "slot": "W",
+     "id": "CHARGE_ROOT",
+     "count": 2
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_HEALTHCHANCE_MACE",
+     "count": 2
+    },
+    {
+     "slot": "W",
+     "id": "GUARDRUNE",
+     "count": 2
+    },
+    {
+     "slot": "Q",
+     "id": "THREATENINGSMASH",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_ENERGYCHANCE_MACE",
+     "count": 1
+    },
+    {
+     "slot": "Q",
+     "id": "SACRED_GROUND",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_STUNCHANCE",
+     "count": 1
+    }
+   ]
+  },
+  {
    "id": "2H_DOUBLEBLADEDSTAFF_CRYSTAL",
    "name": "Phantom Twinblade",
    "builds": 3,
@@ -3213,6 +3344,53 @@
     {
      "slot": "P",
      "id": "PASSIVE_SPELLPOWER_CHANCE_SPEAR",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "2H_LONGBOW_UNDEAD",
+   "name": "Whispering Bow",
+   "builds": 3,
+   "skills": [
+    {
+     "slot": "E",
+     "id": "UNDEADARROWS",
+     "count": 3
+    },
+    {
+     "slot": "Q",
+     "id": "POISONARROW",
+     "count": 2
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_ARMOR_PIERCE_STACK",
+     "count": 2
+    },
+    {
+     "slot": "W",
+     "id": "JUMPSHOT2",
+     "count": 1
+    },
+    {
+     "slot": "W",
+     "id": "BURNINGARROWS",
+     "count": 1
+    },
+    {
+     "slot": "Q",
+     "id": "MULTISHOT2",
+     "count": 1
+    },
+    {
+     "slot": "W",
+     "id": "GROUNDARROW",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_AASPEEDCHANCE_BOW",
      "count": 1
     }
    ]
@@ -3302,58 +3480,6 @@
    ]
   },
   {
-   "id": "2H_SKULLORB_HELL",
-   "name": "Cursed Skull",
-   "builds": 3,
-   "skills": [
-    {
-     "slot": "E",
-     "id": "SKULLCURSE",
-     "count": 2
-    },
-    {
-     "slot": "Q",
-     "id": "CURSED_SPLAT",
-     "count": 2
-    },
-    {
-     "slot": "W",
-     "id": "ARMORPIERCER",
-     "count": 2
-    },
-    {
-     "slot": "Q",
-     "id": "CURSEDOT",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "CURSEDHANDS_STACKUP",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_MOVESPEED_CHANCE_CURSEDSTAFF",
-     "count": 1
-    },
-    {
-     "slot": "E",
-     "id": "DEATHCURSE2",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_ENERGYCHANCE_MACE",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_SPELLPOWER_CASTER_CURSEDSTAFF",
-     "count": 1
-    }
-   ]
-  },
-  {
    "id": "2H_CROSSBOW",
    "name": "Crossbow",
    "builds": 3,
@@ -3386,6 +3512,38 @@
     {
      "slot": "W",
      "id": "SILENCINGBOLT",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "MAIN_DAGGER_HELL",
+   "name": "Demonfang",
+   "builds": 3,
+   "skills": [
+    {
+     "slot": "Q",
+     "id": "QDASH",
+     "count": 3
+    },
+    {
+     "slot": "E",
+     "id": "BLOOD_BLADE",
+     "count": 3
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_BLEEDCHANCE",
+     "count": 3
+    },
+    {
+     "slot": "W",
+     "id": "THROWINGBLADES",
+     "count": 2
+    },
+    {
+     "slot": "W",
+     "id": "CHAINDASH",
      "count": 1
     }
    ]
@@ -3665,38 +3823,6 @@
    ]
   },
   {
-   "id": "MAIN_ROCKMACE_KEEPER",
-   "name": "Bedrock Mace",
-   "builds": 3,
-   "skills": [
-    {
-     "slot": "Q",
-     "id": "SACRED_GROUND",
-     "count": 3
-    },
-    {
-     "slot": "E",
-     "id": "PRIMALSLAM",
-     "count": 3
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_ENERGYCHANCE_MACE",
-     "count": 3
-    },
-    {
-     "slot": "W",
-     "id": "GUARDRUNE",
-     "count": 2
-    },
-    {
-     "slot": "W",
-     "id": "CHARGE_ROOT",
-     "count": 1
-    }
-   ]
-  },
-  {
    "id": "2H_ENIGMATICSTAFF",
    "name": "Enigmatic Staff",
    "builds": 3,
@@ -3771,48 +3897,6 @@
     {
      "slot": "P",
      "id": "PASSIVE_SLOWPOISON",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "MAIN_MACE_CRYSTAL",
-   "name": "Dreadstorm Monarch",
-   "builds": 3,
-   "skills": [
-    {
-     "slot": "E",
-     "id": "MACE_CRYSTAL_FRAGMENT_STORM",
-     "count": 3
-    },
-    {
-     "slot": "Q",
-     "id": "DEFENSIVESLAM",
-     "count": 2
-    },
-    {
-     "slot": "W",
-     "id": "CHARGE_ROOT",
-     "count": 2
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_HEALTHCHANCE_MACE",
-     "count": 2
-    },
-    {
-     "slot": "W",
-     "id": "GUARDRUNE",
-     "count": 1
-    },
-    {
-     "slot": "Q",
-     "id": "SACRED_GROUND",
-     "count": 1
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_STUNCHANCE",
      "count": 1
     }
    ]
@@ -3961,38 +4045,6 @@
     {
      "slot": "P",
      "id": "PASSIVE_SPELLPOWER_CASTER_CROSSBOW",
-     "count": 1
-    }
-   ]
-  },
-  {
-   "id": "2H_LONGBOW_UNDEAD",
-   "name": "Whispering Bow",
-   "builds": 2,
-   "skills": [
-    {
-     "slot": "Q",
-     "id": "POISONARROW",
-     "count": 2
-    },
-    {
-     "slot": "E",
-     "id": "UNDEADARROWS",
-     "count": 2
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_ARMOR_PIERCE_STACK",
-     "count": 2
-    },
-    {
-     "slot": "W",
-     "id": "JUMPSHOT2",
-     "count": 1
-    },
-    {
-     "slot": "W",
-     "id": "BURNINGARROWS",
      "count": 1
     }
    ]
@@ -4196,33 +4248,6 @@
      "slot": "P",
      "id": "PASSIVE_ENERGYCHANCE_MACE",
      "count": 1
-    }
-   ]
-  },
-  {
-   "id": "MAIN_FROSTSTAFF",
-   "name": "Frost Staff",
-   "builds": 2,
-   "skills": [
-    {
-     "slot": "Q",
-     "id": "SHATTER_Q",
-     "count": 2
-    },
-    {
-     "slot": "W",
-     "id": "FROSTNOVA",
-     "count": 2
-    },
-    {
-     "slot": "E",
-     "id": "FREEZINGWIND",
-     "count": 2
-    },
-    {
-     "slot": "P",
-     "id": "PASSIVE_FROST",
-     "count": 2
     }
    ]
   },
@@ -5088,6 +5113,33 @@
     {
      "slot": "P",
      "id": "PASSIVE_BURN",
+     "count": 1
+    }
+   ]
+  },
+  {
+   "id": "2H_KNUCKLES_MORGANA",
+   "name": "Ravenstrike Cestus",
+   "builds": 1,
+   "skills": [
+    {
+     "slot": "Q",
+     "id": "SHOCKWAVE_PUNCH",
+     "count": 1
+    },
+    {
+     "slot": "W",
+     "id": "BACKHAND_KNOCKBACK",
+     "count": 1
+    },
+    {
+     "slot": "E",
+     "id": "GROWING_PUNCH",
+     "count": 1
+    },
+    {
+     "slot": "P",
+     "id": "PASSIVE_KNUCKLE_COMBOBREAKER",
      "count": 1
     }
    ]
