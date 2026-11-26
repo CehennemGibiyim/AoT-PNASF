@@ -1,5 +1,5 @@
 {
-  "lastUpdate": "2026-11-26T01:18:17.122Z",
+  "lastUpdate": "2026-11-26T15:59:45.400Z",
   "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
   "opportunities": [
@@ -11,10 +11,25 @@
       "from": "Caerleon",
       "to": "Bridgewatch",
       "buyPrice": 8899,
-      "sellPrice": 10700,
-      "profit": 1656,
-      "profitPercent": "18.6",
-      "timestamp": "2026-11-26T01:18:17.122Z",
+      "sellPrice": 10769,
+      "profit": 1720,
+      "profitPercent": "19.3",
+      "timestamp": "2026-11-26T15:59:45.400Z",
+      "source": "albion-online-data.com",
+      "verified": true
+    },
+    {
+      "id": "market_T7_BAG_Thetford_Fort Sterling",
+      "type": "flip",
+      "item": "T7_BAG",
+      "itemName": "T7_BAG",
+      "from": "Thetford",
+      "to": "Fort Sterling",
+      "buyPrice": 100000,
+      "sellPrice": 101672,
+      "profit": 1538,
+      "profitPercent": "1.5",
+      "timestamp": "2026-11-26T15:59:45.400Z",
       "source": "albion-online-data.com",
       "verified": true
     }
