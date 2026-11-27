@@ -1,23 +1,8 @@
 {
-  "lastUpdate": "2026-11-26T15:59:45.400Z",
+  "lastUpdate": "2026-11-27T01:16:26.086Z",
   "generatedBy": "market-api",
   "source": "https://europe.albion-online-data.com/api/v2/stats/prices",
   "opportunities": [
-    {
-      "id": "market_T6_POTION_HEAL_Caerleon_Bridgewatch",
-      "type": "flip",
-      "item": "T6_POTION_HEAL",
-      "itemName": "T6_POTION_HEAL",
-      "from": "Caerleon",
-      "to": "Bridgewatch",
-      "buyPrice": 8899,
-      "sellPrice": 10769,
-      "profit": 1720,
-      "profitPercent": "19.3",
-      "timestamp": "2026-11-26T15:59:45.400Z",
-      "source": "albion-online-data.com",
-      "verified": true
-    },
     {
       "id": "market_T7_BAG_Thetford_Fort Sterling",
       "type": "flip",
@@ -25,11 +10,26 @@
       "itemName": "T7_BAG",
       "from": "Thetford",
       "to": "Fort Sterling",
-      "buyPrice": 100000,
+      "buyPrice": 96985,
       "sellPrice": 101672,
-      "profit": 1538,
-      "profitPercent": "1.5",
-      "timestamp": "2026-11-26T15:59:45.400Z",
+      "profit": 4312,
+      "profitPercent": "4.4",
+      "timestamp": "2026-11-27T01:16:26.086Z",
+      "source": "albion-online-data.com",
+      "verified": true
+    },
+    {
+      "id": "market_T6_POTION_HEAL_Thetford_Bridgewatch",
+      "type": "flip",
+      "item": "T6_POTION_HEAL",
+      "itemName": "T6_POTION_HEAL",
+      "from": "Thetford",
+      "to": "Bridgewatch",
+      "buyPrice": 9999,
+      "sellPrice": 10769,
+      "profit": 708,
+      "profitPercent": "7.1",
+      "timestamp": "2026-11-27T01:16:26.086Z",
       "source": "albion-online-data.com",
       "verified": true
     }
